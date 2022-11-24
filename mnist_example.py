@@ -185,15 +185,15 @@ def main():
     torch.manual_seed(args.seed)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
+    weight_dir='/s/luffy/b/nobackup/mgorb/mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         if args.ri_baseline:
             model = Net().to(device)
-            save_path='mnist_ri_subnetwork_baseline.pt'
+            save_path=f'{weight_dir}mnist_ri_subnetwork_baseline.pt'
         else:
             model = Net().to(device)
-            save_path='/s/luffy/b/nobackup/mgorb/mlc_weights/mnist_baseline.pt'
+            save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
     else:
