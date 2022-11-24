@@ -193,7 +193,7 @@ def main():
             save_path='mnist_ri_subnetwork_baseline.pt'
         else:
             model = Net().to(device)
-            save_path='mnist_baseline.pt'
+            save_path='/s/luffy/b/nobackup/mgorb/mlc_weights/mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
     else:
