@@ -68,14 +68,14 @@ def get_datasets(args):
         ])
 
     if args.baseline:
-        dataset1 = datasets.MNIST(f'{args.base_dir}/data', train=True, download=True, transform=transform)
-        test_dataset = datasets.MNIST(f'{args.base_dir}/data', train=False, transform=transform)
+        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
 
-    dataset1 = datasets.MNIST(f'{args.base_dir}/data', train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST(f'{args.base_dir}/data', train=True, transform=transform)
+    dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+    dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
 
     #split dataset in half
     labels=torch.unique(dataset1.targets)
@@ -89,7 +89,7 @@ def get_datasets(args):
     dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
     assert(ds1_indices.isdisjoint(ds2_indices))
 
-    test_dataset = datasets.MNIST(f'{args.base_dir}/data', train=False,  transform=transform)
+    test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
     train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
     train_loader2 = DataLoader(dataset2,batch_size=args.batch_size, shuffle=True)
     test_loader = DataLoader(test_dataset,batch_size=args.batch_size, shuffle=False)
@@ -174,8 +174,8 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--score_seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--log-interval', type=int, default=100, metavar='N',
-                        help='how many batches to wait before logging training status')
+    parser.add_argument('--gpu', type=int, default=1, metavar='S',
+                        help='which gpu to use')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool,default=False,help='train base model')
@@ -185,7 +185,7 @@ def main():
 
     torch.manual_seed(args.seed)
 
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir=f'{args.base_dir}mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
