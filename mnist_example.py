@@ -52,7 +52,33 @@ class SubnetLinear(nn.Linear):
         x= F.linear(x, w, self.bias)
         return x
 
+
 class Net(nn.Module):
+    def __init__(self):
+        super(Net, self).__init__()
+        self.conv1 = nn.Conv2d(1, 32, 3, 1)
+        self.conv2 = nn.Conv2d(32, 64, 3, 1)
+        self.dropout1 = nn.Dropout(0.25)
+        self.dropout2 = nn.Dropout(0.5)
+        self.fc1 = nn.Linear(9216, 128)
+        self.fc2 = nn.Linear(128, 10)
+
+    def forward(self, x):
+        x = self.conv1(x)
+        x = F.relu(x)
+        x = self.conv2(x)
+        x = F.relu(x)
+        x = F.max_pool2d(x, 2)
+        x = self.dropout1(x)
+        x = torch.flatten(x, 1)
+        x = self.fc1(x)
+        x = F.relu(x)
+        x = self.dropout2(x)
+        x = self.fc2(x)
+        #output = F.log_softmax(x, dim=1)
+        return x
+
+'''class Net(nn.Module):
     def __init__(self,args, sparse=False):
         super(Net, self).__init__()
         self.args=args
@@ -71,7 +97,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         x = F.relu(x)
         x = self.fc3(x)
-        return x
+        return x'''
 
 def freeze_model_weights(model):
     print("=> Freezing model weights")
@@ -139,16 +165,19 @@ class Trainer:
         self.save_path=save_path
 
     def fit(self):
-        best_loss=1e6
+        self.best_loss=1e6
         print('Fitting model...')
         for epoch in range(1, self.args.epochs + 1):
             print(f'Epoch {epoch}')
             train_loss = self.train()
             self.test()
-            if train_loss<best_loss:
-                best_loss=train_loss
+            if train_loss<self.best_loss:
+                self.best_loss=train_loss
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
+
+    def model_loss(self):
+        return self.best_loss
 
     def train(self,):
         self.model.train()
@@ -184,17 +213,35 @@ class Trainer:
             test_loss, correct, len(self.test_loader.dataset),
             100. * correct / len(self.test_loader.dataset)))
 
-
 class MLC_Iterator:
     def __init__(self, args,datasets, device,):
-        model1 = Net(args, sparse=True).to(device)
-        model2 = Net(args, sparse=True).to(device)
-        freeze_model_weights(model1)
-        freeze_model_weights(model2)
         self.args=args
-        train_loader1 = datasets[0]
-        train_loader2 = datasets[1]
-        test_dataset = datasets[2]
+        self.device=device
+        self.train_loader1 = datasets[0]
+        self.train_loader2 = datasets[1]
+        self.test_dataset = datasets[2]
+
+    def train_single(self, model,model_name, mlc_iter,train_dataset):
+        freeze_model_weights(model)
+        save_path = f'{self.args.weight_dir}{model_name}_{mlc_iter}.pt'
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
+        trainer.fit()
+        return trainer.best_loss
+
+    def run(self):
+        mlc_iterations=20
+        epsilon=1e-2
+
+        results_dict={}
+
+        for iter in range(mlc_iterations):
+            model1 = Net(self.args, sparse=True).to(self.device)
+            model_1_loss=self.train_single(model1, "model_1", iter, self.train_loader1)
+
+            model2 = Net(self.args, sparse=True).to(self.device)
+            model_2_loss=self.train_single(model2, "model_2", iter, self.train_loader2)
+
+
 
 def main():
     # Training settings
@@ -218,7 +265,7 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool,default=False,help='train base model')
-    parser.add_argument('--ri_baseline', type=bool,default=False,help='train subnetwork with randomly initialized weights')
+    parser.add_argument('--randinit_baseline', type=bool,default=False,help='train subnetwork with randomly initialized weights')
     parser.add_argument('--base_dir', type=str,default="/s/luffy/b/nobackup/mgorb/",help='Directory for data and weights')
     args = parser.parse_args()
 
@@ -228,7 +275,7 @@ def main():
     weight_dir=f'{args.base_dir}mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
-        if args.ri_baseline:
+        if args.randinit_baseline:
             model = Net(args, sparse=True).to(device)
             save_path=f'{weight_dir}mnist_ri_subnetwork_baseline.pt'
         else:
