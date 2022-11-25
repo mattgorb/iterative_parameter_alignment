@@ -58,7 +58,8 @@ class Net(nn.Module):
         self.args=args
         if sparse:
             self.fc1 = linear_init(28*28, 128, bias=None, args=self.args, )
-            self.fc2 = linear_init(128, 10, bias=None, args=self.args, )
+            self.fc2 = linear_init(128, 128, bias=None, args=self.args, )
+            self.fc3 = linear_init(128, 10, bias=None, args=self.args, )
         else:
             self.fc1 = nn.Linear(28*28, 128)
             self.fc2 = nn.Linear(128, 10)
@@ -68,6 +69,8 @@ class Net(nn.Module):
         x = self.fc1(x.view(x.size(0),-1))
         x = F.relu(x)
         x = self.fc2(x)
+        x = F.relu(x)
+        x = self.fc3(x)
         return x
 
 def freeze_model_weights(model):
@@ -237,11 +240,6 @@ def main():
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
         mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,)
-
-
-
-
-
 
 
 if __name__ == '__main__':
