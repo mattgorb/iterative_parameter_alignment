@@ -212,11 +212,11 @@ class Trainer:
         for epoch in range(1, self.args.epochs + 1):
             print(f'Epoch {epoch}')
             train_loss = self.train()
-            self.test()
             if train_loss<self.best_loss:
                 self.best_loss=train_loss
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
+                self.test()
 
     def model_loss(self):
         return self.best_loss
