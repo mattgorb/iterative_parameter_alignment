@@ -160,7 +160,7 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         #self.optimizer= optim.Adam(self.model.parameters(), lr=args.lr)
-        self.optimizer = optim.SGD(self.model.parameters(), lr=1e-3)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
