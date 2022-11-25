@@ -33,6 +33,30 @@ def linear_init(in_dim, out_dim, bias=None, args=None,):
     layer.init(args)
     return layer
 
+def conv_init(in_channels, out_channels, kernel_size, stride,  args=None,):
+    layer=SubnetConv(in_channels, out_channels, kernel_size, stride,)
+    layer.init(args)
+    return layer
+
+# Not learning weights, finding subnet
+class SubnetConv(nn.Conv2d):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.scores = nn.Parameter(torch.Tensor(self.weight.size()))
+
+    def init(self,args):
+        self.args=args
+        set_seed(self.args.weight_seed)
+        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        set_seed(self.args.score_seed)
+        nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
+
+    def forward(self, x):
+        subnet = GetSubnetSTE.apply(self.scores, )
+        w = self.weight * subnet
+        x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
+        return x
+
 # Not learning weights, finding subnet
 class SubnetLinear(nn.Linear):
     def __init__(self, *args, **kwargs):
@@ -56,12 +80,18 @@ class SubnetLinear(nn.Linear):
 class Net(nn.Module):
     def __init__(self,args, sparse=False):
         super(Net, self).__init__()
-        self.conv1 = nn.Conv2d(1, 32, 3, 1)
-        self.conv2 = nn.Conv2d(32, 64, 3, 1)
-        self.dropout1 = nn.Dropout(0.25)
-        self.dropout2 = nn.Dropout(0.5)
-        self.fc1 = nn.Linear(9216, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.args=args
+        self.sparse=sparse
+        if self.sparse:
+            self.conv1 = conv_init(1,32,3,1)
+            self.conv2 = conv_init(32, 64, 3, 1)
+            self.fc1 = linear_init(9216, 128, bias=None, args=self.args, )
+            self.fc2 = linear_init(128, 10, bias=None, args=self.args, )
+        else:
+            self.conv1 = nn.Conv2d(1, 32, 3, 1)
+            self.conv2 = nn.Conv2d(32, 64, 3, 1)
+            self.fc1 = nn.Linear(9216, 128)
+            self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x):
         x = self.conv1(x)
@@ -69,13 +99,10 @@ class Net(nn.Module):
         x = self.conv2(x)
         x = F.relu(x)
         x = F.max_pool2d(x, 2)
-        #x = self.dropout1(x)
         x = torch.flatten(x, 1)
         x = self.fc1(x)
         x = F.relu(x)
-        #x = self.dropout2(x)
         x = self.fc2(x)
-        #output = F.log_softmax(x, dim=1)
         return x
 
 '''class Net(nn.Module):
@@ -190,7 +217,8 @@ class Trainer:
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
-
+        print(len(self.train_loader.dataset))
+        print(train_loss)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
