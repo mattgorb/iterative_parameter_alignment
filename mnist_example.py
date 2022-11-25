@@ -311,8 +311,8 @@ class MLC_Iterator:
 
             model_new = Net(self.args, sparse=True).to(self.device)
             model_new=generate_mlc(model1, model2, model_new)
-            if iter>0:
-                sys.exit()
+            #if iter>0:
+                #sys.exit()
 
 def main():
     # Training settings
