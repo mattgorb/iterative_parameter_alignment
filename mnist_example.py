@@ -105,26 +105,7 @@ class Net(nn.Module):
         x = self.fc2(x)
         return x
 
-'''class Net(nn.Module):
-    def __init__(self,args, sparse=False):
-        super(Net, self).__init__()
-        self.args=args
-        if sparse:
-            self.fc1 = linear_init(28*28, 128, bias=None, args=self.args, )
-            self.fc2 = linear_init(128, 128, bias=None, args=self.args, )
-            self.fc3 = linear_init(128, 10, bias=None, args=self.args, )
-        else:
-            self.fc1 = nn.Linear(28*28, 128)
-            self.fc2 = nn.Linear(128, 10)
 
-    def forward(self, x):
-
-        x = self.fc1(x.view(x.size(0),-1))
-        x = F.relu(x)
-        x = self.fc2(x)
-        x = F.relu(x)
-        x = self.fc3(x)
-        return x'''
 
 def freeze_model_weights(model):
     print("=> Freezing model weights")
@@ -217,8 +198,6 @@ class Trainer:
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
-        print(len(self.train_loader.dataset))
-        print(train_loss)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
@@ -275,7 +254,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=50, metavar='N',
+    parser.add_argument('--epochs', type=int, default=25, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
