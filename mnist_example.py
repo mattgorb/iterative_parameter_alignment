@@ -54,7 +54,10 @@ class SubnetConv(nn.Conv2d):
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
     def get_subnet(self):
-        return (self.scores > 0).float()
+        subnet = GetSubnetSTE.apply(self.scores, )
+        if self.mlc_mask is not None:
+            subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+        return subnet
 
     def forward(self, x):
         subnet = GetSubnetSTE.apply(self.scores, )
@@ -78,7 +81,10 @@ class SubnetLinear(nn.Linear):
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
     def get_subnet(self):
-        return (self.scores > 0).float()
+        subnet = GetSubnetSTE.apply(self.scores, )
+        if self.mlc_mask is not None:
+            subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+        return subnet
 
     def forward(self, x):
         subnet = GetSubnetSTE.apply(self.scores, )
@@ -311,8 +317,7 @@ class MLC_Iterator:
 
             model_new = Net(self.args, sparse=True).to(self.device)
             model_new=generate_mlc(model1, model2, model_new)
-            #if iter>0:
-                #sys.exit()
+
 
 def main():
     # Training settings
