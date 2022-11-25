@@ -108,7 +108,9 @@ class Net(nn.Module):
 
 def assert_model_equality(model1, model2):
     print("=> Freezing model weights")
-    for n1, m1, n2,m2 in zip(model1.named_modules(), model2.named_modules()):
+    for model1_mods, model2_mods in zip(model1.named_modules(), model2.named_modules()):
+        n1,m1=model1_mods
+        n2,m2=model2_mods
         if not type(m1)==SubnetLinear and not type(m1)==SubnetConv:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
