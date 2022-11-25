@@ -114,9 +114,9 @@ def assert_model_equality(model1, model2):
         if not type(m1)==SubnetLinear and not type(m1)==SubnetConv:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
-            assert(torch.eq(m1.weight,m2.weight))
+            assert(torch.equal(m1.weight,m2.weight))
             if hasattr(m1, "bias") and m1.bias is not None:
-                assert(torch.eq(m1.bias,m2.bias))
+                assert(torch.equal(m1.bias,m2.bias))
 
 
 
