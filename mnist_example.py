@@ -258,7 +258,7 @@ def generate_mlc(model1, model2, model_new):
             m1_mask=m1.get_subnet()
             m2_mask=m2.get_subnet()
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
-            print(mlc)
+            #print(mlc)
 
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
