@@ -75,8 +75,8 @@ class Net(nn.Module):
         x = F.relu(x)
         x = self.dropout2(x)
         x = self.fc2(x)
-        output = F.log_softmax(x, dim=1)
-        return output
+        #output = F.log_softmax(x, dim=1)
+        return x
 
 '''class Net(nn.Module):
     def __init__(self,args, sparse=False):
@@ -131,35 +131,35 @@ def get_datasets(args):
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
+    else:
+        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
 
-    dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
-    dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
+        #split dataset in half
+        labels=torch.unique(dataset1.targets)
+        ds1_labels=labels[:len(labels)//2]
+        ds2_labels=labels[len(labels)//2:]
+        print(f'ds1_labels: {ds1_labels}')
+        print(f'ds2_labels: {ds2_labels}')
+        ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
+        ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
+        dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
+        dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
+        assert(ds1_indices.isdisjoint(ds2_indices))
 
-    #split dataset in half
-    labels=torch.unique(dataset1.targets)
-    ds1_labels=labels[:len(labels)//2]
-    ds2_labels=labels[len(labels)//2:]
-    print(f'ds1_labels: {ds1_labels}')
-    print(f'ds2_labels: {ds2_labels}')
-    ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
-    ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
-    dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
-    dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
-    assert(ds1_indices.isdisjoint(ds2_indices))
+        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
+        train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
+        train_loader2 = DataLoader(dataset2,batch_size=args.batch_size, shuffle=True)
+        test_loader = DataLoader(test_dataset,batch_size=args.batch_size, shuffle=False)
 
-    test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
-    train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
-    train_loader2 = DataLoader(dataset2,batch_size=args.batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset,batch_size=args.batch_size, shuffle=False)
-
-    return train_loader1, train_loader2, test_loader
+        return train_loader1, train_loader2, test_loader
 
 class Trainer:
     def __init__(self, args,datasets, model, device, save_path):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer= optim.Adam(self.model.parameters(), lr=args.lr)
+        self.optimizer= optim.SGD(self.model.parameters(), lr=args.lr)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
