@@ -56,6 +56,7 @@ class SubnetConv(nn.Conv2d):
     def get_subnet(self):
         subnet = GetSubnetSTE.apply(self.scores, )
         if self.mlc_mask is not None:
+            print("HERE")
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
