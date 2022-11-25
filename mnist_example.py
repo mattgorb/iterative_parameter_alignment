@@ -313,7 +313,7 @@ def main():
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
         mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,)
-
+        mlc_iterator.run()
 
 if __name__ == '__main__':
     main()
