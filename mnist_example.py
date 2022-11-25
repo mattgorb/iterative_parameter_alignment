@@ -110,7 +110,7 @@ class Net(nn.Module):
 def freeze_model_weights(model):
     print("=> Freezing model weights")
     for n, m in model.named_modules():
-        if not type(m)==SubnetLinear:
+        if not type(m)==SubnetLinear and not type(m)==SubnetConv:
             continue
         if hasattr(m, "weight") and m.weight is not None:
             print(f"==> No gradient to {n}.weight")
@@ -227,9 +227,9 @@ class MLC_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,model_name, mlc_iter,train_dataset):
+    def train_single(self, model,save_path, train_dataset):
         freeze_model_weights(model)
-        save_path = f'{self.args.weight_dir}{model_name}_{mlc_iter}.pt'
+
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
         trainer.fit()
         return trainer.best_loss
@@ -242,10 +242,13 @@ class MLC_Iterator:
 
         for iter in range(mlc_iterations):
             model1 = Net(self.args, sparse=True).to(self.device)
-            model_1_loss=self.train_single(model1, "model_1", iter, self.train_loader1)
-
             model2 = Net(self.args, sparse=True).to(self.device)
-            model_2_loss=self.train_single(model2, "model_2", iter, self.train_loader2)
+
+
+            model_1_loss=self.train_single(model1, f'{self.args.weight_dir}model_1_{iter}.pt', self.train_loader1)
+
+
+            model_2_loss=self.train_single(model2, f'{self.args.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
 
 
