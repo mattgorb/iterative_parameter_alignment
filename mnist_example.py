@@ -257,11 +257,12 @@ def generate_mlc(model1, model2, model_new):
             assert(torch.equal(m1.weight,m2.weight))
             m1_mask=m1.get_subnet()
             m2_mask=m2.get_subnet()
-            print(m1_mask)
-            mlc=(m1_mask.bool()==m2_mask.bool()).bool()
+            mlc=(m1_mask.bool()==m2_mask.bool()).float()
+            print(mlc)
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, mlc, mlc_mask)
             m_new.mlc_mask=mlc_mask
+            print(mlc_mask)
             print(f'Module: {n_new} matching masks: {torch.sum(mlc)}/{torch.numel()}')
     sys.exit()
     return model_new
