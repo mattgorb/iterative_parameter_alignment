@@ -75,7 +75,7 @@ class Net(nn.Module):
         x = F.relu(x)
         x = self.dropout2(x)
         x = self.fc2(x)
-        #output = F.log_softmax(x, dim=1)
+        output = F.log_softmax(x, dim=1)
         return x
 
 '''class Net(nn.Module):
@@ -187,7 +187,8 @@ class Trainer:
             self.optimizer.zero_grad()
             output = self.model(data)
 
-            loss = self.criterion(output, target)
+            #loss = self.criterion(output, target)
+            loss = F.nll_loss(output, target)
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
