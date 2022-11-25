@@ -76,7 +76,7 @@ class Net(nn.Module):
         x = self.dropout2(x)
         x = self.fc2(x)
         output = F.log_softmax(x, dim=1)
-        return x
+        return output
 
 '''class Net(nn.Module):
     def __init__(self,args, sparse=False):
