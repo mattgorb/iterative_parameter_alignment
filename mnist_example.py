@@ -116,6 +116,8 @@ def assert_model_equality(model1, model2):
         if hasattr(m1, "weight") and m1.weight is not None:
             assert(torch.equal(m1.weight,m2.weight))
             if hasattr(m1, "bias") and m1.bias is not None:
+                print(m1.bias)
+                print(m2.bias)
                 assert(torch.equal(m1.bias,m2.bias))
 
 
