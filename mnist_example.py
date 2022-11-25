@@ -11,6 +11,26 @@ import math
 import random
 import copy
 
+class GetSubnetEdgePopup(autograd.Function):
+    @staticmethod
+    def forward(ctx, scores, k):
+        # Get the subnetwork by sorting the scores and using the top k%
+        out = scores.clone()
+        _, idx = scores.flatten().sort()
+        j = int((1 - k) * scores.numel())
+
+        # flat_out and out access the same memory.
+        flat_out = out.flatten()
+        flat_out[idx[:j]] = 0
+        flat_out[idx[j:]] = 1
+
+        return out
+
+    @staticmethod
+    def backward(ctx, g):
+        # send the gradient g straight-through on the backward pass.
+        return g, None
+
 class GetSubnetSTE(autograd.Function):
     @staticmethod
     def forward(ctx, scores,):
@@ -60,7 +80,8 @@ class SubnetConv(nn.Conv2d):
         return subnet
 
     def forward(self, x):
-        subnet = GetSubnetSTE.apply(self.scores, )
+        #subnet = GetSubnetSTE.apply(self.scores, )
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), 0.5)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
@@ -87,7 +108,8 @@ class SubnetLinear(nn.Linear):
         return subnet
 
     def forward(self, x):
-        subnet = GetSubnetSTE.apply(self.scores, )
+        #subnet = GetSubnetSTE.apply(self.scores, )
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), 0.5)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
