@@ -159,7 +159,8 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer= optim.SGD(self.model.parameters(), lr=args.lr)
+        #self.optimizer= optim.Adam(self.model.parameters(), lr=args.lr)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
@@ -186,9 +187,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output = self.model(data)
-
             loss = self.criterion(output, target)
-            #loss = F.nll_loss(output, target)
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
