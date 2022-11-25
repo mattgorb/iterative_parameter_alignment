@@ -9,6 +9,7 @@ from torch.utils.data import  DataLoader
 import torch.autograd as autograd
 import math
 import random
+import copy
 
 class GetSubnetSTE(autograd.Function):
     @staticmethod
@@ -117,7 +118,7 @@ class Net(nn.Module):
         return x
 
 
-def assert_model_weight_equality(model1, model2):
+def assert_model_weight_equality(model1, model2, mlc_mask=False):
     print("=> Freezing model weights")
     for model1_mods, model2_mods in zip(model1.named_modules(), model2.named_modules()):
         n1,m1=model1_mods
@@ -126,6 +127,8 @@ def assert_model_weight_equality(model1, model2):
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             assert(torch.equal(m1.weight,m2.weight))
+            if mlc_mask:
+                assert(torch.equal(m1.mlc_mask, m2.mlc_mask))
             if hasattr(m1, "bias") and m1.bias is not None:
                 assert(torch.equal(m1.bias,m2.bias))
 
@@ -258,13 +261,10 @@ def generate_mlc(model1, model2, model_new):
             m1_mask=m1.get_subnet()
             m2_mask=m2.get_subnet()
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
-            #print(mlc)
-
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
             m_new.mlc_mask=mlc_mask
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
-    sys.exit()
     return model_new
 
 
@@ -291,11 +291,14 @@ class MLC_Iterator:
         results_dict={}
 
         for iter in range(mlc_iterations):
-            model1 = Net(self.args, sparse=True).to(self.device)
-            model2 = Net(self.args, sparse=True).to(self.device)
-            assert_model_weight_equality(model1, model2)
-            if iter>0:
-                assert_model_weight_equality(model1, results_dict[f'model_1_{iter-1}'].model)
+            if iter==0:
+                model1 = Net(self.args, sparse=True).to(self.device)
+                model2 = Net(self.args, sparse=True).to(self.device)
+            else:
+                model1=copy.deepcopy(model_new)
+                model2=copy.deepcopy(model_new)
+                assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
+            assert_model_weight_equality(model1, model2, mlc_mask=True)
 
             print(f"MLC Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
@@ -305,7 +308,7 @@ class MLC_Iterator:
             results_dict[f'model_2_{iter}']=model_2_trainer
 
             model_new = Net(self.args, sparse=True).to(self.device)
-            generate_mlc(model1, model2, model_new)
+            model_new=generate_mlc(model1, model2, model_new)
             if iter>0:
                 sys.exit()
 
