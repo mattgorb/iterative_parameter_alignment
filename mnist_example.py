@@ -236,9 +236,10 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 class MLC_Iterator:
-    def __init__(self, args,datasets, device,):
+    def __init__(self, args,datasets, device,weight_dir):
         self.args=args
         self.device=device
+        self.weight_dir=weight_dir
         self.train_loader1 = datasets[0]
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
@@ -264,9 +265,9 @@ class MLC_Iterator:
                 assert_model_equality(model1, results_dict[f'model_1_{iter-1}'].model)
 
             print(f"MLC Iterator: {iter}, training model 1")
-            model_1_trainer=self.train_single(model1, f'{self.args.weight_dir}model_1_{iter}.pt', self.train_loader1)
+            model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             print(f"MLC Iterator: {iter}, training model 2")
-            model_2_trainer=self.train_single(model2, f'{self.args.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
+            model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
 
@@ -316,7 +317,7 @@ def main():
         trainer.fit()
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
-        mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,)
+        mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
         mlc_iterator.run()
 
 if __name__ == '__main__':
