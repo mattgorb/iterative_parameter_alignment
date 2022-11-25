@@ -28,6 +28,10 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
+def linear_init(in_dim, out_dim, bias=None, args=None,):
+    layer=SubnetLinear(in_dim,out_dim, bias)
+    layer.init(args)
+    return layer
 
 # Not learning weights, finding subnet
 class SubnetLinear(nn.Linear):
@@ -49,10 +53,15 @@ class SubnetLinear(nn.Linear):
         return x
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self,args, sparse=False):
         super(Net, self).__init__()
-        self.fc1 = nn.Linear(28*28, 128)
-        self.fc2 = nn.Linear(128, 10)
+        self.args=args
+        if sparse:
+            self.fc1 = linear_init(28*28, 128, bias=None, args=self.args, )
+            self.fc2 = linear_init(128, 10, bias=None, args=self.args, )
+        else:
+            self.fc1 = nn.Linear(28*28, 128)
+            self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x):
 
@@ -153,9 +162,14 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-
-
-
+class MLC_Iterator:
+    def __init__(self, args,datasets, device,):
+        model1 = Net(args, sparse=True).to(device)
+        model2 = Net(args, sparse=True).to(device)
+        self.args=args
+        train_loader1 = datasets[0]
+        train_loader2 = datasets[1]
+        test_dataset = datasets[2]
 
 def main():
     # Training settings
@@ -190,16 +204,17 @@ def main():
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         if args.ri_baseline:
-            model = Net().to(device)
+            model = Net(args, sparse=True).to(device)
             save_path=f'{weight_dir}mnist_ri_subnetwork_baseline.pt'
         else:
-            model = Net().to(device)
+            model = Net(args, sparse=False).to(device)
             save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
-        model = Net().to(device)
+        mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,)
+
 
 
 
