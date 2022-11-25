@@ -270,7 +270,7 @@ def generate_mlc(model1, model2, model_new):
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
-            m_new.mlc_mask=mlc_mask
+            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
     return model_new
 
