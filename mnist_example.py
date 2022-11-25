@@ -106,6 +106,18 @@ class Net(nn.Module):
         return x
 
 
+def assert_model_equality(model1, model2):
+    print("=> Freezing model weights")
+    for n1, m1, n2,m2 in zip(model1.named_modules(), model2.named_modules()):
+        if not type(m1)==SubnetLinear and not type(m1)==SubnetConv:
+            continue
+        if hasattr(m1, "weight") and m1.weight is not None:
+            assert(m1.weight==m2.weight)
+            if hasattr(m1, "bias") and m1.bias is not None:
+                assert(m1.bias==m2.bias)
+
+
+
 
 def freeze_model_weights(model):
     print("=> Freezing model weights")
@@ -232,7 +244,7 @@ class MLC_Iterator:
 
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
         trainer.fit()
-        return trainer.best_loss
+        return trainer
 
     def run(self):
         mlc_iterations=20
@@ -243,14 +255,19 @@ class MLC_Iterator:
         for iter in range(mlc_iterations):
             model1 = Net(self.args, sparse=True).to(self.device)
             model2 = Net(self.args, sparse=True).to(self.device)
+            assert_model_equality(model1, model2)
+            if iter>0:
+                assert_model_equality(model1, results_dict[f'model_1_{iter-1}'].model)
 
+            print(f"MLC Iterator: {iter}, training model 1")
+            model_1_trainer=self.train_single(model1, f'{self.args.weight_dir}model_1_{iter}.pt', self.train_loader1)
+            print(f"MLC Iterator: {iter}, training model 2")
+            model_2_trainer=self.train_single(model2, f'{self.args.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
+            results_dict[f'model_1_{iter}']=model_1_trainer
+            results_dict[f'model_2_{iter}']=model_2_trainer
 
-            model_1_loss=self.train_single(model1, f'{self.args.weight_dir}model_1_{iter}.pt', self.train_loader1)
-
-
-            model_2_loss=self.train_single(model2, f'{self.args.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
-
-
+            if iter>0:
+                sys.exit()
 
 def main():
     # Training settings
