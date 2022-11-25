@@ -313,7 +313,7 @@ class MLC_Iterator:
         return trainer
 
     def run(self):
-        mlc_iterations=20
+        mlc_iterations=50
         epsilon=1e-2
 
         results_dict={}
