@@ -29,12 +29,12 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 def linear_init(in_dim, out_dim, bias=None, args=None,):
-    layer=SubnetLinear(in_dim,out_dim, bias)
+    layer=SubnetLinear(in_dim,out_dim,bias=False)
     layer.init(args)
     return layer
 
 def conv_init(in_channels, out_channels, kernel_size, stride,  args=None,):
-    layer=SubnetConv(in_channels, out_channels, kernel_size, stride,)
+    layer=SubnetConv(in_channels, out_channels, kernel_size, stride,bias=False)
     layer.init(args)
     return layer
 
