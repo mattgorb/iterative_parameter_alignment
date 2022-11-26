@@ -70,6 +70,7 @@ class SubnetConv(nn.Conv2d):
         if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask==1)
             k=self.base_k-j
+
         else:
             k=self.base_k
 
@@ -83,6 +84,10 @@ class SubnetConv(nn.Conv2d):
         if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask==1)
             k=self.base_k-j
+            print(self.base_k)
+            print(k)
+            print(j)
+            sys.exit()
         else:
             k=self.base_k
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
@@ -308,7 +313,6 @@ def generate_mlc(model1, model2, model_new):
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
             m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
-
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
