@@ -91,6 +91,7 @@ class SubnetConv(nn.Conv2d):
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
 
         if test:
+            print(self.scores.numel())
             print(torch.sum(subnet))
             if self.mlc_mask is not None:
                 testttt=(self.mlc_mask==1).float()
