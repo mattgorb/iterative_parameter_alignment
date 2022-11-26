@@ -72,20 +72,12 @@ class SubnetConv(nn.Conv2d):
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
-    def forward(self, x, test=False):
+    def forward(self, x,):
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
 
-        if test:
-            #subnet2 = GetSubnetEdgePopup.apply(self.scores.abs(), k)
-            #print(torch.sum(subnet2))
-            print(self.scores.numel())
-            print(torch.sum(subnet))
-            if self.mlc_mask is not None:
-                testttt=(self.mlc_mask==1).float()
-                print(torch.sum(testttt))
-            print(self.base_k)
+
         w = self.weight * subnet
         x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
         return x
@@ -113,8 +105,6 @@ class SubnetLinear(nn.Linear):
         return subnet
 
     def forward(self, x):
-
-        #subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
@@ -139,8 +129,8 @@ class Net(nn.Module):
             self.fc1 = nn.Linear(9216, 128)
             self.fc2 = nn.Linear(128, 10)
 
-    def forward(self, x, test=False):
-        x = self.conv1(x,test)
+    def forward(self, x, ):
+        x = self.conv1(x,)
         x = F.relu(x)
         x = self.conv2(x)
         x = F.relu(x)
@@ -270,11 +260,11 @@ class Trainer:
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
-                output = self.model(data, test=True)
+                output = self.model(data, )
                 test_loss += self.criterion(output, target).item()  # sum up batch loss
                 pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
-                break
+
         test_loss /= len(self.test_loader.dataset)
 
         print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
