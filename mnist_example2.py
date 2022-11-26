@@ -299,7 +299,7 @@ def generate_mlc(model1, model2, model_new):
     for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        #n_new, m_new=new_model_mods
+        n_new, m_new=new_model_mods
         if not type(m1)==SubnetLinear and not type(m1)==SubnetConv:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
@@ -363,8 +363,8 @@ class MLC_Iterator:
             results_dict[f'model_2_{iter}']=model_2_trainer
 
             #self.args.score_seed+=1
-            #model_new = Net(self.args, sparse=True).to(self.device)
-            generate_mlc(model1, model2,)
+            model_new = Net(self.args, sparse=True).to(self.device)
+            generate_mlc(model1, model2,model_new)
 
 
 def main():
