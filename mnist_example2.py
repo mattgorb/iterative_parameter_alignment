@@ -67,7 +67,13 @@ class SubnetConv(nn.Conv2d):
         self.base_k=int((0.5) * self.scores.numel())
 
     def get_subnet(self):
-        subnet = GetSubnetEdgePopup.apply(self.scores, )
+        if self.mlc_mask is not None:
+            j = torch.sum(self.mlc_mask==1)
+            k=self.base_k-j
+        else:
+            k=self.base_k
+
+        subnet = GetSubnetEdgePopup.apply(self.scores,k )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
@@ -102,7 +108,12 @@ class SubnetLinear(nn.Linear):
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
     def get_subnet(self):
-        subnet = GetSubnetEdgePopup.apply(self.scores, )
+        if self.mlc_mask is not None:
+            j = torch.sum(self.mlc_mask==1)
+            k=self.base_k-j
+        else:
+            k=self.base_k
+        subnet = GetSubnetEdgePopup.apply(self.scores,k )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
