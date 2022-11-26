@@ -90,7 +90,7 @@ class SubnetConv(nn.Conv2d):
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             print('here')
-
+            print(self.scores[0])
             print(self.mlc_mask[0])
             print('here1')
             print(subnet[0])
@@ -323,6 +323,7 @@ def generate_mlc(model1, model2, model_new):
 
             if n1=='conv1':
                 print('here0')
+                print(m1.scores[0])
                 print(m1_mask[0])
                 print(m2_mask[0])
                 print(mlc[0])
