@@ -128,8 +128,8 @@ class SubnetLinear(nn.Linear):
             k=self.base_k
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
-        if self.mlc_mask is not None:
-            subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+        #if self.mlc_mask is not None:
+            #subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
         x= F.linear(x, w, self.bias)
         return x
@@ -358,9 +358,9 @@ class MLC_Iterator:
             print(f"MLC Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             print(f"MLC Iterator: {iter}, training model 2")
-            model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
+            #model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
             results_dict[f'model_1_{iter}']=model_1_trainer
-            results_dict[f'model_2_{iter}']=model_2_trainer
+            #results_dict[f'model_2_{iter}']=model_2_trainer
 
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
