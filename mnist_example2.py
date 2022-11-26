@@ -89,8 +89,10 @@ class SubnetConv(nn.Conv2d):
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
+            print('here1')
             print(subnet[0])
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+            print('here2')
             print(subnet[0])
         w = self.weight * subnet
         x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
