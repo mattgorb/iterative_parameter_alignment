@@ -81,13 +81,13 @@ class SubnetConv(nn.Conv2d):
 
     def forward(self, x):
         #subnet = GetSubnetSTE.apply(self.scores, )
-        if self.mlc_mask is not None:
-            j = torch.sum(self.mlc_mask==1)
-            k=self.base_k-j
-
+        '''if self.mlc_mask is not None:
+            j = torch.sum(self.mlc_mask == 1)
+            k = self.base_k - j
         else:
             k=self.base_k
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
@@ -121,12 +121,13 @@ class SubnetLinear(nn.Linear):
         return subnet
 
     def forward(self, x):
-        if self.mlc_mask is not None:
+        '''if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask == 1)
             k = self.base_k - j
         else:
             k=self.base_k
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
@@ -298,7 +299,7 @@ def generate_mlc(model1, model2, model_new):
     for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        n_new, m_new=new_model_mods
+        #n_new, m_new=new_model_mods
         if not type(m1)==SubnetLinear and not type(m1)==SubnetConv:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
@@ -316,7 +317,7 @@ def generate_mlc(model1, model2, model_new):
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-    return model_new
+    #return model_new
 
 
 class MLC_Iterator:
@@ -362,8 +363,8 @@ class MLC_Iterator:
             results_dict[f'model_2_{iter}']=model_2_trainer
 
             #self.args.score_seed+=1
-            model_new = Net(self.args, sparse=True).to(self.device)
-            model_new=generate_mlc(model1, model2, model_new)
+            #model_new = Net(self.args, sparse=True).to(self.device)
+            generate_mlc(model1, model2,)
 
 
 def main():
