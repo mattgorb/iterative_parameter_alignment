@@ -91,7 +91,7 @@ class SubnetConv(nn.Conv2d):
         if self.mlc_mask is not None:
             print('here')
 
-            print(self.mlc_mask)
+            print(self.mlc_mask[0])
             print('here1')
             print(subnet[0])
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
