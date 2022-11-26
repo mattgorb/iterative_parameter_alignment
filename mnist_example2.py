@@ -307,23 +307,16 @@ def generate_mlc(model1, model2, model_new):
         if hasattr(m1, "weight") and m1.weight is not None:
             assert(torch.equal(m1.weight,m2.weight))
             m1_mask=m1.get_subnet()
-            print('heere')
-            print(m1_mask[:2])
             m2_mask=m2.get_subnet()
-            print(m2_mask[:2])
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
-            print(mlc[:2])
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
             m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            print("HEEEre2")
-            print(m1_mask[:2])
-            print(m2_mask[:2])
-            print(mlc_mask[:2])
+
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
-            sys.exit()
+
     return model_new
 
 
