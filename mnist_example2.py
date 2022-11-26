@@ -307,6 +307,7 @@ def generate_mlc(model1, model2, model_new):
         if hasattr(m1, "weight") and m1.weight is not None:
             assert(torch.equal(m1.weight,m2.weight))
             m1_mask=m1.get_subnet()
+            print('heere')
             print(m1_mask[0])
             m2_mask=m2.get_subnet()
             print(m2_mask[0])
@@ -315,6 +316,7 @@ def generate_mlc(model1, model2, model_new):
             mlc_mask=torch.ones_like(m1.weight) * -1
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
             m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            print("HEEEre2")
             print(m1_mask[0])
             print(m2_mask[0])
             print(mlc_mask[0])
