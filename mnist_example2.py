@@ -84,10 +84,7 @@ class SubnetConv(nn.Conv2d):
         if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask==1)
             k=self.base_k-j
-            print(self.base_k)
-            print(k)
-            print(j)
-            sys.exit()
+
         else:
             k=self.base_k
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
