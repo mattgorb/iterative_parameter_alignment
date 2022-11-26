@@ -92,6 +92,8 @@ class SubnetConv(nn.Conv2d):
 
         if test:
             print(torch.sum(subnet))
+            print(torch.sum(torch.where(self.mlc_mask==1,1,0)))
+            print(k)
         w = self.weight * subnet
         x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
         return x
