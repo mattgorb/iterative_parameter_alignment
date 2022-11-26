@@ -67,12 +67,12 @@ class SubnetConv(nn.Conv2d):
         self.base_k=int((0.5) * self.scores.numel())
 
     def get_subnet(self):
-        '''if self.mlc_mask is not None:
+        if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask==1)
             k=self.base_k-j
 
         else:
-            k=self.base_k'''
+            k=self.base_k
 
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(),self.base_k )
         #if self.mlc_mask is not None:
@@ -81,23 +81,15 @@ class SubnetConv(nn.Conv2d):
 
     def forward(self, x):
         #subnet = GetSubnetSTE.apply(self.scores, )
-        '''if self.mlc_mask is not None:
+        if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask == 1)
             k = self.base_k - j
         else:
             k=self.base_k
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
+        #subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
-            print('here')
-            print(self.scores[0])
-            print(self.mlc_mask[0])
-            print('here1')
-            print(subnet[0])
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
-            print('here2')
-            print(subnet[0])
-            sys.exit()
         w = self.weight * subnet
         x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
         return x
@@ -123,21 +115,21 @@ class SubnetLinear(nn.Linear):
             k=self.base_k-j
         else:
             k=self.base_k
-        subnet = GetSubnetEdgePopup.apply(self.scores,k )
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(),k )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
     def forward(self, x):
-        '''if self.mlc_mask is not None:
+        if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask == 1)
             k = self.base_k - j
         else:
             k=self.base_k
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)'''
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
-        #if self.mlc_mask is not None:
-            #subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
+        #subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
+        if self.mlc_mask is not None:
+            subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
         x= F.linear(x, w, self.bias)
         return x
@@ -321,13 +313,13 @@ def generate_mlc(model1, model2, model_new):
             m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
-            if n1=='conv1':
+            '''if n1=='conv1':
                 print('here0')
                 print(m1.scores[0])
                 print(m1_mask[0])
                 print(m2_mask[0])
                 print(mlc[0])
-                print(mlc_mask[0])
+                print(mlc_mask[0])'''
 
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
