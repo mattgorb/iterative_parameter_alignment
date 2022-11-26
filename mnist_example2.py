@@ -358,7 +358,7 @@ class MLC_Iterator:
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
 
-            self.args.score_seed+=1
+            #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
             model_new=generate_mlc(model1, model2, model_new)
 
