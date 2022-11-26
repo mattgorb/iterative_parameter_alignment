@@ -79,17 +79,19 @@ class SubnetConv(nn.Conv2d):
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
-    def forward(self, x):
-        #subnet = GetSubnetSTE.apply(self.scores, )
+    def forward(self, x, test=False):
+
         if self.mlc_mask is not None:
             j = torch.sum(self.mlc_mask == 1)
             k = self.base_k - j
         else:
             k=self.base_k
         subnet = GetSubnetEdgePopup.apply(self.scores.abs(), k)
-        #subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
+
+        if test:
+            print(torch.sum(subnet))
         w = self.weight * subnet
         x = F.conv2d(x, w, self.bias, self.stride, self.padding, self.dilation, self.groups)
         return x
@@ -282,11 +284,11 @@ class Trainer:
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
-                output = self.model(data)
+                output = self.model(data, test=True)
                 test_loss += self.criterion(output, target).item()  # sum up batch loss
                 pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
-
+                break
         test_loss /= len(self.test_loader.dataset)
 
         print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
