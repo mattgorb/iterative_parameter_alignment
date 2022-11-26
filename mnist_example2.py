@@ -291,14 +291,6 @@ def generate_mlc(model1, model2, model_new):
             m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
-            '''if n1=='conv1':
-                print('here0')
-                print(m1.scores[0])
-                print(m1_mask[0])
-                print(m2_mask[0])
-                print(mlc[0])
-                print(mlc_mask[0])'''
-
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
@@ -338,15 +330,15 @@ class MLC_Iterator:
                 #model2=copy.deepcopy(model_new)
                 assert_model_weight_equality(model1, model2, mlc_mask=True)
                 assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
-                model_1_trainer.test()
-                sys.exit()
+                #model_1_trainer.test()
+
 
             print(f"MLC Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             print(f"MLC Iterator: {iter}, training model 2")
-            #model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
+            model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
             results_dict[f'model_1_{iter}']=model_1_trainer
-            #results_dict[f'model_2_{iter}']=model_2_trainer
+            results_dict[f'model_2_{iter}']=model_2_trainer
 
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
