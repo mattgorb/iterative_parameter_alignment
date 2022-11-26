@@ -323,6 +323,7 @@ def generate_mlc(model1, model2, model_new):
 
             if n1=='conv1':
                 print('here0')
+                print(m1_mask)
                 print(mlc[0])
                 print(mlc_mask[0])
 
