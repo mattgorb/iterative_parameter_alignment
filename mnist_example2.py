@@ -74,7 +74,7 @@ class SubnetConv(nn.Conv2d):
         else:
             k=self.base_k'''
 
-        subnet = GetSubnetEdgePopup.apply(self.scores,k )
+        subnet = GetSubnetEdgePopup.apply(self.scores,self.base_k )
         #if self.mlc_mask is not None:
             #subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
