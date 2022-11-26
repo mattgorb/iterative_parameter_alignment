@@ -11,25 +11,7 @@ import math
 import random
 import copy
 
-class GetSubnetEdgePopup(autograd.Function):
-    @staticmethod
-    def forward(ctx, scores, k):
-        # Get the subnetwork by sorting the scores and using the top k%
-        out = scores.clone()
-        _, idx = scores.flatten().sort()
-        j = int((1 - k) * scores.numel())
 
-        # flat_out and out access the same memory.
-        flat_out = out.flatten()
-        flat_out[idx[:j]] = 0
-        flat_out[idx[j:]] = 1
-
-        return out
-
-    @staticmethod
-    def backward(ctx, g):
-        # send the gradient g straight-through on the backward pass.
-        return g, None
 
 class GetSubnetSTE(autograd.Function):
     @staticmethod
@@ -80,8 +62,7 @@ class SubnetConv(nn.Conv2d):
         return subnet
 
     def forward(self, x):
-        #subnet = GetSubnetSTE.apply(self.scores, )
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), 0.5)
+        subnet = GetSubnetSTE.apply(self.scores, )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
@@ -108,8 +89,7 @@ class SubnetLinear(nn.Linear):
         return subnet
 
     def forward(self, x):
-        #subnet = GetSubnetSTE.apply(self.scores, )
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), 0.5)
+        subnet = GetSubnetSTE.apply(self.scores, )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
@@ -207,6 +187,11 @@ def get_datasets(args):
         print(f'ds2_labels: {ds2_labels}')
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
+
+        #80/20 split
+        ds1_indices=ds1_indices[:int(len(ds1_indices)*.8)]+ds2_indices[int(len(ds1_indices)*.8):]
+        ds2_indices=ds1_indices[int(len(ds1_indices)*.8):]+ds2_indices[:int(len(ds1_indices)*.8)]
+
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         assert(set(ds1_indices).isdisjoint(ds2_indices))

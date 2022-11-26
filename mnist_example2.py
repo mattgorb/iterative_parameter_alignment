@@ -326,8 +326,6 @@ class MLC_Iterator:
                 model2 = Net(self.args, sparse=True).to(self.device)
                 assert_model_weight_equality(model1, model2, mlc_mask=False)
             else:
-                #model1=copy.deepcopy(model_new)
-                #model2=copy.deepcopy(model_new)
                 assert_model_weight_equality(model1, model2, mlc_mask=True)
                 assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
                 model_1_trainer.test()
