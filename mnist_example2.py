@@ -206,7 +206,7 @@ def get_datasets(args):
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
         #p/1-p split
-        p=0.9
+        p=0.75
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
         ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
@@ -295,7 +295,20 @@ def generate_mlc(model1, model2, model_new):
             m2_mask=m2.get_subnet()
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
             mlc_mask=torch.ones_like(m1.weight) * -1
+
+            '''
+            new logic: keep most important scores from each subnetwork.  
+            but override these values where there is a matching linear codimension.  
+            '''
+            k=int(m1.scores.numel()*0.99)
+            _, idx1 = m1.scores.abs().flatten().sort()
+            _, idx2 = m2.scores.abs().flatten().sort()
+            mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
+            mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]
+
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+
+
             #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
