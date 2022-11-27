@@ -282,7 +282,7 @@ def generate_mlc(model1, model2, model_new, iter):
                         if i==j:
                             continue
                         y = torch.sum(torch.where(mlc_mask[j] == -1, 1, 0))
-                        print(f'{i}, {j}, {x==y}')
+                        print(f'{i}, {j}')
                         print(torch.sum(x==y))
             if n1=='fc2':
                 print(m1)
@@ -293,7 +293,7 @@ def generate_mlc(model1, model2, model_new, iter):
                         if i==j:
                             continue
                         y = torch.sum(torch.where(mlc_mask[j] == -1, 1, 0))
-                        print(f'{i}, {j}, {x==y}')
+                        print(f'{i}, {j}')
                         print(torch.sum(x==y))
 
                 sys.exit()
