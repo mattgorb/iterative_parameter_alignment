@@ -213,7 +213,7 @@ class Trainer:
         self.optimizer = optim.SGD(
             [p for p in self.model.parameters() if p.requires_grad],
             lr=args.lr,
-            momentum=args.momentum,
+            momentum=0.9,
             weight_decay=args.wd,
         )
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
