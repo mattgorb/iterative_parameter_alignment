@@ -301,10 +301,10 @@ def generate_mlc(model1, model2, model_new):
             #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
 
-
+            m1.scores = m2.scores
             if n1=='fc2':
 
-                m1.scores=m2.scores
+
 
                 print(m1)
                 print(m1.weight.size())
