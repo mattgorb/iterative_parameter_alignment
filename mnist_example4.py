@@ -253,6 +253,7 @@ class Trainer:
         self.model.eval()
         test_loss = 0
         correct = 0
+        pred_dict={}
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
@@ -260,12 +261,19 @@ class Trainer:
                 test_loss += self.criterion(output, target).item()  # sum up batch loss
                 pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
+                for i,j in zip(target,pred):
+                    if j.eq(i.view_as(j)):
+                        if i not in pred_dict:
+                            pred_dict[i]=0
+                        pred_dict[i]+=1
+
 
         test_loss /= len(self.test_loader.dataset)
 
         print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
             test_loss, correct, len(self.test_loader.dataset),
             100. * correct / len(self.test_loader.dataset)))
+        print(pred_dict)
 
 
 def generate_mlc(model1, model2, model_new):
