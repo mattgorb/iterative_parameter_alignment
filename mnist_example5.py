@@ -255,15 +255,15 @@ def generate_mlc(model1, model2, model_new, iter):
                 mlc_mask=torch.ones_like(m1.weight) * -1
 
 
-                mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
-
+                ##mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+                m1.mlc_mask[:,5:]=m2_mask[:,5:]
 
 
                 #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
                 #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-                m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+                #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
                 m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
                 m1.inc_score()
@@ -273,8 +273,8 @@ def generate_mlc(model1, model2, model_new, iter):
                 print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
                 print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-                for i in range(10):
-                    print(torch.sum(torch.where(mlc_mask[i]==-1,1,0)))
+                #for i in range(10):
+                    #print(torch.sum(torch.where(mlc_mask[i]==-1,1,0)))
 
     return model_new
 
@@ -310,6 +310,7 @@ class MLC_Iterator:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
                 model_1_trainer.test()
+                sys.exit()
                 model_2_trainer.test()
 
 
