@@ -288,17 +288,17 @@ def generate_mlc(model1, model2, model_new):
             new logic: keep most important scores from each subnetwork.  
             but override these values where there is a matching linear codimension.  
             '''
-            k=int(m1.scores.numel()*0.99)
+            '''k=int(m1.scores.numel()*0.99)
             _, idx1 = m1.scores.abs().flatten().sort()
             _, idx2 = m2.scores.abs().flatten().sort()
             mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
-            mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]
+            mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]'''
 
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
-            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
     return model_new
 
@@ -331,8 +331,8 @@ class MLC_Iterator:
                 model2 = Net(self.args, sparse=True).to(self.device)
                 assert_model_weight_equality(model1, model2, mlc_mask=False)
             else:
-                #model1=copy.deepcopy(model_new)
-                #model2=copy.deepcopy(model_new)
+                model1=copy.deepcopy(model_new)
+                model2=copy.deepcopy(model_new)
                 assert_model_weight_equality(model1, model2, mlc_mask=True)
                 assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
 
@@ -344,7 +344,7 @@ class MLC_Iterator:
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
 
-            #self.args.score_seed+=1
+            self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
             model_new=generate_mlc(model1, model2, model_new)
 
