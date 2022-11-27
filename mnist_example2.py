@@ -308,7 +308,7 @@ def generate_mlc(model1, model2, model_new, iter):
             new logic: keep most important scores from each subnetwork.  
             but override these values where there is a matching linear codimension.  
             '''
-            if iter>40:
+            if iter>5:
                 k=int(m1.scores.numel()*0.995)
                 _, idx1 = m1.scores.abs().flatten().sort()
                 _, idx2 = m2.scores.abs().flatten().sort()
