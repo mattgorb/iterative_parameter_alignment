@@ -1,145 +1,289 @@
-(transformers) luffy:~/matching_lin_codim$ python mnist_example.py --baseline=True
+(transformers) luffy:~/matching_lin_codim$ python mnist_example2.py --baseline=True  --epochs=100 --gpu=6
+
 /s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: /s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/image.so: undefined symbol: _ZN3c106detail19maybe_wrap_dim_slowEllb
   warn(f"Failed to load image Python extension: {e}")
 => Freezing model weights
 Fitting model...
 Epoch 1
-Test set: Average loss: 0.0502, Accuracy: 9841/10000 (98%)
 Saving model with train loss 0.17528678476810455
+Test set: Average loss: 0.0502, Accuracy: 9841/10000 (98%)
 Epoch 2
-Test set: Average loss: 0.0376, Accuracy: 9874/10000 (99%)
-Saving model with train loss 0.04631340876221657
+Saving model with train loss 0.04641309008002281
+Test set: Average loss: 0.0375, Accuracy: 9877/10000 (99%)
 Epoch 3
-Test set: Average loss: 0.0380, Accuracy: 9873/10000 (99%)
-Saving model with train loss 0.028094010427594185
+Saving model with train loss 0.0282493494451046
+Test set: Average loss: 0.0379, Accuracy: 9877/10000 (99%)
 Epoch 4
-Test set: Average loss: 0.0435, Accuracy: 9877/10000 (99%)
-Saving model with train loss 0.01928754337131977
+Saving model with train loss 0.019177082926034927
+Test set: Average loss: 0.0450, Accuracy: 9870/10000 (99%)
 Epoch 5
-Test set: Average loss: 0.0384, Accuracy: 9888/10000 (99%)
-Saving model with train loss 0.013963970355689526
+Saving model with train loss 0.014063042588531971
+Test set: Average loss: 0.0385, Accuracy: 9881/10000 (99%)
 Epoch 6
-Test set: Average loss: 0.0407, Accuracy: 9884/10000 (99%)
-Saving model with train loss 0.01092939730733633
+Saving model with train loss 0.0094631751999259
+Test set: Average loss: 0.0342, Accuracy: 9899/10000 (99%)
 Epoch 7
-Test set: Average loss: 0.0422, Accuracy: 9879/10000 (99%)
-Saving model with train loss 0.007319487631320953
+Saving model with train loss 0.0069720130413770676
+Test set: Average loss: 0.0445, Accuracy: 9875/10000 (99%)
 Epoch 8
-Test set: Average loss: 0.0453, Accuracy: 9890/10000 (99%)
-Saving model with train loss 0.0058176652528345585
+Saving model with train loss 0.005355928558856249
+Test set: Average loss: 0.0413, Accuracy: 9890/10000 (99%)
 Epoch 9
-Test set: Average loss: 0.0373, Accuracy: 9898/10000 (99%)
+Saving model with train loss 0.004523273557424545
+Test set: Average loss: 0.0426, Accuracy: 9893/10000 (99%)
 Epoch 10
-Test set: Average loss: 0.0376, Accuracy: 9909/10000 (99%)
-Saving model with train loss 0.0034897816367447376
 Epoch 11
-Test set: Average loss: 0.0467, Accuracy: 9892/10000 (99%)
 Epoch 12
-Test set: Average loss: 0.0432, Accuracy: 9897/10000 (99%)
 Epoch 13
-Test set: Average loss: 0.0426, Accuracy: 9898/10000 (99%)
-Saving model with train loss 0.0030359444208443165
 Epoch 14
-Test set: Average loss: 0.0423, Accuracy: 9885/10000 (99%)
-Saving model with train loss 0.002588069997727871
+Saving model with train loss 0.0034048769157379866
+Test set: Average loss: 0.0462, Accuracy: 9886/10000 (99%)
 Epoch 15
-Test set: Average loss: 0.0470, Accuracy: 9898/10000 (99%)
-Saving model with train loss 0.0014635573606938124
+Saving model with train loss 0.001795098534785211
+Test set: Average loss: 0.0505, Accuracy: 9898/10000 (99%)
 Epoch 16
-Test set: Average loss: 0.0490, Accuracy: 9886/10000 (99%)
 Epoch 17
-Test set: Average loss: 0.0500, Accuracy: 9892/10000 (99%)
 Epoch 18
-Test set: Average loss: 0.0534, Accuracy: 9883/10000 (99%)
 Epoch 19
-Test set: Average loss: 0.0572, Accuracy: 9894/10000 (99%)
 Epoch 20
-Test set: Average loss: 0.0691, Accuracy: 9867/10000 (99%)
 Epoch 21
-Test set: Average loss: 0.0478, Accuracy: 9906/10000 (99%)
+Saving model with train loss 0.0012677572667598724
+Test set: Average loss: 0.0517, Accuracy: 9900/10000 (99%)
 Epoch 22
-Test set: Average loss: 0.0480, Accuracy: 9905/10000 (99%)
-Saving model with train loss 0.0005708345561288297
+Saving model with train loss 0.000613066484220326
+Test set: Average loss: 0.0480, Accuracy: 9900/10000 (99%)
 Epoch 23
-Test set: Average loss: 0.0443, Accuracy: 9915/10000 (99%)
-Saving model with train loss 0.00012478952703531832
+Saving model with train loss 0.00020411094010341913
+Test set: Average loss: 0.0486, Accuracy: 9907/10000 (99%)
 Epoch 24
-Test set: Average loss: 0.0454, Accuracy: 9913/10000 (99%)
-Saving model with train loss 2.030499672400765e-05
+Saving model with train loss 4.3480944441398606e-05
+Test set: Average loss: 0.0482, Accuracy: 9912/10000 (99%)
 Epoch 25
-Test set: Average loss: 0.0461, Accuracy: 9913/10000 (99%)
-Saving model with train loss 1.2693923054030165e-05
+Saving model with train loss 1.1392552551114932e-05
+Test set: Average loss: 0.0486, Accuracy: 9910/10000 (99%)
 Epoch 26
-Test set: Average loss: 0.0467, Accuracy: 9913/10000 (99%)
-Saving model with train loss 9.901312296278775e-06
+Saving model with train loss 8.59759165905416e-06
+Test set: Average loss: 0.0490, Accuracy: 9911/10000 (99%)
 Epoch 27
-Test set: Average loss: 0.0473, Accuracy: 9912/10000 (99%)
-Saving model with train loss 7.999567060323898e-06
+Saving model with train loss 7.070894298522035e-06
+Test set: Average loss: 0.0496, Accuracy: 9910/10000 (99%)
 Epoch 28
-Test set: Average loss: 0.0478, Accuracy: 9912/10000 (99%)
-Saving model with train loss 6.6595098360267e-06
+Saving model with train loss 5.952276296739001e-06
+Test set: Average loss: 0.0500, Accuracy: 9910/10000 (99%)
 Epoch 29
-Test set: Average loss: 0.0484, Accuracy: 9913/10000 (99%)
-Saving model with train loss 5.588172371062683e-06
+Saving model with train loss 5.084431904833764e-06
+Test set: Average loss: 0.0505, Accuracy: 9910/10000 (99%)
 Epoch 30
-Test set: Average loss: 0.0489, Accuracy: 9913/10000 (99%)
-Saving model with train loss 4.771020030602813e-06
+Saving model with train loss 4.381230155559024e-06
+Test set: Average loss: 0.0510, Accuracy: 9910/10000 (99%)
 Epoch 31
-Test set: Average loss: 0.0495, Accuracy: 9915/10000 (99%)
-Saving model with train loss 4.094098585483152e-06
+Saving model with train loss 3.8172825043147895e-06
+Test set: Average loss: 0.0515, Accuracy: 9911/10000 (99%)
 Epoch 32
-Test set: Average loss: 0.0499, Accuracy: 9913/10000 (99%)
-Saving model with train loss 3.5315601962793153e-06
+Saving model with train loss 3.3277797228947747e-06
+Test set: Average loss: 0.0519, Accuracy: 9911/10000 (99%)
 Epoch 33
-Test set: Average loss: 0.0505, Accuracy: 9913/10000 (99%)
-Saving model with train loss 3.0674816571263364e-06
+Saving model with train loss 2.9263560463732574e-06
+Test set: Average loss: 0.0525, Accuracy: 9912/10000 (99%)
 Epoch 34
-Test set: Average loss: 0.0509, Accuracy: 9914/10000 (99%)
-Saving model with train loss 2.6717482342064613e-06
+Saving model with train loss 2.583605009931489e-06
+Test set: Average loss: 0.0529, Accuracy: 9912/10000 (99%)
 Epoch 35
-Test set: Average loss: 0.0515, Accuracy: 9914/10000 (99%)
-Saving model with train loss 2.325565446881228e-06
+Saving model with train loss 2.2874944534123642e-06
+Test set: Average loss: 0.0534, Accuracy: 9912/10000 (99%)
 Epoch 36
-Test set: Average loss: 0.0519, Accuracy: 9915/10000 (99%)
-Saving model with train loss 2.040479330389644e-06
+Saving model with train loss 2.026988795478246e-06
+Test set: Average loss: 0.0539, Accuracy: 9911/10000 (99%)
 Epoch 37
-Test set: Average loss: 0.0524, Accuracy: 9915/10000 (99%)
-Saving model with train loss 1.7815279989008559e-06
+Saving model with train loss 1.803799023036845e-06
+Test set: Average loss: 0.0543, Accuracy: 9912/10000 (99%)
 Epoch 38
-Test set: Average loss: 0.0530, Accuracy: 9915/10000 (99%)
-Saving model with train loss 1.5676253042329336e-06
+Saving model with train loss 1.6090400549728656e-06
+Test set: Average loss: 0.0548, Accuracy: 9913/10000 (99%)
 Epoch 39
-Test set: Average loss: 0.0534, Accuracy: 9915/10000 (99%)
-Saving model with train loss 1.3774040326097747e-06
+Saving model with train loss 1.4327303006211878e-06
+Test set: Average loss: 0.0553, Accuracy: 9914/10000 (99%)
 Epoch 40
-Test set: Average loss: 0.0539, Accuracy: 9915/10000 (99%)
-Saving model with train loss 1.2138484635215718e-06
+Saving model with train loss 1.2830798823415535e-06
+Test set: Average loss: 0.0558, Accuracy: 9914/10000 (99%)
 Epoch 41
-Test set: Average loss: 0.0544, Accuracy: 9915/10000 (99%)
-Saving model with train loss 1.0678517128326348e-06
+Saving model with train loss 1.1491842997202184e-06
+Test set: Average loss: 0.0562, Accuracy: 9914/10000 (99%)
 Epoch 42
-Test set: Average loss: 0.0550, Accuracy: 9915/10000 (99%)
-Saving model with train loss 9.38151742957416e-07
+Saving model with train loss 1.03044590105128e-06
+Test set: Average loss: 0.0567, Accuracy: 9914/10000 (99%)
 Epoch 43
-Test set: Average loss: 0.0555, Accuracy: 9914/10000 (99%)
-Saving model with train loss 8.287566402032098e-07
+Saving model with train loss 9.268713938581641e-07
+Test set: Average loss: 0.0572, Accuracy: 9913/10000 (99%)
 Epoch 44
-Test set: Average loss: 0.0560, Accuracy: 9916/10000 (99%)
-Saving model with train loss 7.290566941264842e-07
+Saving model with train loss 8.349709901267488e-07
+Test set: Average loss: 0.0576, Accuracy: 9913/10000 (99%)
 Epoch 45
-Test set: Average loss: 0.0565, Accuracy: 9918/10000 (99%)
-Saving model with train loss 6.446988436437096e-07
+Saving model with train loss 7.504738732677652e-07
+Test set: Average loss: 0.0581, Accuracy: 9913/10000 (99%)
 Epoch 46
-Test set: Average loss: 0.0569, Accuracy: 9918/10000 (99%)
-Saving model with train loss 5.681905577148427e-07
+Saving model with train loss 6.774077405680146e-07
+Test set: Average loss: 0.0586, Accuracy: 9913/10000 (99%)
 Epoch 47
-Test set: Average loss: 0.0575, Accuracy: 9918/10000 (99%)
-Saving model with train loss 5.016149202674569e-07
+Saving model with train loss 6.11531561389711e-07
+Test set: Average loss: 0.0591, Accuracy: 9913/10000 (99%)
 Epoch 48
-Test set: Average loss: 0.0580, Accuracy: 9918/10000 (99%)
-Saving model with train loss 4.4177167524139804e-07
+Saving model with train loss 5.536037974707142e-07
+Test set: Average loss: 0.0595, Accuracy: 9913/10000 (99%)
 Epoch 49
-Test set: Average loss: 0.0584, Accuracy: 9917/10000 (99%)
-Saving model with train loss 3.904685001998587e-07
+Saving model with train loss 4.997843348064634e-07
+Test set: Average loss: 0.0599, Accuracy: 9913/10000 (99%)
 Epoch 50
-Test set: Average loss: 0.0590, Accuracy: 9917/10000 (99%)
+Saving model with train loss 4.528539818693389e-07
+Test set: Average loss: 0.0604, Accuracy: 9913/10000 (99%)
+Epoch 51
+Saving model with train loss 4.096769998795935e-07
+Test set: Average loss: 0.0608, Accuracy: 9913/10000 (99%)
+Epoch 52
+Saving model with train loss 3.7169252209423576e-07
+Test set: Average loss: 0.0613, Accuracy: 9913/10000 (99%)
+Epoch 53
+Saving model with train loss 3.3764789009183005e-07
+Test set: Average loss: 0.0616, Accuracy: 9913/10000 (99%)
+Epoch 54
+Saving model with train loss 3.06163940422266e-07
+Test set: Average loss: 0.0621, Accuracy: 9912/10000 (99%)
+Epoch 55
+Saving model with train loss 2.7869901941812714e-07
+Test set: Average loss: 0.0625, Accuracy: 9913/10000 (99%)
+Epoch 56
+Saving model with train loss 2.5355052457598504e-07
+Test set: Average loss: 0.0629, Accuracy: 9912/10000 (99%)
+Epoch 57
+Saving model with train loss 2.3127495296648704e-07
+Test set: Average loss: 0.0634, Accuracy: 9912/10000 (99%)
+Epoch 58
+Saving model with train loss 2.1070604816486593e-07
+Test set: Average loss: 0.0638, Accuracy: 9912/10000 (99%)
+Epoch 59
+Saving model with train loss 1.921554542150261e-07
+Test set: Average loss: 0.0642, Accuracy: 9911/10000 (99%)
+Epoch 60
+Saving model with train loss 1.7599697343939624e-07
+Test set: Average loss: 0.0646, Accuracy: 9912/10000 (99%)
+Epoch 61
+Saving model with train loss 1.607285327054342e-07
+Test set: Average loss: 0.0650, Accuracy: 9912/10000 (99%)
+Epoch 62
+Saving model with train loss 1.4728190933510632e-07
+Test set: Average loss: 0.0654, Accuracy: 9912/10000 (99%)
+Epoch 63
+Saving model with train loss 1.3496384099198622e-07
+Test set: Average loss: 0.0658, Accuracy: 9912/10000 (99%)
+Epoch 64
+Saving model with train loss 1.2416168715390086e-07
+Test set: Average loss: 0.0662, Accuracy: 9912/10000 (99%)
+Epoch 65
+Saving model with train loss 1.1411445655085117e-07
+Test set: Average loss: 0.0666, Accuracy: 9912/10000 (99%)
+Epoch 66
+Saving model with train loss 1.0501492653247624e-07
+Test set: Average loss: 0.0670, Accuracy: 9912/10000 (99%)
+Epoch 67
+Saving model with train loss 9.676570300598542e-08
+Test set: Average loss: 0.0674, Accuracy: 9912/10000 (99%)
+Epoch 68
+Saving model with train loss 8.920591199057526e-08
+Test set: Average loss: 0.0678, Accuracy: 9912/10000 (99%)
+Epoch 69
+Saving model with train loss 8.229979897578232e-08
+Test set: Average loss: 0.0681, Accuracy: 9912/10000 (99%)
+Epoch 70
+Saving model with train loss 7.606917051816708e-08
+Test set: Average loss: 0.0685, Accuracy: 9913/10000 (99%)
+Epoch 71
+Saving model with train loss 7.038096327960375e-08
+Test set: Average loss: 0.0689, Accuracy: 9913/10000 (99%)
+Epoch 72
+Saving model with train loss 6.531856655556112e-08
+Test set: Average loss: 0.0692, Accuracy: 9913/10000 (99%)
+Epoch 73
+Saving model with train loss 6.071311986488581e-08
+Test set: Average loss: 0.0696, Accuracy: 9913/10000 (99%)
+Epoch 74
+Saving model with train loss 5.631829935737187e-08
+Test set: Average loss: 0.0699, Accuracy: 9914/10000 (99%)
+Epoch 75
+Saving model with train loss 5.25095948944454e-08
+Test set: Average loss: 0.0703, Accuracy: 9914/10000 (99%)
+Epoch 76
+Saving model with train loss 4.895916205782669e-08
+Test set: Average loss: 0.0706, Accuracy: 9914/10000 (99%)
+Epoch 77
+Saving model with train loss 4.577231038638274e-08
+Test set: Average loss: 0.0709, Accuracy: 9914/10000 (99%)
+Epoch 78
+Saving model with train loss 4.2851702630741784e-08
+Test set: Average loss: 0.0712, Accuracy: 9914/10000 (99%)
+Epoch 79
+Saving model with train loss 4.009400456084222e-08
+Test set: Average loss: 0.0715, Accuracy: 9914/10000 (99%)
+Epoch 80
+Saving model with train loss 3.7674066533099904e-08
+Test set: Average loss: 0.0718, Accuracy: 9914/10000 (99%)
+Epoch 81
+Saving model with train loss 3.5508431750486125e-08
+Test set: Average loss: 0.0721, Accuracy: 9914/10000 (99%)
+Epoch 82
+Saving model with train loss 3.347988553059622e-08
+Test set: Average loss: 0.0723, Accuracy: 9914/10000 (99%)
+Epoch 83
+Saving model with train loss 3.164407758049492e-08
+Test set: Average loss: 0.0726, Accuracy: 9914/10000 (99%)
+Epoch 84
+Saving model with train loss 2.9973158177654113e-08
+Test set: Average loss: 0.0728, Accuracy: 9914/10000 (99%)
+Epoch 85
+Saving model with train loss 2.845523461303401e-08
+Test set: Average loss: 0.0730, Accuracy: 9914/10000 (99%)
+Epoch 86
+Saving model with train loss 2.7130028001920437e-08
+Test set: Average loss: 0.0733, Accuracy: 9914/10000 (99%)
+Epoch 87
+Saving model with train loss 2.5860449781589523e-08
+Test set: Average loss: 0.0735, Accuracy: 9914/10000 (99%)
+Epoch 88
+Saving model with train loss 2.4791544817048816e-08
+Test set: Average loss: 0.0737, Accuracy: 9914/10000 (99%)
+Epoch 89
+Saving model with train loss 2.3782240177183667e-08
+Test set: Average loss: 0.0739, Accuracy: 9914/10000 (99%)
+Epoch 90
+Saving model with train loss 2.2923934750451735e-08
+Test set: Average loss: 0.0741, Accuracy: 9914/10000 (99%)
+Epoch 91
+Saving model with train loss 2.2166954494196034e-08
+Test set: Average loss: 0.0742, Accuracy: 9914/10000 (99%)
+Epoch 92
+Saving model with train loss 2.151329425714721e-08
+Test set: Average loss: 0.0743, Accuracy: 9914/10000 (99%)
+Epoch 93
+Saving model with train loss 2.0893402563615382e-08
+Test set: Average loss: 0.0745, Accuracy: 9914/10000 (99%)
+Epoch 94
+Saving model with train loss 2.04046468610386e-08
+Test set: Average loss: 0.0745, Accuracy: 9914/10000 (99%)
+Epoch 95
+Saving model with train loss 2.001324084233147e-08
+Test set: Average loss: 0.0746, Accuracy: 9914/10000 (99%)
+Epoch 96
+Saving model with train loss 1.971919338927819e-08
+Test set: Average loss: 0.0747, Accuracy: 9914/10000 (99%)
+Epoch 97
+Saving model with train loss 1.9488721747507043e-08
+Test set: Average loss: 0.0747, Accuracy: 9914/10000 (99%)
+Epoch 98
+Saving model with train loss 1.9311896082285784e-08
+Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
+Epoch 99
+Saving model with train loss 1.9180767196758097e-08
+Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
+Epoch 100
+Saving model with train loss 1.9131096706814787e-08
+Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
+(transformers) luffy:~/matching_lin_codim$
