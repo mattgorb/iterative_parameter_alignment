@@ -263,7 +263,7 @@ def generate_mlc(model1, model2, model_new, iter):
 
 
                 #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-                m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+                #ßm1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
                 #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
                 #m1.inc_score()
