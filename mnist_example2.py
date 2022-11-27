@@ -289,7 +289,7 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2, iter):
+def generate_mlc(model1, model2, model_new, iter):
     print("=> Generating MLC mask")
     for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
         n1,m1=model1_mods
@@ -308,7 +308,7 @@ def generate_mlc(model1, model2, iter):
             new logic: keep most important scores from each subnetwork.  
             but override these values where there is a matching linear codimension.  
             '''
-            if iter>20:
+            if iter>40:
                 k=int(m1.scores.numel()*0.995)
                 _, idx1 = m1.scores.abs().flatten().sort()
                 _, idx2 = m2.scores.abs().flatten().sort()
@@ -346,7 +346,7 @@ class MLC_Iterator:
         return trainer
 
     def run(self):
-        mlc_iterations=25
+        mlc_iterations=50
         epsilon=1e-2
 
         results_dict={}
@@ -372,7 +372,7 @@ class MLC_Iterator:
 
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
-            generate_mlc(model1, model2,iter)
+            generate_mlc(model1, model2,model_new,iter)
 
 
 def main():
