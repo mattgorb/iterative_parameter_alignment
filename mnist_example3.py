@@ -313,15 +313,15 @@ def generate_mlc(model1, model2, model_new):
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-    #return model_new
+    return model_new
 
 
 class MLC_Iterator:
@@ -369,7 +369,7 @@ class MLC_Iterator:
 
             self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
-            generate_mlc(model1, model2,model_new)
+            model_new =generate_mlc(model1, model2,model_new)
 
 
 def main():
