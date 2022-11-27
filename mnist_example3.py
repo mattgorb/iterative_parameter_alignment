@@ -207,13 +207,17 @@ def get_datasets(args):
 
 
         #p/1-p split
-        #p=0.75
-        #ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        p=0.99
+        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         #assert(set(ds1_indices).isdisjoint(ds2_indices))
+
+
+        print(len(dataset1.targets))
+        print(len(dataset2.targets))
 
         #dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
         #dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
@@ -285,7 +289,7 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2, model_new):
+def generate_mlc(model1, model2, model_new, iter):
     print("=> Generating MLC mask")
     for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
         n1,m1=model1_mods
@@ -304,24 +308,26 @@ def generate_mlc(model1, model2, model_new):
             new logic: keep most important scores from each subnetwork.  
             but override these values where there is a matching linear codimension.  
             '''
-            k=int(m1.scores.numel()*0.95)
-            _, idx1 = m1.scores.abs().flatten().sort()
-            _, idx2 = m2.scores.abs().flatten().sort()
-            mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
-            mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]
+
+            diff=(m1.scores.abs()-m2.scores.abs())
+            mlc_mask=torch.where(diff>0,m1.scores, m2.scores)
+            #_, idx1 = m1.scores.abs().flatten().sort()
+            #_, idx2 = m2.scores.abs().flatten().sort()
+            #mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
+            #mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]
 
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-    return model_new
+    #return model_new
 
 
 class MLC_Iterator:
@@ -352,8 +358,6 @@ class MLC_Iterator:
                 model2 = Net(self.args, sparse=True).to(self.device)
                 assert_model_weight_equality(model1, model2, mlc_mask=False)
             else:
-                model1=copy.deepcopy(model_new)
-                model2=copy.deepcopy(model_new)
                 assert_model_weight_equality(model1, model2, mlc_mask=True)
                 assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
                 model_1_trainer.test()
@@ -367,11 +371,12 @@ class MLC_Iterator:
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
 
-            self.args.score_seed+=1
+            #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
-            model_new =generate_mlc(model1, model2,model_new)
-
-
+            model_new =generate_mlc(model1, model2,model_new,iter)
+            model_new_trainer = self.train_single(model_new , f'{self.weight_dir}model_2_{iter}.pt', self.train_loader2)
+            model_new_trainer.test()
+            sys.exit()
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
