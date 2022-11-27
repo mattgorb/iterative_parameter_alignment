@@ -10,6 +10,7 @@ import torch.autograd as autograd
 import math
 import random
 import copy
+from torch.optim.lr_scheduler import CosineAnnealingLR
 
 
 
@@ -208,7 +209,15 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
+        #self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
+        self.optimizer = optim.SGD(
+            [p for p in self.model.parameters() if p.requires_grad],
+            lr=args.lr,
+            momentum=args.momentum,
+            weight_decay=args.wd,
+        )
+        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
+
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
@@ -224,6 +233,7 @@ class Trainer:
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
                 self.test()
+            self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
@@ -281,7 +291,7 @@ def generate_mlc(model1, model2, model_new):
             new logic: keep most important scores from each subnetwork.  
             but override these values where there is a matching linear codimension.  
             '''
-            k=int(m1.scores.numel()*0.98)
+            k=int(m1.scores.numel()*0.99)
             _, idx1 = m1.scores.abs().flatten().sort()
             _, idx2 = m2.scores.abs().flatten().sort()
             mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
@@ -289,7 +299,9 @@ def generate_mlc(model1, model2, model_new):
 
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
-            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
     return model_new
 
