@@ -84,16 +84,16 @@ class Net(nn.Module):
         self.args=args
         self.sparse=sparse
         if self.sparse:
-            self.fc1 = linear_init(28*28, 1024, bias=None, args=self.args, )
-            self.fc2 = linear_init(1024, 10, bias=None, args=self.args, )
+            #self.fc1 = linear_init(28*28, 1024, bias=None, args=self.args, )
+            self.fc2 = linear_init(28*28, 10, bias=None, args=self.args, )
         else:
-            self.fc1 = nn.Linear(28*28, 1024)
-            self.fc2 = nn.Linear(1024, 10)
+            #self.fc1 = nn.Linear(28*28, 1024)
+            self.fc2 = nn.Linear(28*28, 10)
 
     def forward(self, x, ):
-        x = self.fc1(x.view(-1, 28*28))
-        x = F.relu(x)
-        x = self.fc2(x)
+        #x = self.fc1(x.view(-1, 28*28))
+        #x = F.relu(x)
+        x = self.fc2(x.view(-1, 28*28))
         return x
 
 
