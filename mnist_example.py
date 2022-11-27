@@ -274,8 +274,17 @@ def generate_mlc(model1, model2, model_new):
             m1_mask=m1.get_subnet()
             m2_mask=m2.get_subnet()
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
+
             mlc_mask=torch.ones_like(m1.weight) * -1
+
+            k=int(m1.scores.numel()*0.05)
+            _, idx1 = m1.scores.abs().flatten().sort()[k:]
+            _, idx2 = m2.scores.abs().flatten().sort()[k:]
+            mlc_mask.flatten()[idx1]=m1.scores.flatten()[idx1]
+            mlc_mask.flatten()[idx2]=m1.scores.flatten()[idx2]
+
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+
             m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
             print(f'Module: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
     return model_new
