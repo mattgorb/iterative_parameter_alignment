@@ -324,12 +324,17 @@ def generate_mlc(model1, model2, model_new, iter):
                 print(m1)
                 print(m1.weight.size())
                 for i in range(10):
-                    print(torch.sum(torch.where(mlc_mask[i]==-1, 1,0)))
-                for i in range(10):
-                    print(torch.sum(torch.where(m1_mask[i]==1, 1,0)))
-                for i in range(10):
-                    print(torch.sum(torch.where(m2_mask[i]==1, 1,0)))
-                #sys.exit()
+                    x=torch.where(mlc_mask[i]==-1, 1,0)
+                    for j in range(10):
+                        if i==j:
+                            continue
+                        y = torch.sum(torch.where(mlc_mask[j] == -1, 1, 0))
+                        print(i)
+                        print(j)
+                        print(x==y)
+                        print(torch.sum(x==y))
+
+                sys.exit()
     return model_new
 
 
