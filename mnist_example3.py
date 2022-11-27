@@ -212,7 +212,7 @@ def get_datasets(args):
         #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
-        #dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
+        dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         #assert(set(ds1_indices).isdisjoint(ds2_indices))
 
 
@@ -305,15 +305,15 @@ def generate_mlc(model1, model2, model_new, iter):
             mlc_mask=torch.ones_like(m1.weight) * -1
 
 
-            mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+            #mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-
+            m1.scores=m1_mask.scores.abs()+m2_mask.scores.abs()
 
 
             #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
@@ -333,8 +333,8 @@ def generate_mlc(model1, model2, model_new, iter):
                 print(torch.sum(torch.where(mlc_mask[7]==-1, 1,0)))
                 print(torch.sum(torch.where(mlc_mask[8]==-1, 1,0)))
                 print(torch.sum(torch.where(mlc_mask[9]==-1, 1,0)))
-                sys.exit()
-    #return model_new
+                #sys.exit()
+    return model_new
 
 
 class MLC_Iterator:
@@ -381,7 +381,8 @@ class MLC_Iterator:
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2,model_new,iter)
-
+            model_1_trainer.test()
+            sys.exit()
 
 def main():
     # Training settings
