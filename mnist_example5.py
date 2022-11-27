@@ -55,13 +55,13 @@ class SubnetLinear(nn.Linear):
 
     def get_subnet(self):
 
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(),self.base_k )
+        subnet = GetSubnetEdgePopup.apply(self.scores,)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
     def forward(self, x):
-        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
+        subnet = GetSubnetEdgePopup.apply(self.scores, )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
