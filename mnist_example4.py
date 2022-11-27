@@ -262,9 +262,9 @@ class Trainer:
                 pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
                 for i,j in zip(target,pred):
+                    if i.item() not in pred_dict:
+                        pred_dict[i.item()] = 0
                     if j.eq(i.view_as(j)):
-                        if i.item() not in pred_dict:
-                            pred_dict[i.item()]=0
                         pred_dict[i.item()]+=1
 
 
