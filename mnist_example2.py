@@ -205,6 +205,9 @@ def get_datasets(args):
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
+        print(len(ds1_indices))
+        print(len(ds2_indices))
+
         #p/1-p split
         p=0.75
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
