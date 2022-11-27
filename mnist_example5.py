@@ -14,23 +14,14 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 
 class GetSubnetEdgePopup(autograd.Function):
     @staticmethod
-    def forward(ctx, scores, k):
+    def forward(ctx, scores,):
         # Get the subnetwork by sorting the scores and using the top k%
-        out = scores.clone()
-        _, idx = scores.flatten().sort()
-        #j = int((1 - k) * scores.numel())
-
-        # flat_out and out access the same memory.
-        flat_out = out.flatten()
-        flat_out[idx[:k]] = 0
-        flat_out[idx[k:]] = 1
-
-        return out
+        return (scores>0).float()
 
     @staticmethod
     def backward(ctx, g):
         # send the gradient g straight-through on the backward pass.
-        return g, None
+        return g
 
 
 
