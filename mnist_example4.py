@@ -263,9 +263,9 @@ class Trainer:
                 correct += pred.eq(target.view_as(pred)).sum().item()
                 for i,j in zip(target,pred):
                     if j.eq(i.view_as(j)):
-                        if i not in pred_dict:
-                            pred_dict[i]=0
-                        pred_dict[i]+=1
+                        if i.item() not in pred_dict:
+                            pred_dict[i.item()]=0
+                        pred_dict[i.item()]+=1
 
 
         test_loss /= len(self.test_loader.dataset)
