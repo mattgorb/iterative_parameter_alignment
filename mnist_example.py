@@ -32,7 +32,7 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 def linear_init(in_dim, out_dim, bias=None, args=None,):
-    layer=SubnetLinear(in_dim,out_dim,bias=False)
+    layer=SubnetLinear(in_dim,out_dim,bias=bias)
     layer.init(args)
     return layer
 
@@ -189,12 +189,12 @@ def get_datasets(args):
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
         #80/20 split
-        ds1_indices=ds1_indices[:int(len(ds1_indices)*.8)]+ds2_indices[int(len(ds1_indices)*.8):]
-        ds2_indices=ds1_indices[int(len(ds1_indices)*.8):]+ds2_indices[:int(len(ds1_indices)*.8)]
+        ds1_indices=ds1_indices[:int(len(ds1_indices)*.8)]+ds2_indices[int(len(ds2_indices)*.8):]
+        ds2_indices=ds1_indices[int(len(ds1_indices)*.8):]+ds2_indices[:int(len(ds2_indices)*.8)]
 
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
-        #assert(set(ds1_indices).isdisjoint(ds2_indices))
+        #assert(set(ds1_indices).isdisjoint(ds2_indices)) #turning off for 80/20 split
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
         train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
@@ -277,7 +277,10 @@ def generate_mlc(model1, model2, model_new):
 
             mlc_mask=torch.ones_like(m1.weight) * -1
 
-            #new logic here
+            '''
+            new logic: keep most important scores from each subnetwork.  
+            but override these values where there is a matching linear codimension.  
+            '''
             k=int(m1.scores.numel()*0.95)
             _, idx1 = m1.scores.abs().flatten().sort()
             _, idx2 = m2.scores.abs().flatten().sort()
@@ -319,8 +322,8 @@ class MLC_Iterator:
                 model2 = Net(self.args, sparse=True).to(self.device)
                 assert_model_weight_equality(model1, model2, mlc_mask=False)
             else:
-                model1=copy.deepcopy(model_new)
-                model2=copy.deepcopy(model_new)
+                #model1=copy.deepcopy(model_new)
+                #model2=copy.deepcopy(model_new)
                 assert_model_weight_equality(model1, model2, mlc_mask=True)
                 assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
 
@@ -332,7 +335,7 @@ class MLC_Iterator:
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
 
-            self.args.score_seed+=1
+            #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
             model_new=generate_mlc(model1, model2, model_new)
 
@@ -367,6 +370,7 @@ def main():
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir=f'{args.base_dir}mlc_weights/'
+
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         if args.randinit_baseline:
