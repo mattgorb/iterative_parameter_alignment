@@ -304,30 +304,24 @@ def generate_mlc(model1, model2, model_new, iter):
             mlc=(m1_mask.bool()==m2_mask.bool()).float()
             mlc_mask=torch.ones_like(m1.weight) * -1
 
-            '''
-            new logic: keep most important scores from each subnetwork.  
-            but override these values where there is a matching linear codimension.  
-            '''
-
-            diff=(m1.scores.abs()-m2.scores.abs())
-            mlc_mask=torch.where(diff>0,m1.scores, m2.scores)
-            #_, idx1 = m1.scores.abs().flatten().sort()
-            #_, idx2 = m2.scores.abs().flatten().sort()
-            #mlc_mask.flatten()[idx1[k:]]=m1.scores.flatten()[idx1[k:]]
-            #mlc_mask.flatten()[idx2[k:]]=m1.scores.flatten()[idx2[k:]]
 
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-            m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            if n1=='fc2':
+                print(m1.size())
+                sys.exit()
+
+
+            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+            m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
             print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-    return model_new
+    #return model_new
 
 
 class MLC_Iterator:
@@ -373,10 +367,9 @@ class MLC_Iterator:
 
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
-            model_new =generate_mlc(model1, model2,model_new,iter)
-            model_new_trainer = self.train_single(model_new , f'{self.weight_dir}model_2_{iter}.pt', self.train_loader2)
-            model_new_trainer.test()
-            sys.exit()
+            generate_mlc(model1, model2,model_new,iter)
+
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
