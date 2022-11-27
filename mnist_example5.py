@@ -53,6 +53,10 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
+    def inc_score(self,):
+        self.args.score_seed+=1
+        nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
+
     def get_subnet(self):
 
         subnet = GetSubnetEdgePopup.apply(self.scores,)
@@ -254,12 +258,16 @@ def generate_mlc(model1, model2, model_new, iter):
                 mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
+
                 #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
                 #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
                 m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
                 m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+
+                m1.inc_score()
+                m2.inc_score()
 
                 print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
                 print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
