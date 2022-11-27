@@ -211,7 +211,7 @@ class Trainer:
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-2)
         #self.optimizer = optim.SGD([p for p in self.model.parameters() if p.requires_grad],lr=0.1,  momentum=0.9, weight_decay=0.0005, )
-        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
+        #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
 
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
@@ -228,7 +228,7 @@ class Trainer:
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
                 self.test()
-            self.scheduler.step()
+            #self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
