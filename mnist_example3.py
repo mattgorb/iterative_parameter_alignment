@@ -305,10 +305,10 @@ def generate_mlc(model1, model2, model_new, iter):
             mlc_mask=torch.ones_like(m1.weight) * -1
 
 
-            #mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+            mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-            m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
+            #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
             #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
