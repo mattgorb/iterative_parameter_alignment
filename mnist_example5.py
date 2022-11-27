@@ -265,6 +265,9 @@ def generate_mlc(model1, model2, model_new, iter):
                 print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
                 print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
+                for i in range(10):
+                    print(torch.sum(torch.where(mlc_mask[i]==-1,1,0)))
+
     return model_new
 
 
