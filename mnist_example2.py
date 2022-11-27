@@ -10,6 +10,7 @@ import torch.autograd as autograd
 import math
 import random
 import copy
+from torch.optim.lr_scheduler import CosineAnnealingLR
 
 class GetSubnetEdgePopup(autograd.Function):
     @staticmethod
@@ -60,7 +61,7 @@ class SubnetConv(nn.Conv2d):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
@@ -93,7 +94,7 @@ class SubnetLinear(nn.Linear):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
@@ -221,6 +222,7 @@ class Trainer:
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
+        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
         self.device=device
         self.save_path=save_path
 
@@ -235,6 +237,7 @@ class Trainer:
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
                 self.test()
+            self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
