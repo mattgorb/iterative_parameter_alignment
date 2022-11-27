@@ -273,7 +273,17 @@ def generate_mlc(model1, model2, model_new, iter):
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
-
+            if n1=='fc1':
+                print(m1)
+                print(m1.weight.size())
+                for i in range(28*28):
+                    x=torch.where(mlc_mask[i]==-1, 1,0)
+                    for j in range(28*28):
+                        if i==j:
+                            continue
+                        y = torch.sum(torch.where(mlc_mask[j] == -1, 1, 0))
+                        print(f'{i}, {j}, {x==y}')
+                        print(torch.sum(x==y))
             if n1=='fc2':
                 print(m1)
                 print(m1.weight.size())
@@ -283,9 +293,7 @@ def generate_mlc(model1, model2, model_new, iter):
                         if i==j:
                             continue
                         y = torch.sum(torch.where(mlc_mask[j] == -1, 1, 0))
-                        print(i)
-                        print(j)
-                        print(x==y)
+                        print(f'{i}, {j}, {x==y}')
                         print(torch.sum(x==y))
 
                 sys.exit()
