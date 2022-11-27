@@ -53,7 +53,7 @@ class SubnetLinear(nn.Linear):
         super().__init__(*args, **kwargs)
         self.scores = nn.Parameter(torch.Tensor(self.weight.size()))
         self.mlc_mask = None
-        self.base_k = int((0.9) * self.scores.numel())
+        self.base_k = int((0.5) * self.scores.numel())
 
     def init(self,args):
         self.args=args
@@ -253,39 +253,27 @@ def generate_mlc(model1, model2, model_new, iter):
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             assert(torch.equal(m1.weight,m2.weight))
-            m1_mask=m1.get_subnet()
-            m2_mask=m2.get_subnet()
-            mlc=(m1_mask.bool()==m2_mask.bool()).float()
-            mlc_mask=torch.ones_like(m1.weight) * -1
-
-
-            mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
-
-            print(m1_mask[:,0])
-            print(m2_mask[:,0])
-            print(mlc_mask[:,0])
-            print(m1_mask[:,0].size())
-            #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
-
-
-            #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-            #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-
-            print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
-            print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
-            print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
-
-            if n1=='fc1':
-                print(m1)
-                print(m1.weight.size())
-
             if n1=='fc2':
-                print(m1)
-                print(m1.weight.size())
+                m1_mask=m1.get_subnet()
+                m2_mask=m2.get_subnet()
+                mlc=(m1_mask.bool()==m2_mask.bool()).float()
+                mlc_mask=torch.ones_like(m1.weight) * -1
 
 
-                sys.exit()
+                mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
+
+
+                #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
+
+
+                #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+                m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+                m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+
+                print(f'\nModule: {n_new} matching masks: {int(torch.sum(mlc))}/{torch.numel(mlc)}, %: {int(torch.sum(mlc))/torch.numel(mlc)}')
+                print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
+                print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
+
     return model_new
 
 
@@ -333,8 +321,8 @@ class MLC_Iterator:
             #self.args.score_seed+=1
             model_new = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2,model_new,iter)
-            model_1_trainer.test()
-            sys.exit()
+            #model_1_trainer.test()
+
 
 def main():
     # Training settings
