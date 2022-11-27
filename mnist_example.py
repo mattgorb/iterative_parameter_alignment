@@ -277,7 +277,7 @@ def generate_mlc(model1, model2, model_new):
 
             mlc_mask=torch.ones_like(m1.weight) * -1
 
-            k=int(m1.scores.numel()*0.05)
+            k=int(m1.scores.numel()*0.95)
             _, idx1 = m1.scores.abs().flatten().sort()[k:]
             _, idx2 = m2.scores.abs().flatten().sort()[k:]
             mlc_mask.flatten()[idx1]=m1.scores.flatten()[idx1]
