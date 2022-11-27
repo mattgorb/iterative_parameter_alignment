@@ -323,8 +323,16 @@ def generate_mlc(model1, model2, model_new, iter):
             if n1=='fc2':
                 print(m1)
                 print(m1.weight.size())
-                print(mlc_mask[0])
-                print(mlc_mask[5])
+                print(torch.sum(torch.where(mlc_mask[0]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[1]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[2]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[3]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[4]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[5]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[6]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[7]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[8]==-1, 1,0)))
+                print(torch.sum(torch.where(mlc_mask[9]==-1, 1,0)))
                 sys.exit()
     #return model_new
 
