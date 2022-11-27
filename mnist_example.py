@@ -214,7 +214,7 @@ class Trainer:
             [p for p in self.model.parameters() if p.requires_grad],
             lr=args.lr,
             momentum=0.9,
-            weight_decay=args.wd,
+            weight_decay=0.0005,
         )
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
 
