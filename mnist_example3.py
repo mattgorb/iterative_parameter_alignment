@@ -309,7 +309,8 @@ def generate_mlc(model1, model2, model_new, iter):
 
 
             if n1=='fc2':
-                print(m1.size())
+                print(m1)
+                print(m1.weight.size())
                 sys.exit()
 
 
