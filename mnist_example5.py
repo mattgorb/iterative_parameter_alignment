@@ -263,6 +263,7 @@ def generate_mlc(model1, model2, model_new, iter):
 
             print(m1_mask[:,0])
             print(m2_mask[:,0])
+            print(mlc_mask[:,0])
             #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
