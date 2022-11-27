@@ -209,7 +209,7 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-2)
         #self.optimizer = optim.SGD([p for p in self.model.parameters() if p.requires_grad],lr=0.1,  momentum=0.9, weight_decay=0.0005, )
 
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
