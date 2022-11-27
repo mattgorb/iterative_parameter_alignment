@@ -52,7 +52,7 @@ class SubnetConv(nn.Conv2d):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
@@ -79,7 +79,7 @@ class SubnetLinear(nn.Linear):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
