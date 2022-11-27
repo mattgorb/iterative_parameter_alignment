@@ -307,8 +307,8 @@ class MLC_Iterator:
             #else:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
-                #model_1_trainer.test()
-                #model_2_trainer.test()
+                model_1_trainer.test()
+                model_2_trainer.test()
 
 
             print(f"MLC Iterator: {iter}, training model 1")
