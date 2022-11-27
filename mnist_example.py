@@ -212,7 +212,7 @@ class Trainer:
         #self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.optimizer = optim.SGD(
             [p for p in self.model.parameters() if p.requires_grad],
-            lr=args.lr,
+            lr=0.1,
             momentum=0.9,
             weight_decay=0.0005,
         )
