@@ -212,7 +212,7 @@ def get_datasets(args):
         #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
-        dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
+        #dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         #assert(set(ds1_indices).isdisjoint(ds2_indices))
 
 
@@ -308,12 +308,7 @@ def generate_mlc(model1, model2, model_new, iter):
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
 
-            if n1=='fc2':
-                print(m1)
-                print(m1.weight.size())
-                print(mlc_mask[0])
-                print(mlc_mask[5])
-                sys.exit()
+
 
 
             #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
@@ -324,6 +319,13 @@ def generate_mlc(model1, model2, model_new, iter):
             print(f'Module: {n_new} matching ones: {int(torch.sum(torch.where(mlc_mask==1, 1,0)))}/{torch.numel(mlc)}, %: {int(torch.sum(torch.where(mlc_mask==1, 1,0))) / torch.numel(mlc)}')
             print(f'Module: {n_new} matching zeros: {int(torch.sum(torch.where(mlc_mask==0, 1,0)))}/{torch.numel(mlc)}), %: {int(torch.sum(torch.where(mlc_mask==0, 1,0))) / torch.numel(mlc)}')
 
+
+            if n1=='fc2':
+                print(m1)
+                print(m1.weight.size())
+                print(mlc_mask[0])
+                print(mlc_mask[5])
+                sys.exit()
     #return model_new
 
 
@@ -336,7 +338,7 @@ class MLC_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset):
+    def train_single(self, model,save_path, train_dataset, ):
         freeze_model_weights(model)
 
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
