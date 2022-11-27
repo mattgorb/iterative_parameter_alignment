@@ -261,7 +261,8 @@ def generate_mlc(model1, model2, model_new, iter):
 
             mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
 
-
+            print(m1_mask[:,0])
+            print(m2_mask[:,0])
             #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
