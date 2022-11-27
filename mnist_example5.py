@@ -53,7 +53,7 @@ class SubnetLinear(nn.Linear):
         super().__init__(*args, **kwargs)
         self.scores = nn.Parameter(torch.Tensor(self.weight.size()))
         self.mlc_mask = None
-        self.base_k = int((0.5) * self.scores.numel())
+        self.base_k = int((0.9) * self.scores.numel())
 
     def init(self,args):
         self.args=args
