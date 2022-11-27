@@ -14,14 +14,23 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 
 class GetSubnetEdgePopup(autograd.Function):
     @staticmethod
-    def forward(ctx, scores,):
+    def forward(ctx, scores, k):
         # Get the subnetwork by sorting the scores and using the top k%
-        return (scores>0).float()
+        out = scores.clone()
+        _, idx = scores.flatten().sort()
+        #j = int((1 - k) * scores.numel())
+
+        # flat_out and out access the same memory.
+        flat_out = out.flatten()
+        flat_out[idx[:k]] = 0
+        flat_out[idx[k:]] = 1
+
+        return out
 
     @staticmethod
     def backward(ctx, g):
         # send the gradient g straight-through on the backward pass.
-        return g
+        return g, None
 
 
 
@@ -53,19 +62,15 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.score_seed)
         nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
 
-    def inc_score(self,):
-        self.args.score_seed+=1
-        nn.init.kaiming_uniform_(self.scores, a=math.sqrt(5))
-
     def get_subnet(self):
 
-        subnet = GetSubnetEdgePopup.apply(self.scores,)
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(),self.base_k )
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         return subnet
 
     def forward(self, x):
-        subnet = GetSubnetEdgePopup.apply(self.scores, )
+        subnet = GetSubnetEdgePopup.apply(self.scores.abs(), self.base_k)
         if self.mlc_mask is not None:
             subnet=torch.where(self.mlc_mask==-1, subnet, self.mlc_mask)
         w = self.weight * subnet
