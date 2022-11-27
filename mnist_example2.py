@@ -207,7 +207,7 @@ def get_datasets(args):
 
 
         #p/1-p split
-        p=0.95
+        p=0.99
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
         ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
