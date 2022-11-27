@@ -311,6 +311,8 @@ def generate_mlc(model1, model2, model_new, iter):
             if n1=='fc2':
                 print(m1)
                 print(m1.weight.size())
+                print(mlc_mask[0])
+                print(mlc_mask[5])
                 sys.exit()
 
 
