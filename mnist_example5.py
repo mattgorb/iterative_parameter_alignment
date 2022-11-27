@@ -256,14 +256,14 @@ def generate_mlc(model1, model2, model_new, iter):
 
                 print(m1_mask.size())
                 ##mlc_mask=torch.where(mlc==1, m1_mask, mlc_mask)
-                mlc_mask[:,5:]=m2_mask[:,5:]
+                mlc_mask[5:,:]=m2_mask[5:,:]
 
 
                 #m1.scores=nn.Parameter(m1.scores.abs()+m2.scores.abs())
 
 
                 #m_new.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
-                #ßm1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
+                m1.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
                 #m2.mlc_mask=nn.Parameter(mlc_mask, requires_grad=False)
 
                 #m1.inc_score()
