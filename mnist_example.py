@@ -228,7 +228,7 @@ class Trainer:
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
                 self.test()
-            #self.scheduler.step()
+            self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
