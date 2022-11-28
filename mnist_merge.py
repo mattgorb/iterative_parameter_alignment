@@ -236,7 +236,7 @@ class Trainer:
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
                 output, sd = self.model(data, )
-                test_loss += self.criterion(output, target).item() +sd
+                test_loss += self.criterion(output, target).item() #+sd
                 pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
                 correct += pred.eq(target.view_as(pred)).sum().item()
 
