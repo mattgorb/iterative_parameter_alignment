@@ -234,7 +234,7 @@ class MLC_Iterator:
             else:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt').keys())
-                model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt'))
+                model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
 
             model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
