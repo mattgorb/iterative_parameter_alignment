@@ -271,7 +271,7 @@ def main():
     parser.add_argument('--base_dir', type=str,default="/s/luffy/b/nobackup/mgorb/",help='Directory for data and weights')
     args = parser.parse_args()
 
-    torch.manual_seed(args.seed)
+    set_seed(args.seed)
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir=f'{args.base_dir}mlc_weights/'
@@ -292,4 +292,5 @@ def main():
         mlc_iterator.run()
 
 if __name__ == '__main__':
+
     main()
