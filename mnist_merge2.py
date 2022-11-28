@@ -224,7 +224,7 @@ class MLC_Iterator:
         return trainer
 
     def run(self):
-        mlc_iterations=50
+        mlc_iterations=2
         epsilon=1e-2
 
         results_dict={}
@@ -234,11 +234,11 @@ class MLC_Iterator:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-
-            print("HEEREE")
-            model1 = Net(self.args, sparse=True).to(self.device)
-            print(torch.load(f'{self.weight_dir}model_1_{iter}.pt').keys())
-            model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter}.pt'))
+            else:
+                print("HEEREE")
+                model1 = Net(self.args, sparse=True).to(self.device)
+                print(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt').keys())
+                model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt'))
 
             model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
