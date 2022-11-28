@@ -63,7 +63,6 @@ class Net(nn.Module):
         else:
             self.fc1 = nn.Linear(28*28, 1024)
             self.fc2 = nn.Linear(1024, 10)
-        print(self.fc1.weight[0][:10])
     def forward(self, x, ):
         if self.sparse:
             x,sd1 = self.fc1(x.view(-1, 28*28))
@@ -201,9 +200,9 @@ def generate_mlc(model1, model2,):
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
-            m2.weights_align=m1.weight
-            #m2.reset_weights()
-            print(m2.weights_align[0][:10])
+            m2.weights_align=m1.weight#.detach()
+            print(m1.weight[0][:10])
+            #print(m2.weights_align[0][:10])
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -238,8 +237,7 @@ class MLC_Iterator:
             print(f"MLC Iterator: {iter}, training model 2")
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_1_{iter}.pt')
             trainer.fit()
-            del model2
-            del trainer
+
 
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
