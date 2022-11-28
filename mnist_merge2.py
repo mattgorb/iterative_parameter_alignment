@@ -201,7 +201,7 @@ def generate_mlc(model1, model2,):
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
 
-            m2.weights_align=nn.Parameter(m1.weight.detach(), requires_grad=True)
+            m2.weights_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
             #m2.reset_weights()
 
 class MLC_Iterator:
