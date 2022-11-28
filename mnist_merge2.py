@@ -37,10 +37,10 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    def reset_weights(self,):
-        self.args.weight_seed+=1
-        set_seed(self.args.weight_seed)
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+    #def reset_weights(self,):
+        #self.args.weight_seed+=1
+        #set_seed(self.args.weight_seed)
+        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
 
     def forward(self, x):
@@ -202,7 +202,7 @@ def generate_mlc(model1, model2,):
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
-            m2.reset_weights()
+            #m2.reset_weights()
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
