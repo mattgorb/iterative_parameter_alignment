@@ -205,7 +205,7 @@ def generate_mlc(model1, model2,):
             nn.Parameter(m2.weights_align, requires_grad=True)
             print(m1.weight[0][:10])
             print(m1.weights_align)
-            sys.exit()
+
             #print(m2.weights_align[0][:10])
 
 class MLC_Iterator:
