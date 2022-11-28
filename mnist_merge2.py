@@ -30,7 +30,6 @@ def linear_init(in_dim, out_dim, bias=None, args=None,):
 class SubnetLinear(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.scores = nn.Parameter(torch.Tensor(self.weight.size()))
         self.weights_align = None
 
     def init(self,args):
@@ -57,7 +56,7 @@ class Net(nn.Module):
             self.fc2 = linear_init(1024, 10, bias=None, args=self.args, )
         else:
             self.fc1 = nn.Linear(28*28, 1024)
-            self.fc2 = nn.Linear(28*28, 10)
+            self.fc2 = nn.Linear(1024, 10)
 
     def forward(self, x, ):
         x,sd1 = self.fc1(x.view(-1, 28*28))
@@ -71,41 +70,6 @@ class Net(nn.Module):
         return x, score_diff
 
 
-def assert_model_weight_equality(model1, model2, mlc_mask=False):
-    for model1_mods, model2_mods in zip(model1.named_modules(), model2.named_modules()):
-        n1,m1=model1_mods
-        n2,m2=model2_mods
-        if not type(m1)==SubnetLinear:
-            continue
-        if hasattr(m1, "weight") and m1.weight is not None:
-            assert(torch.equal(m1.weight,m2.weight))
-            if mlc_mask:
-                assert(torch.equal(m1.mlc_mask, m2.mlc_mask))
-            if hasattr(m1, "bias") and m1.bias is not None:
-                assert(torch.equal(m1.bias,m2.bias))
-
-
-
-
-def freeze_model_weights(model):
-    print("=> Freezing model weights")
-    for n, m in model.named_modules():
-        if not type(m)==SubnetLinear:
-            continue
-        if hasattr(m, "weight") and m.weight is not None:
-            print(f"==> No gradient to {n}.weight")
-            m.weight.requires_grad = False
-            if m.weight.grad is not None:
-                print(f"==> Setting gradient of {n}.weight to None")
-                m.weight.grad = None
-
-            if hasattr(m, "bias") and m.bias is not None:
-                print(f"==> No gradient to {n}.bias")
-                m.bias.requires_grad = False
-
-                if m.bias.grad is not None:
-                    print(f"==> Setting gradient of {n}.bias to None")
-                    m.bias.grad = None
 
 def get_datasets(args):
     transform=transforms.Compose([
