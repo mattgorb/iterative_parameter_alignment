@@ -257,7 +257,9 @@ class MLC_Iterator:
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
             print(model2.fc1.weight[0][:10])
-
+            print(model2.fc1.weights_align[0][:10])
+            print(model1.fc1.weight[0][:10])
+            sys.exit()
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
 
