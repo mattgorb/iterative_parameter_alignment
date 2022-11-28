@@ -166,7 +166,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+250*sd
+            loss = self.criterion(output, target)+500*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -202,7 +202,7 @@ def generate_mlc(model1, model2,):
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
-            m2.reset_weights()
+            #m2.reset_weights()
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -239,9 +239,6 @@ class MLC_Iterator:
                 #model_1_trainer.test()
                 #sys.exit()
                 #model_2_trainer.test()
-
-
-
 
             #model_new = Net(self.args, sparse=True).to(self.device)
 
