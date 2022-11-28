@@ -229,7 +229,7 @@ class MLC_Iterator:
         for iter in range(mlc_iterations):
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
-                model2 = Net(self.args, sparse=True).to(self.device)
+
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
 
@@ -241,7 +241,7 @@ class MLC_Iterator:
                 #model_2_trainer.test()
 
             #model_new = Net(self.args, sparse=True).to(self.device)
-
+            model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
