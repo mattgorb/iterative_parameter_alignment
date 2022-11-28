@@ -255,7 +255,7 @@ class MLC_Iterator:
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
             results_dict[f'model_1_{iter}']=model_1_trainer
             results_dict[f'model_2_{iter}']=model_2_trainer
-
+            print(model2.fc1.weight[0][:10])
 
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
