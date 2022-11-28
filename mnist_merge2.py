@@ -237,6 +237,7 @@ class MLC_Iterator:
 
             print("HEEREE")
             model1 = Net(self.args, sparse=True).to(self.device)
+            print(torch.load(f'{self.weight_dir}model_1_{iter}.pt').keys())
             model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter}.pt'))
 
             model2 = Net(self.args, sparse=True).to(self.device)
