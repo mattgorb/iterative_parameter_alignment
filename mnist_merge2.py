@@ -202,7 +202,7 @@ def generate_mlc(model1, model2,):
             #assert(torch.equal(m1.weight,m2.weight))
 
             m2.weights_align=nn.Parameter(m1.weight.detach(), requires_grad=True)
-            m2.reset_weights()
+            #m2.reset_weights()
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -227,20 +227,32 @@ class MLC_Iterator:
         results_dict={}
 
         for iter in range(mlc_iterations):
-            if iter==0:
+            '''if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_0.pt', self.train_loader1)
             else:
-                model1 = Net(self.args, sparse=True).to(self.device)
-                model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
+                #model1 = Net(self.args, sparse=True).to(self.device)
+                #model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
+                print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer.fit()
 
             model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
-            trainer.fit()
+            trainer.fit()'''
+            if iter==0:
+                model1 = Net(self.args, sparse=True).to(self.device)
+                model2 = Net(self.args, sparse=True).to(self.device)
+
+            print(f"MLC Iterator: {iter}, training model 1")
+            model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
+            generate_mlc(model1, model2,)
+            print(f"MLC Iterator: {iter}, training model 2")
+            model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
+            results_dict[f'model_1_{iter}']=model_1_trainer
+            results_dict[f'model_2_{iter}']=model_2_trainer
 
 
             #results_dict[f'model_1_{iter}']=model_1_trainer
