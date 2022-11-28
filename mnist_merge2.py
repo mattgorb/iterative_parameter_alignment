@@ -235,6 +235,7 @@ class MLC_Iterator:
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
 
+            print("HEEREE")
             model1 = Net(self.args, sparse=True).to(self.device)
             model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter}.pt'))
 
