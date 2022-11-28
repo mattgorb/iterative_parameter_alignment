@@ -63,7 +63,7 @@ class Net(nn.Module):
         else:
             self.fc1 = nn.Linear(28*28, 1024)
             self.fc2 = nn.Linear(1024, 10)
-
+        print(self.fc1.weight[0])
     def forward(self, x, ):
         if self.sparse:
             x,sd1 = self.fc1(x.view(-1, 28*28))
