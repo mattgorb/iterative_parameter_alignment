@@ -37,6 +37,12 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
+    def reset_weights(self,):
+        self.args.weight_seed+=1
+        set_seed(self.args.weight_seed)
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+
+
     def forward(self, x):
         x= F.linear(x, self.weight, self.bias)
 
@@ -160,7 +166,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+1000*sd
+            loss = self.criterion(output, target)+500*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -196,7 +202,7 @@ def generate_mlc(model1, model2,):
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
-
+            m2.reset_weights()
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -226,7 +232,7 @@ class MLC_Iterator:
                 model2 = Net(self.args, sparse=True).to(self.device)
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-                generate_mlc(model1, model2, )
+
             #else:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
@@ -239,7 +245,7 @@ class MLC_Iterator:
 
             #model_new = Net(self.args, sparse=True).to(self.device)
 
-
+            generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
