@@ -233,8 +233,8 @@ class MLC_Iterator:
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_0.pt', self.train_loader1)
             else:
                 model1 = Net(self.args, sparse=True).to(self.device)
-
                 model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
+                model_1_trainer.fit()
 
             model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
