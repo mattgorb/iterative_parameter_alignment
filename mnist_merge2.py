@@ -203,6 +203,7 @@ def generate_mlc(model1, model2,):
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
             #m2.reset_weights()
+            print(m2.weights_align[0][:10])
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
