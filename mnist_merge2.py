@@ -59,16 +59,22 @@ class Net(nn.Module):
             self.fc2 = nn.Linear(1024, 10)
 
     def forward(self, x, ):
-        x,sd1 = self.fc1(x.view(-1, 28*28))
-        x = F.relu(x)
-        x,sd2= self.fc2(x)
-        if sd1 is not None:
-            score_diff=sd1+sd2
-            #print(score_diff)
+        if self.sparse:
+            x,sd1 = self.fc1(x.view(-1, 28*28))
+            x = F.relu(x)
+            x,sd2= self.fc2(x)
+            if sd1 is not None:
+                score_diff=sd1+sd2
+                #print(score_diff)
+            else:
+                score_diff=torch.tensor(0)
+            return x, score_diff
         else:
-            score_diff=torch.tensor(0)
-        return x, score_diff
+            x = self.fc1(x.view(-1, 28*28))
+            x = F.relu(x)
+            x= self.fc2(x)
 
+            return x, torch.tensor(0)
 
 
 def get_datasets(args):
