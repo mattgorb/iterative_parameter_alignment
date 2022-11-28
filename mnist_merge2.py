@@ -236,7 +236,7 @@ class MLC_Iterator:
             generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
-
+            del model2
 
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
