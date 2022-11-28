@@ -37,10 +37,10 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    #def reset_weights(self,):
-        #self.args.weight_seed+=1
-        #set_seed(self.args.weight_seed)
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+    def reset_weights(self,):
+        self.args.weight_seed+=1
+        set_seed(self.args.weight_seed)
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
 
     def forward(self, x):
@@ -202,10 +202,7 @@ def generate_mlc(model1, model2,):
             #assert(torch.equal(m1.weight,m2.weight))
 
             m2.weights_align=nn.Parameter(m1.weight.detach(), requires_grad=True)
-            print(m1.weight[0][:10])
-            print(m1.weights_align)
-
-            #print(m2.weights_align[0][:10])
+            m2.reset_weights()
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -224,7 +221,7 @@ class MLC_Iterator:
         return trainer
 
     def run(self):
-        mlc_iterations=2
+        mlc_iterations=20
         epsilon=1e-2
 
         results_dict={}
@@ -235,7 +232,6 @@ class MLC_Iterator:
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             else:
-                print("HEEREE")
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt').keys())
                 model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt'))
