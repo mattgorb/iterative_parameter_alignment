@@ -160,7 +160,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+250*sd
+            loss = self.criterion(output, target)+1000*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -186,20 +186,16 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2, model_new, iter):
+def generate_mlc(model1, model2,):
     print("=> Generating MLC mask")
-    for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
+    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        n_new, m_new=new_model_mods
         if not type(m1)==SubnetLinear:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
-
-
-    return model_new
 
 
 class MLC_Iterator:
@@ -228,7 +224,9 @@ class MLC_Iterator:
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 model2 = Net(self.args, sparse=True).to(self.device)
-                assert_model_weight_equality(model1, model2, mlc_mask=False)
+                print(f"MLC Iterator: {iter}, training model 1")
+                model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
+                generate_mlc(model1, model2, )
             #else:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
@@ -237,11 +235,10 @@ class MLC_Iterator:
                 #model_2_trainer.test()
 
 
-            print(f"MLC Iterator: {iter}, training model 1")
-            model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
 
-            model_new = Net(self.args, sparse=True).to(self.device)
-            generate_mlc(model1, model2,model_new,iter)
+
+            #model_new = Net(self.args, sparse=True).to(self.device)
+
 
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
