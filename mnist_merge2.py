@@ -165,7 +165,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+1000*sd
+            loss = self.criterion(output, target)+2500*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -246,9 +246,11 @@ class MLC_Iterator:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 model2 = Net(self.args, sparse=True).to(self.device)
 
+            print(model1.fc1.weight[0][:10])
             print(f"MLC Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             generate_mlc(model1, model2,)
+            print(model2.fc1.weight[0][:10])
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
             results_dict[f'model_1_{iter}']=model_1_trainer
