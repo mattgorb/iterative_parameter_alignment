@@ -72,7 +72,6 @@ class Net(nn.Module):
 
 
 def assert_model_weight_equality(model1, model2, mlc_mask=False):
-    print("=> Freezing model weights")
     for model1_mods, model2_mods in zip(model1.named_modules(), model2.named_modules()):
         n1,m1=model1_mods
         n2,m2=model2_mods
@@ -226,7 +225,7 @@ def generate_mlc(model1, model2, model_new, iter):
         if not type(m1)==SubnetLinear:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
-            assert(torch.equal(m1.weight,m2.weight))
+            #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
 
 
