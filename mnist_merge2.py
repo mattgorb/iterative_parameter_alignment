@@ -229,30 +229,18 @@ class MLC_Iterator:
         for iter in range(mlc_iterations):
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
-
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
 
-            #else:
-                #assert_model_weight_equality(model1, model2, mlc_mask=True)
-                #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
-                #model_1_trainer.test()
-                #sys.exit()
-                #model_2_trainer.test()
-
-            #model_new = Net(self.args, sparse=True).to(self.device)
             model2 = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
 
-            results_dict[f'model_1_{iter}']=model_1_trainer
-            results_dict[f'model_2_{iter}']=model_2_trainer
+            #results_dict[f'model_1_{iter}']=model_1_trainer
+            #results_dict[f'model_2_{iter}']=model_2_trainer
 
-            #self.args.score_seed+=1
-
-            #model_1_trainer.test()
 
 
 def main():
