@@ -95,7 +95,7 @@ class Net(nn.Module):
         x,sd2= self.fc2(x)
         if sd1 is not None:
             score_diff=sd1+sd2
-            print(score_diff)
+            #print(score_diff)
         else:
             score_diff=torch.tensor(0)
         return x, score_diff
