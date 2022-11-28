@@ -230,7 +230,7 @@ class MLC_Iterator:
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(f"MLC Iterator: {iter}, training model 1")
-                model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
+                model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_0.pt', self.train_loader1)
             else:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 print(torch.load(f'{self.weight_dir}model_1_{iter-1}.pt').keys())
