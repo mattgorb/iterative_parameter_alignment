@@ -37,12 +37,6 @@ class SubnetLinear(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    def reset_weights(self,):
-        self.args.weight_seed+=1
-        set_seed(self.args.weight_seed)
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-
-
     def forward(self, x):
         x= F.linear(x, self.weight, self.bias)
 
@@ -65,22 +59,16 @@ class Net(nn.Module):
             self.fc2 = nn.Linear(1024, 10)
 
     def forward(self, x, ):
-        if self.sparse:
-            x,sd1 = self.fc1(x.view(-1, 28*28))
-            x = F.relu(x)
-            x,sd2= self.fc2(x)
-            if sd1 is not None:
-                score_diff=sd1+sd2
-                #print(score_diff)
-            else:
-                score_diff=torch.tensor(0)
-            return x, score_diff
+        x,sd1 = self.fc1(x.view(-1, 28*28))
+        x = F.relu(x)
+        x,sd2= self.fc2(x)
+        if sd1 is not None:
+            score_diff=sd1+sd2
+            #print(score_diff)
         else:
-            x = self.fc1(x.view(-1, 28*28))
-            x = F.relu(x)
-            x= self.fc2(x)
+            score_diff=torch.tensor(0)
+        return x, score_diff
 
-            return x, torch.tensor(0)
 
 
 def get_datasets(args):
@@ -166,7 +154,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+500*sd
+            loss = self.criterion(output, target)+250*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -192,17 +180,21 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2,):
+def generate_mlc(model1, model2, model_new, iter):
     print("=> Generating MLC mask")
-    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
+    for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
         n1,m1=model1_mods
         n2,m2=model2_mods
+        n_new, m_new=new_model_mods
         if not type(m1)==SubnetLinear:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
             m2.weights_align=m1.weight
-            m2.reset_weights()
+
+
+    return model_new
+
 
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -230,9 +222,7 @@ class MLC_Iterator:
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 model2 = Net(self.args, sparse=True).to(self.device)
-                print(f"MLC Iterator: {iter}, training model 1")
-                model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-
+                assert_model_weight_equality(model1, model2, mlc_mask=False)
             #else:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
@@ -241,11 +231,12 @@ class MLC_Iterator:
                 #model_2_trainer.test()
 
 
+            print(f"MLC Iterator: {iter}, training model 1")
+            model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
 
+            model_new = Net(self.args, sparse=True).to(self.device)
+            generate_mlc(model1, model2,model_new,iter)
 
-            #model_new = Net(self.args, sparse=True).to(self.device)
-
-            generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
@@ -263,7 +254,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--epochs', type=int, default=50, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
