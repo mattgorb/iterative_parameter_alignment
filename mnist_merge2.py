@@ -223,32 +223,16 @@ class Merge_Iterator:
     def run(self):
         mlc_iterations=20
         epsilon=1e-2
-
         results_dict={}
-
         for iter in range(mlc_iterations):
-            '''if iter==0:
-                model1 = Net(self.args, weight_merge=True).to(self.device)
-                print(f"MLC Iterator: {iter}, training model 1")
-                model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_0.pt', self.train_loader1)
-            else:
-                #model1 = Net(self.args, weight_merge=True).to(self.device)
-                #model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
-                print(f"MLC Iterator: {iter}, training model 1")
-                model_1_trainer.fit()
 
-            model2 = Net(self.args, weight_merge=True).to(self.device)
-            generate_mlc(model1, model2, )
-            print(f"MLC Iterator: {iter}, training model 2")
-            trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
-            trainer.fit()'''
             if iter==0:
                 model1 = Net(self.args, weight_merge=False ).to(self.device)
                 model2 = Net(self.args, weight_merge=True).to(self.device)
 
             print(f"Merge Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-            generate_mlc(model1, model2,)
+            generate_mlc(model1, model2,merge_model=True)
             print(f"Merge Iterator: {iter}, training model 2")
             print(model1.fc1.weight[0][:10])
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
