@@ -251,8 +251,9 @@ class Merge_Iterator:
             print(f"Merge Iterator: {iter}, training model 2")
             print(model1.fc1.weight[0][:10])
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
-            print(model1.fc1.weight[0][:10])
+
             generate_mlc(model1, model2,merge_model=False)
+            print(model1.fc1.weight[0][:10])
             sys.exit()
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
