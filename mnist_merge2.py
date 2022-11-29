@@ -19,11 +19,11 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 def linear_init(in_dim, out_dim, bias=False, args=None,):
-    layer=LinearAlign(in_dim,out_dim,bias=bias)
+    layer=LinearMerge(in_dim,out_dim,bias=bias)
     layer.init(args)
     return layer
 
-class LinearAlign(nn.Linear):
+class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
@@ -33,6 +33,7 @@ class LinearAlign(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
+    #not sure if this helps convergence.  need to test more.  
     def reset_weights(self,):
         self.args.weight_seed+=1
         set_seed(self.args.weight_seed)
@@ -51,6 +52,8 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.args=args
         self.weight_merge=weight_merge
+
+        #bias False for now, have not tested adding bias to the loss fn.
         if self.weight_merge:
             self.fc1 = linear_init(28*28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
@@ -101,14 +104,14 @@ def get_datasets(args):
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
         '''
-        #use this code for p/1-p split.  
-        #p=0.99
+        #use this code for p/1-p split.  need to test
+        #p=0.8
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
         ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
         '''
 
         '''
-        #use this code to split dataset down middle.
+        #use this code to split dataset down middle. need to test
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
         dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
         '''
@@ -126,7 +129,7 @@ def get_datasets(args):
         return train_loader1, train_loader2, test_loader
 
 class Trainer:
-    def __init__(self, args,datasets, model, device, save_path):
+    def __init__(self, args,datasets, model, device, save_path, epochs):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
@@ -135,11 +138,11 @@ class Trainer:
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
         self.device=device
         self.save_path=save_path
+        self.epochs=epochs
 
     def fit(self):
         self.best_loss=1e6
-        print('Fitting model...')
-        for epoch in range(1, self.args.epochs + 1):
+        for epoch in range(1, self.epochs + 1):
             print(f'Epoch {epoch}')
             train_loss = self.train()
             if train_loss<self.best_loss:
@@ -159,6 +162,13 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
+
+            '''
+            5000 works for this particular combination, summing both CrossEntropyLoss and weight alignment
+            Taking mean of CE and sum of weight alignment might make this hyperparameter unnecessary.
+            For model w/o weight alignment paramter, second part of loss is 0
+            When 5000 isn't used, the model converges too quickly towards second models dataset.  
+            '''
             loss = self.criterion(output, target)+5000*sd
             train_loss+=loss
             loss.backward()
@@ -185,15 +195,19 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2,):
+def set_weight_align_param(model1, model2,):
     print("=> Generating MLC mask")
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        if not type(m2)==LinearAlign:
+        if not type(m2)==LinearMerge:
             continue
         if hasattr(m1, "weight"):
-
+            '''
+            m1.weight gets updated to m2.weight_align because it is not detached.  
+            This is a simple way to "share" the weights between models, 
+            alternatively we could set m1.weight=m2.weight_align after model2 is done training.  
+            '''
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 
@@ -206,48 +220,34 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset, ):
-        #freeze_model_weights(model)
-
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
+    def train_single(self, model,save_path, train_dataset,epochs ):
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, epochs)
         trainer.fit()
         return trainer
 
     def run(self):
-        mlc_iterations=20
-        epsilon=1e-2
-        results_dict={}
-        for iter in range(mlc_iterations):
+        merge_iterations=20
+        for iter in range(merge_iterations):
 
             if iter==0:
-                model1 = Net(self.args, weight_merge=False ).to(self.device)
-                model2 = Net(self.args, weight_merge=True).to(self.device)
+                reference_model = Net(self.args, weight_merge=False ).to(self.device)
+                merge_model = Net(self.args, weight_merge=True).to(self.device)
 
             print(f"Merge Iterator: {iter}, training model 1")
-            model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-            generate_mlc(model1, model2,)
+            self.train_single(reference_model, f'{self.weight_dir}reference_model_{iter}.pt', self.train_loader1, self.args.ref_epochs)
+            set_weight_align_param(reference_model, merge_model,)
             print(f"Merge Iterator: {iter}, training model 2")
-            print(model1.fc1.weight[0][:10])
-            model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
-
-            #generate_mlc(model1, model2,merge_model=False)
-            print(model1.fc1.weight[0][:10])
-            #sys.exit()
-            #results_dict[f'model_1_{iter}']=model_1_trainer
-            #results_dict[f'model_2_{iter}']=model_2_trainer
-
-            #results_dict[f'model_1_{iter}']=model_1_trainer
-            #results_dict[f'model_2_{iter}']=model_2_trainer
-
-
+            self.train_single(merge_model, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2,self.args.merge_epochs)
 
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=50, metavar='N',
-                        help='number of epochs to train (default: 14)')
+    parser.add_argument('--ref_epochs', type=int, default=20, metavar='N',
+                        help='number of epochs to train')
+    parser.add_argument('--merge_epochs', type=int, default=40, metavar='N',
+                        help='number of epochs to train')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
@@ -276,8 +276,8 @@ def main():
         trainer.fit()
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
-        mlc_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
-        mlc_iterator.run()
+        merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
+        merge_iterator.run()
 
 if __name__ == '__main__':
 
