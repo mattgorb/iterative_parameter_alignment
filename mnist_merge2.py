@@ -6,10 +6,8 @@ import torch.nn.functional as F
 import torch.optim as optim
 from torchvision import datasets, transforms
 from torch.utils.data import  DataLoader
-import torch.autograd as autograd
 import math
 import random
-import copy
 from torch.optim.lr_scheduler import CosineAnnealingLR
 
 
@@ -20,15 +18,15 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
-def linear_init(in_dim, out_dim, bias=None, args=None,):
-    layer=LinearAlign(in_dim,out_dim,bias=False)
+def linear_init(in_dim, out_dim, bias=False, args=None,):
+    layer=LinearAlign(in_dim,out_dim,bias=bias)
     layer.init(args)
     return layer
 
 class LinearAlign(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.weights_align = None
+        self.weight_align = None
 
     def init(self,args):
         self.args=args
@@ -40,28 +38,27 @@ class LinearAlign(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-
     def forward(self, x):
         x= F.linear(x, self.weight, self.bias)
         weights_diff=None
-        if self.weights_align is not None:
-            weights_diff=torch.sum((self.weight-self.weights_align).abs())
+        if self.weight_align is not None:
+            weights_diff=torch.sum((self.weight-self.weight_align).abs())
         return x, weights_diff
 
 
 class Net(nn.Module):
-    def __init__(self,args, sparse=False):
+    def __init__(self,args, weight_merge=False):
         super(Net, self).__init__()
         self.args=args
-        self.sparse=sparse
-        if self.sparse:
+        self.weight_merge=weight_merge
+        if self.weight_merge:
             self.fc1 = linear_init(28*28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
         else:
             self.fc1 = nn.Linear(28*28, 1024, bias=False)
             self.fc2 = nn.Linear(1024, 10, bias=False)
     def forward(self, x, ):
-        if self.sparse:
+        if self.weight_merge:
             x,sd1 = self.fc1(x.view(-1, 28*28))
             x = F.relu(x)
             x,sd2= self.fc2(x)
@@ -94,7 +91,7 @@ def get_datasets(args):
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
         dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
 
-        #split dataset in half
+        #split dataset in half by labels
         labels=torch.unique(dataset1.targets)
         ds1_labels=labels[:len(labels)//2]
         ds2_labels=labels[len(labels)//2:]
@@ -103,22 +100,23 @@ def get_datasets(args):
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
-
-        #p/1-p split
+        '''
+        #use this code for p/1-p split.  
         #p=0.99
-        #ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        '''
+
+        '''
+        #use this code to split dataset down middle.
+        dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
+        dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
+        '''
 
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
-        #assert(set(ds1_indices).isdisjoint(ds2_indices))
+        assert(set(ds1_indices).isdisjoint(ds2_indices))
 
-
-        print(len(dataset1.targets))
-        print(len(dataset2.targets))
-
-        #dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
-        #dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
         train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
@@ -197,10 +195,11 @@ def generate_mlc(model1, model2,):
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
 
-            m2.weights_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            m2.reset_weights()
+            m2.weight_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
+            #m2.reset_weights()
 
-class MLC_Iterator:
+class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
         self.args=args
         self.device=device
@@ -224,38 +223,33 @@ class MLC_Iterator:
 
         for iter in range(mlc_iterations):
             '''if iter==0:
-                model1 = Net(self.args, sparse=True).to(self.device)
+                model1 = Net(self.args, weight_merge=True).to(self.device)
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_0.pt', self.train_loader1)
             else:
-                #model1 = Net(self.args, sparse=True).to(self.device)
+                #model1 = Net(self.args, weight_merge=True).to(self.device)
                 #model1.load_state_dict(torch.load(f'{self.weight_dir}model_1_0.pt'))
                 print(f"MLC Iterator: {iter}, training model 1")
                 model_1_trainer.fit()
 
-            model2 = Net(self.args, sparse=True).to(self.device)
+            model2 = Net(self.args, weight_merge=True).to(self.device)
             generate_mlc(model1, model2, )
             print(f"MLC Iterator: {iter}, training model 2")
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
             trainer.fit()'''
             if iter==0:
-                model1 = Net(self.args, sparse=True).to(self.device)
-                model2 = Net(self.args, sparse=True).to(self.device)
-            #print("HERE")
-            #print(model1.fc1.weight[0][:10])
-            #print(f"MLC Iterator: {iter}, training model 1")
+                model1 = Net(self.args, weight_merge=True).to(self.device)
+                model2 = Net(self.args, weight_merge=True).to(self.device)
+
+            print(f"Merge Iterator: {iter}, training model 1")
             model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
             generate_mlc(model1, model2,)
-            #print(model1.fc1.weight[0][:10])
-            #print(model2.fc1.weights_align[0][:10])
-            #print(f"MLC Iterator: {iter}, training model 2")
+            print(f"Merge Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
-            results_dict[f'model_1_{iter}']=model_1_trainer
-            results_dict[f'model_2_{iter}']=model_2_trainer
-            #print(model2.fc1.weight[0][:10])
-            #print(model2.fc1.weights_align[0][:10])
-            #print(model1.fc1.weight[0][:10])
-            #sys.exit()
+
+            #results_dict[f'model_1_{iter}']=model_1_trainer
+            #results_dict[f'model_2_{iter}']=model_2_trainer
+
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
 
@@ -268,6 +262,8 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=50, metavar='N',
                         help='number of epochs to train (default: 14)')
+    parser.add_argument('--epochs', type=int, default=50, metavar='N',
+                        help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
@@ -276,14 +272,11 @@ def main():
                         help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--score_seed', type=int, default=1, metavar='S',
-                        help='random seed (default: 1)')
     parser.add_argument('--gpu', type=int, default=1, metavar='S',
                         help='which gpu to use')
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool,default=False,help='train base model')
-    parser.add_argument('--randinit_baseline', type=bool,default=False,help='train subnetwork with randomly initialized weights')
     parser.add_argument('--base_dir', type=str,default="/s/luffy/b/nobackup/mgorb/",help='Directory for data and weights')
     args = parser.parse_args()
 
@@ -293,18 +286,13 @@ def main():
     weight_dir=f'{args.base_dir}mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
-        if args.randinit_baseline:
-            model = Net(args, sparse=True).to(device)
-            save_path=f'{weight_dir}mnist_ri_subnetwork_baseline.pt'
-        else:
-            model = Net(args, sparse=False).to(device)
-            save_path=f'{weight_dir}mnist_baseline.pt'
-        #freeze_model_weights(model)
+        model = Net(args, sparse=False).to(device)
+        save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
-        mlc_iterator=MLC_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
+        mlc_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
         mlc_iterator.run()
 
 if __name__ == '__main__':
