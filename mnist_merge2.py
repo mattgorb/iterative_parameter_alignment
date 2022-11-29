@@ -185,27 +185,17 @@ class Trainer:
             100. * correct / len(self.test_loader.dataset)))
 
 
-def generate_mlc(model1, model2,merge_model=True):
+def generate_mlc(model1, model2,):
     print("=> Generating MLC mask")
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        print(type(m1))
         if not type(m2)==LinearAlign:
             continue
-
         if hasattr(m1, "weight"):
-            #assert(torch.equal(m1.weight,m2.weight))
 
-            #m2.weight_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
-            print(merge_model)
-            #if merge_model:
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            #else:
-                #print('here')
-                #m1.weight=m2.weight_align
-            #m2.reset_weights()
+
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -240,9 +230,9 @@ class Merge_Iterator:
             print(model1.fc1.weight[0][:10])
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
-            generate_mlc(model1, model2,merge_model=False)
+            #generate_mlc(model1, model2,merge_model=False)
             print(model1.fc1.weight[0][:10])
-            sys.exit()
+            #sys.exit()
             #results_dict[f'model_1_{iter}']=model_1_trainer
             #results_dict[f'model_2_{iter}']=model_2_trainer
 
