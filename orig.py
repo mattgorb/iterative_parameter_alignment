@@ -222,7 +222,7 @@ class MLC_Iterator:
             if iter==0:
                 model1 = Net(self.args, sparse=True).to(self.device)
                 model2 = Net(self.args, sparse=True).to(self.device)
-                assert_model_weight_equality(model1, model2, mlc_mask=False)
+                #assert_model_weight_equality(model1, model2, mlc_mask=False)
             #else:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
