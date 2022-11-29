@@ -238,7 +238,7 @@ class Merge_Iterator:
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
             trainer.fit()'''
             if iter==0:
-                model1 = Net(self.args, ).to(self.device)
+                model1 = Net(self.args, weight_merge=True ).to(self.device)
                 model2 = Net(self.args, weight_merge=True).to(self.device)
 
             print(f"Merge Iterator: {iter}, training model 1")
