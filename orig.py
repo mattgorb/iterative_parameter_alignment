@@ -154,7 +154,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+300*sd
+            loss = self.criterion(output, target)+200*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -227,7 +227,6 @@ class MLC_Iterator:
                 #assert_model_weight_equality(model1, model2, mlc_mask=True)
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
                 #model_1_trainer.test()
-                #sys.exit()
                 #model_2_trainer.test()
 
 
