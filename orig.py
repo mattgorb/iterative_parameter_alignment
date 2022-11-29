@@ -125,7 +125,7 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-4)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
         self.device=device
@@ -154,7 +154,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+235*sd
+            loss = self.criterion(output, target)+250*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
