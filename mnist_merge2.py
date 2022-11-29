@@ -21,13 +21,11 @@ def set_seed(seed):
     torch.backends.cudnn.deterministic = True
 
 def linear_init(in_dim, out_dim, bias=None, args=None,):
-    layer=SubnetLinear(in_dim,out_dim,bias=False)
+    layer=LinearAlign(in_dim,out_dim,bias=False)
     layer.init(args)
     return layer
 
-
-# Not learning weights, finding subnet
-class SubnetLinear(nn.Linear):
+class LinearAlign(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weights_align = None
@@ -45,7 +43,6 @@ class SubnetLinear(nn.Linear):
 
     def forward(self, x):
         x= F.linear(x, self.weight, self.bias)
-
         weights_diff=None
         if self.weights_align is not None:
             weights_diff=torch.sum((self.weight-self.weights_align).abs())
@@ -58,11 +55,11 @@ class Net(nn.Module):
         self.args=args
         self.sparse=sparse
         if self.sparse:
-            self.fc1 = linear_init(28*28, 1024, bias=None, args=self.args, )
-            self.fc2 = linear_init(1024, 10, bias=None, args=self.args, )
+            self.fc1 = linear_init(28*28, 1024, bias=False, args=self.args, )
+            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
         else:
-            self.fc1 = nn.Linear(28*28, 1024)
-            self.fc2 = nn.Linear(1024, 10)
+            self.fc1 = nn.Linear(28*28, 1024, bias=False)
+            self.fc2 = nn.Linear(1024, 10, bias=False)
     def forward(self, x, ):
         if self.sparse:
             x,sd1 = self.fc1(x.view(-1, 28*28))
@@ -70,7 +67,6 @@ class Net(nn.Module):
             x,sd2= self.fc2(x)
             if sd1 is not None:
                 score_diff=sd1+sd2
-                #print(score_diff)
             else:
                 score_diff=torch.tensor(0)
             return x, score_diff
@@ -196,7 +192,7 @@ def generate_mlc(model1, model2,):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
-        if not type(m1)==SubnetLinear:
+        if not type(m1)==LinearAlign:
             continue
         if hasattr(m1, "weight") and m1.weight is not None:
             #assert(torch.equal(m1.weight,m2.weight))
