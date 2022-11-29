@@ -224,7 +224,7 @@ class MLC_Iterator:
         #freeze_model_weights(model)
 
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path)
-        #trainer.fit()
+        trainer.fit()
         return trainer
 
     def run(self):
@@ -243,18 +243,18 @@ class MLC_Iterator:
                 #assert_model_weight_equality(model1, results_dict[f'model_1_{iter - 1}'].model)
                 #model_1_trainer.test()
                 #model_2_trainer.test()
-                model1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
-                model2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
             print(f"MLC Iterator: {iter}, training model 1")
-            model1_trainer.fit()
+            #model1_trainer.fit()
             #model_1_trainer=self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
+            model1_trainer = self.train_single(model1, f'{self.weight_dir}model_1_{iter}.pt', self.train_loader1)
+
 
             model_new = Net(self.args, sparse=True).to(self.device)
             generate_mlc(model1, model2,model_new,iter)
 
             print(f"MLC Iterator: {iter}, training model 2")
-            model2_trainer.fit()
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt', self.train_loader2)
 
             model_new = Net(self.args, sparse=True).to(self.device)
             generate_mlc2(model1, model2,model_new,iter)
