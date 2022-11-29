@@ -197,6 +197,7 @@ def generate_mlc(model1, model2,merge_model=True):
 
             #m2.weight_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
             #m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
+            print(merge_model)
             if merge_model:
                 m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             else:
