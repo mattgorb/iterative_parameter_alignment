@@ -45,7 +45,7 @@ class LinearMerge(nn.Linear):
         weights_diff=None
         if self.weight_align is not None:
             #using absolute error here.  Need to test using MSE loss
-            weights_diff=torch.sum((self.weight-self.weight_align).abs())
+            weights_diff=torch.sum((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
