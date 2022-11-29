@@ -132,7 +132,7 @@ class Trainer:
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
-        #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
+        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
         self.device=device
         self.save_path=save_path
 
@@ -147,7 +147,7 @@ class Trainer:
                 print(f'Saving model with train loss {train_loss}')
                 torch.save(self.model.state_dict(), self.save_path)
                 self.test()
-            #self.scheduler.step()
+            self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
@@ -238,7 +238,7 @@ class Merge_Iterator:
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
             trainer.fit()'''
             if iter==0:
-                model1 = Net(self.args, weight_merge=True).to(self.device)
+                model1 = Net(self.args, ).to(self.device)
                 model2 = Net(self.args, weight_merge=True).to(self.device)
 
             print(f"Merge Iterator: {iter}, training model 1")
@@ -260,8 +260,6 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=50, metavar='N',
-                        help='number of epochs to train (default: 14)')
     parser.add_argument('--epochs', type=int, default=50, metavar='N',
                         help='number of epochs to train (default: 14)')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
