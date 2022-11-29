@@ -174,8 +174,8 @@ class Trainer:
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
                 output, sd = self.model(data, )
-                test_loss += self.criterion(output, target).item() #+sd
-                pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+                test_loss += self.criterion(output, target).item()
+                pred = output.argmax(dim=1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
 
         test_loss /= len(self.test_loader.dataset)
@@ -191,7 +191,7 @@ def generate_mlc(model1, model2,merge_model=True):
         n1,m1=model1_mods
         n2,m2=model2_mods
         print(type(m1))
-        if not type(m1)==LinearAlign:
+        if not type(m2)==LinearAlign:
             continue
 
         if hasattr(m1, "weight"):
@@ -200,11 +200,11 @@ def generate_mlc(model1, model2,merge_model=True):
             #m2.weight_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
             #m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
             print(merge_model)
-            if merge_model:
-                m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            else:
-                print('here')
-                m1.weight=m2.weight_align
+            #if merge_model:
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #else:
+                #print('here')
+                #m1.weight=m2.weight_align
             #m2.reset_weights()
 
 class Merge_Iterator:
