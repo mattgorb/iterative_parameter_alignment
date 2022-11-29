@@ -154,7 +154,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, sd = self.model(data)
-            loss = self.criterion(output, target)+250*sd
+            loss = self.criterion(output, target)+300*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
