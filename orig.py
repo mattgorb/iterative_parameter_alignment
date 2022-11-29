@@ -125,7 +125,7 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-4)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=args.epochs)
         self.device=device
@@ -196,6 +196,21 @@ def generate_mlc(model1, model2, model_new, iter):
     return model_new
 
 
+def generate_mlc2(model1, model2, model_new, iter):
+    print("=> Generating MLC mask")
+    for model1_mods, model2_mods, new_model_mods in zip(model1.named_modules(), model2.named_modules(), model_new.named_modules()):
+        n1,m1=model1_mods
+        n2,m2=model2_mods
+        n_new, m_new=new_model_mods
+        if not type(m1)==SubnetLinear:
+            continue
+        if hasattr(m1, "weight") and m1.weight is not None:
+            #assert(torch.equal(m1.weight,m2.weight))
+            m1.weights_align=m2.weight
+
+
+    return model_new
+
 class MLC_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
         self.args=args
@@ -239,9 +254,10 @@ class MLC_Iterator:
             print(f"MLC Iterator: {iter}, training model 2")
             model_2_trainer=self.train_single(model2, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2)
 
+            model_new = Net(self.args, sparse=True).to(self.device)
+            generate_mlc2(model1, model2,model_new,iter)
 
-            results_dict[f'model_1_{iter}']=model_1_trainer
-            results_dict[f'model_2_{iter}']=model_2_trainer
+
 
             #self.args.score_seed+=1
 
