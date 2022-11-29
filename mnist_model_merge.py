@@ -136,7 +136,7 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
-        self.criterion=nn.CrossEntropyLoss(reduction='sum')
+        self.criterion=nn.CrossEntropyLoss(reduction='mean')
         self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device=device
         self.save_path=save_path
@@ -171,7 +171,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0
             When 5000 isn't used, the model converges too quickly towards second models dataset.  
             '''
-            loss = self.criterion(output, target)+5000*sd
+            loss = self.criterion(output, target)+sd#5000*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -211,7 +211,7 @@ def set_weight_align_param(model1, model2,):
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            m2.reset_weights()
+            #m2.reset_weights()
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
