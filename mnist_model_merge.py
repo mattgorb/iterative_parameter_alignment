@@ -249,7 +249,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--ref_epochs', type=int, default=10, metavar='N',
                         help='number of epochs to train')
-    parser.add_argument('--merge_epochs', type=int, default=5, metavar='N',
+    parser.add_argument('--merge_epochs', type=int, default=20, metavar='N',
                         help='number of epochs to train')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
