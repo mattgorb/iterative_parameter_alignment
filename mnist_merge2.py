@@ -196,7 +196,8 @@ def generate_mlc(model1, model2,):
             #assert(torch.equal(m1.weight,m2.weight))
 
             #m2.weight_align=nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             #m2.reset_weights()
 
 class Merge_Iterator:
@@ -238,7 +239,7 @@ class Merge_Iterator:
             trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model_2_{iter}.pt')
             trainer.fit()'''
             if iter==0:
-                model1 = Net(self.args, weight_merge=True ).to(self.device)
+                model1 = Net(self.args, weight_merge=False ).to(self.device)
                 model2 = Net(self.args, weight_merge=True).to(self.device)
 
             print(f"Merge Iterator: {iter}, training model 1")
