@@ -31,18 +31,20 @@ class LinearMerge(nn.Linear):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
+        #this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    #not sure if this helps convergence.  need to test more.  
+    #not sure if reinitializing weights helps convergence.  need to test.
     def reset_weights(self,):
         self.args.weight_seed+=1
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
     def forward(self, x):
-        x= F.linear(x, self.weight, self.bias)
+        x = F.linear(x, self.weight, self.bias)
         weights_diff=None
         if self.weight_align is not None:
+            #using absolute error here.  Need to test using MSE loss
             weights_diff=torch.sum((self.weight-self.weight_align).abs())
         return x, weights_diff
 
@@ -205,11 +207,11 @@ def set_weight_align_param(model1, model2,):
         if hasattr(m1, "weight"):
             '''
             m1.weight gets updated to m2.weight_align because it is not detached.  
-            This is a simple way to "share" the weights between models, 
-            alternatively we could set m1.weight=m2.weight_align after model2 is done training.  
+            This is a simple way to "share" the weights between models. 
+            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-
+            m2.reset_weights()
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -221,6 +223,7 @@ class Merge_Iterator:
         self.test_dataset = datasets[2]
 
     def train_single(self, model,save_path, train_dataset,epochs ):
+        #not sure if we need to initialize a new training optimizer etc. during each iteration.  need to test.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, epochs)
         trainer.fit()
         return trainer
