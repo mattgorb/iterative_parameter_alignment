@@ -190,8 +190,10 @@ def generate_mlc(model1, model2,merge_model=True):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
+        print(type(m1))
         if not type(m1)==LinearAlign:
             continue
+
         if hasattr(m1, "weight"):
             #assert(torch.equal(m1.weight,m2.weight))
 
