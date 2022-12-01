@@ -164,7 +164,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0
             When 250 isn't used, the model converges too quickly towards second models dataset.  
             '''
-            loss = self.criterion(output, target)+1000*sd
+            loss = self.criterion(output, target)+10000*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
