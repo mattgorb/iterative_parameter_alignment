@@ -40,9 +40,9 @@ class LinearMerge(nn.Linear):
         weights_diff=torch.tensor(0)
         if self.weight_align is not None:
             #using absolute error here.
-            #weights_diff=torch.sum((self.weight-self.weight_align).abs())
+            weights_diff=torch.sum((self.weight-self.weight_align).abs())
             #MSE loss -- not able to get as good results using this loss fn.
-            weights_diff=torch.mean((self.weight-self.weight_align)**2)
+            #weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -130,7 +130,7 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
-        self.criterion=nn.CrossEntropyLoss(reduction='mean')
+        self.criterion=nn.CrossEntropyLoss(reduction='sum')
         #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device=device
         self.save_path=save_path
@@ -157,7 +157,7 @@ class Trainer:
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
-            output, sd = self.model(data)
+            output, weight_align = self.model(data)
 
             '''
             250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
@@ -165,7 +165,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0
             When 250 isn't used, the model converges too quickly towards second models dataset.  
             '''
-            loss = self.criterion(output, target)+250*sd
+            loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -197,16 +197,16 @@ def set_weight_align_param(model1, model2,reverse=False):
         if not type(m2)==LinearMerge:
             continue
         if hasattr(m1, "weight"):
-            '''
-            m1.weight gets updated to m2.weight_align because it is not detached.  
-            This is a simple way to "share" the weights between models. 
-            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
-            '''
+
             if reverse:
                 m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             else:
+                '''
+                m1.weight gets updated to m2.weight_align because it is not detached.  
+                This is a simple way to "share" the weights between models. 
+                Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
+                '''
                 m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            #m2.reset_weights()
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -224,7 +224,9 @@ class Merge_Iterator:
         return trainer
 
     def run(self):
-        merge_iterations=20
+        merge_iterations=self.args.merge_iter
+
+
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         for iter in range(merge_iterations):
@@ -242,20 +244,21 @@ class Merge_Iterator:
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
-    parser.add_argument('--batch-size', type=int, default=256, metavar='N',
+    parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=1, metavar='N',
+    parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
+    parser.add_argument('--merge_iter', type=int, default=2500,
+                        help='number of iterations to merge')
+    parser.add_argument('--weight_align_factor', type=int, default=250,)
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
-    parser.add_argument('--gamma', type=float, default=0.7, metavar='M',
+    parser.add_argument('--gamma', type=float, default=0.7,
                         help='Learning rate step gamma (default: 0.7)')
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
-    parser.add_argument('--weight_seed', type=int, default=1, metavar='S',
-                        help='random seed (default: 1)')
-    parser.add_argument('--gpu', type=int, default=1, metavar='S',
-                        help='which gpu to use')
+    parser.add_argument('--weight_seed', type=int, default=1, )
+    parser.add_argument('--gpu', type=int, default=1, )
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool,default=False,help='train base model')
