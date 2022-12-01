@@ -190,7 +190,6 @@ class Trainer:
 
 
 def set_weight_align_param(model1, model2,reverse=False):
-    print("=> Generating MLC mask")
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
