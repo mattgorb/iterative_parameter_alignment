@@ -220,7 +220,7 @@ class Merge_Iterator:
     def train_single(self, model,save_path, train_dataset, ):
         #not sure if we need to initialize a new training optimizer etc. during each iteration.  need to test.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
-        #trainer.fit()
+        trainer.fit()
         return trainer
 
     def run(self):
@@ -230,14 +230,14 @@ class Merge_Iterator:
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         for iter in range(merge_iterations):
-            if iter==0:
-                model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
-                model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
-            model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=1e-3)
-            model1_trainer.fit()
+
+            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
+            #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=1e-3)
+            #model1_trainer.fit()
             set_weight_align_param(model1, model2,)
-            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=1e-3)
-            model2_trainer.fit()
+            #model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=1e-3)
+            #model2_trainer.fit()
             set_weight_align_param(model1, model2,reverse=True)
 
             if iter%1==0:
