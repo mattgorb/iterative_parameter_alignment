@@ -190,23 +190,20 @@ class Trainer:
 
 
 
-def set_weight_align_param(model1, model2,reverse=False):
+def set_weight_align_param(model1, model2,):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
         if not type(m2)==LinearMerge:
             continue
         if hasattr(m1, "weight"):
-
-            if reverse:
-                m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
-            else:
-                '''
-                m1.weight gets updated to m2.weight_align because it is not detached.  
-                This is a simple way to "share" the weights between models. 
-                Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
-                '''
-                m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            '''
+            m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
+            This is a simple way to "share" the weights between models. 
+            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
+            '''
+            m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -218,7 +215,8 @@ class Merge_Iterator:
         self.test_dataset = datasets[2]
 
     def train_single(self, model,save_path, train_dataset, ):
-        #not sure if we need to initialize a new training optimizer etc. during each iteration.  need to test.
+        #we need to initialize a new optimizer during each iteration.
+        # not sure why, but this is the only way it works.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
         return trainer
@@ -233,12 +231,8 @@ class Merge_Iterator:
 
             model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
             model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
-            #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=1e-3)
-            #model1_trainer.fit()
+
             set_weight_align_param(model1, model2,)
-            #model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=1e-3)
-            #model2_trainer.fit()
-            set_weight_align_param(model1, model2,reverse=True)
 
             if iter%1==0:
                 print(f'Merge Iteration: {iter} \n'
