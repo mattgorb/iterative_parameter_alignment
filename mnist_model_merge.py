@@ -217,7 +217,7 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset,epochs ):
+    def train_single(self, model,save_path, train_dataset, ):
         #not sure if we need to initialize a new training optimizer etc. during each iteration.  need to test.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
