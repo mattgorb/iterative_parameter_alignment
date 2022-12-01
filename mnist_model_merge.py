@@ -132,7 +132,6 @@ class Trainer:
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
-        #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device=device
         self.save_path=save_path
 
@@ -149,7 +148,7 @@ class Trainer:
                 self.test_acc=test_acc
                 if log_output:
                     print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
-            #self.scheduler.step()
+
 
     def model_loss(self):
         return self.best_loss
@@ -218,8 +217,10 @@ class Merge_Iterator:
         self.test_dataset = datasets[2]
 
     def train_single(self, model,save_path, train_dataset, ):
-        #we need to initialize a new optimizer during each iteration.
-        # not sure why, but this is the only way it works.
+        '''
+        ****** We need to initialize a new optimizer during each iteration.
+        Not sure why, but this is the only way it works.
+        '''
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
         return trainer
