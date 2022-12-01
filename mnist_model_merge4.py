@@ -77,7 +77,7 @@ class Net(nn.Module):
 def get_datasets(args):
     transform=transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
+        #transforms.Normalize((0.1307,), (0.3081,))
         ])
 
     if args.baseline:
@@ -88,26 +88,31 @@ def get_datasets(args):
         return train_loader, test_loader
     else:
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset3 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset4 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
 
 
         dataset1.data, dataset1.targets = dataset1.data[:15000], dataset1.targets[:15000]
-        dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
-
-
+        dataset2.data, dataset2.targets = dataset1.data[15000:30000], dataset1.targets[15000:30000]
+        dataset3.data, dataset3.targets = dataset1.data[30000:45000], dataset1.targets[30000:45000]
+        dataset4.data, dataset4.targets = dataset1.data[45000:], dataset1.targets[45000:]
 
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False,  transform=transform)
         train_loader1 = DataLoader(dataset1,batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2,batch_size=args.batch_size, shuffle=True)
+        train_loader3 = DataLoader(dataset3,batch_size=args.batch_size, shuffle=True)
+        train_loader4 = DataLoader(dataset4,batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset,batch_size=args.batch_size, shuffle=False)
 
-        return train_loader1, train_loader2, test_loader
+        return [train_loader1, train_loader2,train_loader3, train_loader4,], test_loader
 
 class Trainer:
     def __init__(self, args,datasets, model, device, save_path,):
         self.args = args
         self.model = model
-        self.train_loader, self.test_loader=datasets[0],datasets[1]
+        self.train_loaders, self.test_loader=datasets[:-2],datasets[-1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
@@ -189,12 +194,11 @@ class Merge_Iterator:
         self.args=args
         self.device=device
         self.weight_dir=weight_dir
-        self.train_loader1 = datasets[0]
-        self.train_loader2 = datasets[1]
-        self.test_dataset = datasets[2]
+        self.train_loaders = datasets[:-1]
+        self.test_dataset = datasets[-1]
 
     def train_single(self, model,save_path, train_dataset, ):
-        #we need to initialize a new optimizer during each iteration.
+        # we need to initialize a new optimizer during each iteration.
         # not sure why, but this is the only way it works.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
@@ -202,14 +206,13 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations=self.args.merge_iter
-
-
-        model1 = Net(self.args, weight_merge=True).to(self.device)
-        model2 = Net(self.args, weight_merge=True).to(self.device)
+        self.models=[]
+        for i in range(len(self.train_loaders[:-1])):
+            model= Net(self.args, weight_merge=True).to(self.device)
+            self.models.apppend(model)
         for iter in range(merge_iterations):
-
-            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
-            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
+            for model in range(len(self.models)):
+                model1_trainer=self.train_single(self.models[i], f'{self.weight_dir}model{model}_{iter}.pt', self.train_loaders[i],)
 
             set_weight_align_param(model1, model2,)
 
@@ -253,8 +256,8 @@ def main():
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
     else:
-        train_loader1, train_loader2, test_dataset=get_datasets(args)
-        merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
+        datasets=get_datasets(args)
+        merge_iterator=Merge_Iterator(args,datasets, device,weight_dir)
         merge_iterator.run()
 
 if __name__ == '__main__':
