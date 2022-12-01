@@ -136,7 +136,7 @@ class Trainer:
         self.device=device
         self.save_path=save_path
 
-    def fit(self, print=False):
+    def fit(self, log_output=False):
         self.train_loss=1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
@@ -147,7 +147,7 @@ class Trainer:
 
                 self.test_loss=test_loss
                 self.test_acc=test_acc
-                if print:
+                if log_output:
                     print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
             #self.scheduler.step()
 
@@ -275,7 +275,7 @@ def main():
         model = Net(args, weight_merge=False).to(device)
         save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
-        trainer.fit(print=True)
+        trainer.fit(log_output=True)
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
         merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
