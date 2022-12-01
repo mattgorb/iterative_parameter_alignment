@@ -261,9 +261,6 @@ class MLC_Iterator:
 
 
 
-            #self.args.score_seed+=1
-
-            #model_1_trainer.test()
 
 
 def main():
