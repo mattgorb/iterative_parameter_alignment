@@ -233,8 +233,10 @@ class Merge_Iterator:
             if iter==0:
                 model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
                 model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
+            model1_trainer.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
             model1_trainer.fit()
             set_weight_align_param(model1, model2,)
+            model2_trainer.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
             model2_trainer.fit()
             set_weight_align_param(model1, model2,reverse=True)
 
