@@ -270,7 +270,7 @@ def main():
     weight_dir=f'{args.base_dir}mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
-        model = Net(args, sparse=False).to(device)
+        model = Net(args, weight_merge=False).to(device)
         save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
         trainer.fit()
