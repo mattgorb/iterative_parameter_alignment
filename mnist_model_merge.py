@@ -39,9 +39,10 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff=torch.tensor(0)
         if self.weight_align is not None:
-            #using absolute error here.  Need to test using MSE loss
-            #weights_diff=torch.mean((self.weight-self.weight_align).abs())
-            weights_diff=torch.sum((self.weight-self.weight_align)**2)
+            #using absolute error here.
+            weights_diff=torch.sum((self.weight-self.weight_align).abs())
+            #MSE loss -- not able to get as good results using this loss fn.
+            #weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -129,7 +130,7 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
-        self.criterion=nn.CrossEntropyLoss(reduction='mean')
+        self.criterion=nn.CrossEntropyLoss(reduction='sum')
         #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device=device
         self.save_path=save_path
@@ -164,7 +165,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0
             When 250 isn't used, the model converges too quickly towards second models dataset.  
             '''
-            loss = self.criterion(output, target)+100*sd
+            loss = self.criterion(output, target)+250*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
