@@ -233,8 +233,8 @@ class Merge_Iterator:
             model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt' ,self.train_loader2,)
             set_weight_align_param(model1, model2,reverse=True)
 
-            if iter%2==0:
-                print(f'Epoch: {iter} \n'
+            if iter%1==0:
+                print(f'Merge Iteration: {iter} \n'
                       f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train loss: {model1_trainer.test_acc},  Test accuracy: {model1_trainer.test_acc}\n'
                       f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train loss: {model2_trainer.test_acc},  Test accuracy: {model2_trainer.test_acc}')
 
