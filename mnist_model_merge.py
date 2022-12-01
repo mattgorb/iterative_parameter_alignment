@@ -78,18 +78,18 @@ def get_datasets(args):
     #not using
     transform=transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.1307,), (0.3081,))
+        #transforms.Normalize((0.1307,), (0.3081,))
         ])
 
     if args.baseline:
-        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=None)
-        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=None)
+        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
     else:
-        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=None)
-        dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=None)
+        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
 
         #split dataset in half by labels
         labels=torch.unique(dataset1.targets)
