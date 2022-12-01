@@ -224,7 +224,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations=20
-        model1 = Net(self.args, weight_merge=False).to(self.device)
+        model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         for iter in range(merge_iterations):
 
