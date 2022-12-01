@@ -75,7 +75,7 @@ class Net(nn.Module):
 
 
 def get_datasets(args):
-    #not using
+    #not using normalization
     transform=transforms.Compose([
         transforms.ToTensor(),
         #transforms.Normalize((0.1307,), (0.3081,))
