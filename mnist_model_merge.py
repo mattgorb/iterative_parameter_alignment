@@ -78,7 +78,6 @@ def get_datasets(args):
     #not using normalization
     transform=transforms.Compose([
         transforms.ToTensor(),
-        #transforms.Normalize((0.1307,), (0.3081,))
         ])
 
     if args.baseline:
@@ -162,10 +161,8 @@ class Trainer:
             output, weight_align = self.model(data)
 
             '''
-            250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
-            Taking mean of CE and sum of weight alignment might make this hyperparameter unnecessary.
-            For model w/o weight alignment paramter, second part of loss is 0
-            When 250 isn't used, the model converges too quickly towards second models dataset.  
+            weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
+            For model w/o weight alignment paramter, second part of loss is 0  
             '''
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
@@ -270,7 +267,7 @@ def main():
     set_seed(args.seed)
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
-    weight_dir=f'{args.base_dir}mlc_weights/'
+    weight_dir=f'{args.base_dir}iwa_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         model = Net(args, weight_merge=False).to(device)

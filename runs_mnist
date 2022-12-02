@@ -1,0 +1,2 @@
+nohup python -u mnist_model_merge.py --epochs=1 --gpu=3 --lr=0.01> ~/out/97.txt 2>&1 &
+nohup python -u mnist_model_merge.py --epochs=20000 --baseline=True --gpu=4  --lr=0.01> ~/out/98.txt 2>&1 &
