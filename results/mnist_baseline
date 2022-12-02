@@ -183,3 +183,7 @@ Epoch: 1299, Train loss: 3.973642595522797e-12, Test loss: 0.31144821848478144, 
 Epoch: 1303, Train loss: 1.9868212977613986e-12, Test loss: 0.31529879035053554, Test Acc: 98.34
 Epoch: 1306, Train loss: 0.0, Test loss: 0.31806650498062083, Test Acc: 98.35
 (base) luffy:~$
+
+
+LOWEST TEST LOSS:
+Epoch: 9, Train loss: 0.015155813656747341, Test loss: 0.059510015040822324, Test Acc: 98.19
