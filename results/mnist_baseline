@@ -1,289 +1,185 @@
-(transformers) luffy:~/matching_lin_codim$ python mnist_example2.py --baseline=True  --epochs=100 --gpu=6
-
 /s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: /s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/image.so: undefined symbol: _ZN3c106detail19maybe_wrap_dim_slowEllb
   warn(f"Failed to load image Python extension: {e}")
-=> Freezing model weights
-Fitting model...
-Epoch 1
-Saving model with train loss 0.17528678476810455
-Test set: Average loss: 0.0502, Accuracy: 9841/10000 (98%)
-Epoch 2
-Saving model with train loss 0.04641309008002281
-Test set: Average loss: 0.0375, Accuracy: 9877/10000 (99%)
-Epoch 3
-Saving model with train loss 0.0282493494451046
-Test set: Average loss: 0.0379, Accuracy: 9877/10000 (99%)
-Epoch 4
-Saving model with train loss 0.019177082926034927
-Test set: Average loss: 0.0450, Accuracy: 9870/10000 (99%)
-Epoch 5
-Saving model with train loss 0.014063042588531971
-Test set: Average loss: 0.0385, Accuracy: 9881/10000 (99%)
-Epoch 6
-Saving model with train loss 0.0094631751999259
-Test set: Average loss: 0.0342, Accuracy: 9899/10000 (99%)
-Epoch 7
-Saving model with train loss 0.0069720130413770676
-Test set: Average loss: 0.0445, Accuracy: 9875/10000 (99%)
-Epoch 8
-Saving model with train loss 0.005355928558856249
-Test set: Average loss: 0.0413, Accuracy: 9890/10000 (99%)
-Epoch 9
-Saving model with train loss 0.004523273557424545
-Test set: Average loss: 0.0426, Accuracy: 9893/10000 (99%)
-Epoch 10
-Epoch 11
-Epoch 12
-Epoch 13
-Epoch 14
-Saving model with train loss 0.0034048769157379866
-Test set: Average loss: 0.0462, Accuracy: 9886/10000 (99%)
-Epoch 15
-Saving model with train loss 0.001795098534785211
-Test set: Average loss: 0.0505, Accuracy: 9898/10000 (99%)
-Epoch 16
-Epoch 17
-Epoch 18
-Epoch 19
-Epoch 20
-Epoch 21
-Saving model with train loss 0.0012677572667598724
-Test set: Average loss: 0.0517, Accuracy: 9900/10000 (99%)
-Epoch 22
-Saving model with train loss 0.000613066484220326
-Test set: Average loss: 0.0480, Accuracy: 9900/10000 (99%)
-Epoch 23
-Saving model with train loss 0.00020411094010341913
-Test set: Average loss: 0.0486, Accuracy: 9907/10000 (99%)
-Epoch 24
-Saving model with train loss 4.3480944441398606e-05
-Test set: Average loss: 0.0482, Accuracy: 9912/10000 (99%)
-Epoch 25
-Saving model with train loss 1.1392552551114932e-05
-Test set: Average loss: 0.0486, Accuracy: 9910/10000 (99%)
-Epoch 26
-Saving model with train loss 8.59759165905416e-06
-Test set: Average loss: 0.0490, Accuracy: 9911/10000 (99%)
-Epoch 27
-Saving model with train loss 7.070894298522035e-06
-Test set: Average loss: 0.0496, Accuracy: 9910/10000 (99%)
-Epoch 28
-Saving model with train loss 5.952276296739001e-06
-Test set: Average loss: 0.0500, Accuracy: 9910/10000 (99%)
-Epoch 29
-Saving model with train loss 5.084431904833764e-06
-Test set: Average loss: 0.0505, Accuracy: 9910/10000 (99%)
-Epoch 30
-Saving model with train loss 4.381230155559024e-06
-Test set: Average loss: 0.0510, Accuracy: 9910/10000 (99%)
-Epoch 31
-Saving model with train loss 3.8172825043147895e-06
-Test set: Average loss: 0.0515, Accuracy: 9911/10000 (99%)
-Epoch 32
-Saving model with train loss 3.3277797228947747e-06
-Test set: Average loss: 0.0519, Accuracy: 9911/10000 (99%)
-Epoch 33
-Saving model with train loss 2.9263560463732574e-06
-Test set: Average loss: 0.0525, Accuracy: 9912/10000 (99%)
-Epoch 34
-Saving model with train loss 2.583605009931489e-06
-Test set: Average loss: 0.0529, Accuracy: 9912/10000 (99%)
-Epoch 35
-Saving model with train loss 2.2874944534123642e-06
-Test set: Average loss: 0.0534, Accuracy: 9912/10000 (99%)
-Epoch 36
-Saving model with train loss 2.026988795478246e-06
-Test set: Average loss: 0.0539, Accuracy: 9911/10000 (99%)
-Epoch 37
-Saving model with train loss 1.803799023036845e-06
-Test set: Average loss: 0.0543, Accuracy: 9912/10000 (99%)
-Epoch 38
-Saving model with train loss 1.6090400549728656e-06
-Test set: Average loss: 0.0548, Accuracy: 9913/10000 (99%)
-Epoch 39
-Saving model with train loss 1.4327303006211878e-06
-Test set: Average loss: 0.0553, Accuracy: 9914/10000 (99%)
-Epoch 40
-Saving model with train loss 1.2830798823415535e-06
-Test set: Average loss: 0.0558, Accuracy: 9914/10000 (99%)
-Epoch 41
-Saving model with train loss 1.1491842997202184e-06
-Test set: Average loss: 0.0562, Accuracy: 9914/10000 (99%)
-Epoch 42
-Saving model with train loss 1.03044590105128e-06
-Test set: Average loss: 0.0567, Accuracy: 9914/10000 (99%)
-Epoch 43
-Saving model with train loss 9.268713938581641e-07
-Test set: Average loss: 0.0572, Accuracy: 9913/10000 (99%)
-Epoch 44
-Saving model with train loss 8.349709901267488e-07
-Test set: Average loss: 0.0576, Accuracy: 9913/10000 (99%)
-Epoch 45
-Saving model with train loss 7.504738732677652e-07
-Test set: Average loss: 0.0581, Accuracy: 9913/10000 (99%)
-Epoch 46
-Saving model with train loss 6.774077405680146e-07
-Test set: Average loss: 0.0586, Accuracy: 9913/10000 (99%)
-Epoch 47
-Saving model with train loss 6.11531561389711e-07
-Test set: Average loss: 0.0591, Accuracy: 9913/10000 (99%)
-Epoch 48
-Saving model with train loss 5.536037974707142e-07
-Test set: Average loss: 0.0595, Accuracy: 9913/10000 (99%)
-Epoch 49
-Saving model with train loss 4.997843348064634e-07
-Test set: Average loss: 0.0599, Accuracy: 9913/10000 (99%)
-Epoch 50
-Saving model with train loss 4.528539818693389e-07
-Test set: Average loss: 0.0604, Accuracy: 9913/10000 (99%)
-Epoch 51
-Saving model with train loss 4.096769998795935e-07
-Test set: Average loss: 0.0608, Accuracy: 9913/10000 (99%)
-Epoch 52
-Saving model with train loss 3.7169252209423576e-07
-Test set: Average loss: 0.0613, Accuracy: 9913/10000 (99%)
-Epoch 53
-Saving model with train loss 3.3764789009183005e-07
-Test set: Average loss: 0.0616, Accuracy: 9913/10000 (99%)
-Epoch 54
-Saving model with train loss 3.06163940422266e-07
-Test set: Average loss: 0.0621, Accuracy: 9912/10000 (99%)
-Epoch 55
-Saving model with train loss 2.7869901941812714e-07
-Test set: Average loss: 0.0625, Accuracy: 9913/10000 (99%)
-Epoch 56
-Saving model with train loss 2.5355052457598504e-07
-Test set: Average loss: 0.0629, Accuracy: 9912/10000 (99%)
-Epoch 57
-Saving model with train loss 2.3127495296648704e-07
-Test set: Average loss: 0.0634, Accuracy: 9912/10000 (99%)
-Epoch 58
-Saving model with train loss 2.1070604816486593e-07
-Test set: Average loss: 0.0638, Accuracy: 9912/10000 (99%)
-Epoch 59
-Saving model with train loss 1.921554542150261e-07
-Test set: Average loss: 0.0642, Accuracy: 9911/10000 (99%)
-Epoch 60
-Saving model with train loss 1.7599697343939624e-07
-Test set: Average loss: 0.0646, Accuracy: 9912/10000 (99%)
-Epoch 61
-Saving model with train loss 1.607285327054342e-07
-Test set: Average loss: 0.0650, Accuracy: 9912/10000 (99%)
-Epoch 62
-Saving model with train loss 1.4728190933510632e-07
-Test set: Average loss: 0.0654, Accuracy: 9912/10000 (99%)
-Epoch 63
-Saving model with train loss 1.3496384099198622e-07
-Test set: Average loss: 0.0658, Accuracy: 9912/10000 (99%)
-Epoch 64
-Saving model with train loss 1.2416168715390086e-07
-Test set: Average loss: 0.0662, Accuracy: 9912/10000 (99%)
-Epoch 65
-Saving model with train loss 1.1411445655085117e-07
-Test set: Average loss: 0.0666, Accuracy: 9912/10000 (99%)
-Epoch 66
-Saving model with train loss 1.0501492653247624e-07
-Test set: Average loss: 0.0670, Accuracy: 9912/10000 (99%)
-Epoch 67
-Saving model with train loss 9.676570300598542e-08
-Test set: Average loss: 0.0674, Accuracy: 9912/10000 (99%)
-Epoch 68
-Saving model with train loss 8.920591199057526e-08
-Test set: Average loss: 0.0678, Accuracy: 9912/10000 (99%)
-Epoch 69
-Saving model with train loss 8.229979897578232e-08
-Test set: Average loss: 0.0681, Accuracy: 9912/10000 (99%)
-Epoch 70
-Saving model with train loss 7.606917051816708e-08
-Test set: Average loss: 0.0685, Accuracy: 9913/10000 (99%)
-Epoch 71
-Saving model with train loss 7.038096327960375e-08
-Test set: Average loss: 0.0689, Accuracy: 9913/10000 (99%)
-Epoch 72
-Saving model with train loss 6.531856655556112e-08
-Test set: Average loss: 0.0692, Accuracy: 9913/10000 (99%)
-Epoch 73
-Saving model with train loss 6.071311986488581e-08
-Test set: Average loss: 0.0696, Accuracy: 9913/10000 (99%)
-Epoch 74
-Saving model with train loss 5.631829935737187e-08
-Test set: Average loss: 0.0699, Accuracy: 9914/10000 (99%)
-Epoch 75
-Saving model with train loss 5.25095948944454e-08
-Test set: Average loss: 0.0703, Accuracy: 9914/10000 (99%)
-Epoch 76
-Saving model with train loss 4.895916205782669e-08
-Test set: Average loss: 0.0706, Accuracy: 9914/10000 (99%)
-Epoch 77
-Saving model with train loss 4.577231038638274e-08
-Test set: Average loss: 0.0709, Accuracy: 9914/10000 (99%)
-Epoch 78
-Saving model with train loss 4.2851702630741784e-08
-Test set: Average loss: 0.0712, Accuracy: 9914/10000 (99%)
-Epoch 79
-Saving model with train loss 4.009400456084222e-08
-Test set: Average loss: 0.0715, Accuracy: 9914/10000 (99%)
-Epoch 80
-Saving model with train loss 3.7674066533099904e-08
-Test set: Average loss: 0.0718, Accuracy: 9914/10000 (99%)
-Epoch 81
-Saving model with train loss 3.5508431750486125e-08
-Test set: Average loss: 0.0721, Accuracy: 9914/10000 (99%)
-Epoch 82
-Saving model with train loss 3.347988553059622e-08
-Test set: Average loss: 0.0723, Accuracy: 9914/10000 (99%)
-Epoch 83
-Saving model with train loss 3.164407758049492e-08
-Test set: Average loss: 0.0726, Accuracy: 9914/10000 (99%)
-Epoch 84
-Saving model with train loss 2.9973158177654113e-08
-Test set: Average loss: 0.0728, Accuracy: 9914/10000 (99%)
-Epoch 85
-Saving model with train loss 2.845523461303401e-08
-Test set: Average loss: 0.0730, Accuracy: 9914/10000 (99%)
-Epoch 86
-Saving model with train loss 2.7130028001920437e-08
-Test set: Average loss: 0.0733, Accuracy: 9914/10000 (99%)
-Epoch 87
-Saving model with train loss 2.5860449781589523e-08
-Test set: Average loss: 0.0735, Accuracy: 9914/10000 (99%)
-Epoch 88
-Saving model with train loss 2.4791544817048816e-08
-Test set: Average loss: 0.0737, Accuracy: 9914/10000 (99%)
-Epoch 89
-Saving model with train loss 2.3782240177183667e-08
-Test set: Average loss: 0.0739, Accuracy: 9914/10000 (99%)
-Epoch 90
-Saving model with train loss 2.2923934750451735e-08
-Test set: Average loss: 0.0741, Accuracy: 9914/10000 (99%)
-Epoch 91
-Saving model with train loss 2.2166954494196034e-08
-Test set: Average loss: 0.0742, Accuracy: 9914/10000 (99%)
-Epoch 92
-Saving model with train loss 2.151329425714721e-08
-Test set: Average loss: 0.0743, Accuracy: 9914/10000 (99%)
-Epoch 93
-Saving model with train loss 2.0893402563615382e-08
-Test set: Average loss: 0.0745, Accuracy: 9914/10000 (99%)
-Epoch 94
-Saving model with train loss 2.04046468610386e-08
-Test set: Average loss: 0.0745, Accuracy: 9914/10000 (99%)
-Epoch 95
-Saving model with train loss 2.001324084233147e-08
-Test set: Average loss: 0.0746, Accuracy: 9914/10000 (99%)
-Epoch 96
-Saving model with train loss 1.971919338927819e-08
-Test set: Average loss: 0.0747, Accuracy: 9914/10000 (99%)
-Epoch 97
-Saving model with train loss 1.9488721747507043e-08
-Test set: Average loss: 0.0747, Accuracy: 9914/10000 (99%)
-Epoch 98
-Saving model with train loss 1.9311896082285784e-08
-Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
-Epoch 99
-Saving model with train loss 1.9180767196758097e-08
-Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
-Epoch 100
-Saving model with train loss 1.9131096706814787e-08
-Test set: Average loss: 0.0748, Accuracy: 9914/10000 (99%)
-(transformers) luffy:~/matching_lin_codim$
+Epoch: 1, Train loss: 0.3418040871620178, Test loss: 0.16149557857513427, Test Acc: 95.3
+Epoch: 2, Train loss: 0.1345255970954895, Test loss: 0.10938110611364245, Test Acc: 96.79
+Epoch: 3, Train loss: 0.08514990657567978, Test loss: 0.08779699211865663, Test Acc: 97.31
+Epoch: 4, Train loss: 0.06067521497607231, Test loss: 0.07561574280336499, Test Acc: 97.72
+Epoch: 5, Train loss: 0.04578256234526634, Test loss: 0.06647457051128149, Test Acc: 97.83
+Epoch: 6, Train loss: 0.03471740707755089, Test loss: 0.06863649168927223, Test Acc: 97.96
+Epoch: 7, Train loss: 0.02622327208518982, Test loss: 0.06477242336589843, Test Acc: 97.99
+Epoch: 8, Train loss: 0.02004137448966503, Test loss: 0.06459669547248632, Test Acc: 98.07
+Epoch: 9, Train loss: 0.015155813656747341, Test loss: 0.059510015040822324, Test Acc: 98.19
+Epoch: 10, Train loss: 0.011139915324747562, Test loss: 0.062445520025864246, Test Acc: 98.06
+Epoch: 11, Train loss: 0.009330663830041885, Test loss: 0.06089063729426125, Test Acc: 98.31
+Epoch: 12, Train loss: 0.006098280195146799, Test loss: 0.06114590260200203, Test Acc: 98.14
+Epoch: 13, Train loss: 0.004645285662263632, Test loss: 0.06305819314342807, Test Acc: 98.21
+Epoch: 14, Train loss: 0.0032683347817510366, Test loss: 0.062374233410303716, Test Acc: 98.3
+Epoch: 15, Train loss: 0.002995976246893406, Test loss: 0.060752568033273564, Test Acc: 98.33
+Epoch: 16, Train loss: 0.002025095047429204, Test loss: 0.060265464419478665, Test Acc: 98.28
+Epoch: 17, Train loss: 0.0014866655692458153, Test loss: 0.06035639012188767, Test Acc: 98.36
+Epoch: 22, Train loss: 0.0008927563321776688, Test loss: 0.06500091411066206, Test Acc: 98.33
+Epoch: 23, Train loss: 0.0005088197067379951, Test loss: 0.06557358720302127, Test Acc: 98.34
+Epoch: 24, Train loss: 0.0003355379740241915, Test loss: 0.0655947492659936, Test Acc: 98.34
+Epoch: 25, Train loss: 0.0002809771685861051, Test loss: 0.06697364043579218, Test Acc: 98.28
+Epoch: 26, Train loss: 0.00024548405781388283, Test loss: 0.0668339801182492, Test Acc: 98.33
+Epoch: 27, Train loss: 0.00021330849267542362, Test loss: 0.0679244350797027, Test Acc: 98.29
+Epoch: 28, Train loss: 0.00019215258362237364, Test loss: 0.067817706051282, Test Acc: 98.36
+Epoch: 29, Train loss: 0.00017452739120926708, Test loss: 0.06880715867029485, Test Acc: 98.3
+Epoch: 30, Train loss: 0.00015476113185286522, Test loss: 0.06962683645659072, Test Acc: 98.34
+Epoch: 31, Train loss: 0.0001382949121762067, Test loss: 0.06990161393559528, Test Acc: 98.33
+Epoch: 32, Train loss: 0.00013010526890866458, Test loss: 0.07085371482884477, Test Acc: 98.31
+Epoch: 33, Train loss: 0.00011619881843216717, Test loss: 0.07091327995897727, Test Acc: 98.32
+Epoch: 34, Train loss: 0.00010358494182582945, Test loss: 0.07138887259587637, Test Acc: 98.29
+Epoch: 35, Train loss: 9.278480865759775e-05, Test loss: 0.07226456495322041, Test Acc: 98.35
+Epoch: 36, Train loss: 8.328547119162977e-05, Test loss: 0.07267780731834933, Test Acc: 98.28
+Epoch: 37, Train loss: 7.46101577533409e-05, Test loss: 0.07344258464796001, Test Acc: 98.3
+Epoch: 38, Train loss: 6.716654024785385e-05, Test loss: 0.07318022813289422, Test Acc: 98.34
+Epoch: 39, Train loss: 6.182467041071504e-05, Test loss: 0.07432890036561292, Test Acc: 98.29
+Epoch: 40, Train loss: 5.3747415222460404e-05, Test loss: 0.07586279346711233, Test Acc: 98.29
+Epoch: 57, Train loss: 5.042667908128351e-05, Test loss: 0.07767606514978688, Test Acc: 98.31
+Epoch: 58, Train loss: 4.535288826446049e-05, Test loss: 0.07798715349537087, Test Acc: 98.33
+Epoch: 59, Train loss: 4.127313877688721e-05, Test loss: 0.0791141990648699, Test Acc: 98.32
+Epoch: 60, Train loss: 3.695387931657024e-05, Test loss: 0.07950144397289259, Test Acc: 98.31
+Epoch: 61, Train loss: 3.370979175087996e-05, Test loss: 0.07990569375784835, Test Acc: 98.32
+Epoch: 62, Train loss: 3.0244382287492044e-05, Test loss: 0.08084417150547961, Test Acc: 98.33
+Epoch: 63, Train loss: 2.7372982003726065e-05, Test loss: 0.08152311957554775, Test Acc: 98.32
+Epoch: 64, Train loss: 2.4773373297648504e-05, Test loss: 0.0820234732358891, Test Acc: 98.33
+Epoch: 65, Train loss: 2.2236356016946957e-05, Test loss: 0.08211802169147413, Test Acc: 98.34
+Epoch: 66, Train loss: 2.0009019863209687e-05, Test loss: 0.08342707692312251, Test Acc: 98.31
+Epoch: 67, Train loss: 1.830443761718925e-05, Test loss: 0.08354945394824026, Test Acc: 98.31
+Epoch: 68, Train loss: 1.6352645616279915e-05, Test loss: 0.08485022171383608, Test Acc: 98.31
+Epoch: 69, Train loss: 1.4660204215033446e-05, Test loss: 0.08541014091785182, Test Acc: 98.29
+Epoch: 70, Train loss: 1.3171217688068282e-05, Test loss: 0.0862598917947762, Test Acc: 98.31
+Epoch: 71, Train loss: 1.2050641998939682e-05, Test loss: 0.087600722721903, Test Acc: 98.33
+Epoch: 72, Train loss: 1.0724676940299105e-05, Test loss: 0.08717742697822686, Test Acc: 98.3
+Epoch: 73, Train loss: 9.59629142016638e-06, Test loss: 0.0886532435432062, Test Acc: 98.32
+Epoch: 74, Train loss: 8.590800462116022e-06, Test loss: 0.08901377043829707, Test Acc: 98.32
+Epoch: 75, Train loss: 7.68439258536091e-06, Test loss: 0.0897956383907207, Test Acc: 98.32
+Epoch: 76, Train loss: 6.834205578343244e-06, Test loss: 0.09040017687437066, Test Acc: 98.32
+Epoch: 77, Train loss: 6.271495294640772e-06, Test loss: 0.09097680882036657, Test Acc: 98.3
+Epoch: 78, Train loss: 5.4655392887070775e-06, Test loss: 0.0915479811492478, Test Acc: 98.31
+Epoch: 79, Train loss: 4.860066837863997e-06, Test loss: 0.09303218772444816, Test Acc: 98.35
+Epoch: 80, Train loss: 4.404547780723078e-06, Test loss: 0.0930193297205813, Test Acc: 98.32
+Epoch: 81, Train loss: 3.86740202884539e-06, Test loss: 0.09395470305047929, Test Acc: 98.3
+Epoch: 82, Train loss: 3.4705810776358703e-06, Test loss: 0.09493640977067844, Test Acc: 98.3
+Epoch: 83, Train loss: 3.0831606636638753e-06, Test loss: 0.09510791449334356, Test Acc: 98.31
+Epoch: 84, Train loss: 2.741972821240779e-06, Test loss: 0.0962740143842595, Test Acc: 98.34
+Epoch: 85, Train loss: 2.433185045447317e-06, Test loss: 0.09697979849964686, Test Acc: 98.29
+Epoch: 86, Train loss: 2.220178657807992e-06, Test loss: 0.09788284361684818, Test Acc: 98.28
+Epoch: 87, Train loss: 2.0214492906234227e-06, Test loss: 0.09918213593238688, Test Acc: 98.28
+Epoch: 88, Train loss: 1.6978573285086895e-06, Test loss: 0.09914153126292513, Test Acc: 98.3
+Epoch: 89, Train loss: 1.4824029221927049e-06, Test loss: 0.10009784135568098, Test Acc: 98.31
+Epoch: 90, Train loss: 1.3439345138976933e-06, Test loss: 0.10161220341145036, Test Acc: 98.32
+Epoch: 91, Train loss: 1.1833556072815554e-06, Test loss: 0.10159394732693817, Test Acc: 98.32
+Epoch: 92, Train loss: 1.0416979421279393e-06, Test loss: 0.10255624182180854, Test Acc: 98.31
+Epoch: 93, Train loss: 9.311642656939512e-07, Test loss: 0.10361171590302375, Test Acc: 98.31
+Epoch: 94, Train loss: 8.133551432365493e-07, Test loss: 0.10365858572127182, Test Acc: 98.3
+Epoch: 95, Train loss: 7.309189413717831e-07, Test loss: 0.10544467407181528, Test Acc: 98.32
+Epoch: 96, Train loss: 6.42017653262883e-07, Test loss: 0.10506088566342114, Test Acc: 98.3
+Epoch: 97, Train loss: 5.674002636624209e-07, Test loss: 0.10690640827536, Test Acc: 98.31
+Epoch: 98, Train loss: 5.02145780956198e-07, Test loss: 0.10722832291986496, Test Acc: 98.33
+Epoch: 99, Train loss: 4.3938692328993056e-07, Test loss: 0.10828650132196425, Test Acc: 98.3
+Epoch: 100, Train loss: 3.891729534188926e-07, Test loss: 0.1093116170923909, Test Acc: 98.32
+Epoch: 101, Train loss: 3.4926765124509984e-07, Test loss: 0.10889164973865204, Test Acc: 98.35
+Epoch: 152, Train loss: 3.457151080965559e-07, Test loss: 0.11562586647523494, Test Acc: 98.37
+Epoch: 153, Train loss: 3.1267458666661696e-07, Test loss: 0.11590572341494221, Test Acc: 98.39
+Epoch: 154, Train loss: 2.8228652126927045e-07, Test loss: 0.11654611345113931, Test Acc: 98.38
+Epoch: 155, Train loss: 2.542188894949504e-07, Test loss: 0.11642687236797045, Test Acc: 98.39
+Epoch: 156, Train loss: 2.276394894806799e-07, Test loss: 0.11681455523794261, Test Acc: 98.39
+Epoch: 157, Train loss: 2.058103802937694e-07, Test loss: 0.11765690663631499, Test Acc: 98.38
+Epoch: 158, Train loss: 1.830117781764784e-07, Test loss: 0.11761194469773897, Test Acc: 98.37
+Epoch: 159, Train loss: 1.6482243836435373e-07, Test loss: 0.11858372494153437, Test Acc: 98.39
+Epoch: 160, Train loss: 1.4725311814345332e-07, Test loss: 0.11844367976556519, Test Acc: 98.41
+Epoch: 161, Train loss: 1.3225063355548627e-07, Test loss: 0.11996338157972763, Test Acc: 98.39
+Epoch: 162, Train loss: 1.1962838186718727e-07, Test loss: 0.11974528544670889, Test Acc: 98.39
+Epoch: 163, Train loss: 1.066425667772819e-07, Test loss: 0.1206577827190572, Test Acc: 98.38
+Epoch: 164, Train loss: 9.543094847686007e-08, Test loss: 0.12032692552766527, Test Acc: 98.4
+Epoch: 165, Train loss: 8.555646502372838e-08, Test loss: 0.12146329443848222, Test Acc: 98.38
+Epoch: 166, Train loss: 7.607537355625027e-08, Test loss: 0.12196976770212636, Test Acc: 98.36
+Epoch: 167, Train loss: 6.756383896799889e-08, Test loss: 0.12285439571642778, Test Acc: 98.36
+Epoch: 168, Train loss: 6.145635467191823e-08, Test loss: 0.12250370556251142, Test Acc: 98.37
+Epoch: 169, Train loss: 5.5019050648752454e-08, Test loss: 0.12353397089341886, Test Acc: 98.37
+Epoch: 170, Train loss: 4.8943352481956026e-08, Test loss: 0.12478141637012591, Test Acc: 98.36
+Epoch: 171, Train loss: 4.358092553502502e-08, Test loss: 0.12489483465153023, Test Acc: 98.34
+Epoch: 172, Train loss: 3.937879711202186e-08, Test loss: 0.12463433583950971, Test Acc: 98.34
+Epoch: 173, Train loss: 3.503759415934837e-08, Test loss: 0.12547154647800488, Test Acc: 98.32
+Epoch: 174, Train loss: 3.1199054006947335e-08, Test loss: 0.1257297907788772, Test Acc: 98.37
+Epoch: 175, Train loss: 2.7682382608418266e-08, Test loss: 0.12644928597897523, Test Acc: 98.33
+Epoch: 176, Train loss: 2.462267723046807e-08, Test loss: 0.12705457668468007, Test Acc: 98.35
+Epoch: 177, Train loss: 2.1978218356366597e-08, Test loss: 0.12753735983258813, Test Acc: 98.36
+Epoch: 178, Train loss: 1.970926710725962e-08, Test loss: 0.12825745569128777, Test Acc: 98.35
+Epoch: 179, Train loss: 1.74701195732041e-08, Test loss: 0.12839758608211704, Test Acc: 98.35
+Epoch: 180, Train loss: 1.5497207073167374e-08, Test loss: 0.12889125432726578, Test Acc: 98.36
+Epoch: 181, Train loss: 1.366535773428268e-08, Test loss: 0.1301210305948247, Test Acc: 98.36
+Epoch: 182, Train loss: 1.2147426176056797e-08, Test loss: 0.13106178514913772, Test Acc: 98.35
+Epoch: 183, Train loss: 1.0736782130038591e-08, Test loss: 0.1298847420790873, Test Acc: 98.32
+Epoch: 184, Train loss: 9.477137297153604e-09, Test loss: 0.13183644359311, Test Acc: 98.33
+Epoch: 185, Train loss: 8.346636271028274e-09, Test loss: 0.13126335019601684, Test Acc: 98.33
+Epoch: 186, Train loss: 7.375080990357219e-09, Test loss: 0.1319563478363969, Test Acc: 98.35
+Epoch: 187, Train loss: 6.4373013586305206e-09, Test loss: 0.13373575779525562, Test Acc: 98.32
+Epoch: 188, Train loss: 5.706151107176538e-09, Test loss: 0.13420918241010368, Test Acc: 98.33
+Epoch: 189, Train loss: 5.082288812019442e-09, Test loss: 0.13614107613314408, Test Acc: 98.31
+Epoch: 190, Train loss: 4.4961767642348605e-09, Test loss: 0.13634176119204422, Test Acc: 98.33
+Epoch: 191, Train loss: 4.057089331155339e-09, Test loss: 0.13600034611412265, Test Acc: 98.35
+Epoch: 192, Train loss: 3.945827220519504e-09, Test loss: 0.13797414416397225, Test Acc: 98.35
+Epoch: 193, Train loss: 3.568331186087903e-09, Test loss: 0.14044827433047394, Test Acc: 98.3
+Epoch: 194, Train loss: 3.453095587246935e-09, Test loss: 0.1435364372154174, Test Acc: 98.33
+Epoch: 279, Train loss: 3.3855436232244074e-09, Test loss: 0.15056538089647512, Test Acc: 98.37
+Epoch: 280, Train loss: 2.9901661147135883e-09, Test loss: 0.15080812632591697, Test Acc: 98.34
+Epoch: 281, Train loss: 2.7318793893726934e-09, Test loss: 0.1519458142306008, Test Acc: 98.33
+Epoch: 282, Train loss: 2.4338560056236247e-09, Test loss: 0.15259402804221972, Test Acc: 98.35
+Epoch: 283, Train loss: 2.241134389180388e-09, Test loss: 0.15357518586805963, Test Acc: 98.32
+Epoch: 284, Train loss: 2.1954376094868167e-09, Test loss: 0.15512764152901873, Test Acc: 98.3
+Epoch: 373, Train loss: 2.0305315207025387e-09, Test loss: 0.15501390742770163, Test Acc: 98.35
+Epoch: 374, Train loss: 1.8437702475893047e-09, Test loss: 0.15453099132848783, Test Acc: 98.39
+Epoch: 375, Train loss: 1.7881391922713874e-09, Test loss: 0.15479469132869036, Test Acc: 98.38
+Epoch: 376, Train loss: 1.5993911750555867e-09, Test loss: 0.15570725419965, Test Acc: 98.38
+Epoch: 377, Train loss: 1.5874702663509765e-09, Test loss: 0.156412721726983, Test Acc: 98.41
+Epoch: 378, Train loss: 1.4762082667374443e-09, Test loss: 0.15801731197158878, Test Acc: 98.36
+Epoch: 464, Train loss: 1.4662741021354009e-09, Test loss: 0.17564694424266813, Test Acc: 98.35
+Epoch: 465, Train loss: 1.2814997951693385e-09, Test loss: 0.17632640360446453, Test Acc: 98.33
+Epoch: 466, Train loss: 1.2060005216696368e-09, Test loss: 0.1769772273355156, Test Acc: 98.36
+Epoch: 467, Train loss: 1.1543431766014578e-09, Test loss: 0.1777768947141473, Test Acc: 98.36
+Epoch: 468, Train loss: 1.0947385220561046e-09, Test loss: 0.1779026880776039, Test Acc: 98.35
+Epoch: 469, Train loss: 1.0927516669312354e-09, Test loss: 0.17850595323871676, Test Acc: 98.35
+Epoch: 470, Train loss: 1.056988940817405e-09, Test loss: 0.17864245547503152, Test Acc: 98.35
+Epoch: 471, Train loss: 1.011292050101531e-09, Test loss: 0.18185620922669724, Test Acc: 98.36
+Epoch: 561, Train loss: 9.338060324992625e-10, Test loss: 0.1895548987475515, Test Acc: 98.33
+Epoch: 562, Train loss: 8.08636269056251e-10, Test loss: 0.1902304503854568, Test Acc: 98.33
+Epoch: 563, Train loss: 7.410843605448747e-10, Test loss: 0.19112921249214268, Test Acc: 98.3
+Epoch: 564, Train loss: 6.715455969086292e-10, Test loss: 0.19208340081581554, Test Acc: 98.3
+Epoch: 654, Train loss: 6.457169243745398e-10, Test loss: 0.1985887109641364, Test Acc: 98.24
+Epoch: 656, Train loss: 6.198882518404503e-10, Test loss: 0.20052590777629667, Test Acc: 98.24
+Epoch: 748, Train loss: 5.781650158631635e-10, Test loss: 0.2276918383431319, Test Acc: 98.3
+Epoch: 749, Train loss: 5.225340160563974e-10, Test loss: 0.22850079368957849, Test Acc: 98.3
+Epoch: 750, Train loss: 4.887580895562849e-10, Test loss: 0.22883119978290634, Test Acc: 98.28
+Epoch: 751, Train loss: 4.132588438121587e-10, Test loss: 0.22917754520273012, Test Acc: 98.27
+Epoch: 752, Train loss: 3.735224074485899e-10, Test loss: 0.2297045397639118, Test Acc: 98.29
+Epoch: 753, Train loss: 3.5564101663609904e-10, Test loss: 0.22959245050112403, Test Acc: 98.28
+Epoch: 758, Train loss: 3.2981234410200955e-10, Test loss: 0.2348375950252519, Test Acc: 98.28
+Epoch: 759, Train loss: 2.7815497127825495e-10, Test loss: 0.23831590749844164, Test Acc: 98.27
+Epoch: 763, Train loss: 2.2848445357936953e-10, Test loss: 0.23914067534533934, Test Acc: 98.28
+Epoch: 961, Train loss: 2.0066895367598647e-10, Test loss: 0.2389508642754503, Test Acc: 98.49
+Epoch: 963, Train loss: 1.8278756286349562e-10, Test loss: 0.24116292721292665, Test Acc: 98.43
+Epoch: 1053, Train loss: 1.7484028114189698e-10, Test loss: 0.2650094828656147, Test Acc: 98.4
+Epoch: 1054, Train loss: 1.629193446817112e-10, Test loss: 0.26539556668765146, Test Acc: 98.39
+Epoch: 1055, Train loss: 1.2914337654823527e-10, Test loss: 0.26566164861760333, Test Acc: 98.38
+Epoch: 1056, Train loss: 1.1126199961353223e-10, Test loss: 0.26567855695302134, Test Acc: 98.37
+Epoch: 1058, Train loss: 1.0331471095303968e-10, Test loss: 0.2658186597671331, Test Acc: 98.39
+Epoch: 1059, Train loss: 1.0132789052264002e-10, Test loss: 0.26536031595236853, Test Acc: 98.37
+Epoch: 1066, Train loss: 8.742014057094849e-11, Test loss: 0.2720519151301094, Test Acc: 98.3
+Epoch: 1163, Train loss: 8.543332014054883e-11, Test loss: 0.2771370860313822, Test Acc: 98.33
+Epoch: 1164, Train loss: 6.15914610979651e-11, Test loss: 0.27686754260807067, Test Acc: 98.36
+Epoch: 1170, Train loss: 3.973642595522797e-11, Test loss: 0.2778086543014826, Test Acc: 98.35
+Epoch: 1174, Train loss: 3.377596119458204e-11, Test loss: 0.27827309642288856, Test Acc: 98.36
+Epoch: 1175, Train loss: 2.980232033378272e-11, Test loss: 0.27901656083520865, Test Acc: 98.35
+Epoch: 1282, Train loss: 2.7815499903383056e-11, Test loss: 0.30779789445747996, Test Acc: 98.37
+Epoch: 1285, Train loss: 2.1855035142737123e-11, Test loss: 0.30707158156553144, Test Acc: 98.4
+Epoch: 1289, Train loss: 1.9868212977613986e-11, Test loss: 0.30664822179511786, Test Acc: 98.38
+Epoch: 1292, Train loss: 1.589457038209119e-11, Test loss: 0.3065989793157199, Test Acc: 98.36
+Epoch: 1295, Train loss: 7.947285191045594e-12, Test loss: 0.3074582103942504, Test Acc: 98.37
+Epoch: 1297, Train loss: 5.960463893284196e-12, Test loss: 0.30933990171775205, Test Acc: 98.34
+Epoch: 1299, Train loss: 3.973642595522797e-12, Test loss: 0.31144821848478144, Test Acc: 98.29
+Epoch: 1303, Train loss: 1.9868212977613986e-12, Test loss: 0.31529879035053554, Test Acc: 98.34
+Epoch: 1306, Train loss: 0.0, Test loss: 0.31806650498062083, Test Acc: 98.35
+(base) luffy:~$
