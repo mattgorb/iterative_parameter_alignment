@@ -33,9 +33,10 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
 
         #this isn't default initialization.  not sure if necessary, need to test.
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-        self.args.weight_seed+=1
+        #models do NOT need to be initialized the same
+        #self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
