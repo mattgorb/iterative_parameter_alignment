@@ -158,6 +158,11 @@ class Trainer:
     def train(self,):
         self.model.train()
         train_loss=0
+
+        if self.model.fc1.weight_align is not None:
+            print(torch.norm(self.model.fc1.weight_align, p=1))
+            print(torch.norm(self.model.fc2.weight_align, p=1))
+
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
