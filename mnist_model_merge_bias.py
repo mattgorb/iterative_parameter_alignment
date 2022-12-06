@@ -173,9 +173,10 @@ class Trainer:
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
-            if self.model.fc1.weight_align is not None:
-                print(torch.norm(self.model.fc1.weight_align, p=1))
-                print(torch.norm(self.model.fc2.weight_align, p=1))
+            if batch_idx%100==0:
+                if self.model.fc1.weight_align is not None:
+                    print(torch.norm(self.model.fc1.weight_align, p=1))
+                    print(torch.norm(self.model.fc2.weight_align, p=1))
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
             loss.backward()
