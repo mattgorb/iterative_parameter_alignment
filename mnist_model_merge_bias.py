@@ -160,6 +160,7 @@ class Trainer:
         train_loss=0
 
         if self.model.fc1.weight_align is not None:
+            print("HERE")
             print(torch.norm(self.model.fc1.weight_align, p=1))
             print(torch.norm(self.model.fc2.weight_align, p=1))
 
