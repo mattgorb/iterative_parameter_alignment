@@ -174,7 +174,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
             if batch_idx%100==0:
-                if self.model.fc1.weight_align is not None:
+                if self.model.fc1.weight is not None:
                     print(torch.norm(self.model.fc1.weight, p=1))
                     print(torch.norm(self.model.fc2.weight, p=1))
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
