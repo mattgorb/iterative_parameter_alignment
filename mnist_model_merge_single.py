@@ -325,7 +325,7 @@ def main():
         train_loader1, test_dataset = get_datasets(args)
         model = Net(args, weight_merge=False).to(device)
         save_path=f'{weight_dir}mnist_baseline.pt'
-        trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
+        trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
