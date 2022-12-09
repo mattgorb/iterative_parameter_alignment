@@ -193,10 +193,14 @@ class Trainer:
 
             plt.clf()
             plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc1.png')
 
             plt.clf()
             plt.plot([i for i in range(len(self.fc2_norm_list))], self.fc2_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc2.png')
 
         if self.model.fc1.weight_align is not None:
@@ -205,10 +209,14 @@ class Trainer:
 
             plt.clf()
             plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
 
             plt.clf()
             plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
 
 
