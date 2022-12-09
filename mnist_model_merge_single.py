@@ -247,7 +247,7 @@ def set_weight_align_param(model1, model2,):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
-            #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
@@ -274,8 +274,8 @@ class Merge_Iterator:
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
-        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_single')
-        model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model2_0.pt','model2_single')
+        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
+        model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model2_0.pt','model2_double')
 
 
         for iter in range(merge_iterations):
