@@ -203,21 +203,22 @@ class Trainer:
             plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc2.png')
 
-        if self.model.fc1.weight_align is not None:
-            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+        if hasattr(self.model.fc1, 'weight_align'):
+            if self.model.fc1.weight_align is not None:
+                self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
-            plt.clf()
-            plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
+                plt.clf()
+                plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
+                plt.ylabel('1-norm')
+                plt.xlabel('epoch')
+                plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
 
-            plt.clf()
-            plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
+                plt.clf()
+                plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
+                plt.ylabel('1-norm')
+                plt.xlabel('epoch')
+                plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
 
 
         with torch.no_grad():
