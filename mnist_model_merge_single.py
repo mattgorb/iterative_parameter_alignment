@@ -185,10 +185,7 @@ class Trainer:
         test_loss = 0
         correct = 0
 
-        self.fc1_norm_list = []
-        self.fc2_norm_list = []
-        self.wa1_norm_list = []
-        self.wa2_norm_list = []
+
 
         if self.model.fc1.weight is not None:
             self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
@@ -253,26 +250,32 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset,model_name ):
+    def train_single(self, model,save_path, train_dataset,model_name):
         '''
         ****** We need to initialize a new optimizer during each iteration.
         Not sure why, but this is the only way it works.
         '''
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path,model_name )
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path,model_name)
         trainer.fit()
         return trainer
 
     def run(self):
         merge_iterations=self.args.merge_iter
 
-
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
+        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_{iter}.pt','model1_single')
+        model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model1, self.device, f'{self.weight_dir}model2_{iter}.pt','model2_single')
+
+
         for iter in range(merge_iterations):
 
-            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
-            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
+            #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
+            #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
+
+            model1_trainer.fit()
+            model2_trainer.fit()
 
             set_weight_align_param(model1, model2,)
 
