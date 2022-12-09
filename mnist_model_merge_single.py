@@ -9,7 +9,7 @@ from torch.utils.data import  DataLoader
 import math
 import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
-
+from matplotlib import pyplot as plt
 
 def set_seed(seed):
     random.seed(seed)
@@ -33,7 +33,7 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
 
         #this isn't default initialization.  not sure if necessary, need to test.
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
         #models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
         #self.args.weight_seed+=1
@@ -128,7 +128,7 @@ def get_datasets(args):
         return train_loader1, train_loader2, test_loader
 
 class Trainer:
-    def __init__(self, args,datasets, model, device, save_path,):
+    def __init__(self, args,datasets, model, device, save_path,model_name):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
@@ -136,6 +136,12 @@ class Trainer:
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
+
+        self.model_name=model_name
+        self.fc1_norm_list=[]
+        self.fc2_norm_list=[]
+        self.wa1_norm_list=[]
+        self.wa2_norm_list=[]
 
     def fit(self, log_output=False):
         self.train_loss=1e6
@@ -158,8 +164,6 @@ class Trainer:
     def train(self,):
         self.model.train()
         train_loss=0
-
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
@@ -180,6 +184,37 @@ class Trainer:
         self.model.eval()
         test_loss = 0
         correct = 0
+
+        self.fc1_norm_list = []
+        self.fc2_norm_list = []
+        self.wa1_norm_list = []
+        self.wa2_norm_list = []
+
+        if self.model.fc1.weight is not None:
+            self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1))
+            self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1))
+
+            plt.clf()
+            plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
+            plt.savefig(f'norms/{self.model_name}_fc1.png')
+
+            plt.clf()
+            plt.plot([i for i in range(len(self.fc2_norm_list))], self.fc2_norm_list, '.-')
+            plt.savefig(f'norms/{self.model_name}_fc2.png')
+
+        if self.model.fc1.weight_align is not None:
+            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1))
+            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1))
+
+            plt.clf()
+            plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
+            plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
+
+            plt.clf()
+            plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
+            plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
+
+
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
@@ -206,7 +241,7 @@ def set_weight_align_param(model1, model2,):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
-            m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
@@ -218,12 +253,12 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset, ):
+    def train_single(self, model,save_path, train_dataset,model_name ):
         '''
         ****** We need to initialize a new optimizer during each iteration.
         Not sure why, but this is the only way it works.
         '''
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path,model_name )
         trainer.fit()
         return trainer
 
@@ -237,8 +272,8 @@ class Merge_Iterator:
         print(model2.fc1.weight[0][:10])
         for iter in range(merge_iterations):
 
-            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
-            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
+            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
             set_weight_align_param(model1, model2,)
 
