@@ -191,8 +191,8 @@ class Trainer:
         self.wa2_norm_list = []
 
         if self.model.fc1.weight is not None:
-            self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1))
-            self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1))
+            self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+            self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
             plt.clf()
             plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
@@ -203,8 +203,8 @@ class Trainer:
             plt.savefig(f'norms/{self.model_name}_fc2.png')
 
         if self.model.fc1.weight_align is not None:
-            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1))
-            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1))
+            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
             plt.clf()
             plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
@@ -268,8 +268,7 @@ class Merge_Iterator:
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
-        print(model1.fc1.weight[0][:10])
-        print(model2.fc1.weight[0][:10])
+
         for iter in range(merge_iterations):
 
             model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
