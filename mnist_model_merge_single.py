@@ -165,12 +165,12 @@ class Trainer:
         self.model.train()
         train_loss=0
         print("HEREE")
-        print(self.model.parameters())
-        sys.exit()
+        #print(self.model.parameters())
+
         for batch_idx, (data, target) in enumerate(self.train_loader):
             if batch_idx==0:
                 print(target[:10])
-            print(self.model.fc1.weight[0][:10])
+            #print(self.model.fc1.weight[0][:10])
             #print(self.model.fc2.weight[0][:10])
 
             data, target = data.to(self.device), target.to(self.device)
@@ -183,6 +183,9 @@ class Trainer:
             '''
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
+
+            print(list(self.model.parameters())[0].grad)
+            sys.exit()
             loss.backward()
             self.optimizer.step()
         train_loss /= len(self.train_loader.dataset)
