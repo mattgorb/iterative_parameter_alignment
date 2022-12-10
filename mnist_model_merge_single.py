@@ -168,7 +168,7 @@ class Trainer:
         for batch_idx, (data, target) in enumerate(self.train_loader):
             if batch_idx==0:
                 print(target[:10])
-            print(self.model.fc1.weight[0][:10])
+            print(self.model.fc2.weight[0][:10])
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
@@ -182,6 +182,8 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
         train_loss /= len(self.train_loader.dataset)
+
+        sys.exit(0)
         return train_loss
 
     def test(self,):
