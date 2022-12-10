@@ -185,6 +185,7 @@ class Trainer:
             train_loss+=loss
 
             print(list(self.model.parameters())[0].grad)
+            print(list(self.model.parameters())[1].grad)
             sys.exit()
             loss.backward()
             self.optimizer.step()
