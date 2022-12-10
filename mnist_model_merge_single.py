@@ -167,7 +167,7 @@ class Trainer:
         print("HEREE")
         for batch_idx, (data, target) in enumerate(self.train_loader):
             if batch_idx==0:
-                print(target)
+                print(target[:10])
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
@@ -275,7 +275,7 @@ class Merge_Iterator:
     def run(self):
         merge_iterations=self.args.merge_iter
 
-        model1 = Net(self.args, weight_merge=False).to(self.device)
+        model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
@@ -292,9 +292,9 @@ class Merge_Iterator:
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
             model1_trainer.fit()
-            model2_trainer.fit()
+            #model2_trainer.fit()
 
-            set_weight_align_param(model1, model2,)
+            #set_weight_align_param(model1, model2,)
 
 
             print(f'Merge Iteration: {iter} \n'
