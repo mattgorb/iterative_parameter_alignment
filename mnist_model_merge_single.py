@@ -164,7 +164,10 @@ class Trainer:
     def train(self,):
         self.model.train()
         train_loss=0
+        print("HEREE")
         for batch_idx, (data, target) in enumerate(self.train_loader):
+            if batch_idx==0:
+                print(target)
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
@@ -272,23 +275,23 @@ class Merge_Iterator:
     def run(self):
         merge_iterations=self.args.merge_iter
 
-
+        model1 = Net(self.args, weight_merge=False).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
-        #model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
+        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model2_0.pt','model2_double')
 
         #model1_trainer.fit()
         for iter in range(merge_iterations):
-            model1 = Net(self.args, weight_merge=False).to(self.device)
+
             print(model1.fc1.weight[0][:10])
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
-            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
+            #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
-            #model1_trainer.fit()
+            model1_trainer.fit()
             model2_trainer.fit()
 
             set_weight_align_param(model1, model2,)
