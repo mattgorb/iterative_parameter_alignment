@@ -132,8 +132,8 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
-        #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
-        self.optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+
         self.criterion=nn.CrossEntropyLoss(reduction='sum')
         self.device=device
         self.save_path=save_path
