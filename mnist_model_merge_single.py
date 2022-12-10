@@ -74,7 +74,7 @@ class Net(nn.Module):
             x = F.relu(x)
             x= self.fc2(x)
 
-            return x, torch.tensor(0)
+            return x
 
 
 def get_datasets(args):
@@ -175,7 +175,7 @@ class Trainer:
 
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
-            output, weight_align = self.model(data)
+            output = self.model(data)
 
             '''
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
@@ -184,8 +184,7 @@ class Trainer:
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
 
-            print(list(self.model.parameters())[0].grad)
-            print(list(self.model.parameters())[1].grad)
+
             loss.backward()
             print(list(self.model.parameters())[0].grad)
             print(list(self.model.parameters())[1].grad)
