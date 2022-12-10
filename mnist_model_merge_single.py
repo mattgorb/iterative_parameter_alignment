@@ -143,10 +143,10 @@ class Trainer:
         self.fc2_norm_list=[]
         self.wa1_norm_list=[]
         self.wa2_norm_list=[]
-        self.train_loss=1e6
+
 
     def fit(self, log_output=False):
-
+        self.train_loss=1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             if epoch_loss<self.train_loss:
