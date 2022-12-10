@@ -180,9 +180,7 @@ class Trainer:
             loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
             loss.backward()
-            print(list(self.model.parameters())[0].grad)
-            print(list(self.model.parameters())[1].grad)
-            sys.exit()
+
             self.optimizer.step()
         train_loss /= len(self.train_loader.dataset)
         return train_loss
