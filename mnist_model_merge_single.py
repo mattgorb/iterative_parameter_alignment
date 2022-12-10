@@ -286,7 +286,7 @@ class Merge_Iterator:
         #model1_trainer.fit()
         for iter in range(merge_iterations):
 
-            print(model1.fc1.weight[0][:10])
+            print(model1.fc2.weight[0][:10])
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
