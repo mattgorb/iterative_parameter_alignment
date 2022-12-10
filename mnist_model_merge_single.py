@@ -299,8 +299,8 @@ class Merge_Iterator:
 
             set_weight_align_param(model1, model2,self.args)
 
-            model1.fc1.weight=model2.fc1.weight_align.clone().detach()
-            model1.fc2.weight=model2.fc2.weight_align.clone().detach()
+            model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
+            model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
 
             print(f'Merge Iteration: {iter} \n'
                   #f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
