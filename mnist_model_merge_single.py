@@ -191,38 +191,39 @@ class Trainer:
         test_loss = 0
         correct = 0
 
-        if self.model.fc1.weight is not None:
-            self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-            self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-            plt.clf()
-            plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc1.png')
-
-            plt.clf()
-            plt.plot([i for i in range(len(self.fc2_norm_list))], self.fc2_norm_list, '.-')
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc2.png')
-
-        if hasattr(self.model.fc1, 'weight_align'):
-            if self.model.fc1.weight_align is not None:
-                self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+        if self.args.graph_norms:
+            if self.model.fc1.weight is not None:
+                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
                 plt.clf()
-                plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
+                plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
                 plt.ylabel('1-norm')
                 plt.xlabel('epoch')
-                plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
+                plt.savefig(f'norms/{self.model_name}_fc1.png')
 
                 plt.clf()
-                plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
+                plt.plot([i for i in range(len(self.fc2_norm_list))], self.fc2_norm_list, '.-')
                 plt.ylabel('1-norm')
                 plt.xlabel('epoch')
-                plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
+                plt.savefig(f'norms/{self.model_name}_fc2.png')
+
+            if hasattr(self.model.fc1, 'weight_align'):
+                if self.model.fc1.weight_align is not None:
+                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+
+                    plt.clf()
+                    plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
+                    plt.ylabel('1-norm')
+                    plt.xlabel('epoch')
+                    plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
+
+                    plt.clf()
+                    plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
+                    plt.ylabel('1-norm')
+                    plt.xlabel('epoch')
+                    plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
 
 
         with torch.no_grad():
@@ -323,6 +324,7 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool,default=False,help='train base model')
+    parser.add_argument('--graph_norms', type=bool,default=False,help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str,default="/s/luffy/b/nobackup/mgorb/",help='Directory for data and weights')
     args = parser.parse_args()
 
