@@ -168,7 +168,7 @@ class Trainer:
         for batch_idx, (data, target) in enumerate(self.train_loader):
             if batch_idx==0:
                 print(target[:10])
-            print(self.model.fc2.weight[0][:10])
+            print(self.model.fc1.weight[0][:10])
             #print(self.model.fc2.weight[0][:10])
 
             data, target = data.to(self.device), target.to(self.device)
