@@ -298,6 +298,9 @@ class Merge_Iterator:
 
             set_weight_align_param(model1, model2,)
 
+            if iter==0:
+                # model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             print(f'Merge Iteration: {iter} \n'
                     f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
