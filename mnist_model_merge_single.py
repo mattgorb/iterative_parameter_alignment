@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
         #models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        #self.args.weight_seed+=1
+        self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -55,16 +55,26 @@ class Net(nn.Module):
         self.args=args
         self.weight_merge=weight_merge
 
-
-        self.fc1 = nn.Linear(28*28, 1024, bias=False)
-        self.fc2 = nn.Linear(1024, 10, bias=False)
+        #bias False for now, have not tested adding bias to the loss fn.
+        if self.weight_merge:
+            self.fc1 = linear_init(28*28, 1024, bias=False, args=self.args, )
+            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
+        else:
+            self.fc1 = nn.Linear(28*28, 1024, bias=False)
+            self.fc2 = nn.Linear(1024, 10, bias=False)
     def forward(self, x, ):
+        if self.weight_merge:
+            x,wa1 = self.fc1(x.view(-1, 28*28))
+            x = F.relu(x)
+            x,wa2= self.fc2(x)
+            score_diff=wa1+wa2
+            return x, score_diff
+        else:
+            x = self.fc1(x.view(-1, 28*28))
+            x = F.relu(x)
+            x= self.fc2(x)
 
-        x = self.fc1(x.view(-1, 28*28))
-        x = F.relu(x)
-        x= self.fc2(x)
-
-        return x
+            return x, torch.tensor(0)
 
 
 def get_datasets(args):
@@ -154,48 +164,32 @@ class Trainer:
     def train(self,):
         self.model.train()
         train_loss=0
-        print("HEREE")
-        #print(self.model.parameters())
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
-            if batch_idx==0:
-                print(target[:10])
-            #print(self.model.fc1.weight[0][:10])
-            #print(self.model.fc2.weight[0][:10])
+
 
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
-            output = self.model(data)
+            output, weight_align = self.model(data)
 
             '''
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
-            loss = self.criterion(output, target)#+self.args.weight_align_factor*weight_align
+            loss = self.criterion(output, target)+self.args.weight_align_factor*weight_align
             train_loss+=loss
-
-
             loss.backward()
             print(list(self.model.parameters())[0].grad)
             print(list(self.model.parameters())[1].grad)
-            self.optimizer.step()
-
-
-            print(list(self.model.parameters())[0].grad)
-            print(list(self.model.parameters())[1].grad)
             sys.exit()
-
+            self.optimizer.step()
         train_loss /= len(self.train_loader.dataset)
-
-        sys.exit(0)
         return train_loss
 
     def test(self,):
         self.model.eval()
         test_loss = 0
         correct = 0
-
-
 
         if self.model.fc1.weight is not None:
             self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
@@ -291,10 +285,10 @@ class Merge_Iterator:
         #model1_trainer.fit()
         for iter in range(merge_iterations):
 
-            print(model1.fc1.weight[0][:10])
+            #print(model1.fc1.weight[0][:10])
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
@@ -306,7 +300,7 @@ class Merge_Iterator:
 
             print(f'Merge Iteration: {iter} \n'
                       f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  )#f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 def main():
     # Training settings
