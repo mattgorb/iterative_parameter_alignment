@@ -277,7 +277,7 @@ class Merge_Iterator:
     def run(self):
         merge_iterations=self.args.merge_iter
 
-        model1 = Net(self.args, weight_merge=False).to(self.device)
+        model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
