@@ -186,9 +186,16 @@ class Trainer:
 
             print(list(self.model.parameters())[0].grad)
             print(list(self.model.parameters())[1].grad)
-            sys.exit()
             loss.backward()
+            print(list(self.model.parameters())[0].grad)
+            print(list(self.model.parameters())[1].grad)
             self.optimizer.step()
+
+
+            print(list(self.model.parameters())[0].grad)
+            print(list(self.model.parameters())[1].grad)
+            sys.exit()
+
         train_loss /= len(self.train_loader.dataset)
 
         sys.exit(0)
