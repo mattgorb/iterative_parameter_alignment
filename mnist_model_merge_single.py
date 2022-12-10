@@ -305,7 +305,9 @@ class Merge_Iterator:
             print(model1.fc2.weight[0][:10])
 
             print(model2.fc2.weight_align[0][:10])
-
+            for name, param in model1.named_parameters():
+                print( name, param.data.size())
+            sys.exit()
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
