@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
         #models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        #self.args.weight_seed+=1
+        self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -272,7 +272,7 @@ class Merge_Iterator:
     def run(self):
         merge_iterations=self.args.merge_iter
 
-        model1 = Net(self.args, weight_merge=False).to(self.device)
+
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
         #model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
@@ -280,6 +280,7 @@ class Merge_Iterator:
 
         #model1_trainer.fit()
         for iter in range(merge_iterations):
+            model1 = Net(self.args, weight_merge=False).to(self.device)
             print(model1.fc1.weight[0][:10])
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
