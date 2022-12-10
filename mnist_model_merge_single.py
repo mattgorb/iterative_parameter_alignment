@@ -60,7 +60,7 @@ class Net(nn.Module):
             self.fc1 = linear_init(28*28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
         else:
-            self.fc1 = nn.Linear(28*28, 1024, bias=False)
+            self.fc1 = nn.Linear(28*28, 1024, bias=True)
             self.fc2 = nn.Linear(1024, 10, bias=False)
     def forward(self, x, ):
         if self.weight_merge:
@@ -169,7 +169,7 @@ class Trainer:
             if batch_idx==0:
                 print(target[:10])
             print(self.model.fc1.weight[0][:10])
-            print(self.model.fc2.weight[0][:10])
+            #print(self.model.fc2.weight[0][:10])
 
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
