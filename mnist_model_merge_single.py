@@ -306,9 +306,9 @@ class Merge_Iterator:
 
             #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align, requires_grad=True)
             #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align, requires_grad=True)
-            print(model1.fc2.weight[0][:10])
+            #print(model1.fc2.weight[0][:10])
 
-            print(model2.fc2.weight_align[0][:10])
+            #print(model2.fc2.weight_align[0][:10])
             #for name, param in model1.named_parameters():
                 #print( name, param.data.size())
             #sys.exit()
