@@ -255,7 +255,8 @@ def set_weight_align_param(model1, model2,args):
             #We only want to merge one models weights in this file
             #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             #if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -289,8 +290,8 @@ class Merge_Iterator:
 
             #print(model1.fc2.weight[0][:10])
 
-            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
@@ -299,12 +300,9 @@ class Merge_Iterator:
 
             set_weight_align_param(model1, model2,self.args)
 
-            model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
-            model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
+            #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
+            #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
 
-            if iter==0:
-                model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
