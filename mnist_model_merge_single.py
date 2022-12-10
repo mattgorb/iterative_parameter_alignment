@@ -165,7 +165,7 @@ class Trainer:
         self.model.train()
         train_loss=0
         print("HEREE")
-        print(list(self.model.parameters()))
+        print(self.model.parameters())
         sys.exit()
         for batch_idx, (data, target) in enumerate(self.train_loader):
             if batch_idx==0:
