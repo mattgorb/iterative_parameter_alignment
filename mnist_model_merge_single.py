@@ -278,7 +278,7 @@ class Merge_Iterator:
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device, f'{self.weight_dir}model1_0.pt','model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device, f'{self.weight_dir}model2_0.pt','model2_double')
 
-
+        model1_trainer.fit()
         for iter in range(merge_iterations):
             print(model1.fc1.weight[0][:10])
 
@@ -287,7 +287,7 @@ class Merge_Iterator:
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
-            model1_trainer.fit()
+            #model1_trainer.fit()
             model2_trainer.fit()
 
             set_weight_align_param(model1, model2,)
