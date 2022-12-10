@@ -302,6 +302,10 @@ class Merge_Iterator:
             model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
             model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
 
+            if iter==0:
+                model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
