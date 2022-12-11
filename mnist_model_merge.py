@@ -204,10 +204,10 @@ def set_weight_align_param(model1, model2,):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
-            #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            m1.weight_align=nn.Parameter(m2.weight.clone().detach(), requires_grad=True)
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m1.weight_align=nn.Parameter(m2.weight.clone().detach(), requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
