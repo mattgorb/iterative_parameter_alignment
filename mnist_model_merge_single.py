@@ -309,9 +309,9 @@ class Merge_Iterator:
             if iter>0:
                 for batch_idx, (data, target) in enumerate(model2_trainer.train_loader):
                     data, target = data.to(self.device), target.to(self.device)
-                    self.optimizer.zero_grad()
-                    output, weight_align = self.model(data)
-                    loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+                    model2_trainer.optimizer.zero_grad()
+                    output, weight_align = model2(data)
+                    loss = model2_trainer.criterion(output, target) + model2_trainer.args.weight_align_factor * weight_align
 
                     loss.backward()
                     print(model2.fc2.weight_align.grad[0][:10])
