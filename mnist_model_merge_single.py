@@ -255,8 +255,8 @@ def set_weight_align_param(model1, model2,args):
             #We only want to merge one models weights in this file
             #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             #if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -299,9 +299,9 @@ class Merge_Iterator:
             print(model1.fc2.weight[0][:10])
             model1_trainer.fit()
             print(model1.fc2.weight[0][:10])
-            if iter>0:
-                model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach(), requires_grad=True)
-                model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach(), requires_grad=True)
+            #if iter>0:
+                #model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach(), requires_grad=True)
+                #model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach(), requires_grad=True)
 
 
             model2_trainer.fit()
@@ -314,8 +314,8 @@ class Merge_Iterator:
             #print(model2_trainer.test_acc)
             #sys.exit()
             #set_weight_align_param(model1, model2, self.args)
-            model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
-            model1.fc2.weight = nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
+            #model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
+            #model1.fc2.weight = nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
 
             #print(model1.fc2.weight[0][:10])
             #print(model2.fc2.weight_align[0][:10])
