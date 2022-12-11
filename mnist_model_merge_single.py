@@ -306,7 +306,7 @@ class Merge_Iterator:
                 #model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach(), requires_grad=True)
                 #model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach(), requires_grad=True)
 
-            if iter>0:
+            '''if iter>0:
                 for batch_idx, (data, target) in enumerate(model2_trainer.train_loader):
                     data, target = data.to(self.device), target.to(self.device)
                     model2_trainer.optimizer.zero_grad()
@@ -316,8 +316,8 @@ class Merge_Iterator:
                     loss.backward()
                     print(model2.fc2.weight_align.grad[0][:10])
                     print(model1.fc2.weight.grad[0][:10])
-                    sys.exit()
-                    #self.optimizer.step()
+                    #sys.exit()
+                    model2_trainer.optimizer.step()'''
 
             model2_trainer.fit()
 
@@ -325,7 +325,7 @@ class Merge_Iterator:
             set_weight_align_param(model1, model2, self.args)
             print("HERE")
             print(model1.fc2.weight[0][:10])
-            print(model2.fc2.weight_align[0][:10])
+            #print(model2.fc2.weight_align[0][:10])
             #model2_trainer.fit()
             #print(model2_trainer.test_acc)
             #sys.exit()
