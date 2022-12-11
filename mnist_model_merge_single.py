@@ -297,9 +297,11 @@ class Merge_Iterator:
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
             if iter>0:
+                print(model2.fc2.weight[0][:10])
                 print(model2.fc2.weight_align[0][:10])
             model1_trainer.fit()
             if iter>0:
+                print(model2.fc2.weight[0][:10])
                 print(model2.fc2.weight_align[0][:10])
                 sys.exit()
             model2_trainer.fit()
