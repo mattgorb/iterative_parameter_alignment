@@ -298,9 +298,9 @@ class Merge_Iterator:
 
 
             model1_trainer.fit()
-
+            print(model1.fc2.weight[0][:10])
             model2_trainer.fit()
-
+            print(model1.fc2.weight[0][:10])
             #print(model2_trainer.test_acc)
             set_weight_align_param(model1, model2, self.args)
             #model2_trainer.fit()
