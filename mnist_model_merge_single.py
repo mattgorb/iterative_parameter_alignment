@@ -300,7 +300,11 @@ class Merge_Iterator:
             model1_trainer.fit()
 
             model2_trainer.fit()
+            print(model2_trainer.test_acc)
             set_weight_align_param(model1, model2, self.args)
+            model2_trainer.fit()
+            print(model2_trainer.test_acc)
+            sys.exit()
             #set_weight_align_param(model1, model2, self.args)
             model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
             model1.fc2.weight = nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
