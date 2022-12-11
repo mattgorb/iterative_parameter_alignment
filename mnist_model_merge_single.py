@@ -292,8 +292,8 @@ class Merge_Iterator:
 
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            #if iter==0:
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            if iter>0:
+                model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
             #else:
             #    model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
