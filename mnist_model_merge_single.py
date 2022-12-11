@@ -255,8 +255,8 @@ def set_weight_align_param(model1, model2,args):
             #We only want to merge one models weights in this file
             #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             #if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -292,8 +292,9 @@ class Merge_Iterator:
 
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            if iter>0:
-                model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
+            #if iter>0:
+                #model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
+            model2_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             #else:
             #    model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
@@ -305,6 +306,18 @@ class Merge_Iterator:
                 #model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach(), requires_grad=True)
                 #model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach(), requires_grad=True)
 
+            if iter>0:
+                for batch_idx, (data, target) in enumerate(model2_trainer.train_loader):
+                    data, target = data.to(self.device), target.to(self.device)
+                    self.optimizer.zero_grad()
+                    output, weight_align = self.model(data)
+                    loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+
+                    loss.backward()
+                    print(model2.fc2.weight_align.grad[0][:10])
+                    print(model1.fc2.weight.grad[0][:10])
+                    sys.exit()
+                    #self.optimizer.step()
 
             model2_trainer.fit()
 
