@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
         #models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        self.args.weight_seed+=1
+        #self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -255,8 +255,8 @@ def set_weight_align_param(model1, model2,args):
             #We only want to merge one models weights in this file
             #m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             #if args.detach():
-            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args,datasets, device,weight_dir):
@@ -291,7 +291,7 @@ class Merge_Iterator:
 
             #print(model1.fc2.weight[0][:10])
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
