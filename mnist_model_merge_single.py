@@ -302,7 +302,7 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-            if iter>0:
+            if iter>1:
                 print(model1_trainer.optimizer.param_groups)
                 print(model1_trainer.optimizer.state_dict())
                 #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
