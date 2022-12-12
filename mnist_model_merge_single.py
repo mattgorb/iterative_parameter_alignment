@@ -260,7 +260,7 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
         for iter in range(merge_iterations):
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
@@ -300,7 +300,6 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
             if iter>0:
-
                 sys.exit()
 
 def main():
