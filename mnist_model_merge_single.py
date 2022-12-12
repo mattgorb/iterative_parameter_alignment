@@ -288,13 +288,9 @@ class Merge_Iterator:
 
 
         for iter in range(merge_iterations):
-
-
-
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            #if iter>0:
-                #model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
             model2_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+
             #else:
             #    model2_trainer.optimizer=optim.Adam(list(model2.parameters())+list(model1.parameters()), lr=self.args.lr)
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
@@ -318,34 +314,24 @@ class Merge_Iterator:
                     print(model1.fc2.weight.grad[0][:10])
                     #sys.exit()
                     model2_trainer.optimizer.step()'''
-            if iter>0:
-                print(model2.fc2.weight_align[0][:10])
+            #if iter>0:
+                #print(model2.fc2.weight_align[0][:10])
             model2_trainer.fit()
-
+            #if iter>0:
+                #print(model2.fc2.weight_align[0][:10])
+                #sys.exit()
             #print(model2_trainer.test_acc)
             set_weight_align_param(model1, model2, self.args)
-            print("HERE")
+            #print("HERE")
 
-            #print(model2.fc2.weight_align[0][:10])
-            #model2_trainer.fit()
-            #print(model2_trainer.test_acc)
-            #sys.exit()
-            #set_weight_align_param(model1, model2, self.args)
+
             #model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
             #model1.fc2.weight = nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
-
-            #print(model1.fc2.weight[0][:10])
-            #print(model2.fc2.weight_align[0][:10])
-            #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align, requires_grad=True)
-            #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align, requires_grad=True)
-            #print(model1.fc2.weight[0][:10])
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
-            if iter>0:
-                print(model2.fc2.weight_align[0][:10])
-                sys.exit()
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
