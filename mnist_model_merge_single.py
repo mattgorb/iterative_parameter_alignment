@@ -270,8 +270,9 @@ class Merge_Iterator:
             model1_trainer.fit()
 
             if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight, requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight, requires_grad=True)
+                #model2.fc1.weight_align=nn.Parameter(model1.fc1.weight, requires_grad=True)
+                #model2.fc2.weight_align=nn.Parameter(model1.fc2.weight, requires_grad=True)
+                set_weight_align_param(model1, model2, self.args)
                 model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             model2_trainer.fit()
