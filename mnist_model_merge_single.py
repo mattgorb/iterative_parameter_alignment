@@ -305,8 +305,8 @@ class Merge_Iterator:
 
 
 
-            if iter==0:
-                set_weight_align_param(model1, model2, self.args)
+            #if iter==0:
+                #set_weight_align_param(model1, model2, self.args)
 
 
             # model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
