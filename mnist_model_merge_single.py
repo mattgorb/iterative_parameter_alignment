@@ -228,8 +228,8 @@ def set_weight_align_param(model1, model2, args):
             # We only want to merge one models weights in this file
             # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             # if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 
 class Merge_Iterator:
@@ -272,12 +272,12 @@ class Merge_Iterator:
 
             model1_trainer.fit()
 
-            if iter>0:
+            '''if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 #model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.to(self.device), requires_grad=True)
                 #model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.to(self.device), requires_grad=True)
-                #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)'''
                 
             if iter>0:
                 print(model1.fc2.weight[0][:5])
@@ -288,7 +288,7 @@ class Merge_Iterator:
             model2_trainer.fit()
 
 
-            if iter==0:
+            '''if iter==0:
                 model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 #model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.to(self.device), requires_grad=True)
@@ -297,15 +297,15 @@ class Merge_Iterator:
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
                 #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.to(self.device), requires_grad=True)
-                #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.to(self.device), requires_grad=True)#.clone().detach()
+                #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.to(self.device), requires_grad=True)#.clone().detach()'''
 
             if iter>0:
                 print(model1.fc2.weight[0][:5])
                 print(model2.fc2.weight_align[0][:5])
 
 
-            #if iter==0:
-                #set_weight_align_param(model1, model2, self.args)
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
 
 
             # model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
