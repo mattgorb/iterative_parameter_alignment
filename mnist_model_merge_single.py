@@ -139,15 +139,15 @@ class Trainer:
         self.train_loss = 1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
-            if epoch_loss < self.train_loss:
-                self.train_loss = epoch_loss
-                torch.save(self.model.state_dict(), self.save_path)
-                test_loss, test_acc = self.test()
-                self.test_loss = test_loss
-                self.test_acc = test_acc
-                if log_output:
-                    print(
-                        f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+            #if epoch_loss < self.train_loss:
+            self.train_loss = epoch_loss
+            torch.save(self.model.state_dict(), self.save_path)
+            test_loss, test_acc = self.test()
+            self.test_loss = test_loss
+            self.test_acc = test_acc
+            if log_output:
+                print(
+                    f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
@@ -253,7 +253,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        model1 = Net(self.args, weight_merge=False).to(self.device)
+        model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
