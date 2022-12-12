@@ -294,6 +294,8 @@ class Merge_Iterator:
                 #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
                 print(model1_trainer.optimizer.param_groups)
                 model1_trainer.optimizer.param_groups.append({'params': model1.parameters()})
+                print(model1_trainer.optimizer.param_groups)
+                sys.exit()
             #if iter==0:
                 #set_weight_align_param(model1, model2, self.args)
             if iter>0:
