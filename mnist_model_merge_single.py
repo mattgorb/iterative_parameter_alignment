@@ -283,7 +283,7 @@ class Merge_Iterator:
 
             model2_trainer.fit()
 
-
+            print(model1.fc2.weight[0][:5])
 
             if iter>1:
                 #print(model1_trainer.optimizer.param_groups)
@@ -296,7 +296,7 @@ class Merge_Iterator:
 
                 #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
-            print(model1.fc2.weight[0][:5])
+
 
 
 
