@@ -285,7 +285,7 @@ class Merge_Iterator:
 
 
 
-            if iter>0:
+            if iter>1:
                 #print(model1_trainer.optimizer.param_groups)
                 print(model1_trainer.optimizer.state_dict())
                 #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
