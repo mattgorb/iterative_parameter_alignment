@@ -261,39 +261,25 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
         for iter in range(merge_iterations):
             # model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            if iter == 0:
-                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
-            else:
-                model2_trainer.optimizer = optim.Adam(list(model2.parameters()) + list(model1.parameters()),
-                                                      lr=self.args.lr)
+            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
             # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             # model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
-            print("HERE")
-            print(model1.fc2.weight[0][:10])
+
             model1_trainer.fit()
             print(model1.fc2.weight[0][:10])
-            # if iter>0:
-            # model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach(), requires_grad=True)
-            # model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach(), requires_grad=True)
+
             model2_trainer.fit()
-            # print(model2_trainer.test_acc)
+
             set_weight_align_param(model1, model2, self.args)
             print(model1.fc2.weight[0][:10])
-            # model2_trainer.fit()
-            # print(model2_trainer.test_acc)
-            # sys.exit()
-            # set_weight_align_param(model1, model2, self.args)
+
             # model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
             # model1.fc2.weight = nn.Parameter(model2.fc2.weight_align.clone().detach(), requires_grad=True)
-            # print(model1.fc2.weight[0][:10])
-            # print(model2.fc2.weight_align[0][:10])
+
             # model1.fc1.weight=nn.Parameter(model2.fc1.weight_align, requires_grad=True)
             # model1.fc2.weight=nn.Parameter(model2.fc2.weight_align, requires_grad=True)
-            # print(model1.fc2.weight[0][:10])
-            # print(model2.fc2.weight_align[0][:10])
-            # for name, param in model1.named_parameters():
-            # print( name, param.data.size())
-            # sys.exit()
+
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
