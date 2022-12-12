@@ -323,6 +323,7 @@ class Merge_Iterator:
             model2_trainer.fit()
             if iter>0:
                 print(model1.fc2.weight_align[0][:10])
+                sys.exit()
             #print(model2_trainer.test_acc)
             set_weight_align_param(model1, model2, self.args)
             print("HERE")
