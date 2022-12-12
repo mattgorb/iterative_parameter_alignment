@@ -228,8 +228,8 @@ def set_weight_align_param(model1, model2, args):
             # We only want to merge one models weights in this file
             # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             # if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 
 class Merge_Iterator:
@@ -279,6 +279,7 @@ class Merge_Iterator:
                 print(model2.fc2.weight[0][:5])
                 print(model2.fc2.weight_align[0][:5])
                 print(model1.fc2.weight[0][:5])
+                sys.exit()
                 set_weight_align_param(model1, model2, self.args)
             model2_trainer.fit()
 
