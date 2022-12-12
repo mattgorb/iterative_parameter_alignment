@@ -268,6 +268,7 @@ class Merge_Iterator:
             print(model1.fc2.weight[0][:5])
 
             #
+            model1.train()
             model1_trainer.fit()
 
             if iter>0:
