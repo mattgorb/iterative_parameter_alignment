@@ -277,7 +277,7 @@ class Merge_Iterator:
             if iter>0:
                 print(model2.fc2.weight[0][:10])
                 print(model2.fc2.weight_align[0][:10])
-                sys.exit()
+                #sys.exit()
 
             set_weight_align_param(model1, model2, self.args)
 
@@ -291,7 +291,9 @@ class Merge_Iterator:
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+            if iter>0:
 
+                sys.exit()
 
 def main():
     # Training settings
