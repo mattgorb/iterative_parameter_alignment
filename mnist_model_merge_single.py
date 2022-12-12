@@ -292,10 +292,10 @@ class Merge_Iterator:
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
                 #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-                print(model1_trainer.optimizer.param_groups)
+                #print(model1_trainer.optimizer.param_groups)
                 model1_trainer.optimizer.param_groups[0]['params']= list(model1.parameters())
-                print(model1_trainer.optimizer.param_groups)
-                sys.exit()
+                #print(model1_trainer.optimizer.param_groups)
+                #sys.exit()
             #if iter==0:
                 #set_weight_align_param(model1, model2, self.args)
             if iter>0:
