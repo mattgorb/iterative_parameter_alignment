@@ -272,11 +272,11 @@ class Merge_Iterator:
 
             model2_trainer.fit()
 
-            if iter>0:
+            '''if iter>0:
                 print("HERE3")
                 print(model2.fc2.weight[0][:5])
                 print(model2.fc2.weight_align[0][:5])
-                print(model1.fc2.weight[0][:5])
+                print(model1.fc2.weight[0][:5])'''
 
             #set_weight_align_param(model1, model2, self.args)
 
