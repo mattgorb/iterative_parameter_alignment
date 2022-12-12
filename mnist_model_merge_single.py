@@ -228,8 +228,8 @@ def set_weight_align_param(model1, model2, args):
             # We only want to merge one models weights in this file
             # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             # if args.detach():
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
 
 
 class Merge_Iterator:
@@ -266,19 +266,13 @@ class Merge_Iterator:
 
             model1_trainer.fit()
 
-            if iter>0:
-                set_weight_align_param(model1, model2, self.args)
-                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+            #if iter>0:
+                #set_weight_align_param(model1, model2, self.args)
+            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             model2_trainer.fit()
 
-            '''if iter>0:
-                print("HERE3")
-                print(model2.fc2.weight[0][:5])
-                print(model2.fc2.weight_align[0][:5])
-                print(model1.fc2.weight[0][:5])'''
-
-            #set_weight_align_param(model1, model2, self.args)
+            set_weight_align_param(model1, model2, self.args)
 
 
             # model1.fc1.weight = nn.Parameter(model2.fc1.weight_align.clone().detach(), requires_grad=True)
@@ -290,8 +284,7 @@ class Merge_Iterator:
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
-            #if iter>0:
-                #sys.exit()
+
 
 def main():
     # Training settings
