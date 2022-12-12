@@ -285,9 +285,6 @@ class Merge_Iterator:
 
             print(model1.fc2.weight[0][:5])
 
-            if iter>0:
-                model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
 
 
 
@@ -315,6 +312,11 @@ class Merge_Iterator:
                 #print(model1_trainer.optimizer.param_groups)
                 print(model1_trainer.optimizer.state_dict())
                 sys.exit()
+
+            if iter>0:
+                model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
