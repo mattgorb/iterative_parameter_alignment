@@ -305,18 +305,18 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
             if iter>1:
-                #print(model1_trainer.optimizer.param_groups)
-                print(model1_trainer.optimizer.state_dict())
+                print(model1_trainer.optimizer.param_groups)
+                #print(model1_trainer.optimizer.state_dict())
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
                 #print(model1_trainer.optimizer.param_groups)
-                print(model1_trainer.optimizer.state_dict())
+                #print(model1_trainer.optimizer.state_dict())
                 sys.exit()
 
             if iter>0:
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
-
+                #model1_trainer.optimizer.
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
