@@ -319,10 +319,10 @@ class Merge_Iterator:
                     #sys.exit()
                     model2_trainer.optimizer.step()'''
             if iter>0:
-                print(model1.fc2.weight_align[0][:10])
+                print(model2.fc2.weight_align[0][:10])
             model2_trainer.fit()
             if iter>0:
-                print(model1.fc2.weight_align[0][:10])
+                print(model2.fc2.weight_align[0][:10])
                 sys.exit()
             #print(model2_trainer.test_acc)
             set_weight_align_param(model1, model2, self.args)
