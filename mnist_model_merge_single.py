@@ -264,35 +264,23 @@ class Merge_Iterator:
             # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             # model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
-
-            #
-            #model1.train()
             model1_trainer.fit()
 
-            if iter>0:
+            '''if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-
-
-                
+                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)'''
 
 
             model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             model2_trainer.fit()
 
-
-
-
-
-            if iter>0:
+            '''if iter>0:
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
+                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()'''
 
-
-
-            #if iter==0:
-                #set_weight_align_param(model1, model2, self.args)
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
 
 
 
@@ -303,11 +291,9 @@ class Merge_Iterator:
 
             if iter>0:
                 print(model1_trainer.optimizer.param_groups)
-                print(model1_trainer.optimizer.state_dict())
-                model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
-                #print(model1_trainer.optimizer.param_groups)
                 #print(model1_trainer.optimizer.state_dict())
+                #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
                 sys.exit()
 
 
