@@ -158,7 +158,7 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
-        '''if self.args.graphs:
+        if self.args.graphs:
             if self.model.fc1.weight is not None:
                 self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                 self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
@@ -170,7 +170,7 @@ class Trainer:
                     self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.fc2.weight_align).abs()).detach().cpu().item())
                 else:
                     self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)'''
+                    self.wa2_norm_list.append(None)
 
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
@@ -320,9 +320,9 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
             plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.fc1_norm_list))], model1_trainer.fc1_norm_list, '-.', label='m1 fc1')
-            plt.plot([i for i in range(len(model2_trainer.fc1_norm_list))], model2_trainer.fc1_norm_list, '-.', label='m2 fc1')
-            plt.plot([i for i in range(len(model2_trainer.wa1_norm_list))], model2_trainer.wa1_norm_list, '-.', label='m2 wa1')
+            plt.plot([i for i in range(len(model1_trainer.fc1_norm_list))], model1_trainer.fc1_norm_list, linestyle='--', marker='.', label='m1 fc1')
+            plt.plot([i for i in range(len(model2_trainer.fc1_norm_list))], model2_trainer.fc1_norm_list, linestyle='--', marker='.', label='m2 fc1')
+            plt.plot([i for i in range(len(model2_trainer.wa1_norm_list))], model2_trainer.wa1_norm_list, linestyle='--', marker='.', label='m2 wa1')
             plt.legend()
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
@@ -331,16 +331,16 @@ class Merge_Iterator:
 
 
             plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.fc2_norm_list))], model1_trainer.fc2_norm_list, '-.', label='m1 fc2')
-            plt.plot([i for i in range(len(model2_trainer.fc2_norm_list))], model2_trainer.fc2_norm_list, '-.', label='m2 fc2')
-            plt.plot([i for i in range(len(model2_trainer.wa2_norm_list))], model2_trainer.wa2_norm_list, '-.', label='m2 fc2 wa2')
+            plt.plot([i for i in range(len(model1_trainer.fc2_norm_list))], model1_trainer.fc2_norm_list, linestyle='--', marker='.', label='m1 fc2')
+            plt.plot([i for i in range(len(model2_trainer.fc2_norm_list))], model2_trainer.fc2_norm_list, linestyle='--', marker='.', label='m2 fc2')
+            plt.plot([i for i in range(len(model2_trainer.wa2_norm_list))], model2_trainer.wa2_norm_list, linestyle='--', marker='.', label='m2 fc2 wa2')
             plt.legend()
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
             plt.savefig(f'norms/fc2.png')
 
             plt.clf()
-            plt.plot([i for i in range(len(model2_trainer.wa2_norm_sub_list))], model2_trainer.wa2_norm_sub_list, '-.', label='sum((m2.w-m2.wa).abs())')
+            plt.plot([i for i in range(len(model2_trainer.wa2_norm_sub_list))], model2_trainer.wa2_norm_sub_list, linestyle='--', marker='o', label='sum((m2.w-m2.wa).abs())')
             plt.legend()
             plt.ylabel('sum of abs diff')
             plt.xlabel('epoch')
