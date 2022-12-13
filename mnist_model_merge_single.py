@@ -175,6 +175,7 @@ class Trainer:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                         self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
                 print(hasattr(self.model.fc1, 'weight_align'))
+                print(self.model.fc1.weight_align)
                 sys.exit()
                 if hasattr(self.model.fc1, 'weight_align'):
 
