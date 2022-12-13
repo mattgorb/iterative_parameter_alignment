@@ -193,7 +193,7 @@ class Trainer:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                         self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
-                if hasattr(self.model.fc1, 'weight_align'):
+                '''if hasattr(self.model.fc1, 'weight_align'):
 
                     if self.model.fc1.weight_align is not None:
                         if batch_idx in [25,50,75]:
@@ -203,7 +203,7 @@ class Trainer:
                     else:
                         if batch_idx in [ 25, 50, 75]:
                             self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
+                            self.wa2_norm_list.append(None)'''
 
         if self.args.graphs:
             if self.model.fc1.weight is not None:
@@ -286,6 +286,10 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
+
+        wd1=[]
+
+        wd2=[]
         for iter in range(merge_iterations):
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
@@ -314,7 +318,22 @@ class Merge_Iterator:
 
             #if iter==0:
                 #set_weight_align_param(model1, model2, self.args)
+            #if iter>0:
+            wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
+            wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
+            plt.clf()
+            plt.plot([i for i in range(len(wd1))], wd1, linestyle='--', marker='.', label='m1 fc1')
+            plt.legend()
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
+            plt.savefig(f'norms/wd1.png')
 
+            plt.clf()
+            plt.plot([i for i in range(len(wd1))], wd1, linestyle='--', marker='.', label='m1 fc1')
+            plt.legend()
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
+            plt.savefig(f'norms/wd1.png')
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
