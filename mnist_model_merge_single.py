@@ -174,17 +174,19 @@ class Trainer:
                     if batch_idx in [0,25,50,75]:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                         self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                print(hasattr(self.model.fc1, 'weight_align'))
+                sys.exit()
                 if hasattr(self.model.fc1, 'weight_align'):
+
                     if self.model.fc1.weight_align is not None:
                         if batch_idx in [0,25,50,75]:
                             self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                             self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
-                    else:
-                        if batch_idx in [0,25,50,75]:
-                            self.wa1_norm_list.append(0)
-                            self.wa2_norm_list.append(0)
+                else:
+                    if batch_idx in [0,25,50,75]:
+                        self.wa1_norm_list.append(0)
+                        self.wa2_norm_list.append(0)
         if self.args.graphs:
             if self.model.fc1.weight is not None:
                     self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
