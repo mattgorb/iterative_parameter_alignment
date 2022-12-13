@@ -285,7 +285,7 @@ class Merge_Iterator:
             plt.plot([i for i in range(len(model2_trainer.wa1_norm_list))], model2_trainer.wa1_norm_list, '.-')
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc1.png')
+            plt.savefig(f'norms/fc1.png')
 
 
 
@@ -295,7 +295,7 @@ class Merge_Iterator:
             plt.plot([i for i in range(len(model2_trainer.wa2_norm_list))], model2_trainer.wa2_norm_list, '.-')
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
-            plt.savefig(f'norms/{self.model_name}_fc2.png')
+            plt.savefig(f'norms/fc2.png')
 
 
 def main():
