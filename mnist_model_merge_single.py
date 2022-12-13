@@ -345,6 +345,11 @@ class Merge_Iterator:
             plt.ylabel('sum of abs diff')
             plt.xlabel('epoch')
             plt.savefig(f'norms/fc2_subtract.png')
+            print(model2_trainer.wa2_norm_sub_list)
+
+            print(model1_trainer.fc2_norm_list)
+
+            print(model2_trainer.wa2_norm_list)
 
 
 def main():
