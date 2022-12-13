@@ -134,6 +134,7 @@ class Trainer:
         self.fc2_norm_list = []
         self.wa1_norm_list = []
         self.wa2_norm_list = []
+        self.wa2_norm_sub_list = []
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
@@ -164,9 +165,9 @@ class Trainer:
 
             if hasattr(self.model.fc1, 'weight_align'):
                 if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+                    self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.weight_align).abs()).detach().cpu().item())
                 else:
                     self.wa1_norm_list.append(None)
                     self.wa2_norm_list.append(None)
@@ -196,8 +197,9 @@ class Trainer:
 
                     if self.model.fc1.weight_align is not None:
                         if batch_idx in [0,25,50,75]:
-                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+                            self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight - self.model.weight_align).abs()).detach().cpu().item())
                     else:
                         if batch_idx in [0, 25, 50, 75]:
                             self.wa1_norm_list.append(None)
@@ -210,9 +212,9 @@ class Trainer:
 
             if hasattr(self.model.fc1, 'weight_align'):
                 if self.model.fc1.weight_align is not None:
-                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+                        self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.weight_align).abs()).detach().cpu().item())
                 else:
                         self.wa1_norm_list.append(None)
                         self.wa2_norm_list.append(None)
@@ -338,6 +340,13 @@ class Merge_Iterator:
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
             plt.savefig(f'norms/fc2.png')
+
+            plt.clf()
+            plt.plot([i for i in range(len(model2_trainer.wa2_norm_sub_list))], model2_trainer.wa2_norm_sub_list, '-.', label='sum((m2.w-m2.wa).abs())')
+            plt.legend()
+            plt.ylabel('sum of abs diff')
+            plt.xlabel('epoch')
+            plt.savefig(f'norms/fc2_subtract.png')
 
 
 def main():
