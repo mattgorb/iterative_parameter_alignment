@@ -280,9 +280,9 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
             plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.model.fc1_norm_list))], model1_trainer.model.fc1_norm_list, '.-')
-            plt.plot([i for i in range(len(model2_trainer.model.fc1_norm_list))], model2_trainer.model.fc1_norm_list, '.-')
-            plt.plot([i for i in range(len(model2_trainer.model.wa1_norm_list))], model2_trainer.model.wa1_norm_list, '.-')
+            plt.plot([i for i in range(len(model1_trainer.fc1_norm_list))], model1_trainer.fc1_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.fc1_norm_list))], model2_trainer.fc1_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.wa1_norm_list))], model2_trainer.wa1_norm_list, '.-')
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc1.png')
@@ -290,9 +290,9 @@ class Merge_Iterator:
 
 
             plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.model.fc2_norm_list))], model1_trainer.model.fc2_norm_list, '.-')
-            plt.plot([i for i in range(len(model2_trainer.model.fc2_norm_list))], model2_trainer.model.fc2_norm_list, '.-')
-            plt.plot([i for i in range(len(model2_trainer.model.wa2_norm_list))], model2_trainer.model.wa2_norm_list, '.-')
+            plt.plot([i for i in range(len(model1_trainer.fc2_norm_list))], model1_trainer.fc2_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.fc2_norm_list))], model2_trainer.fc2_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.wa2_norm_list))], model2_trainer.wa2_norm_list, '.-')
             plt.ylabel('1-norm')
             plt.xlabel('epoch')
             plt.savefig(f'norms/{self.model_name}_fc2.png')
