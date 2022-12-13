@@ -205,7 +205,7 @@ class Trainer:
                             self.wa1_norm_list.append(None)
                             self.wa2_norm_list.append(None)
 
-        if self.args.graphs:
+        '''if self.args.graphs:
             if self.model.fc1.weight is not None:
                     self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                     self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
@@ -217,7 +217,8 @@ class Trainer:
                         self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.fc2.weight_align).abs()).detach().cpu().item())
                 else:
                         self.wa1_norm_list.append(None)
-                        self.wa2_norm_list.append(None)
+                        self.wa2_norm_list.append(None)'''
+
 
 
         train_loss /= len(self.train_loader.dataset)
