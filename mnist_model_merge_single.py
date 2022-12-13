@@ -187,7 +187,7 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
-            if self.args.graphs:
+            '''if self.args.graphs:
                 if self.model.fc1.weight is not None:
                     if batch_idx in [0,25,50,75]:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
@@ -203,7 +203,7 @@ class Trainer:
                     else:
                         if batch_idx in [0, 25, 50, 75]:
                             self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
+                            self.wa2_norm_list.append(None)'''
 
         if self.args.graphs:
             if self.model.fc1.weight is not None:
@@ -328,9 +328,7 @@ class Merge_Iterator:
             plt.xlabel('epoch')
             plt.savefig(f'norms/fc1.png')
 
-            print(len(model1_trainer.fc1_norm_list))
-            print(len(model2_trainer.fc1_norm_list))
-            print(len(model2_trainer.wa1_norm_list))
+
 
             plt.clf()
             plt.plot([i for i in range(len(model1_trainer.fc2_norm_list))], model1_trainer.fc2_norm_list, '-.', label='m1 fc2')
