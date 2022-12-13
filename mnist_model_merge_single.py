@@ -167,7 +167,7 @@ class Trainer:
                 if self.model.fc1.weight_align is not None:
                     self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
                     self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.weight_align).abs()).detach().cpu().item())
+                    self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.fc2.weight_align).abs()).detach().cpu().item())
                 else:
                     self.wa1_norm_list.append(None)
                     self.wa2_norm_list.append(None)
@@ -199,7 +199,7 @@ class Trainer:
                         if batch_idx in [0,25,50,75]:
                             self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
                             self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight - self.model.weight_align).abs()).detach().cpu().item())
+                            self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight - self.model.fc2.weight_align).abs()).detach().cpu().item())
                     else:
                         if batch_idx in [0, 25, 50, 75]:
                             self.wa1_norm_list.append(None)
@@ -214,7 +214,7 @@ class Trainer:
                 if self.model.fc1.weight_align is not None:
                         self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
                         self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                        self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.weight_align).abs()).detach().cpu().item())
+                        self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight-self.model.fc2.weight_align).abs()).detach().cpu().item())
                 else:
                         self.wa1_norm_list.append(None)
                         self.wa2_norm_list.append(None)
