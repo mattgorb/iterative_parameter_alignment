@@ -139,12 +139,13 @@ class Trainer:
         self.train_loss = 1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
-            #if epoch_loss < self.train_loss:
             self.train_loss = epoch_loss
-            torch.save(self.model.state_dict(), self.save_path)
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
+
+            if epoch_loss < self.train_loss:
+                torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -167,6 +168,18 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
+
+            if self.args.graphs:
+                if self.model.fc1.weight is not None:
+                    self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                    self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+
+                if hasattr(self.model.fc1, 'weight_align'):
+                    if self.model.fc1.weight_align is not None:
+                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+
+
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
@@ -174,34 +187,7 @@ class Trainer:
         self.model.eval()
         test_loss = 0
         correct = 0
-        if self.args.graph_norms:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                plt.clf()
-                plt.plot([i for i in range(len(self.fc1_norm_list))], self.fc1_norm_list, '.-')
-                plt.ylabel('1-norm')
-                plt.xlabel('epoch')
-                plt.savefig(f'norms/{self.model_name}_fc1.png')
-                plt.clf()
-                plt.plot([i for i in range(len(self.fc2_norm_list))], self.fc2_norm_list, '.-')
-                plt.ylabel('1-norm')
-                plt.xlabel('epoch')
-                plt.savefig(f'norms/{self.model_name}_fc2.png')
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                    plt.clf()
-                    plt.plot([i for i in range(len(self.wa1_norm_list))], self.wa1_norm_list, '.-')
-                    plt.ylabel('1-norm')
-                    plt.xlabel('epoch')
-                    plt.savefig(f'norms/{self.model_name}_fc1_wa.png')
-                    plt.clf()
-                    plt.plot([i for i in range(len(self.wa2_norm_list))], self.wa2_norm_list, '.-')
-                    plt.ylabel('1-norm')
-                    plt.xlabel('epoch')
-                    plt.savefig(f'norms/{self.model_name}_fc2_wa.png')
+
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
@@ -278,21 +264,13 @@ class Merge_Iterator:
             if iter==0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.to(self.device), requires_grad=True)
-                #model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.to(self.device), requires_grad=True)
             else:
                 model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
                 new_optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
                 new_optimizer.load_state_dict(model1_trainer.optimizer.state_dict())
                 model1_trainer.optimizer=new_optimizer
-                #model1_trainer.optimizer.add_param_group({'params': model1.parameters()})
-                #print(model1_trainer.optimizer.param_groups)
-                #print(model1_trainer.optimizer.state_dict())
-                #model1_trainer.optimizer.param_groups[0]['params']= list(model1.parameters())
-                #print(model1_trainer.optimizer.state_dict())
-                #print(model1_trainer.optimizer.param_groups)
-                #sys.exit()
+
             #if iter==0:
                 #set_weight_align_param(model1, model2, self.args)
 
@@ -301,15 +279,25 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-            #if iter>1:
-                #print(model1_trainer.optimizer.param_groups)
-                #print(model1_trainer.optimizer.state_dict())
-                #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)#.clone().detach()
-                #sys.exit()
+            plt.clf()
+            plt.plot([i for i in range(len(model1_trainer.model.fc1_norm_list))], model1_trainer.model.fc1_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.model.fc1_norm_list))], model2_trainer.model.fc1_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.model.wa1_norm_list))], model2_trainer.model.wa1_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
+            plt.savefig(f'norms/{self.model_name}_fc1.png')
 
 
-                #model1_trainer.optimizer.
+
+            plt.clf()
+            plt.plot([i for i in range(len(model1_trainer.model.fc2_norm_list))], model1_trainer.model.fc2_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.model.fc2_norm_list))], model2_trainer.model.fc2_norm_list, '.-')
+            plt.plot([i for i in range(len(model2_trainer.model.wa2_norm_list))], model2_trainer.model.wa2_norm_list, '.-')
+            plt.ylabel('1-norm')
+            plt.xlabel('epoch')
+            plt.savefig(f'norms/{self.model_name}_fc2.png')
+
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
@@ -331,7 +319,7 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
-    parser.add_argument('--graph_norms', type=bool, default=False, help='add norm graphs during training')
+    parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
     args = parser.parse_args()
