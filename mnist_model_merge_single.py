@@ -198,6 +198,8 @@ class Trainer:
                 else:
                         self.wa1_norm_list.append(None)
                         self.wa2_norm_list.append(None)
+
+
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
