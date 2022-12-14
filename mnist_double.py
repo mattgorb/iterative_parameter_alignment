@@ -287,9 +287,6 @@ class Merge_Iterator:
         wd1=[]
         wd2=[]
 
-        wd1_2=[]
-        wd2_2=[]
-
         for iter in range(merge_iterations):
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
@@ -301,8 +298,8 @@ class Merge_Iterator:
 
             model2_trainer.fit()
 
-            if iter==0:
-                set_weight_align_param(model1, model2, self.args)
+            #if iter==0:
+            set_weight_align_param(model1, model2, self.args)
 
             if iter>0:
                 wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
