@@ -371,6 +371,11 @@ def main():
         save_path = f'{weight_dir}mnist_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
+
+        df = pd.DataFrame({'model1_fc1': trainer.fc1_norm_list,
+                           'model1_fc2': trainer.fc2_norm_list,})
+        df.to_csv('norms/norms_baseline.csv')
+
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
         merge_iterator = Merge_Iterator(args, [train_loader1, train_loader2, test_dataset], device, weight_dir)
