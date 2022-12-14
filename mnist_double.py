@@ -288,19 +288,20 @@ class Merge_Iterator:
         wd2=[]
 
         for iter in range(merge_iterations):
-            #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
-            #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
-            if iter%2==0:
+            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
+            '''if iter%2==0:
                 print("HERE")
                 model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)'''
 
             model1_trainer.fit()
             model2_trainer.fit()
 
 
 
-            if iter==1:
+            if iter==0:
+                print("HERE")
                 set_weight_align_param(model1, model2, self.args)
 
             if iter>0:
