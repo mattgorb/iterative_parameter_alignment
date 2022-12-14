@@ -299,12 +299,12 @@ class Merge_Iterator:
                 #new_optimizer.load_state_dict(model2_trainer.optimizer.state_dict())
                 model2_trainer.optimizer=new_optimizer
 
-            print(model1_trainer.model.fc1.weight[0][:10])
+            print(model1_trainer.model.fc2.weight[0][:10])
 
 
             model1_trainer.fit()
 
-            print(model1_trainer.model.fc1.weight[0][:10])
+            print(model1_trainer.model.fc2.weight[0][:10])
 
             model2_trainer.fit()
 
