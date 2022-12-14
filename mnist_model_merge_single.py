@@ -10,7 +10,7 @@ import math
 import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
-
+import pandas as pd
 
 def set_seed(seed):
     random.seed(seed)
@@ -132,9 +132,8 @@ class Trainer:
         self.model_name = model_name
         self.fc1_norm_list = []
         self.fc2_norm_list = []
-        self.wa1_norm_list = [None, None,None,None]
-        self.wa2_norm_list = [None, None,None,None]
-        self.wa2_norm_sub_list = []
+        self.wa1_norm_list = []
+        self.wa2_norm_list = []
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
@@ -189,21 +188,20 @@ class Trainer:
 
             if self.args.graphs:
                 if self.model.fc1.weight is not None:
-                    if batch_idx in [25,50,75]:
+                    if batch_idx in [10,25,50,75]:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                         self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
-                '''if hasattr(self.model.fc1, 'weight_align'):
+                if hasattr(self.model.fc1, 'weight_align'):
 
                     if self.model.fc1.weight_align is not None:
-                        if batch_idx in [25,50,75]:
+                        if batch_idx in [10,25,50,75]:
                             self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
                             self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_sub_list.append(torch.sum((self.model.fc2.weight - self.model.fc2.weight_align).abs()).detach().cpu().item())
                     else:
-                        if batch_idx in [ 25, 50, 75]:
+                        if batch_idx in [10, 25, 50, 75]:
                             self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)'''
+                            self.wa2_norm_list.append(None)
 
         if self.args.graphs:
             if self.model.fc1.weight is not None:
@@ -321,56 +319,24 @@ class Merge_Iterator:
             if iter>0:
                 wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
                 wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-                plt.clf()
-                plt.plot([i for i in range(len(wd1))], wd1, linestyle='--', marker='.', label='m1 fc1')
-                plt.legend()
-                plt.ylabel('1-norm')
-                plt.xlabel('epoch')
-                plt.savefig(f'norms/wd1.png')
 
-                plt.clf()
-                plt.plot([i for i in range(len(wd2))], wd2, linestyle='--', marker='.', label='m1 fc1')
-                plt.legend()
-                plt.ylabel('1-norm')
-                plt.xlabel('epoch')
-                plt.savefig(f'norms/wd2.png')
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-            plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.fc1_norm_list))], model1_trainer.fc1_norm_list, linestyle='--', marker='.', label='m1 fc1')
-            plt.plot([i for i in range(len(model2_trainer.fc1_norm_list))], model2_trainer.fc1_norm_list, linestyle='--', marker='.', label='m2 fc1')
-            plt.plot([i for i in range(len(model2_trainer.wa1_norm_list))], model2_trainer.wa1_norm_list, linestyle='--', marker='.', label='m2 wa1')
-            plt.legend()
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/fc1.png')
 
+            df=pd.Dataframe({'model1_fc1':model1_trainer.fc1_norm_list,
+                             'model1_fc2':model1_trainer.fc2_norm_list,
+                             'model2_fc1': model2_trainer.fc1_norm_list,
+                             'model2_fc2':model2_trainer.fc2_norm_list,
+                             'model2_wa1':model2_trainer.wa1_norm_list,
+                             'model2_wa2':model2_trainer.wa2_norm_list})
+            df.to_csv('norms/norms.csv')
 
-
-            plt.clf()
-            plt.plot([i for i in range(len(model1_trainer.fc2_norm_list))], model1_trainer.fc2_norm_list, linestyle='--', marker='.', label='m1 fc2')
-            plt.plot([i for i in range(len(model2_trainer.fc2_norm_list))], model2_trainer.fc2_norm_list, linestyle='--', marker='.', label='m2 fc2')
-            plt.plot([i for i in range(len(model2_trainer.wa2_norm_list))], model2_trainer.wa2_norm_list, linestyle='--', marker='.', label='m2 fc2 wa2')
-            plt.legend()
-            plt.ylabel('1-norm')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/fc2.png')
-
-            plt.clf()
-            plt.plot([i for i in range(len(model2_trainer.wa2_norm_sub_list))], model2_trainer.wa2_norm_sub_list, linestyle='--', marker='o', label='sum((m2.w-m2.wa).abs())')
-            plt.legend()
-            plt.ylabel('sum of abs diff')
-            plt.xlabel('epoch')
-            plt.savefig(f'norms/fc2_subtract.png')
-            print(model2_trainer.wa2_norm_sub_list)
-
-            print(model1_trainer.fc2_norm_list)
-
-            print(model2_trainer.wa2_norm_list)
-
+            df=pd.Dataframe({'weight_diff_layer1':wd1,
+                             'weight_diff_layer2':wd2})
+            df.to_csv('norms/weight_diff.csv')
 
 def main():
     # Training settings
