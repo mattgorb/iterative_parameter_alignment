@@ -277,7 +277,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        intra_merge_iterations=3
+        intra_merge_iterations=10
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
