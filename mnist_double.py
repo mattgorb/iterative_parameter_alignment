@@ -277,6 +277,8 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
+        intra_merge_iterations=3
+
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
@@ -295,7 +297,7 @@ class Merge_Iterator:
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
-            for iter2 in range(5):
+            for iter2 in range(intra_merge_iterations):
                 model1_trainer.fit()
                 model2_trainer.fit()
                 if iter>0:
