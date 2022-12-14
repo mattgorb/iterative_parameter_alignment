@@ -304,7 +304,7 @@ class Merge_Iterator:
 
             model1_trainer.fit()
 
-
+            print(model1_trainer.model.fc1.weight[0][:10])
 
             model2_trainer.fit()
 
