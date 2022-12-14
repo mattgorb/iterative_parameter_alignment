@@ -295,7 +295,7 @@ class Merge_Iterator:
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
-            for iter2 in range(2):
+            for iter2 in range(5):
                 model1_trainer.fit()
                 model2_trainer.fit()
                 if iter>0:
