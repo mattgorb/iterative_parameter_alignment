@@ -300,7 +300,7 @@ class Merge_Iterator:
 
 
 
-            if iter==0:
+            if iter==1:
                 print("HERE2")
                 set_weight_align_param(model1, model2, self.args)
 
