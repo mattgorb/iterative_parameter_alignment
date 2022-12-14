@@ -295,6 +295,8 @@ class Merge_Iterator:
                 #model2_trainer.model=model2
                 model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
                 model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+                model1_trainer.train_loader, model1_trainer.test_loader = self.train_loader1,self.test_dataset
+                model2_trainer.train_loader, model2_trainer.test_loader = self.train_loader2,self.test_dataset
 
             model1_trainer.fit()
 
