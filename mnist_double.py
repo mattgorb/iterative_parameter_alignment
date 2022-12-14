@@ -144,8 +144,8 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            if epoch_loss < self.train_loss:
-                torch.save(self.model.state_dict(), self.save_path)
+            #if epoch_loss < self.train_loss:
+                #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -289,10 +289,10 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
-            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
-            #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-            #model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+            #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
+            #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
+            model1_trainer.optimizer = optim.Adam(model1_trainer.model.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer = optim.Adam(model2_trainer.model.parameters(), lr=self.args.lr)
 
             model1_trainer.fit()
 
