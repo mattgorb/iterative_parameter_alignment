@@ -289,14 +289,14 @@ class Merge_Iterator:
         wd1=[]
         wd2=[]
 
-        #model1_trainer.optimizer = optim.Adadelta(model1.parameters(), lr=self.args.lr)
-        #model2_trainer.optimizer = optim.Adadelta(model2.parameters(), lr=self.args.lr)
+        model1_trainer.optimizer = optim.Adadelta(model1.parameters(), )
+        model2_trainer.optimizer = optim.Adadelta(model2.parameters(), )
         for iter in range(merge_iterations):
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
             print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
