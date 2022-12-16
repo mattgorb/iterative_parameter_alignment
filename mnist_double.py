@@ -339,9 +339,8 @@ class Merge_Iterator:
                              'model1_wa2': model1_trainer.wa2_norm_list,
                              'train_epoch':model1_trainer.train_iter_list
                              })
-            print(df)
-            print(model1_trainer.train_iter_list)
-            #sys.exit()
+
+
             df.to_csv('norms/norms_double.csv')
 
             df=pd.DataFrame({'weight_diff_layer1':wd1,
