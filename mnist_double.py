@@ -280,7 +280,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        intra_merge_iterations=[15 for i in range(2)]+[10 for i in range(2)]+[5 for i in range(4)]+[2 for i in range(10)]+[1 for i in range(1000)]
+        intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(1000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
@@ -343,7 +343,7 @@ class Merge_Iterator:
 
             df=pd.DataFrame({'weight_diff_layer1':wd1,
                              'weight_diff_layer2':wd2,
-                             'epoch':model1_trainer.train_iter_list,
+                             'epoch':ti,
                              'merge_iter':mi
                              })
             df.to_csv('norms/weight_diff_double.csv')
