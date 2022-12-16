@@ -341,7 +341,7 @@ class Merge_Iterator:
                              })
             print(df)
             print(model1_trainer.train_iter_list)
-            sys.exit()
+            #sys.exit()
             df.to_csv('norms/norms_double.csv')
 
             df=pd.DataFrame({'weight_diff_layer1':wd1,
