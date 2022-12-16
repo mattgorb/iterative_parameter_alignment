@@ -309,8 +309,8 @@ class Merge_Iterator:
                 if iter>0:
                     wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
                     wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-            print(wd1)
-            print(wd2)
+            #print(wd1)
+            #print(wd2)
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
