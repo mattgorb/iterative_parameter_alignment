@@ -289,17 +289,17 @@ class Merge_Iterator:
         wd1=[]
         wd2=[]
 
-
-        #model1_trainer.optimizer = optim.SGD(model1.parameters(),lr=self.args.lr )
-        #model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
+        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
+        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         for iter in range(merge_iterations):
             #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
             #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
             #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
-            model1_trainer.optimizer = optim.Adadelta(model1.parameters(), )
-            model2_trainer.optimizer = optim.Adadelta(model2.parameters(), )
+            #model1_trainer.optimizer = optim.Adadelta(model1.parameters(), )
+            #model2_trainer.optimizer = optim.Adadelta(model2.parameters(), )
+
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             #for iter2 in range(intra_merge_iterations[iter]):
@@ -309,8 +309,7 @@ class Merge_Iterator:
                 if iter>0:
                     wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
                     wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-            #print(wd1)
-            #print(wd2)
+
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
