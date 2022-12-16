@@ -293,6 +293,7 @@ class Merge_Iterator:
         wd1=[]
         wd2=[]
         mi=[]
+        ti=[]
 
         '''
         AdaDelta works with re-initialization (because of the adadptive state)
@@ -301,6 +302,7 @@ class Merge_Iterator:
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
 
+        total=0
         for iter in range(merge_iterations):
 
             model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
@@ -314,6 +316,8 @@ class Merge_Iterator:
                     wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
                     wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
                     mi.append(iter)
+                    ti.append(total)
+                    total+=1
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
