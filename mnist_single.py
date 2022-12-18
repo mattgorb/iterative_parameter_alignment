@@ -134,9 +134,12 @@ class Trainer:
         self.fc2_norm_list = []
         self.wa1_norm_list = []
         self.wa2_norm_list = []
+        self.train_iter_list=[]
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
+        self.train_iter += 1
+
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
@@ -161,7 +164,7 @@ class Trainer:
             if self.model.fc1.weight is not None:
                 self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                 self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                self.train_iter_list.append(self.train_iter)
             if hasattr(self.model.fc1, 'weight_align'):
                 if self.model.fc1.weight_align is not None:
                     self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
@@ -191,7 +194,7 @@ class Trainer:
                     if batch_idx in [10,25,50,75]:
                         self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                         self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                        self.train_iter_list.append(self.train_iter)
                 if hasattr(self.model.fc1, 'weight_align'):
 
                     if self.model.fc1.weight_align is not None:
@@ -207,7 +210,7 @@ class Trainer:
             if self.model.fc1.weight is not None:
                     self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
                     self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
+                    self.train_iter_list.append(self.train_iter)
             if hasattr(self.model.fc1, 'weight_align'):
                 if self.model.fc1.weight_align is not None:
                         self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
@@ -285,30 +288,14 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
         wd1=[]
-
         wd2=[]
+        mi=[]
         for iter in range(merge_iterations):
-
             model1_trainer.fit()
 
-
-            '''if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)'''
-
             model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
-
             model2_trainer.fit()
 
-            '''if iter==0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-            else:
-                model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                new_optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-                new_optimizer.load_state_dict(model1_trainer.optimizer.state_dict())
-                model1_trainer.optimizer=new_optimizer'''
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
@@ -316,7 +303,7 @@ class Merge_Iterator:
             if iter>0:
                 wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
                 wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-
+                mi.append(iter)
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
@@ -327,11 +314,14 @@ class Merge_Iterator:
                              'model2_fc1': model2_trainer.fc1_norm_list,
                              'model2_fc2':model2_trainer.fc2_norm_list,
                              'model2_wa1':model2_trainer.wa1_norm_list,
-                             'model2_wa2':model2_trainer.wa2_norm_list})
+                             'model2_wa2':model2_trainer.wa2_norm_list,
+                             'train_epoch': model1_trainer.train_iter_list
+                             })
             df.to_csv('norms/norms.csv')
 
             df=pd.DataFrame({'weight_diff_layer1':wd1,
-                             'weight_diff_layer2':wd2})
+                             'weight_diff_layer2':wd2,
+                             'merge_iter':mi})
             df.to_csv('norms/weight_diff.csv')
 
 def main():
