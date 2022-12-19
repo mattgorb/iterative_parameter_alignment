@@ -135,6 +135,7 @@ class Trainer:
         self.wa1_norm_list = []
         self.wa2_norm_list = []
         self.train_iter_list=[]
+        self.train_iter=0
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
