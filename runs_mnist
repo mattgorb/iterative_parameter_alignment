@@ -5,3 +5,6 @@ nohup python -u mnist_model_merge.py --epochs=20000 --baseline=True --gpu=4  --l
 
 
 nohup python -u mnist_double.py --graphs=True > ~/iwa/mnist_double.txt 2>&1 &
+
+
+nohup python -u mnist_single.py --graphs=True > ~/iwa/mnist_single.txt 2>&1 &
