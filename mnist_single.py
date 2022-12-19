@@ -317,12 +317,12 @@ class Merge_Iterator:
                              'model2_wa2':model2_trainer.wa2_norm_list,
                              'train_epoch': model1_trainer.train_iter_list
                              })
-            df.to_csv('norms/norms.csv')
+            df.to_csv('norms/norms_single.csv')
 
             df=pd.DataFrame({'weight_diff_layer1':wd1,
                              'weight_diff_layer2':wd2,
                              'merge_iter':mi})
-            df.to_csv('norms/weight_diff.csv')
+            df.to_csv('norms/weight_diff_single.csv')
 
 def main():
     # Training settings
