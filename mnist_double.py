@@ -309,7 +309,8 @@ class Merge_Iterator:
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            for iter2 in range(intra_merge_iterations[iter]):
+            for iter2 in range(1):
+            #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
                 model2_trainer.fit()
                 if iter>0:
