@@ -242,6 +242,8 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
+            print('losss')
+            print(self.criterion(output, target) )
             print(self.args.weight_align_factor * weight_align)
 
             if self.args.graphs:
