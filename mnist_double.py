@@ -48,7 +48,7 @@ class LinearMerge(nn.Linear):
             # using absolute error here.
             #weights_diff = torch.sum((self.weight - self.weight_align).abs())
             # MSE loss -- not able to get as good results using this loss fn.
-            weights_diff=torch.mean((self.weight-self.weight_align)**2)
+            weights_diff=torch.sum((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
