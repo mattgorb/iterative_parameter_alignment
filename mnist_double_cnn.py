@@ -80,27 +80,53 @@ class LinearMerge(nn.Linear):
 
 
 class Net(nn.Module):
-    def __init__(self):
+    def __init__(self, args, weight_merge=False):
         super(Net, self).__init__()
-        self.conv1 = conv_init(1, 32, 3, 1)
-        self.conv2 = conv_init(32, 64, 3, 1)
+        self.args=args
+        self.weight_merge=weight_merge
 
-        self.fc1 = linear_init(9216, 128)
-        self.fc2 = linear_init(128, 10)
+        if self.weight_merge:
+            self.conv1 = conv_init(1, 32, 3, 1)
+            self.conv2 = conv_init(32, 64, 3, 1)
+
+            self.fc1 = linear_init(9216, 128)
+            self.fc2 = linear_init(128, 10)
+        else:
+            self.conv1 = nn.Conv2d(1, 32, 3, 1)
+            self.conv2 = nn.Conv2d(32, 64, 3, 1)
+
+            self.fc1 = nn.Linear(9216, 128)
+            self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x):
-        x,wd1 = self.conv1(x)
-        x = F.relu(x)
+        if self.weight_merge:
+            x,wd1 = self.conv1(x)
+            x = F.relu(x)
 
-        x,wd2 = self.conv2(x)
-        x = F.relu(x)
-        x = F.max_pool2d(x, 2)
-        x = torch.flatten(x, 1)
-        x,wd3 = self.fc1(x)
-        x = F.relu(x)
-        x,wd4 = self.fc2(x)
-        wd = wd1+wd2+wd3+wd4
-        return x, wd
+            x,wd2 = self.conv2(x)
+            x = F.relu(x)
+            x = F.max_pool2d(x, 2)
+            x = torch.flatten(x, 1)
+            x,wd3 = self.fc1(x)
+            x = F.relu(x)
+            x,wd4 = self.fc2(x)
+            wd = wd1+wd2+wd3+wd4
+            return x, wd
+        else:
+            x, = self.conv1(x)
+            x = F.relu(x)
+
+            x, = self.conv2(x)
+            x = F.relu(x)
+            x = F.max_pool2d(x, 2)
+            x = torch.flatten(x, 1)
+            x, = self.fc1(x)
+            x = F.relu(x)
+            x, wd4 = self.fc2(x)
+
+            return x, torch.tensor(0)
+
+
 
 
 def get_datasets(args):
