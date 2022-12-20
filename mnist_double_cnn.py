@@ -113,16 +113,16 @@ class Net(nn.Module):
             wd = wd1+wd2+wd3+wd4
             return x, wd
         else:
-            x, = self.conv1(x)
+            x = self.conv1(x)
             x = F.relu(x)
 
-            x, = self.conv2(x)
+            x = self.conv2(x)
             x = F.relu(x)
             x = F.max_pool2d(x, 2)
             x = torch.flatten(x, 1)
-            x, = self.fc1(x)
+            x = self.fc1(x)
             x = F.relu(x)
-            x, wd4 = self.fc2(x)
+            x = self.fc2(x)
 
             return x, torch.tensor(0)
 
@@ -361,7 +361,7 @@ class Merge_Iterator:
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            for iter2 in range(5):
+            for iter2 in range(1):
             #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
                 model2_trainer.fit()
