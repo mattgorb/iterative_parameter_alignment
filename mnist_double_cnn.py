@@ -261,10 +261,10 @@ class Trainer:
                             self.wa1_norm_list.append(None)
                             self.wa2_norm_list.append(None)
 
-        print('losss')
-        print(self.criterion(output, target) )
-        print(self.args.weight_align_factor * weight_align)
-        print(self.criterion(output, target) /(self.args.weight_align_factor * weight_align))
+        #print('losss')
+        #print(self.criterion(output, target) )
+        #print(self.args.weight_align_factor * weight_align)
+        #print(self.criterion(output, target) /(self.args.weight_align_factor * weight_align))
         if self.args.graphs:
             if self.model.fc1.weight is not None:
                 self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
@@ -303,7 +303,7 @@ def set_weight_align_param(model1, model2, args):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
-        if not type(m2) == LinearMerge:
+        if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
             continue
         if hasattr(m1, "weight"):
             '''
@@ -347,11 +347,6 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
-        wd1=[]
-        wd2=[]
-        mi=[]
-        ti=[]
-
         '''
         AdaDelta works with re-initialization (because of the adadptive state)
         SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
@@ -359,7 +354,6 @@ class Merge_Iterator:
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
 
-        total=0
         for iter in range(merge_iterations):
 
             model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
@@ -370,43 +364,14 @@ class Merge_Iterator:
             #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
                 model2_trainer.fit()
-                if iter>0:
-                    wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
-                    wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-                    mi.append(iter)
-                    ti.append(total)
-                    total+=1
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
-
-
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-
-            df=pd.DataFrame({'model1_fc1':model1_trainer.fc1_norm_list,
-                             'model1_fc2':model1_trainer.fc2_norm_list,
-                             'model2_fc1': model2_trainer.fc1_norm_list,
-                             'model2_fc2':model2_trainer.fc2_norm_list,
-                             'model2_wa1':model2_trainer.wa1_norm_list,
-                             'model2_wa2':model2_trainer.wa2_norm_list,
-                             'model1_wa1': model1_trainer.wa1_norm_list,
-                             'model1_wa2': model1_trainer.wa2_norm_list,
-                             'train_epoch':model1_trainer.train_iter_list
-                             })
-
-
-            df.to_csv('norms/norms_double.csv')
-
-            df=pd.DataFrame({'weight_diff_layer1':wd1,
-                             'weight_diff_layer2':wd2,
-                             'epoch':ti,
-                             'merge_iter':mi
-                             })
-            df.to_csv('norms/weight_diff_double.csv')
 
 def main():
     # Training settings
