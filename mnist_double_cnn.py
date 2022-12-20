@@ -38,6 +38,8 @@ class ConvMerge(nn.Conv2d):
         # self.args.weight_seed+=1
 
     def forward(self, x):
+        print(self.weight)
+        sys.exit()
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
