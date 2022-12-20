@@ -37,7 +37,7 @@ class LinearMerge(nn.Linear):
         # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        #self.args.weight_seed+=1
+        self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
