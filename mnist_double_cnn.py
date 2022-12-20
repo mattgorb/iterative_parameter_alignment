@@ -19,6 +19,36 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
+def conv_init(in_channels, out_channels, kernel_size, stride, bias=False, args=None, ):
+    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
+    layer.init(args)
+    return layer
+
+class ConvMerge(nn.Conv2d):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.weight_align = None
+
+    def init(self, args):
+        self.args = args
+        set_seed(self.args.weight_seed)
+        # this isn't default initialization.  not sure if necessary, need to test.
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
+        # self.args.weight_seed+=1
+
+    def forward(self, x):
+        x = F.conv2d(
+            x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
+        )
+        weights_diff = torch.tensor(0)
+        if self.weight_align is not None:
+            # using absolute error here.
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            # MSE loss -- not able to get as good results using this loss fn.
+            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
+        return x, weights_diff
+
 
 def linear_init(in_dim, out_dim, bias=False, args=None, ):
     layer = LinearMerge(in_dim, out_dim, bias=bias)
@@ -37,7 +67,6 @@ class LinearMerge(nn.Linear):
         # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        # self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -51,30 +80,27 @@ class LinearMerge(nn.Linear):
 
 
 class Net(nn.Module):
-    def __init__(self, args, weight_merge=False):
+    def __init__(self):
         super(Net, self).__init__()
-        self.args = args
-        self.weight_merge = weight_merge
-        # bias False for now, have not tested adding bias to the loss fn.
-        if self.weight_merge:
-            self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
-            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
-        else:
-            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
-            self.fc2 = nn.Linear(1024, 10, bias=False)
+        self.conv1 = conv_init(1, 32, 3, 1)
+        self.conv2 = conv_init(32, 64, 3, 1)
 
-    def forward(self, x, ):
-        if self.weight_merge:
-            x, wa1 = self.fc1(x.view(-1, 28 * 28))
-            x = F.relu(x)
-            x, wa2 = self.fc2(x)
-            score_diff = wa1 + wa2
-            return x, score_diff
-        else:
-            x = self.fc1(x.view(-1, 28 * 28))
-            x = F.relu(x)
-            x = self.fc2(x)
-            return x, torch.tensor(0)
+        self.fc1 = linear_init(9216, 128)
+        self.fc2 = linear_init(128, 10)
+
+    def forward(self, x):
+        x,wd1 = self.conv1(x)
+        x = F.relu(x)
+
+        x,wd2 = self.conv2(x)
+        x = F.relu(x)
+        x = F.max_pool2d(x, 2)
+        x = torch.flatten(x, 1)
+        x,wd3 = self.fc1(x)
+        x = F.relu(x)
+        x,wd4 = self.fc2(x)
+        wd = wd1+wd2+wd3+wd4
+        return x, wd
 
 
 def get_datasets(args):
@@ -161,7 +187,20 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
+        if self.args.graphs:
+            if self.model.fc1.weight is not None:
+                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+                self.train_iter_list.append(self.train_iter)
 
+            if hasattr(self.model.fc1, 'weight_align'):
+                if self.model.fc1.weight_align is not None:
+                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+
+                else:
+                    self.wa1_norm_list.append(None)
+                    self.wa2_norm_list.append(None)
 
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
@@ -177,6 +216,37 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
+
+            if self.args.graphs:
+                if self.model.fc1.weight is not None:
+                    if batch_idx in [10,25,50,75]:
+                        self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                        self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+                        self.train_iter_list.append(self.train_iter)
+                if hasattr(self.model.fc1, 'weight_align'):
+
+                    if self.model.fc1.weight_align is not None:
+                        if batch_idx in [10,25,50,75]:
+                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+                    else:
+                        if batch_idx in [10, 25, 50, 75]:
+                            self.wa1_norm_list.append(None)
+                            self.wa2_norm_list.append(None)
+
+        if self.args.graphs:
+            if self.model.fc1.weight is not None:
+                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
+                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
+                self.train_iter_list.append(self.train_iter)
+            if hasattr(self.model.fc1, 'weight_align'):
+                if self.model.fc1.weight_align is not None:
+                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
+                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
+                else:
+                        self.wa1_norm_list.append(None)
+                        self.wa2_norm_list.append(None)
+
 
 
         train_loss /= len(self.train_loader.dataset)
@@ -197,6 +267,23 @@ class Trainer:
         test_loss /= len(self.test_loader.dataset)
         return test_loss, 100. * correct / len(self.test_loader.dataset)
 
+
+def set_weight_align_param(model1, model2, args):
+    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
+        n1, m1 = model1_mods
+        n2, m2 = model2_mods
+        if not type(m2) == LinearMerge:
+            continue
+        if hasattr(m1, "weight"):
+            '''
+            m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
+            This is a simple way to "share" the weights between models. 
+            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
+            '''
+            # We only want to merge one models weights in this file
+            # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)s
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
 
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
@@ -219,6 +306,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
+        intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
@@ -228,6 +316,11 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+        wd1=[]
+        wd2=[]
+        mi=[]
+        ti=[]
+
         '''
         AdaDelta works with re-initialization (because of the adadptive state)
         SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
@@ -235,19 +328,27 @@ class Merge_Iterator:
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
 
-
+        total=0
         for iter in range(merge_iterations):
 
-            if iter>0:
-                model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-            model1_trainer.fit()
-            if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
-            model2_trainer.fit()
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+
+            print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
+            for iter2 in range(1):
+            #for iter2 in range(intra_merge_iterations[iter]):
+                model1_trainer.fit()
+                model2_trainer.fit()
+                if iter>0:
+                    wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
+                    wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
+                    mi.append(iter)
+                    ti.append(total)
+                    total+=1
+
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
+
 
 
             print(f'Merge Iteration: {iter} \n'
@@ -255,6 +356,26 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 
+            df=pd.DataFrame({'model1_fc1':model1_trainer.fc1_norm_list,
+                             'model1_fc2':model1_trainer.fc2_norm_list,
+                             'model2_fc1': model2_trainer.fc1_norm_list,
+                             'model2_fc2':model2_trainer.fc2_norm_list,
+                             'model2_wa1':model2_trainer.wa1_norm_list,
+                             'model2_wa2':model2_trainer.wa2_norm_list,
+                             'model1_wa1': model1_trainer.wa1_norm_list,
+                             'model1_wa2': model1_trainer.wa2_norm_list,
+                             'train_epoch':model1_trainer.train_iter_list
+                             })
+
+
+            df.to_csv('norms/norms_double.csv')
+
+            df=pd.DataFrame({'weight_diff_layer1':wd1,
+                             'weight_diff_layer2':wd2,
+                             'epoch':ti,
+                             'merge_iter':mi
+                             })
+            df.to_csv('norms/weight_diff_double.csv')
 
 def main():
     # Training settings
