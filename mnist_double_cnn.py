@@ -332,7 +332,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
+        #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
@@ -360,7 +360,7 @@ class Merge_Iterator:
             model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
-            print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
+            #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             for iter2 in range(1):
             #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
