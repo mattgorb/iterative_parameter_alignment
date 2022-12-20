@@ -242,6 +242,7 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
+            print(self.args.weight_align_factor * weight_align)
 
             if self.args.graphs:
                 if self.model.fc1.weight is not None:
