@@ -207,10 +207,7 @@ class Trainer:
                         if batch_idx in [10, 25, 50, 75]:
                             self.wa1_norm_list.append(None)
                             self.wa2_norm_list.append(None)
-        print('losss')
-        print(self.criterion(output, target) )
-        print(self.args.weight_align_factor * weight_align)
-        print(self.criterion(output, target) /(self.args.weight_align_factor * weight_align))
+
         if self.args.graphs:
             if self.model.fc1.weight is not None:
                 self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
