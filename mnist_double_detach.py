@@ -130,13 +130,17 @@ class Trainer:
         self.device = device
         self.save_path = save_path
         self.model_name = model_name
+
         self.fc1_norm_list = []
         self.fc2_norm_list = []
         self.wa1_norm_list = []
         self.wa2_norm_list = []
+        self.train_iter_list=[]
+        self.train_iter=0
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
+        self.train_iter+=1
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
@@ -144,8 +148,8 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            if epoch_loss < self.train_loss:
-                torch.save(self.model.state_dict(), self.save_path)
+            #if epoch_loss < self.train_loss:
+                #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -157,19 +161,7 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
 
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-
-                else:
-                    self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)
 
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
@@ -185,37 +177,6 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
-
-            if self.args.graphs:
-                if self.model.fc1.weight is not None:
-                    if batch_idx in [10,25,50,75]:
-                        self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                        self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-                if hasattr(self.model.fc1, 'weight_align'):
-
-                    if self.model.fc1.weight_align is not None:
-                        if batch_idx in [10,25,50,75]:
-                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                    else:
-                        if batch_idx in [10, 25, 50, 75]:
-                            self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
-
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                    self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                    self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                else:
-                        self.wa1_norm_list.append(None)
-                        self.wa2_norm_list.append(None)
-
 
 
         train_loss /= len(self.train_loader.dataset)
@@ -235,23 +196,6 @@ class Trainer:
                 correct += pred.eq(target.view_as(pred)).sum().item()
         test_loss /= len(self.test_loader.dataset)
         return test_loss, 100. * correct / len(self.test_loader.dataset)
-
-
-def set_weight_align_param(model1, model2, args):
-    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
-        n1, m1 = model1_mods
-        n2, m2 = model2_mods
-        if not type(m2) == LinearMerge:
-            continue
-        if hasattr(m1, "weight"):
-            '''
-            m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
-            This is a simple way to "share" the weights between models. 
-            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
-            '''
-            # We only want to merge one models weights in this file
-            m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-
 
 
 class Merge_Iterator:
@@ -275,64 +219,45 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
+        intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
+
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
+
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
-        wd1=[]
 
-        wd2=[]
+
+        '''
+        AdaDelta works with re-initialization (because of the adadptive state)
+        SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
+        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
+        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
+        '''
+
+
         for iter in range(merge_iterations):
-            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            # model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
-            # model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
 
+            if iter>0:
+                model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
+                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             model1_trainer.fit()
-
-
             if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-
-            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
-
+                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             model2_trainer.fit()
 
-            if iter==0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-            else:
-                model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                new_optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-                new_optimizer.load_state_dict(model1_trainer.optimizer.state_dict())
-                model1_trainer.optimizer=new_optimizer
-
-
-
-            if iter>0:
-                wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
-                wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 
-            df=pd.DataFrame({'model1_fc1':model1_trainer.fc1_norm_list,
-                             'model1_fc2':model1_trainer.fc2_norm_list,
-                             'model2_fc1': model2_trainer.fc1_norm_list,
-                             'model2_fc2':model2_trainer.fc2_norm_list,
-                             'model2_wa1':model2_trainer.wa1_norm_list,
-                             'model2_wa2':model2_trainer.wa2_norm_list})
-            df.to_csv('norms/norms.csv')
-
-            df=pd.DataFrame({'weight_diff_layer1':wd1,
-                             'weight_diff_layer2':wd2})
-            df.to_csv('norms/weight_diff.csv')
 
 def main():
     # Training settings
@@ -368,11 +293,6 @@ def main():
         save_path = f'{weight_dir}mnist_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
-
-        df = pd.DataFrame({'model1_fc1': trainer.fc1_norm_list,
-                           'model1_fc2': trainer.fc2_norm_list,})
-        df.to_csv('norms/norms_baseline.csv')
-
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
         merge_iterator = Merge_Iterator(args, [train_loader1, train_loader2, test_dataset], device, weight_dir)
