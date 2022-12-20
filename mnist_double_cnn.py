@@ -86,11 +86,11 @@ class Net(nn.Module):
         self.weight_merge=weight_merge
 
         if self.weight_merge:
-            self.conv1 = conv_init(1, 32, 3, 1, args=args)
-            self.conv2 = conv_init(32, 64, 3, 1, args=args)
+            self.conv1 = conv_init(1, 32, 3, 1 , args=self.args, )
+            self.conv2 = conv_init(32, 64, 3, 1, args=self.args, )
 
-            self.fc1 = linear_init(9216, 128)
-            self.fc2 = linear_init(128, 10)
+            self.fc1 = linear_init(9216, 128, args=self.args, )
+            self.fc2 = linear_init(128, 10, args=self.args, )
         else:
             self.conv1 = nn.Conv2d(1, 32, 3, 1)
             self.conv2 = nn.Conv2d(32, 64, 3, 1)
