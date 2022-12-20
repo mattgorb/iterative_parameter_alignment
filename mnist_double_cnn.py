@@ -44,7 +44,7 @@ class ConvMerge(nn.Conv2d):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align)**2)
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
             # MSE loss -- not able to get as good results using this loss fn.
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
@@ -73,7 +73,7 @@ class LinearMerge(nn.Linear):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align)**2)
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
             # MSE loss -- not able to get as good results using this loss fn.
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
@@ -300,7 +300,7 @@ class Trainer:
 
 
 def set_weight_align_param(model1, model2, args):
-    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
+    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
         if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
