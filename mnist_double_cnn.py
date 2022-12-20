@@ -44,7 +44,7 @@ class ConvMerge(nn.Conv2d):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff = torch.sum((self.weight - self.weight_align)**2)
             # MSE loss -- not able to get as good results using this loss fn.
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
@@ -73,7 +73,7 @@ class LinearMerge(nn.Linear):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff = torch.sum((self.weight - self.weight_align)**2)
             # MSE loss -- not able to get as good results using this loss fn.
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
