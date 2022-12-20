@@ -49,7 +49,7 @@ plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_di
 plt.show()
 '''
 
-df=pd.read_csv('norms/norms_single.csv')
+df=pd.read_csv('norms/norms/norms_single.csv')
 df=df[:100]
 #df=df.head(100)
 print(df.shape)
