@@ -82,10 +82,11 @@ class LinearMerge(nn.Linear):
 
 class VGG11(nn.Module):
     def __init__(
-        self,  num_classes: int = 10, init_weights: bool = True, ) -> None:
+        self,  num_classes: int = 10, init_weights: bool = True,args=None, weight_merge=False ) -> None:
         super().__init__()
 
-
+        self.args=args
+        self.weight_merge=weight_merge
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
         self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
         self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
@@ -164,7 +165,7 @@ cfgs: Dict[str, List[Union[str, int]]] = {
     "D": [64, 64, "M", 128, 128, "M", 256, 256, 256, "M", 512, 512, 512, "M", 512, 512, 512, "M"],
     "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"],
 }
-model = VGG(make_layers(cfgs["A"], batch_norm=False), )
+#model = VGG(make_layers(cfgs["A"], batch_norm=False), )
 
 
 
