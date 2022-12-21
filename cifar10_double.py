@@ -103,7 +103,7 @@ class Conv4(nn.Module):
 
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        print(x.size())
+
         x=self.conv1(x)
         x=self.relu(x)
         x=self.conv2(x)
@@ -113,13 +113,15 @@ class Conv4(nn.Module):
         x=self.relu(x)
         x=self.conv4(x)
         x=self.relu(x)
-        print(x.size())
+
         x=self.max_pool(x)
 
         print(x.size())
 
         x = x.view(x.size(0), 8192, 1, 1)
+        print(x.size())
         x = self.fc1(x)
+        print(x.size())
         x = self.relu(x)
         x = self.fc2(x)
         x = self.relu(x)
