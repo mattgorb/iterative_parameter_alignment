@@ -82,7 +82,7 @@ class LinearMerge(nn.Linear):
 
 class VGG11(nn.Module):
     def __init__(
-        self,  num_classes: int = 10, init_weights: bool = True,args=None, weight_merge=False ) -> None:
+        self,  init_weights: bool = True,args=None, weight_merge=False ) -> None:
         super().__init__()
 
         self.args=args
@@ -102,14 +102,8 @@ class VGG11(nn.Module):
 
         self.fc1=nn.Linear(512 * 7 * 7, 4096)
         self.fc2=nn.Linear(4096, 4096)
-        self.fc3=nn.Linear(4096, num_classes)
-        self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 4096),
-            nn.ReLU(True),
-            nn.Linear(4096, 4096),
-            nn.ReLU(True),
-            nn.Linear(4096, num_classes),
-        )
+        self.fc3=nn.Linear(4096, 10)
+
         if init_weights:
             for m in self.modules():
                 if isinstance(m, nn.Conv2d):
