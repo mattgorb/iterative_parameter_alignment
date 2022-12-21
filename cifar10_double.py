@@ -80,7 +80,7 @@ class LinearMerge(nn.Linear):
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
-class VGG11(nn.Module):
+class Conv4(nn.Module):
     def __init__(
         self,  init_weights: bool = True,args=None, weight_merge=False ) -> None:
         super().__init__()
@@ -88,46 +88,32 @@ class VGG11(nn.Module):
         self.args=args
         self.weight_merge=weight_merge
         self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
-        self.conv4 = nn.Conv2d(256, 256, kernel_size=3, padding=1)
-        self.conv5 = nn.Conv2d(256, 512, kernel_size=3, padding=1)
-        self.conv6 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
-        self.conv7 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
-        self.conv8 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
+
 
         self.max_pool=nn.MaxPool2d(kernel_size=2, stride=2)
         self.relu=nn.ReLU(True)
-        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        #self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
 
-        self.fc1=nn.Linear(512 * 7 * 7, 4096)
-        self.fc2=nn.Linear(4096, 4096)
-        self.fc3=nn.Linear(4096, 10)
+        self.fc1=nn.Linear(32*32*8, 256)
+        self.fc2=nn.Linear(256, 256)
+        self.fc3=nn.Linear(256, 10)
 
-        if init_weights:
-            for m in self.modules():
-                if isinstance(m, nn.Conv2d):
-                    nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
-                    if m.bias is not None:
-                        nn.init.constant_(m.bias, 0)
-                elif isinstance(m, nn.BatchNorm2d):
-                    nn.init.constant_(m.weight, 1)
-                    nn.init.constant_(m.bias, 0)
-                elif isinstance(m, nn.Linear):
-                    nn.init.normal_(m.weight, 0, 0.01)
-                    nn.init.constant_(m.bias, 0)
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         x=self.conv1(x)
+        x=self.relu(x)
         x=self.conv2(x)
+        x=self.relu(x)
+        x=self.max_pool(x)
         x=self.conv3(x)
+        x=self.relu(x)
         x=self.conv4(x)
-        x=self.conv5(x)
-        x=self.conv6(x)
-        x=self.conv7(x)
-        x=self.conv8(x)
-        x = self.avgpool(x)
-        x = torch.flatten(x, 1)
+        x=self.relu(x)
+        x=self.max_pool(x)
+        out = out.view(out.size(0), 8192, 1, 1)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.fc2(x)
@@ -136,29 +122,9 @@ class VGG11(nn.Module):
         return x, torch.tensor(0)
 
 
-def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequential:
-    layers: List[nn.Module] = []
-    in_channels = 3
-    for v in cfg:
-        if v == "M":
-            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
-        else:
-            v = cast(int, v)
-            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
-            if batch_norm:
-                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
-            else:
-                layers += [conv2d, nn.ReLU(inplace=True)]
-            in_channels = v
-    return nn.Sequential(*layers)
 
 
-cfgs: Dict[str, List[Union[str, int]]] = {
-    "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
-    "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
-    "D": [64, 64, "M", 128, 128, "M", 256, 256, 256, "M", 512, 512, 512, "M", 512, 512, 512, "M"],
-    "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"],
-}
+
 #model = VGG(make_layers(cfgs["A"], batch_norm=False), )
 
 
@@ -375,8 +341,8 @@ class Merge_Iterator:
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
-        model1 = VGG11(self.args, weight_merge=True).to(self.device)
-        model2 = VGG11(self.args, weight_merge=True).to(self.device)
+        model1 = Conv4(self.args, weight_merge=True).to(self.device)
+        model2 = Conv4(self.args, weight_merge=True).to(self.device)
 
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
@@ -441,7 +407,7 @@ def main():
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
-        model = VGG11(args, weight_merge=False).to(device)
+        model = Conv4(args, weight_merge=False).to(device)
 
         model_parameters = filter(lambda p: p.requires_grad, model.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
