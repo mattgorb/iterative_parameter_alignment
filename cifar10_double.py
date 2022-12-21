@@ -218,7 +218,7 @@ def get_datasets(args):
         print(test_dataset.targets)
         #print(ds1_indices)
         print(dataset1.targets)
-        print(dataset1.targets[ds1_indices])
+        print(list(np.array(dataset1.targets)[ds1_indices]))
         sys.exit()
         dataset1.data= dataset1.data[ds1_indices]#,:,:,:
         dataset1.targets = dataset1.targets[ds1_indices]
