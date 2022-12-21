@@ -87,10 +87,10 @@ class Conv4(nn.Module):
 
         self.args=args
         self.weight_merge=weight_merge
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
-        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
-        self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=False)
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1, bias=False)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1, bias=False)
+        self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1, bias=False)
 
 
         self.max_pool=nn.MaxPool2d(kernel_size=2, stride=2)
@@ -113,6 +113,9 @@ class Conv4(nn.Module):
         x=self.conv4(x)
         x=self.relu(x)
         x=self.max_pool(x)
+
+        print(x.size())
+
         x = x.view(x.size(0), 8192, 1, 1)
         x = self.fc1(x)
         x = self.relu(x)
