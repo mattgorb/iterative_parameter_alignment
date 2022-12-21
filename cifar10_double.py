@@ -21,8 +21,8 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
-def conv_init(in_channels, out_channels, kernel_size=3, stride=1, bias=False, args=None, ):
-    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, bias=False, args=None, ):
+    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=bias)
     layer.init(args)
     return layer
 
