@@ -12,7 +12,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 import pandas as pd
 from typing import Any, cast, Dict, List, Optional, Union
-
+import numpy as np
 
 def set_seed(seed):
     random.seed(seed)
@@ -442,6 +442,11 @@ def main():
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         model = VGG11(args, weight_merge=False).to(device)
+
+        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        print(params)
+
         save_path = f'{weight_dir}cifar10_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
