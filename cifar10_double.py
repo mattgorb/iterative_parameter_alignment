@@ -82,7 +82,7 @@ class LinearMerge(nn.Linear):
 
 class Conv4(nn.Module):
     def __init__(
-        self,  init_weights: bool = True,args=None, weight_merge=False ) -> None:
+        self,  args=None, weight_merge=False ) -> None:
         super().__init__()
 
         self.bias=True
