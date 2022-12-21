@@ -215,6 +215,7 @@ def get_datasets(args):
         dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
         '''
         print(len(dataset1.data))
+        print(len(dataset1[:].data))
         print(dataset1.data.shape)
         print(dataset1.targets.shape)
         print(len(ds1_indices))
