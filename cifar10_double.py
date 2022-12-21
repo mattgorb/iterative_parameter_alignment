@@ -214,10 +214,8 @@ def get_datasets(args):
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
         dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
         '''
-        print(len(dataset1.data))
-        print(len(dataset1.data[:]))
-        print(dataset1.data[[0,1],:,:,:].shape)
-
+        print(ds1_indices)
+        print(dataset1.targets)
         dataset1.data= dataset1.data[ds1_indices]#,:,:,:
         dataset1.targets = dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices,:,:,:], dataset2.targets[ds2_indices]
