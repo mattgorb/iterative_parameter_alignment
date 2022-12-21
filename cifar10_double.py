@@ -93,7 +93,7 @@ class Conv4(nn.Module):
         self.conv4 = nn.Conv2d(128, 256, kernel_size=3, padding=1, bias=False)
 
 
-        self.max_pool=nn.MaxPool2d(kernel_size=2, stride=2)
+        self.max_pool=nn.MaxPool2d((2, 2))
         self.relu=nn.ReLU(True)
         #self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
 
