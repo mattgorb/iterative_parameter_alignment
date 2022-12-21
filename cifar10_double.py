@@ -138,9 +138,26 @@ def get_datasets(args):
     transform = transforms.Compose([
         transforms.ToTensor(),
     ])
+    normalize = transforms.Normalize(
+        mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
+    )
+    train_transform = transforms.Compose(
+        [
+            transforms.RandomCrop(32, padding=4),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            normalize,
+        ]
+    )
+    test_transform = transforms.Compose(
+        [
+            transforms.ToTensor(),
+            normalize,
+        ]
+    )
     if args.baseline:
-        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=transform)
-        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
