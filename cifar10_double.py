@@ -118,7 +118,7 @@ class Conv4(nn.Module):
 
         print(x.size())
 
-        x = x.view(x.size(0), 8192, 1, 1)
+        x = x.view(x.size(0), 8192)
         print(x.size())
         x = self.fc1(x)
         print(x.size())
