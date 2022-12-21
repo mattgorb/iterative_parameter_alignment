@@ -21,7 +21,7 @@ def set_seed(seed):
     torch.cuda.manual_seed_all(seed)
     torch.backends.cudnn.deterministic = True
 
-def conv_init(in_channels, out_channels, kernel_size, stride, bias=False, args=None, ):
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1, bias=False, args=None, ):
     layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
     layer.init(args)
     return layer
@@ -85,21 +85,22 @@ class Conv4(nn.Module):
         self,  init_weights: bool = True,args=None, weight_merge=False ) -> None:
         super().__init__()
 
+        self.bias=True
         self.args=args
         self.weight_merge=weight_merge
-        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=False)
-        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1, bias=False)
-        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1, bias=False)
-        self.conv4 = nn.Conv2d(128, 128, kernel_size=3, padding=1, bias=False)
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=self.bias)
+        self.conv2 = nn.Conv2d(64, 64, kernel_size=3, padding=1, bias=self.bias)
+        self.conv3 = nn.Conv2d(64, 128, kernel_size=3, padding=1, bias=self.bias)
+        self.conv4 = nn.Conv2d(128, 128, kernel_size=3, padding=1, bias=self.bias)
 
 
         self.max_pool=nn.MaxPool2d((2, 2))
         self.relu=nn.ReLU(True)
         #self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
 
-        self.fc1=nn.Linear(32*32*8, 256)
-        self.fc2=nn.Linear(256, 256)
-        self.fc3=nn.Linear(256, 10)
+        self.fc1=nn.Linear(32*32*8, 256, bias=self.bias)
+        self.fc2=nn.Linear(256, 256, bias=self.bias)
+        self.fc3=nn.Linear(256, 10, bias=self.bias)
 
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
