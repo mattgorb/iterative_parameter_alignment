@@ -113,7 +113,7 @@ class Conv4(nn.Module):
         x=self.conv4(x)
         x=self.relu(x)
         x=self.max_pool(x)
-        out = out.view(out.size(0), 8192, 1, 1)
+        x = x.view(x.size(0), 8192, 1, 1)
         x = self.fc1(x)
         x = self.relu(x)
         x = self.fc2(x)
