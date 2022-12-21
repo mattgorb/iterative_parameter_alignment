@@ -196,8 +196,7 @@ def get_datasets(args):
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
         dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=test_transform)
         # split dataset in half by labels
-        #print(dataset1.targets)
-        labels = torch.unique(torch.tensor(dataset1.targets))
+        labels = np.unique(dataset1.targets)
         ds1_labels = labels[:len(labels) // 2]
         ds2_labels = labels[len(labels) // 2:]
         print(f'ds1_labels: {ds1_labels}')
