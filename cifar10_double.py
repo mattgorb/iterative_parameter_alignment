@@ -11,6 +11,8 @@ import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 import pandas as pd
+from typing import Any, cast, Dict, List, Optional, Union
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -78,54 +80,91 @@ class LinearMerge(nn.Linear):
             # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
+class VGG11(nn.Module):
+    def __init__(
+        self,  num_classes: int = 10, init_weights: bool = True, ) -> None:
+        super().__init__()
 
-class Net(nn.Module):
-    def __init__(self, args, weight_merge=False):
-        super(Net, self).__init__()
-        self.args=args
-        self.weight_merge=weight_merge
 
-        if self.weight_merge:
-            self.conv1 = conv_init(1, 32, 3, 1 , args=self.args, )
-            self.conv2 = conv_init(32, 64, 3, 1, args=self.args, )
+        self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1)
+        self.conv2 = nn.Conv2d(64, 128, kernel_size=3, padding=1)
+        self.conv3 = nn.Conv2d(128, 256, kernel_size=3, padding=1)
+        self.conv4 = nn.Conv2d(256, 256, kernel_size=3, padding=1)
+        self.conv5 = nn.Conv2d(256, 512, kernel_size=3, padding=1)
+        self.conv6 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
+        self.conv7 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
+        self.conv8 = nn.Conv2d(512, 512, kernel_size=3, padding=1)
 
-            self.fc1 = linear_init(9216, 128, args=self.args, )
-            self.fc2 = linear_init(128, 10, args=self.args, )
+        self.max_pool=nn.MaxPool2d(kernel_size=2, stride=2)
+        self.relu=nn.ReLU(True)
+        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+
+        self.fc1=nn.Linear(512 * 7 * 7, 4096)
+        self.fc2=nn.Linear(4096, 4096)
+        self.fc3=nn.Linear(4096, num_classes)
+        self.classifier = nn.Sequential(
+            nn.Linear(512 * 7 * 7, 4096),
+            nn.ReLU(True),
+            nn.Linear(4096, 4096),
+            nn.ReLU(True),
+            nn.Linear(4096, num_classes),
+        )
+        if init_weights:
+            for m in self.modules():
+                if isinstance(m, nn.Conv2d):
+                    nn.init.kaiming_normal_(m.weight, mode="fan_out", nonlinearity="relu")
+                    if m.bias is not None:
+                        nn.init.constant_(m.bias, 0)
+                elif isinstance(m, nn.BatchNorm2d):
+                    nn.init.constant_(m.weight, 1)
+                    nn.init.constant_(m.bias, 0)
+                elif isinstance(m, nn.Linear):
+                    nn.init.normal_(m.weight, 0, 0.01)
+                    nn.init.constant_(m.bias, 0)
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        x=self.conv1(x)
+        x=self.conv2(x)
+        x=self.conv3(x)
+        x=self.conv4(x)
+        x=self.conv5(x)
+        x=self.conv6(x)
+        x=self.conv7(x)
+        x=self.conv8(x)
+        x = self.avgpool(x)
+        x = torch.flatten(x, 1)
+        x = self.fc1(x)
+        x = self.relu(x)
+        x = self.fc2(x)
+        x = self.relu(x)
+        x = self.fc3(x)
+        return x
+
+
+def make_layers(cfg: List[Union[str, int]], batch_norm: bool = False) -> nn.Sequential:
+    layers: List[nn.Module] = []
+    in_channels = 3
+    for v in cfg:
+        if v == "M":
+            layers += [nn.MaxPool2d(kernel_size=2, stride=2)]
         else:
-            self.conv1 = nn.Conv2d(1, 32, 3, 1, bias=False)
-            self.conv2 = nn.Conv2d(32, 64, 3, 1, bias=False)
+            v = cast(int, v)
+            conv2d = nn.Conv2d(in_channels, v, kernel_size=3, padding=1)
+            if batch_norm:
+                layers += [conv2d, nn.BatchNorm2d(v), nn.ReLU(inplace=True)]
+            else:
+                layers += [conv2d, nn.ReLU(inplace=True)]
+            in_channels = v
+    return nn.Sequential(*layers)
 
-            self.fc1 = nn.Linear(9216, 128, bias=False)
-            self.fc2 = nn.Linear(128, 10, bias=False)
 
-    def forward(self, x):
-        if self.weight_merge:
-            x,wd1 = self.conv1(x)
-            x = F.relu(x)
-
-            x,wd2 = self.conv2(x)
-            x = F.relu(x)
-            x = F.max_pool2d(x, 2)
-            x = torch.flatten(x, 1)
-            x,wd3 = self.fc1(x)
-            x = F.relu(x)
-            x,wd4 = self.fc2(x)
-            wd = wd1+wd2+wd3+wd4
-            return x, wd
-        else:
-            x = self.conv1(x)
-            x = F.relu(x)
-
-            x = self.conv2(x)
-            x = F.relu(x)
-            x = F.max_pool2d(x, 2)
-            x = torch.flatten(x, 1)
-            x = self.fc1(x)
-            x = F.relu(x)
-            x = self.fc2(x)
-
-            return x, torch.tensor(0)
-
+cfgs: Dict[str, List[Union[str, int]]] = {
+    "A": [64, "M", 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
+    "B": [64, 64, "M", 128, 128, "M", 256, 256, "M", 512, 512, "M", 512, 512, "M"],
+    "D": [64, 64, "M", 128, 128, "M", 256, 256, 256, "M", 512, 512, 512, "M", 512, 512, 512, "M"],
+    "E": [64, 64, "M", 128, 128, "M", 256, 256, 256, 256, "M", 512, 512, 512, 512, "M", 512, 512, 512, 512, "M"],
+}
+model = VGG(make_layers(cfgs["A"], batch_norm=False), )
 
 
 
@@ -135,14 +174,14 @@ def get_datasets(args):
         transforms.ToTensor(),
     ])
     if args.baseline:
-        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
-        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
     else:
-        dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
-        dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=transform)
         # split dataset in half by labels
         labels = torch.unique(dataset1.targets)
         ds1_labels = labels[:len(labels) // 2]
@@ -165,7 +204,7 @@ def get_datasets(args):
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         assert (set(ds1_indices).isdisjoint(ds2_indices))
-        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
@@ -339,8 +378,8 @@ class Merge_Iterator:
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
-        model1 = Net(self.args, weight_merge=True).to(self.device)
-        model2 = Net(self.args, weight_merge=True).to(self.device)
+        model1 = VGG11(self.args, weight_merge=True).to(self.device)
+        model2 = VGG11(self.args, weight_merge=True).to(self.device)
 
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
@@ -403,8 +442,8 @@ def main():
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
-        model = Net(args, weight_merge=False).to(device)
-        save_path = f'{weight_dir}mnist_baseline.pt'
+        model = VGG11(args, weight_merge=False).to(device)
+        save_path = f'{weight_dir}cifar10_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
     else:

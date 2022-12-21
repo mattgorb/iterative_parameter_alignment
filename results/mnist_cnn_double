@@ -1,0 +1,341 @@
+(transformers) luffy:~/iterative_weight_alignment$ python mnist_double_cnn.py
+/s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/io/image.py:13: UserWarning: Failed to load image Python extension: /s/luffy/b/nobackup/mgorb/anaconda/envs/transformers/lib/python3.7/site-packages/torchvision/image.so: undefined symbol: _ZN3c106detail19maybe_wrap_dim_slowEllb
+  warn(f"Failed to load image Python extension: {e}")
+ds1_labels: tensor([0, 1, 2, 3, 4])
+ds2_labels: tensor([5, 6, 7, 8, 9])
+Merge Iteration: 0
+	Model 1 Train loss: 0.16035175323486328, Test loss: 5.643653031921387,  Test accuracy: 51.13
+	Model 2 Train loss: 0.20000605285167694, Test loss: 8.259500680541992,  Test accuracy: 47.79
+Merge Iteration: 1
+	Model 1 Train loss: 5.304601192474365, Test loss: 4.191554917526245,  Test accuracy: 51.67
+	Model 2 Train loss: 0.3379129469394684, Test loss: 7.762551052856446,  Test accuracy: 47.95
+Merge Iteration: 2
+	Model 1 Train loss: 0.4994004964828491, Test loss: 3.4108714950561523,  Test accuracy: 51.23
+	Model 2 Train loss: 0.39613133668899536, Test loss: 3.086278776550293,  Test accuracy: 48.3
+Merge Iteration: 3
+	Model 1 Train loss: 0.27373206615448, Test loss: 2.7867789329528807,  Test accuracy: 56.31
+	Model 2 Train loss: 0.3108786344528198, Test loss: 1.4223604923248292,  Test accuracy: 62.27
+Merge Iteration: 4
+	Model 1 Train loss: 0.22054341435432434, Test loss: 1.0434287522792816,  Test accuracy: 69.04
+	Model 2 Train loss: 0.2223138064146042, Test loss: 0.7878982147216796,  Test accuracy: 76.05
+Merge Iteration: 5
+	Model 1 Train loss: 0.18680045008659363, Test loss: 0.9732732176780701,  Test accuracy: 73.12
+	Model 2 Train loss: 0.20609264075756073, Test loss: 0.568661674118042,  Test accuracy: 83.36
+Merge Iteration: 6
+	Model 1 Train loss: 0.1757417768239975, Test loss: 0.7494244459629059,  Test accuracy: 78.2
+	Model 2 Train loss: 0.1962309032678604, Test loss: 0.5746504115104676,  Test accuracy: 83.2
+Merge Iteration: 7
+	Model 1 Train loss: 0.1754235178232193, Test loss: 0.6860419301509857,  Test accuracy: 79.36
+	Model 2 Train loss: 0.18887625634670258, Test loss: 0.4886744955062866,  Test accuracy: 85.92
+Merge Iteration: 8
+	Model 1 Train loss: 0.16772232949733734, Test loss: 0.7426673354387283,  Test accuracy: 79.42
+	Model 2 Train loss: 0.18813581764698029, Test loss: 0.6106910488128662,  Test accuracy: 83.75
+Merge Iteration: 9
+	Model 1 Train loss: 0.1653081774711609, Test loss: 0.5583936731815338,  Test accuracy: 83.34
+	Model 2 Train loss: 0.17929066717624664, Test loss: 0.38301265807151796,  Test accuracy: 89.89
+Merge Iteration: 10
+	Model 1 Train loss: 0.1581728309392929, Test loss: 0.6148115015983582,  Test accuracy: 83.06
+	Model 2 Train loss: 0.1762828677892685, Test loss: 0.42196728806495665,  Test accuracy: 88.96
+Merge Iteration: 11
+	Model 1 Train loss: 0.15778307616710663, Test loss: 0.5994660462856293,  Test accuracy: 83.32
+	Model 2 Train loss: 0.172537699341774, Test loss: 0.423552135181427,  Test accuracy: 89.04
+Merge Iteration: 12
+	Model 1 Train loss: 0.15789566934108734, Test loss: 0.4466238941669464,  Test accuracy: 86.45
+	Model 2 Train loss: 0.16902345418930054, Test loss: 0.34483826007843016,  Test accuracy: 90.69
+Merge Iteration: 13
+	Model 1 Train loss: 0.1575518399477005, Test loss: 0.44527596590518953,  Test accuracy: 87.42
+	Model 2 Train loss: 0.16940343379974365, Test loss: 0.3924280152797699,  Test accuracy: 90.16
+Merge Iteration: 14
+	Model 1 Train loss: 0.15485790371894836, Test loss: 0.44037772049903867,  Test accuracy: 87.36
+	Model 2 Train loss: 0.16539287567138672, Test loss: 0.3504431765079498,  Test accuracy: 91.23
+Merge Iteration: 15
+	Model 1 Train loss: 0.15503613650798798, Test loss: 0.4854986034870148,  Test accuracy: 87.22
+	Model 2 Train loss: 0.16758234798908234, Test loss: 0.30198523445129394,  Test accuracy: 92.57
+Merge Iteration: 16
+	Model 1 Train loss: 0.15068314969539642, Test loss: 0.34393048738241194,  Test accuracy: 89.66
+	Model 2 Train loss: 0.16331210732460022, Test loss: 0.3001676242351532,  Test accuracy: 92.88
+Merge Iteration: 17
+	Model 1 Train loss: 0.1494823694229126, Test loss: 0.3546348184078932,  Test accuracy: 90.4
+	Model 2 Train loss: 0.1628827005624771, Test loss: 0.2988556985259056,  Test accuracy: 92.67
+Merge Iteration: 18
+	Model 1 Train loss: 0.15009084343910217, Test loss: 0.3245315803050995,  Test accuracy: 90.59
+	Model 2 Train loss: 0.15965788066387177, Test loss: 0.26226234517097474,  Test accuracy: 93.62
+Merge Iteration: 19
+	Model 1 Train loss: 0.14930753409862518, Test loss: 0.31716271140277386,  Test accuracy: 91.34
+	Model 2 Train loss: 0.15957991778850555, Test loss: 0.23896153948307036,  Test accuracy: 94.12
+Merge Iteration: 20
+	Model 1 Train loss: 0.14927703142166138, Test loss: 0.2692543004155159,  Test accuracy: 93.08
+	Model 2 Train loss: 0.1580093502998352, Test loss: 0.2601040788173676,  Test accuracy: 93.71
+Merge Iteration: 21
+	Model 1 Train loss: 0.14867036044597626, Test loss: 0.2707350439816713,  Test accuracy: 92.38
+	Model 2 Train loss: 0.1577201783657074, Test loss: 0.20688867450356482,  Test accuracy: 94.55
+Merge Iteration: 22
+	Model 1 Train loss: 0.1465579718351364, Test loss: 0.2237943285226822,  Test accuracy: 94.25
+	Model 2 Train loss: 0.15800577402114868, Test loss: 0.227917224752903,  Test accuracy: 94.23
+Merge Iteration: 23
+	Model 1 Train loss: 0.1489637941122055, Test loss: 0.2525500395834446,  Test accuracy: 93.35
+	Model 2 Train loss: 0.15852126479148865, Test loss: 0.2031407709479332,  Test accuracy: 94.93
+Merge Iteration: 24
+	Model 1 Train loss: 0.1465688943862915, Test loss: 0.2086015890650451,  Test accuracy: 94.47
+	Model 2 Train loss: 0.15852710604667664, Test loss: 0.18587675806283951,  Test accuracy: 95.28
+Merge Iteration: 25
+	Model 1 Train loss: 0.1471378356218338, Test loss: 0.2009099717736244,  Test accuracy: 94.7
+	Model 2 Train loss: 0.15713362395763397, Test loss: 0.1419427645802498,  Test accuracy: 96.42
+Merge Iteration: 26
+	Model 1 Train loss: 0.14723265171051025, Test loss: 0.20331272742673756,  Test accuracy: 94.9
+	Model 2 Train loss: 0.1582682579755783, Test loss: 0.18495112926959992,  Test accuracy: 95.45
+Merge Iteration: 27
+	Model 1 Train loss: 0.14624381065368652, Test loss: 0.18189897101409733,  Test accuracy: 95.57
+	Model 2 Train loss: 0.1554742306470871, Test loss: 0.15434623127579689,  Test accuracy: 96.18
+Merge Iteration: 28
+	Model 1 Train loss: 0.14931225776672363, Test loss: 0.16806085079796612,  Test accuracy: 95.74
+	Model 2 Train loss: 0.15542350709438324, Test loss: 0.13780425352454184,  Test accuracy: 96.36
+Merge Iteration: 29
+	Model 1 Train loss: 0.14778423309326172, Test loss: 0.1682975301399827,  Test accuracy: 95.62
+	Model 2 Train loss: 0.152703657746315, Test loss: 0.1276032575726509,  Test accuracy: 96.78
+Merge Iteration: 30
+	Model 1 Train loss: 0.14773891866207123, Test loss: 0.1486703555824235,  Test accuracy: 96.18
+	Model 2 Train loss: 0.15595285594463348, Test loss: 0.11873998751044273,  Test accuracy: 96.89
+Merge Iteration: 31
+	Model 1 Train loss: 0.1461798995733261, Test loss: 0.1167450364260003,  Test accuracy: 96.9
+	Model 2 Train loss: 0.1586841344833374, Test loss: 0.11912845109105111,  Test accuracy: 96.94
+Merge Iteration: 32
+	Model 1 Train loss: 0.14797963201999664, Test loss: 0.14876551817641592,  Test accuracy: 96.31
+	Model 2 Train loss: 0.1547616720199585, Test loss: 0.11965394023954869,  Test accuracy: 96.95
+Merge Iteration: 33
+	Model 1 Train loss: 0.14823924005031586, Test loss: 0.12412792382985353,  Test accuracy: 96.89
+	Model 2 Train loss: 0.1543341875076294, Test loss: 0.1304027969866991,  Test accuracy: 96.64
+Merge Iteration: 34
+	Model 1 Train loss: 0.14840351045131683, Test loss: 0.11896364256786182,  Test accuracy: 97.05
+	Model 2 Train loss: 0.1559026539325714, Test loss: 0.10903812328726054,  Test accuracy: 97.26
+Merge Iteration: 35
+	Model 1 Train loss: 0.146708682179451, Test loss: 0.1448733986189589,  Test accuracy: 96.48
+	Model 2 Train loss: 0.15774668753147125, Test loss: 0.09961166569516063,  Test accuracy: 97.53
+Merge Iteration: 36
+	Model 1 Train loss: 0.14740322530269623, Test loss: 0.11264985651096794,  Test accuracy: 97.04
+	Model 2 Train loss: 0.15773440897464752, Test loss: 0.09643864900544286,  Test accuracy: 97.46
+Merge Iteration: 37
+	Model 1 Train loss: 0.14787979423999786, Test loss: 0.09785794602097012,  Test accuracy: 97.58
+	Model 2 Train loss: 0.1553896814584732, Test loss: 0.08995171206295491,  Test accuracy: 97.59
+Merge Iteration: 38
+	Model 1 Train loss: 0.15167875587940216, Test loss: 0.10185988203675952,  Test accuracy: 97.58
+	Model 2 Train loss: 0.1573803722858429, Test loss: 0.0901051039583981,  Test accuracy: 97.62
+Merge Iteration: 39
+	Model 1 Train loss: 0.1489458978176117, Test loss: 0.09805483258119785,  Test accuracy: 97.62
+	Model 2 Train loss: 0.1558455377817154, Test loss: 0.09805049540326,  Test accuracy: 97.55
+Merge Iteration: 40
+	Model 1 Train loss: 0.1456596553325653, Test loss: 0.10175447629599366,  Test accuracy: 97.47
+	Model 2 Train loss: 0.15612156689167023, Test loss: 0.0831382909141481,  Test accuracy: 97.87
+Merge Iteration: 41
+	Model 1 Train loss: 0.14814728498458862, Test loss: 0.09551682266381685,  Test accuracy: 97.49
+	Model 2 Train loss: 0.15607331693172455, Test loss: 0.08619694631993771,  Test accuracy: 97.74
+Merge Iteration: 42
+	Model 1 Train loss: 0.14738614857196808, Test loss: 0.09652063705874607,  Test accuracy: 97.71
+	Model 2 Train loss: 0.15701530873775482, Test loss: 0.08948065785765648,  Test accuracy: 97.58
+Merge Iteration: 43
+	Model 1 Train loss: 0.1480991095304489, Test loss: 0.09466301432503388,  Test accuracy: 97.64
+	Model 2 Train loss: 0.15831004083156586, Test loss: 0.07690620622336865,  Test accuracy: 97.99
+Merge Iteration: 44
+	Model 1 Train loss: 0.15002068877220154, Test loss: 0.09488830053035635,  Test accuracy: 97.79
+	Model 2 Train loss: 0.15790167450904846, Test loss: 0.09003006984964013,  Test accuracy: 97.88
+Merge Iteration: 45
+	Model 1 Train loss: 0.14862357079982758, Test loss: 0.10198939375636401,  Test accuracy: 97.63
+	Model 2 Train loss: 0.15567634999752045, Test loss: 0.09856025615781545,  Test accuracy: 97.66
+Merge Iteration: 46
+	Model 1 Train loss: 0.1468866914510727, Test loss: 0.10191471012247494,  Test accuracy: 97.55
+	Model 2 Train loss: 0.15835098922252655, Test loss: 0.08098573202975094,  Test accuracy: 97.97
+Merge Iteration: 47
+	Model 1 Train loss: 0.15230637788772583, Test loss: 0.09524982833920512,  Test accuracy: 97.79
+	Model 2 Train loss: 0.1557583510875702, Test loss: 0.0959520150065422,  Test accuracy: 97.59
+Merge Iteration: 48
+	Model 1 Train loss: 0.14789564907550812, Test loss: 0.0859022825517226,  Test accuracy: 97.95
+	Model 2 Train loss: 0.15431249141693115, Test loss: 0.07813679400905967,  Test accuracy: 98.05
+Merge Iteration: 49
+	Model 1 Train loss: 0.1494736522436142, Test loss: 0.08268609706191346,  Test accuracy: 98.06
+	Model 2 Train loss: 0.15694354474544525, Test loss: 0.06824511248022318,  Test accuracy: 98.25
+Merge Iteration: 50
+	Model 1 Train loss: 0.15190811455249786, Test loss: 0.08504003212982789,  Test accuracy: 98.1
+	Model 2 Train loss: 0.1583525836467743, Test loss: 0.06527461667004973,  Test accuracy: 98.34
+Merge Iteration: 51
+	Model 1 Train loss: 0.15085960924625397, Test loss: 0.0806833061389916,  Test accuracy: 98.24
+	Model 2 Train loss: 0.15558256208896637, Test loss: 0.07648777928948403,  Test accuracy: 98.11
+Merge Iteration: 52
+	Model 1 Train loss: 0.14789840579032898, Test loss: 0.09643911641742452,  Test accuracy: 97.88
+	Model 2 Train loss: 0.15646299719810486, Test loss: 0.07308938563913107,  Test accuracy: 98.18
+Merge Iteration: 53
+	Model 1 Train loss: 0.15025825798511505, Test loss: 0.07997636289556977,  Test accuracy: 98.13
+	Model 2 Train loss: 0.15961743891239166, Test loss: 0.07682635023146868,  Test accuracy: 98.15
+Merge Iteration: 54
+	Model 1 Train loss: 0.1522635817527771, Test loss: 0.08366600178974332,  Test accuracy: 98.12
+	Model 2 Train loss: 0.15845246613025665, Test loss: 0.07101227851510047,  Test accuracy: 98.26
+Merge Iteration: 55
+	Model 1 Train loss: 0.14987462759017944, Test loss: 0.07026068667108776,  Test accuracy: 98.41
+	Model 2 Train loss: 0.16036680340766907, Test loss: 0.07044415056183934,  Test accuracy: 98.2
+Merge Iteration: 56
+	Model 1 Train loss: 0.15360485017299652, Test loss: 0.07356790914852172,  Test accuracy: 98.3
+	Model 2 Train loss: 0.16036446392536163, Test loss: 0.06783176801279187,  Test accuracy: 98.41
+Merge Iteration: 57
+	Model 1 Train loss: 0.1530849039554596, Test loss: 0.07263686379055144,  Test accuracy: 98.46
+	Model 2 Train loss: 0.1587534099817276, Test loss: 0.06880703641818836,  Test accuracy: 98.45
+Merge Iteration: 58
+	Model 1 Train loss: 0.15060748159885406, Test loss: 0.07099069412481039,  Test accuracy: 98.44
+	Model 2 Train loss: 0.1606026589870453, Test loss: 0.06857210232578217,  Test accuracy: 98.38
+Merge Iteration: 59
+	Model 1 Train loss: 0.15092727541923523, Test loss: 0.07794221416628279,  Test accuracy: 98.37
+	Model 2 Train loss: 0.15807542204856873, Test loss: 0.06237131585860625,  Test accuracy: 98.46
+Merge Iteration: 60
+	Model 1 Train loss: 0.15022459626197815, Test loss: 0.07038439573192591,  Test accuracy: 98.5
+	Model 2 Train loss: 0.16195975244045258, Test loss: 0.06364742312217131,  Test accuracy: 98.43
+Merge Iteration: 61
+	Model 1 Train loss: 0.1525554656982422, Test loss: 0.07842833588569792,  Test accuracy: 98.34
+	Model 2 Train loss: 0.16054315865039825, Test loss: 0.05421122883716598,  Test accuracy: 98.67
+Merge Iteration: 62
+	Model 1 Train loss: 0.15599653124809265, Test loss: 0.06615192094566077,  Test accuracy: 98.62
+	Model 2 Train loss: 0.16336020827293396, Test loss: 0.06287722687320783,  Test accuracy: 98.46
+Merge Iteration: 63
+	Model 1 Train loss: 0.15337787568569183, Test loss: 0.07212045125124424,  Test accuracy: 98.48
+	Model 2 Train loss: 0.1598232537508011, Test loss: 0.05816753431223333,  Test accuracy: 98.47
+Merge Iteration: 64
+	Model 1 Train loss: 0.1508180946111679, Test loss: 0.07804204873733397,  Test accuracy: 98.49
+	Model 2 Train loss: 0.157090425491333, Test loss: 0.056081408631324305,  Test accuracy: 98.61
+Merge Iteration: 65
+	Model 1 Train loss: 0.15303805470466614, Test loss: 0.07202222203738566,  Test accuracy: 98.6
+	Model 2 Train loss: 0.1623407006263733, Test loss: 0.0582748201249633,  Test accuracy: 98.6
+Merge Iteration: 66
+	Model 1 Train loss: 0.1550101786851883, Test loss: 0.08008638111769033,  Test accuracy: 98.42
+	Model 2 Train loss: 0.1606418639421463, Test loss: 0.053979981550085356,  Test accuracy: 98.71
+Merge Iteration: 67
+	Model 1 Train loss: 0.15625348687171936, Test loss: 0.06652317531872477,  Test accuracy: 98.65
+	Model 2 Train loss: 0.16095764935016632, Test loss: 0.05412320758536225,  Test accuracy: 98.74
+Merge Iteration: 68
+	Model 1 Train loss: 0.1506519466638565, Test loss: 0.06740305142048655,  Test accuracy: 98.66
+	Model 2 Train loss: 0.16360221803188324, Test loss: 0.05152882963462908,  Test accuracy: 98.83
+Merge Iteration: 69
+	Model 1 Train loss: 0.15228955447673798, Test loss: 0.06678604382804497,  Test accuracy: 98.66
+	Model 2 Train loss: 0.16205544769763947, Test loss: 0.060285993951326236,  Test accuracy: 98.66
+Merge Iteration: 70
+	Model 1 Train loss: 0.15792343020439148, Test loss: 0.07240248077210654,  Test accuracy: 98.68
+	Model 2 Train loss: 0.16208408772945404, Test loss: 0.06931771063765045,  Test accuracy: 98.59
+Merge Iteration: 71
+	Model 1 Train loss: 0.152990460395813, Test loss: 0.06592300027296856,  Test accuracy: 98.72
+	Model 2 Train loss: 0.16530057787895203, Test loss: 0.05414204325359315,  Test accuracy: 98.82
+Merge Iteration: 72
+	Model 1 Train loss: 0.15563617646694183, Test loss: 0.07197824190333459,  Test accuracy: 98.57
+	Model 2 Train loss: 0.16458149254322052, Test loss: 0.053183609921159225,  Test accuracy: 98.82
+Merge Iteration: 73
+	Model 1 Train loss: 0.15365205705165863, Test loss: 0.06654610141515722,  Test accuracy: 98.67
+	Model 2 Train loss: 0.16571015119552612, Test loss: 0.05562187235119054,  Test accuracy: 98.79
+Merge Iteration: 74
+	Model 1 Train loss: 0.15685072541236877, Test loss: 0.06677228635595911,  Test accuracy: 98.72
+	Model 2 Train loss: 0.1606041043996811, Test loss: 0.057854000807367266,  Test accuracy: 98.7
+Merge Iteration: 75
+	Model 1 Train loss: 0.15408006310462952, Test loss: 0.06700602420195728,  Test accuracy: 98.68
+	Model 2 Train loss: 0.16253148019313812, Test loss: 0.05639901792516466,  Test accuracy: 98.81
+Merge Iteration: 76
+	Model 1 Train loss: 0.15304173529148102, Test loss: 0.08462311871302008,  Test accuracy: 98.42
+	Model 2 Train loss: 0.15813720226287842, Test loss: 0.05978451538789086,  Test accuracy: 98.58
+Merge Iteration: 77
+	Model 1 Train loss: 0.15584911406040192, Test loss: 0.07154059795619666,  Test accuracy: 98.72
+	Model 2 Train loss: 0.16102847456932068, Test loss: 0.05056318485161755,  Test accuracy: 98.84
+Merge Iteration: 78
+	Model 1 Train loss: 0.1582569181919098, Test loss: 0.060557063110300804,  Test accuracy: 98.85
+	Model 2 Train loss: 0.1648590862751007, Test loss: 0.04926017276008497,  Test accuracy: 98.91
+Merge Iteration: 79
+	Model 1 Train loss: 0.15604238212108612, Test loss: 0.06475206864286447,  Test accuracy: 98.85
+	Model 2 Train loss: 0.16086997091770172, Test loss: 0.05855087261504959,  Test accuracy: 98.67
+Merge Iteration: 80
+	Model 1 Train loss: 0.1553366482257843, Test loss: 0.07572686833441257,  Test accuracy: 98.55
+	Model 2 Train loss: 0.1605546474456787, Test loss: 0.0555773107751098,  Test accuracy: 98.71
+Merge Iteration: 81
+	Model 1 Train loss: 0.15452489256858826, Test loss: 0.07172129169523248,  Test accuracy: 98.65
+	Model 2 Train loss: 0.1638767123222351, Test loss: 0.05621494572205702,  Test accuracy: 98.81
+Merge Iteration: 82
+	Model 1 Train loss: 0.15956749022006989, Test loss: 0.06716884580212645,  Test accuracy: 98.73
+	Model 2 Train loss: 0.16652047634124756, Test loss: 0.055794033437733016,  Test accuracy: 98.77
+Merge Iteration: 83
+	Model 1 Train loss: 0.15926359593868256, Test loss: 0.06824997285329737,  Test accuracy: 98.69
+	Model 2 Train loss: 0.1633322685956955, Test loss: 0.05503235050152707,  Test accuracy: 98.74
+Merge Iteration: 84
+	Model 1 Train loss: 0.16124622523784637, Test loss: 0.06478837305288755,  Test accuracy: 98.81
+	Model 2 Train loss: 0.1645641326904297, Test loss: 0.052667607025935106,  Test accuracy: 98.86
+Merge Iteration: 85
+	Model 1 Train loss: 0.15715278685092926, Test loss: 0.06745075192684308,  Test accuracy: 98.86
+	Model 2 Train loss: 0.1634056717157364, Test loss: 0.05005751989077107,  Test accuracy: 98.85
+Merge Iteration: 86
+	Model 1 Train loss: 0.15610088407993317, Test loss: 0.059095175278309035,  Test accuracy: 98.92
+	Model 2 Train loss: 0.16199353337287903, Test loss: 0.048269165765095386,  Test accuracy: 98.95
+Merge Iteration: 87
+	Model 1 Train loss: 0.15756452083587646, Test loss: 0.05801519631929108,  Test accuracy: 98.86
+	Model 2 Train loss: 0.16491824388504028, Test loss: 0.0580962345282649,  Test accuracy: 98.75
+Merge Iteration: 88
+	Model 1 Train loss: 0.15946489572525024, Test loss: 0.06170752108376473,  Test accuracy: 98.83
+	Model 2 Train loss: 0.1618717461824417, Test loss: 0.05919397102603179,  Test accuracy: 98.73
+Merge Iteration: 89
+	Model 1 Train loss: 0.1593436449766159, Test loss: 0.06759627779553991,  Test accuracy: 98.81
+	Model 2 Train loss: 0.16822342574596405, Test loss: 0.052599938615629796,  Test accuracy: 98.89
+Merge Iteration: 90
+	Model 1 Train loss: 0.15666669607162476, Test loss: 0.06059278618244571,  Test accuracy: 98.87
+	Model 2 Train loss: 0.16677360236644745, Test loss: 0.05234724246648875,  Test accuracy: 98.9
+Merge Iteration: 91
+	Model 1 Train loss: 0.15494346618652344, Test loss: 0.06890621894826764,  Test accuracy: 98.67
+	Model 2 Train loss: 0.16239069402217865, Test loss: 0.05703691989608342,  Test accuracy: 98.79
+Merge Iteration: 92
+	Model 1 Train loss: 0.1583365499973297, Test loss: 0.06180462260225317,  Test accuracy: 98.85
+	Model 2 Train loss: 0.16285619139671326, Test loss: 0.05891134594742034,  Test accuracy: 98.77
+Merge Iteration: 93
+	Model 1 Train loss: 0.1564222127199173, Test loss: 0.06292880897297291,  Test accuracy: 98.83
+	Model 2 Train loss: 0.16668164730072021, Test loss: 0.05688537905358685,  Test accuracy: 98.81
+Merge Iteration: 94
+	Model 1 Train loss: 0.15787747502326965, Test loss: 0.0628831643409992,  Test accuracy: 98.86
+	Model 2 Train loss: 0.16493582725524902, Test loss: 0.0548338262537947,  Test accuracy: 98.95
+Merge Iteration: 95
+	Model 1 Train loss: 0.1552756279706955, Test loss: 0.06425970702155683,  Test accuracy: 98.93
+	Model 2 Train loss: 0.16672395169734955, Test loss: 0.05311515638070239,  Test accuracy: 99.01
+Merge Iteration: 96
+	Model 1 Train loss: 0.16036969423294067, Test loss: 0.06247171402769711,  Test accuracy: 98.87
+	Model 2 Train loss: 0.16781409084796906, Test loss: 0.05269833278730277,  Test accuracy: 98.97
+Merge Iteration: 97
+	Model 1 Train loss: 0.16227827966213226, Test loss: 0.05923225314543333,  Test accuracy: 98.95
+	Model 2 Train loss: 0.16833053529262543, Test loss: 0.05042321319444883,  Test accuracy: 99.0
+Merge Iteration: 98
+	Model 1 Train loss: 0.16018033027648926, Test loss: 0.06736399683661293,  Test accuracy: 98.8
+	Model 2 Train loss: 0.1672065258026123, Test loss: 0.05282275326880006,  Test accuracy: 99.01
+Merge Iteration: 99
+	Model 1 Train loss: 0.1621140092611313, Test loss: 0.06485867629752574,  Test accuracy: 98.86
+	Model 2 Train loss: 0.1667286604642868, Test loss: 0.05303334779472691,  Test accuracy: 98.97
+Merge Iteration: 100
+	Model 1 Train loss: 0.15768368542194366, Test loss: 0.06255173123420099,  Test accuracy: 98.84
+	Model 2 Train loss: 0.1659039705991745, Test loss: 0.0527560831463714,  Test accuracy: 98.99
+Merge Iteration: 101
+	Model 1 Train loss: 0.15887343883514404, Test loss: 0.06623825005317922,  Test accuracy: 98.78
+	Model 2 Train loss: 0.16417580842971802, Test loss: 0.056356399663005326,  Test accuracy: 98.9
+Merge Iteration: 102
+	Model 1 Train loss: 0.15812455117702484, Test loss: 0.06216917896615778,  Test accuracy: 98.88
+	Model 2 Train loss: 0.16570815443992615, Test loss: 0.05158026350982611,  Test accuracy: 99.0
+Merge Iteration: 103
+	Model 1 Train loss: 0.16200534999370575, Test loss: 0.07086124260954675,  Test accuracy: 98.73
+	Model 2 Train loss: 0.16425345838069916, Test loss: 0.05518137528288556,  Test accuracy: 98.92
+Merge Iteration: 104
+	Model 1 Train loss: 0.15916962921619415, Test loss: 0.06464911349367904,  Test accuracy: 98.83
+	Model 2 Train loss: 0.1672723889350891, Test loss: 0.05698797601881252,  Test accuracy: 98.91
+Merge Iteration: 105
+	Model 1 Train loss: 0.1612500250339508, Test loss: 0.06728710597556783,  Test accuracy: 98.81
+	Model 2 Train loss: 0.1679505705833435, Test loss: 0.05231921694824732,  Test accuracy: 99.02
+Merge Iteration: 106
+	Model 1 Train loss: 0.16019880771636963, Test loss: 0.06834833027130226,  Test accuracy: 98.83
+	Model 2 Train loss: 0.16322781145572662, Test loss: 0.05889477809227337,  Test accuracy: 98.9
+Merge Iteration: 107
+	Model 1 Train loss: 0.15782088041305542, Test loss: 0.06897876056102686,  Test accuracy: 98.77
+	Model 2 Train loss: 0.16597311198711395, Test loss: 0.05736327383140515,  Test accuracy: 98.92
+Merge Iteration: 108
+	Model 1 Train loss: 0.15782074630260468, Test loss: 0.06822321932897321,  Test accuracy: 98.81
+	Model 2 Train loss: 0.167347252368927, Test loss: 0.06448387566060437,  Test accuracy: 98.78
+Merge Iteration: 109
+	Model 1 Train loss: 0.1569431871175766, Test loss: 0.07186890567326627,  Test accuracy: 98.84
+	Model 2 Train loss: 0.16584168374538422, Test loss: 0.059471688171907955,  Test accuracy: 98.85
+Merge Iteration: 110
+	Model 1 Train loss: 0.1616157740354538, Test loss: 0.06614658323123986,  Test accuracy: 98.87
+	Model 2 Train loss: 0.16744586825370789, Test loss: 0.056261316207360766,  Test accuracy: 98.93
+Merge Iteration: 111
+	Model 1 Train loss: 0.16185042262077332, Test loss: 0.06613801991636174,  Test accuracy: 98.84
+	Model 2 Train loss: 0.16850745677947998, Test loss: 0.06028608084723851,  Test accuracy: 98.85
