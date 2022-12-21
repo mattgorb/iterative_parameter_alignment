@@ -237,8 +237,7 @@ class Trainer:
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
-                print(
-                    f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+                print( f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
@@ -276,7 +275,10 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
-
+            if batch_idx % self.args.log_interval == 0:
+                print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
+                    0, batch_idx * len(data), len(self.train_loader.dataset),
+                           100. * batch_idx / len(self.train_loader), loss.item()))
 
             if self.args.graphs:
                 if self.model.fc1.weight is not None:
@@ -434,6 +436,8 @@ def main():
     args = parser.parse_args()
     set_seed(args.seed)
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
+    print(f'Using Device {device}')
+
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
