@@ -218,8 +218,8 @@ def get_datasets(args):
         print(len(dataset1.data[:]))
         print(dataset1.data[[0,1],:,:,:].shape)
 
-        dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
-        dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
+        dataset1.data, dataset1.targets = dataset1.data[ds1_indices,:,:,:], dataset1.targets[ds1_indices]
+        dataset2.data, dataset2.targets = dataset2.data[ds2_indices,:,:,:], dataset2.targets[ds2_indices]
         assert (set(ds1_indices).isdisjoint(ds2_indices))
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
