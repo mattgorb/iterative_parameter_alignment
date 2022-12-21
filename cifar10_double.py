@@ -166,9 +166,9 @@ class Conv4(nn.Module):
 
 def get_datasets(args):
     # not using normalization
-    transform = transforms.Compose([
-        transforms.ToTensor(),
-    ])
+    #transform = transforms.Compose([
+        #transforms.ToTensor(),
+    #])
     normalize = transforms.Normalize(
         mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
     )
@@ -214,12 +214,13 @@ def get_datasets(args):
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
         dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
         '''
-        print(ds2_indices)
+        print(dataset1.data.size())
+        print(dataset1.targets.size())
         print(len(ds1_indices))
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         assert (set(ds1_indices).isdisjoint(ds2_indices))
-        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
