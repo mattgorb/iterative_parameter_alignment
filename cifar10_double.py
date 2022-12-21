@@ -275,7 +275,7 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
-            if batch_idx % self.args.log_interval == 0:
+            if batch_idx % 10 == 0:
                 print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}'.format(
                     0, batch_idx * len(data), len(self.train_loader.dataset),
                            100. * batch_idx / len(self.train_loader), loss.item()))
