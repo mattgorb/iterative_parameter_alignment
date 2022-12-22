@@ -46,9 +46,10 @@ class ConvMerge(nn.Conv2d):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
+            if self.args.align_loss=='ae':
+                weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            elif self.args.align_loss=='se':
+                weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -74,10 +75,11 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
+
+            if self.args.align_loss=='ae':
+                weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            elif self.args.align_loss=='se':
+                weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 class Conv4(nn.Module):
@@ -312,10 +314,7 @@ class Trainer:
                             self.wa1_norm_list.append(None)
                             self.wa2_norm_list.append(None)
 
-        #print('losss')
-        #print(self.criterion(output, target) )
-        #print(self.args.weight_align_factor * weight_align)
-        #print(self.criterion(output, target) /(self.args.weight_align_factor * weight_align))
+
         if self.args.graphs:
             if self.model.fc1.weight is not None:
                 self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
@@ -433,6 +432,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=20000,
                         help='number of iterations to merge')
+    parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=int, default=250, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
