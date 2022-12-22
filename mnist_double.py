@@ -314,7 +314,7 @@ class Merge_Iterator:
             for iter2 in range(1):
             #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
-                print(model2_trainer.model.fc1.weight[0][:10])
+                print(model2_trainer.model.fc2.weight[0][:10])
                 model2_trainer.fit()
                 if iter>0:
                     wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
