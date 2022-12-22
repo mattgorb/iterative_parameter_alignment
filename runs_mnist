@@ -12,6 +12,6 @@ nohup python -u mnist_single.py --graphs=True > ~/iwa/mnist_single.txt 2>&1 &
 
 nohup python -u mnist_double_cnn.py --gpu=1> ~/iwa/mnist_double_cnn.txt 2>&1 &
 nohup python -u mnist_double_cnn.py --gpu=1 --baseline=True --epochs=250> ~/iwa/mnist_double_cnn_baseline.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=1 --baseline=True --epochs=250 > ~/iwa/cifar10_baseline.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=1 --align_loss='se'> ~/iwa/cifar10_se.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=1 --align_loss='ae'> ~/iwa/cifar10_ae.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=2 --baseline=True --epochs=250 > ~/iwa/cifar10_baseline.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=3 --align_loss='se'> ~/iwa/cifar10_se.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=4 --align_loss='ae'> ~/iwa/cifar10_ae.txt 2>&1 &
