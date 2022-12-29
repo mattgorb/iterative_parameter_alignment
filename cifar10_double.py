@@ -196,7 +196,7 @@ def get_datasets(args):
         return train_loader, test_loader
     else:
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
-        dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=test_transform)
+        dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
         # split dataset in half by labels
         labels = np.unique(dataset1.targets)
         ds1_labels = labels[:len(labels) // 2]
@@ -211,6 +211,7 @@ def get_datasets(args):
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
         ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
         '''
+
         '''
         #use this code to split dataset down middle. need to test
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
@@ -220,6 +221,7 @@ def get_datasets(args):
         dataset1.data,dataset1.targets = dataset1.data[ds1_indices],list(np.array(dataset1.targets)[ds1_indices])
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
         assert (set(ds1_indices).isdisjoint(ds2_indices))
+
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
@@ -267,22 +269,6 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                self.train_iter_list.append(self.train_iter)
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-
-                else:
-                    self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)
-
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
 
             data, target = data.to(self.device), target.to(self.device)
@@ -297,36 +283,7 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
-            if self.args.graphs:
-                if self.model.fc1.weight is not None:
-                    if batch_idx in [10,25,50,75]:
-                        self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                        self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                        self.train_iter_list.append(self.train_iter)
-                if hasattr(self.model.fc1, 'weight_align'):
 
-                    if self.model.fc1.weight_align is not None:
-                        if batch_idx in [10,25,50,75]:
-                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                    else:
-                        if batch_idx in [10, 25, 50, 75]:
-                            self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
-
-
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                self.train_iter_list.append(self.train_iter)
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                else:
-                        self.wa1_norm_list.append(None)
-                        self.wa2_norm_list.append(None)
 
 
 
