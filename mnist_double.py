@@ -37,7 +37,8 @@ class LinearMerge(nn.Linear):
         self.args = args
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        if self.args.kn_init:
+            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
         #self.args.weight_seed+=1
 
@@ -141,11 +142,11 @@ class Trainer:
         self.train_iter=0
 
     def fit(self, log_output=False):
-        self.train_loss = 1e6
+
         self.train_iter+=1
         for epoch in range(1, self.args.epochs + 1):
-            epoch_loss = self.train()
-            self.train_loss = epoch_loss
+            self.train()
+
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
@@ -162,6 +163,7 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
+        train_loss_ce=0
 
         if self.args.graphs:
             if self.model.fc1.weight is not None:
@@ -190,6 +192,8 @@ class Trainer:
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             train_loss += loss
+            train_loss_ce += self.criterion(output, target)
+
             loss.backward()
             self.optimizer.step()
 
@@ -223,10 +227,8 @@ class Trainer:
                         self.wa1_norm_list.append(None)
                         self.wa2_norm_list.append(None)
 
-
-
-        train_loss /= len(self.train_loader.dataset)
-        return train_loss
+        self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
+        self.train_loss= train_loss / len(self.train_loader.dataset)
 
     def test(self, ):
         self.model.eval()
@@ -314,7 +316,6 @@ class Merge_Iterator:
             for iter2 in range(1):
             #for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
-                print(model2_trainer.model.fc2.weight[0][:10])
                 model2_trainer.fit()
                 if iter>0:
                     wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
@@ -361,9 +362,10 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
-    parser.add_argument('--merge_iter', type=int, default=20000,
+    parser.add_argument('--merge_iter', type=int, default=10000,
                         help='number of iterations to merge')
     parser.add_argument('--weight_align_factor', type=int, default=250, )
+    parser.add_argument('--kn_init', type=bool, default=False)
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,

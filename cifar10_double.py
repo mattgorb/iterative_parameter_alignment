@@ -33,9 +33,12 @@ class ConvMerge(nn.Conv2d):
 
     def init(self, args):
         self.args = args
+
         set_seed(self.args.weight_seed)
+
         # this isn't default initialization.  not sure if necessary, need to test.
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        if self.args.kn_init:
+            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
         # self.args.weight_seed+=1
 
@@ -68,7 +71,8 @@ class LinearMerge(nn.Linear):
         self.args = args
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        if self.args.kn_init:
+            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
 
     def forward(self, x):
@@ -174,20 +178,24 @@ def get_datasets(args):
     normalize = transforms.Normalize(
         mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
     )
-    train_transform = transforms.Compose(
-        [
-            transforms.RandomCrop(32, padding=4),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            normalize,
-        ]
-    )
+
     test_transform = transforms.Compose(
         [
             transforms.ToTensor(),
             normalize,
         ]
     )
+    if args.data_transform:
+        train_transform = transforms.Compose(
+            [
+                transforms.RandomCrop(32, padding=4),
+                transforms.RandomHorizontalFlip(),
+                transforms.ToTensor(),
+                normalize,
+            ]
+        )
+    else:
+        train_transform=test_transform
     if args.baseline:
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
@@ -248,11 +256,9 @@ class Trainer:
         self.train_iter=0
 
     def fit(self, log_output=False):
-        self.train_loss = 1e6
         self.train_iter+=1
         for epoch in range(1, self.args.epochs + 1):
-            epoch_loss = self.train()
-            self.train_loss = epoch_loss
+            self.train()
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
@@ -267,7 +273,8 @@ class Trainer:
 
     def train(self, ):
         self.model.train()
-        train_loss = 0
+        train_loss_ce=0
+        train_loss=0
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
 
@@ -280,15 +287,12 @@ class Trainer:
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             train_loss += loss
+            train_loss_ce += self.criterion(output, target)
             loss.backward()
             self.optimizer.step()
 
-
-
-
-
-        train_loss /= len(self.train_loader.dataset)
-        return train_loss
+        self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
+        self.train_loss= train_loss / len(self.train_loader.dataset)
 
     def test(self, ):
         self.model.eval()
@@ -360,11 +364,13 @@ class Merge_Iterator:
         model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
-
+        lr_schedule = [self.args.lr for i in range(int(self.args.merge_iter*0.5))] + \
+                      [self.args.lr*.1 for i in range(int(self.args.merge_iter*0.25))]   + \
+                      [self.args.lr*.01 for i in range(int(self.args.merge_iter*0.25))]
         for iter in range(merge_iterations):
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=lr_schedule[iter])
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=lr_schedule[iter])
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             for iter2 in range(1):
@@ -389,6 +395,8 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=20000,
                         help='number of iterations to merge')
+    parser.add_argument('--data_transform', type=bool, default=False)
+    parser.add_argument('--kn_init', type=bool, default=False)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=int, default=250, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
