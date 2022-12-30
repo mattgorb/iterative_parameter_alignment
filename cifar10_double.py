@@ -382,13 +382,13 @@ class Merge_Iterator:
                 set_weight_align_param(model1, model2, self.args)
 
             print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
+                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 
 def main():
     # Training settings
-    parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+    parser = argparse.ArgumentParser(description='PyTorch Weight Align')
     parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
