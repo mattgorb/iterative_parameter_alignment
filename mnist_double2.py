@@ -26,8 +26,6 @@ def linear_init(in_dim, out_dim, bias=False, args=None, ):
     return layer
 
 
-
-
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,7 +37,7 @@ class LinearMerge(nn.Linear):
         # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        self.args.weight_seed+=1
+        # self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -282,7 +280,7 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
+        intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
@@ -310,9 +308,8 @@ class Merge_Iterator:
             model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
             model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
-            #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            for iter2 in range(1):
-            #for iter2 in range(intra_merge_iterations[iter]):
+            print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
+            for iter2 in range(intra_merge_iterations[iter]):
                 model1_trainer.fit()
                 model2_trainer.fit()
                 if iter>0:
