@@ -78,7 +78,7 @@ def get_datasets(args):
     #not using normalization
     transform=transforms.Compose([
         transforms.ToTensor(),
-        #transforms.Normalize((0.1307,), (0.3081,))
+        transforms.Normalize((0.1307,), (0.3081,))
         ])
 
     if args.baseline:
