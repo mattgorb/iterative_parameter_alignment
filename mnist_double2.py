@@ -9,8 +9,7 @@ from torch.utils.data import DataLoader
 import math
 import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from matplotlib import pyplot as plt
-import pandas as pd
+
 
 def set_seed(seed):
     random.seed(seed)
@@ -36,8 +35,7 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        # self.args.weight_seed+=1
+        self.args.weight_seed += 1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -121,7 +119,7 @@ def get_datasets(args):
 
 
 class Trainer:
-    def __init__(self, args, datasets, model, device, save_path, model_name):
+    def __init__(self, args, datasets, model, device, save_path, ):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
@@ -129,26 +127,20 @@ class Trainer:
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
         self.save_path = save_path
-        self.model_name = model_name
-        self.fc1_norm_list = []
-        self.fc2_norm_list = []
-        self.wa1_norm_list = []
-        self.wa2_norm_list = []
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
-            self.train_loss = epoch_loss
-            test_loss, test_acc = self.test()
-            self.test_loss = test_loss
-            self.test_acc = test_acc
-
-            #if epoch_loss < self.train_loss:
-                #torch.save(self.model.state_dict(), self.save_path)
-            if log_output:
-                print(
-                    f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+            if epoch_loss < self.train_loss:
+                self.train_loss = epoch_loss
+                torch.save(self.model.state_dict(), self.save_path)
+                test_loss, test_acc = self.test()
+                self.test_loss = test_loss
+                self.test_acc = test_acc
+                if log_output:
+                    print(
+                        f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
@@ -156,24 +148,7 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
-
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-
-                else:
-                    self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)
-
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
-
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
@@ -185,39 +160,6 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
-
-            if self.args.graphs:
-                if self.model.fc1.weight is not None:
-                    if batch_idx in [10,25,50,75]:
-                        self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                        self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-                if hasattr(self.model.fc1, 'weight_align'):
-
-                    if self.model.fc1.weight_align is not None:
-                        if batch_idx in [10,25,50,75]:
-                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                    else:
-                        if batch_idx in [10, 25, 50, 75]:
-                            self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
-
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                    self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                    self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                else:
-                        self.wa1_norm_list.append(None)
-                        self.wa2_norm_list.append(None)
-
-
-
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
@@ -225,7 +167,6 @@ class Trainer:
         self.model.eval()
         test_loss = 0
         correct = 0
-
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
@@ -237,7 +178,7 @@ class Trainer:
         return test_loss, 100. * correct / len(self.test_loader.dataset)
 
 
-def set_weight_align_param(model1, model2, args):
+def set_weight_align_param(model1, model2, ):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
@@ -249,16 +190,12 @@ def set_weight_align_param(model1, model2, args):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
-            # We only want to merge one models weights in this file
-            # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
-            # if args.detach():
-            #m2.weight_align = nn.Parameter(m1.weight.clone().detach(), requires_grad=True)
-            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+
 
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
-
         self.args = args
         self.device = device
         self.weight_dir = weight_dir
@@ -266,76 +203,29 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model, save_path, train_dataset, model_name):
+    def train_single(self, model, save_path, train_dataset, ):
         '''
         ****** We need to initialize a new optimizer during each iteration.
         Not sure why, but this is the only way it works.
         '''
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, model_name)
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
         return trainer
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        intra_merge_iterations=[25 for i in range(2)]+[15 for i in range(2)]+[10 for i in range(2)]+[5 for i in range(4)]+[2 for i in range(10)]+[1 for i in range(1000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
-        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
-                                 f'{self.weight_dir}model1_0.pt', 'model1_double')
-        model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
-                                 f'{self.weight_dir}model2_0.pt', 'model2_double')
-
-        wd1=[]
-        wd2=[]
-
-
-        #model1_trainer.optimizer = optim.SGD(model1.parameters(),lr=self.args.lr )
-        #model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         for iter in range(merge_iterations):
-            #model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,'model1_single')
-            #model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, 'model2_single')
+            model1_trainer = self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1, )
 
-            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
-            model1_trainer.optimizer = optim.Adadelta(model1.parameters(), )
-            model2_trainer.optimizer = optim.Adadelta(model2.parameters(), )
-
-            #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            #for iter2 in range(intra_merge_iterations[iter]):
-            for iter2 in range(1):
-                model1_trainer.fit()
-                model2_trainer.fit()
-                if iter>0:
-                    wd1.append(torch.sum((model1_trainer.model.fc1.weight-model2_trainer.model.fc1.weight).abs()).detach().cpu().item())
-                    wd2.append(torch.sum((model1_trainer.model.fc2.weight-model2_trainer.model.fc2.weight).abs()).detach().cpu().item())
-            #print(wd1)
-            #print(wd2)
-
-            if iter==0:
-                set_weight_align_param(model1, model2, self.args)
-
-
-
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
+            set_weight_align_param(model1, model2, )
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-
-            df=pd.DataFrame({'model1_fc1':model1_trainer.fc1_norm_list,
-                             'model1_fc2':model1_trainer.fc2_norm_list,
-                             'model2_fc1': model2_trainer.fc1_norm_list,
-                             'model2_fc2':model2_trainer.fc2_norm_list,
-                             'model2_wa1':model2_trainer.wa1_norm_list,
-                             'model2_wa2':model2_trainer.wa2_norm_list,
-                             'model1_wa1': model1_trainer.wa1_norm_list,
-                             'model1_wa2': model1_trainer.wa2_norm_list
-                             })
-            df.to_csv('norms/norms_double.csv')
-
-            df=pd.DataFrame({'weight_diff_layer1':wd1,
-                             'weight_diff_layer2':wd2})
-            df.to_csv('norms/weight_diff_double.csv')
 
 def main():
     # Training settings
@@ -358,7 +248,6 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
-    parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
     args = parser.parse_args()
@@ -369,7 +258,7 @@ def main():
         train_loader1, test_dataset = get_datasets(args)
         model = Net(args, weight_merge=False).to(device)
         save_path = f'{weight_dir}mnist_baseline.pt'
-        trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
+        trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path)
         trainer.fit(log_output=True)
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
