@@ -125,6 +125,7 @@ class Trainer:
         self.train_loader, self.test_loader = datasets[0], datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
+        # self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device = device
         self.save_path = save_path
 
@@ -141,6 +142,7 @@ class Trainer:
                 if log_output:
                     print(
                         f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+            # self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
@@ -206,10 +208,8 @@ class Merge_Iterator:
         self.test_dataset = datasets[2]
 
     def train_single(self, model, save_path, train_dataset, ):
-        '''
-        ****** We need to initialize a new optimizer during each iteration.
-        Not sure why, but this is the only way it works.
-        '''
+        # we need to initialize a new optimizer during each iteration.
+        # not sure why, but this is the only way it works.
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
         return trainer
@@ -222,22 +222,31 @@ class Merge_Iterator:
             model1_trainer = self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1, )
             model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
             set_weight_align_param(model1, model2, )
+
             print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train loss: {model1_trainer.test_acc},  Test accuracy: {model1_trainer.test_acc}\n'
+                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train loss: {model2_trainer.test_acc},  Test accuracy: {model2_trainer.test_acc}')
 
 
 def main():
     # Training settings
+
+    @ @
+
+    -249, 7 + 249, 7 @ @
+
+    def main():
+
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
-    parser.add_argument('--merge_iter', type=int, default=20000,
+    parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
     parser.add_argument('--weight_align_factor', type=int, default=250, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
+
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
                         help='Learning rate step gamma (default: 0.7)')
