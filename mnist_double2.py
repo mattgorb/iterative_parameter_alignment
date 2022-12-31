@@ -31,21 +31,17 @@ class LinearMerge(nn.Linear):
     def init(self,args):
         self.args=args
         set_seed(self.args.weight_seed)
-        #this isn't default initialization.  not sure if necessary, need to test.
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    #not sure if reinitializing weights helps convergence.  need to test.
-    def reset_weights(self,):
-        self.args.weight_seed+=1
-        set_seed(self.args.weight_seed)
+        #this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff=None
+        weights_diff=torch.tensor(0)
         if self.weight_align is not None:
             #using absolute error here.  Need to test using MSE loss
-            weights_diff=torch.sum((self.weight-self.weight_align)**2)
+            weights_diff=torch.mean((self.weight-self.weight_align).abs())
+            #weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -64,13 +60,10 @@ class Net(nn.Module):
             self.fc2 = nn.Linear(1024, 10, bias=False)
     def forward(self, x, ):
         if self.weight_merge:
-            x,sd1 = self.fc1(x.view(-1, 28*28))
+            x,wa1 = self.fc1(x.view(-1, 28*28))
             x = F.relu(x)
-            x,sd2= self.fc2(x)
-            if sd1 is not None:
-                score_diff=sd1+sd2
-            else:
-                score_diff=torch.tensor(0)
+            x,wa2= self.fc2(x)
+            score_diff=wa1+wa2
             return x, score_diff
         else:
             x = self.fc1(x.view(-1, 28*28))
@@ -131,28 +124,28 @@ def get_datasets(args):
         return train_loader1, train_loader2, test_loader
 
 class Trainer:
-    def __init__(self, args,datasets, model, device, save_path, epochs):
+    def __init__(self, args,datasets, model, device, save_path,):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader=datasets[0],datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion=nn.CrossEntropyLoss(reduction='mean')
-        self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
+        #self.scheduler = CosineAnnealingLR(self.optimizer, T_max=epochs)
         self.device=device
         self.save_path=save_path
-        self.epochs=epochs
 
     def fit(self):
-        self.best_loss=1e6
-        for epoch in range(1, self.epochs + 1):
-            print(f'Epoch {epoch}')
-            train_loss = self.train()
-            if train_loss<self.best_loss:
-                self.best_loss=train_loss
-                print(f'Saving model with train loss {train_loss}')
+        self.train_loss=1e6
+        for epoch in range(1, self.args.epochs + 1):
+            epoch_loss = self.train()
+            if epoch_loss<self.train_loss:
+                self.train_loss=epoch_loss
                 torch.save(self.model.state_dict(), self.save_path)
-                self.test()
-            self.scheduler.step()
+                test_loss, test_acc=self.test()
+
+                self.test_loss=test_loss
+                self.test_acc=test_acc
+            #self.scheduler.step()
 
     def model_loss(self):
         return self.best_loss
@@ -166,12 +159,12 @@ class Trainer:
             output, sd = self.model(data)
 
             '''
-            5000 works for this particular combination, summing both CrossEntropyLoss and weight alignment
+            250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             Taking mean of CE and sum of weight alignment might make this hyperparameter unnecessary.
             For model w/o weight alignment paramter, second part of loss is 0
-            When 5000 isn't used, the model converges too quickly towards second models dataset.  
+            When 250 isn't used, the model converges too quickly towards second models dataset.  
             '''
-            loss = self.criterion(output, target)+5000*sd
+            loss = self.criterion(output, target)+1*sd
             train_loss+=loss
             loss.backward()
             self.optimizer.step()
@@ -191,14 +184,12 @@ class Trainer:
                 correct += pred.eq(target.view_as(pred)).sum().item()
 
         test_loss /= len(self.test_loader.dataset)
-
-        print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
-            test_loss, correct, len(self.test_loader.dataset),
-            100. * correct / len(self.test_loader.dataset)))
+        return test_loss, 100.*correct / len(self.test_loader.dataset)
 
 
-def set_weight_align_param(model1, model2,):
-    print("=> Generating MLC mask")
+
+
+def set_weight_align_param(model1, model2,reverse=False):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1,m1=model1_mods
         n2,m2=model2_mods
@@ -210,7 +201,10 @@ def set_weight_align_param(model1, model2,):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
-            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            if reverse:
+                m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            else:
+                m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             #m2.reset_weights()
 
 class Merge_Iterator:
@@ -222,34 +216,34 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model,save_path, train_dataset,epochs ):
+    def train_single(self, model,save_path, train_dataset, ):
         #not sure if we need to initialize a new training optimizer etc. during each iteration.  need to test.
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, epochs)
+        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, )
         trainer.fit()
         return trainer
 
     def run(self):
         merge_iterations=20
+        model1 = Net(self.args, weight_merge=True).to(self.device)
+        model2 = Net(self.args, weight_merge=True).to(self.device)
         for iter in range(merge_iterations):
 
-            if iter==0:
-                reference_model = Net(self.args, weight_merge=False ).to(self.device)
-                merge_model = Net(self.args, weight_merge=True).to(self.device)
+            model1_trainer=self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1,)
+            set_weight_align_param(model1, model2,)
+            model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt' ,self.train_loader2,)
+            set_weight_align_param(model1, model2,reverse=True)
 
-            print(f"Merge Iterator: {iter}, training model 1")
-            self.train_single(reference_model, f'{self.weight_dir}reference_model_{iter}.pt', self.train_loader1, self.args.ref_epochs)
-            set_weight_align_param(reference_model, merge_model,)
-            print(f"Merge Iterator: {iter}, training model 2")
-            self.train_single(merge_model, f'{self.weight_dir}model_2_{iter}.pt' ,self.train_loader2,self.args.merge_epochs)
+            if iter%1==0:
+                print(f'Merge Iteration: {iter} \n'
+                      f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train loss: {model1_trainer.test_acc},  Test accuracy: {model1_trainer.test_acc}\n'
+                      f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train loss: {model2_trainer.test_acc},  Test accuracy: {model2_trainer.test_acc}')
 
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
     parser.add_argument('--batch-size', type=int, default=256, metavar='N',
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--ref_epochs', type=int, default=10, metavar='N',
-                        help='number of epochs to train')
-    parser.add_argument('--merge_epochs', type=int, default=20, metavar='N',
+    parser.add_argument('--epochs', type=int, default=1, metavar='N',
                         help='number of epochs to train')
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
@@ -271,10 +265,16 @@ def main():
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir=f'{args.base_dir}mlc_weights/'
-
-    train_loader1, train_loader2, test_dataset=get_datasets(args)
-    merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
-    merge_iterator.run()
+    if args.baseline:
+        train_loader1, test_dataset = get_datasets(args)
+        model = Net(args, sparse=False).to(device)
+        save_path=f'{weight_dir}mnist_baseline.pt'
+        trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
+        trainer.fit()
+    else:
+        train_loader1, train_loader2, test_dataset=get_datasets(args)
+        merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
+        merge_iterator.run()
 
 if __name__ == '__main__':
 
