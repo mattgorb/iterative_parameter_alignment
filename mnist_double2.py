@@ -271,16 +271,10 @@ def main():
 
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir=f'{args.base_dir}mlc_weights/'
-    if args.baseline:
-        train_loader1, test_dataset = get_datasets(args)
-        model = Net(args, sparse=False).to(device)
-        save_path=f'{weight_dir}mnist_baseline.pt'
-        trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
-        trainer.fit()
-    else:
-        train_loader1, train_loader2, test_dataset=get_datasets(args)
-        merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
-        merge_iterator.run()
+
+    train_loader1, train_loader2, test_dataset=get_datasets(args)
+    merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
+    merge_iterator.run()
 
 if __name__ == '__main__':
 
