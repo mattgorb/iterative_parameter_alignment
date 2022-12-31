@@ -136,7 +136,7 @@ class Trainer:
         self.device=device
         self.save_path=save_path
 
-    def fit(self, log_output=False):
+    def fit(self, print=False):
         self.train_loss=1e6
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
@@ -147,7 +147,7 @@ class Trainer:
 
                 self.test_loss=test_loss
                 self.test_acc=test_acc
-                if log_output:
+                if print:
                     print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
             #self.scheduler.step()
 
@@ -239,8 +239,8 @@ class Merge_Iterator:
 
 
             print(f'Merge Iteration: {iter} \n'
-                      f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_acc},  Test accuracy: {model1_trainer.test_acc}\n'
-                      f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_acc},  Test accuracy: {model2_trainer.test_acc}')
+                      f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train loss: {model1_trainer.test_acc},  Test accuracy: {model1_trainer.test_acc}\n'
+                      f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train loss: {model2_trainer.test_acc},  Test accuracy: {model2_trainer.test_acc}')
 
 def main():
     # Training settings
@@ -249,7 +249,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
-    parser.add_argument('--merge_iter', type=int, default=20000,
+    parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
     parser.add_argument('--weight_align_factor', type=int, default=250,)
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
@@ -275,7 +275,7 @@ def main():
         model = Net(args, weight_merge=False).to(device)
         save_path=f'{weight_dir}mnist_baseline.pt'
         trainer=Trainer(args,[train_loader1, test_dataset], model, device, save_path)
-        trainer.fit(log_output=True)
+        trainer.fit(print=True)
     else:
         train_loader1, train_loader2, test_dataset=get_datasets(args)
         merge_iterator=Merge_Iterator(args,[train_loader1,train_loader2,test_dataset], device,weight_dir)
