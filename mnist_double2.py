@@ -35,7 +35,6 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        self.args.weight_seed += 1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -79,6 +78,7 @@ def get_datasets(args):
     # not using normalization
     transform = transforms.Compose([
         transforms.ToTensor(),
+        # transforms.Normalize((0.1307,), (0.3081,))
     ])
     if args.baseline:
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
@@ -123,7 +123,7 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=1e-3)
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
         self.save_path = save_path
@@ -153,8 +153,10 @@ class Trainer:
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
             '''
-            weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
-            For model w/o weight alignment paramter, second part of loss is 0  
+            250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
+            Taking mean of CE and sum of weight alignment might make this hyperparameter unnecessary.
+            For model w/o weight alignment paramter, second part of loss is 0
+            When 250 isn't used, the model converges too quickly towards second models dataset.  
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             train_loss += loss
@@ -214,12 +216,10 @@ class Merge_Iterator:
 
     def run(self):
         merge_iterations = self.args.merge_iter
-
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
         for iter in range(merge_iterations):
             model1_trainer = self.train_single(model1, f'{self.weight_dir}model1_{iter}.pt', self.train_loader1, )
-
             model2_trainer = self.train_single(model2, f'{self.weight_dir}model2_{iter}.pt', self.train_loader2, )
             set_weight_align_param(model1, model2, )
             print(f'Merge Iteration: {iter} \n'
@@ -253,7 +253,7 @@ def main():
     args = parser.parse_args()
     set_seed(args.seed)
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
-    weight_dir = f'{args.base_dir}iwa_weights/'
+    weight_dir = f'{args.base_dir}mlc_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
         model = Net(args, weight_merge=False).to(device)
