@@ -33,8 +33,8 @@ nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --kn_init=True --dat
 
 
 THIRD
-nohup python -u mnist_double.py --gpu=1 --kn_init=True> ~/iwa/mnist_double_kn_init.txt 2>&1 & #0.065 test loss after 10,000
-nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True> ~/iwa/mnist_double_cnn_kn_init.txt 2>&1 & #0.034 test loss after 1,300 epochs
+nohup python -u mnist_double.py --gpu=1 --kn_init=True --weight_align_factor=10 > ~/iwa/mnist_double_kn_init_waf_10.txt 2>&1 &
+nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True --weight_align_factor=10> ~/iwa/mnist_double_cnn_kn_init_waf_10.txt 2>&1 &
 
 
 

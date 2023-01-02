@@ -364,9 +364,13 @@ class Merge_Iterator:
         model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
-        lr_schedule = [self.args.lr for i in range(int(self.args.merge_iter*0.25))] + \
-                      [self.args.lr*.1 for i in range(int(self.args.merge_iter*0.25))]   + \
-                      [self.args.lr*.01 for i in range(int(self.args.merge_iter*0.5))]
+        lr_schedule = [0.001 for i in range(5000)] + \
+                      [0.0005 for i in range(2500)] + \
+                      [0.0001 for i in range(2500)] + \
+                      [0.00005 for i in range(1000)] + \
+                      [0.000025 for i in range(1000)] + \
+                      [0.00001 for i in range(3000)] + \
+                      [0.000001 for i in range(5000)]
         for iter in range(merge_iterations):
 
             model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=lr_schedule[iter])
