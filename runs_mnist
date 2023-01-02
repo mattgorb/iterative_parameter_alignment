@@ -18,17 +18,25 @@ SECOND
 2.  mnist double cnn with and without kn_init
 3.  cifar10 with and without kn_init, ae, transform, without transform
 
-nohup python -u mnist_double.py --gpu=1 --kn_init=True> ~/iwa/mnist_double_kn_init.txt 2>&1 &
-nohup python -u mnist_double.py --gpu=1> ~/iwa/mnist_double_no_kn_init.txt 2>&1 &
-nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True> ~/iwa/mnist_double_cnn_kn_init.txt 2>&1 &
-nohup python -u mnist_double_cnn.py --gpu=2> ~/iwa/mnist_double_cnn_no_kn_init.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=3 --align_loss='ae'> ~/iwa/cifar10_ae_no_kn.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --kn_init=True > ~/iwa/cifar10_ae_kn_init.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=5 --align_loss='ae' --data_transform=True> ~/iwa/cifar10_ae_no_kn_data_transform.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --kn_init=True --data_transform=True > ~/iwa/cifar10_ae_kn_init_data_transform.txt 2>&1 &
+nohup python -u mnist_double.py --gpu=1 --kn_init=True> ~/iwa/mnist_double_kn_init.txt 2>&1 & #0.065 test loss after 10,000
+nohup python -u mnist_double.py --gpu=1> ~/iwa/mnist_double_no_kn_init.txt 2>&1 & #0.066 test loss after 10,000 epochs
+nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True> ~/iwa/mnist_double_cnn_kn_init.txt 2>&1 & #0.034 test loss after 1,300 epochs
+nohup python -u mnist_double_cnn.py --gpu=2> ~/iwa/mnist_double_cnn_no_kn_init.txt 2>&1 & #0.034 after 2,000 epochs
+nohup python -u cifar10_double.py --gpu=3 --align_loss='ae'> ~/iwa/cifar10_ae_no_kn.txt 2>&1 & #72% after 15,000 epochs
+nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --kn_init=True > ~/iwa/cifar10_ae_kn_init.txt 2>&1 & #68% after 15,000 epochs
+nohup python -u cifar10_double.py --gpu=5 --align_loss='ae' --data_transform=True> ~/iwa/cifar10_ae_no_kn_data_transform.txt 2>&1 & #82.6 after 11,000 epochs
+nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --kn_init=True --data_transform=True > ~/iwa/cifar10_ae_kn_init_data_transform.txt 2>&1 & # 83% after 11,000 epochs
 
 
-nohup python -u mnist_double2.py --gpu=7> ~/iwa/2.txt 2>&1 &
+
+
+
+
+THIRD
+nohup python -u mnist_double.py --gpu=1 --kn_init=True> ~/iwa/mnist_double_kn_init.txt 2>&1 & #0.065 test loss after 10,000
+nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True> ~/iwa/mnist_double_cnn_kn_init.txt 2>&1 & #0.034 test loss after 1,300 epochs
+
+
 
 
 
