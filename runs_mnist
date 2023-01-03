@@ -36,7 +36,17 @@ THIRD
 nohup python -u mnist_double.py --gpu=1 --kn_init=True --weight_align_factor=10 > ~/iwa/mnist_double_kn_init_waf_10.txt 2>&1 &
 nohup python -u mnist_double_cnn.py --gpu=2 --kn_init=True --weight_align_factor=10> ~/iwa/mnist_double_cnn_kn_init_waf_10.txt 2>&1 &
 
+nohup python -u mnist_double.py --gpu=1 --kn_init=True --weight_align_factor=1 > ~/iwa/mnist_double_kn_init_waf_1.txt 2>&1 &
+nohup python -u mnist_double.py --gpu=1 --weight_align_factor=1 > ~/iwa/mnist_double_no_kn_init_waf_1.txt 2>&1 &
+
+nohup python -u mnist_double_cnn.py --gpu=5 --kn_init=True --weight_align_factor=1 > ~/iwa/mnist_double_cnn_kn_init_waf_1.txt 2>&1 & #0.039 after 96 epochs
+nohup python -u mnist_double_cnn.py --gpu=5 --weight_align_factor=1 > ~/iwa/mnist_double_cnn_no_kn_init_waf_1.txt 2>&1 &
+
+TAKEAWAYS:
+MNIST_CNN works with factor of 1.  Testing with CIFAR10 now.  linear mlp needs a factor of 10.
 
 
 
-
+FOURTH
+nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=10 > ~/iwa/3.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=10 > ~/iwa/3.txt 2>&1 &

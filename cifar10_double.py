@@ -371,10 +371,11 @@ class Merge_Iterator:
                       [0.000025 for i in range(1000)] + \
                       [0.00001 for i in range(3000)] + \
                       [0.000001 for i in range(5000)]
+
         for iter in range(merge_iterations):
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=lr_schedule[iter])
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=lr_schedule[iter])
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             for iter2 in range(1):
