@@ -1,18 +1,17 @@
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
-'''
+''''''
 df=pd.read_csv('norms/weight_diff_double.csv')
 #df=df.head(200)
 plt.clf()
-#plt.plot([i for i in range(len(df['weight_diff_layer1'].values))], df['weight_diff_layer1'], '.-')
-plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_diff_layer2'], '.-')
-#x=set(df['epoch'].values)
-#x = [i for i in x if str(i) != 'nan']
-#print(x)
-#plt.vlines(x, ymin=min(df['weight_diff_layer2'].values), ymax=max(df['weight_diff_layer2'].values),)
+plt.plot([i for i in range(len(df['weight_diff_layer1'].values))], df['weight_diff_layer1'], '.-')
+#plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_diff_layer2'], '.-')
+plt.xlabel('epoch')
+plt.ylabel('weight diff ')
+plt.title("weight diff layer2, sum |m1.w - m2.w|")
 plt.show()
-'''
+plt.savefig('images/double_l1weightdiff.png')
 
 '''
 df=pd.read_csv('norms/norms_double.csv')
@@ -38,7 +37,7 @@ plt.show()
 
 
 
-''''''
+'''
 df=pd.read_csv('norms/weight_diff_single.csv')
 #df=df.head(200)
 plt.clf()
@@ -49,9 +48,11 @@ plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_di
 #print(x)
 plt.xlabel('epoch')
 plt.ylabel('weight diff ')
+plt.title("weight diff layer2, sum |m1.w - m2.w|")
 #plt.vlines(x, ymin=min(df['weight_diff_layer1'].values), ymax=max(df['weight_diff_layer1'].values),)
-plt.show()
-
+#plt.show()
+plt.savefig('images/single_l2weightdiff.png')
+'''
 
 
 '''

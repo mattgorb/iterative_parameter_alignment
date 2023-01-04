@@ -91,7 +91,7 @@ class Conv4(nn.Module):
         self,  args=None, weight_merge=False ) -> None:
         super().__init__()
 
-        self.bias=True
+        self.bias=False
         self.args=args
         self.weight_merge=weight_merge
 
