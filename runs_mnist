@@ -57,7 +57,7 @@ nohup python -u cifar10_double.py --gpu=4 --align_loss='se' --data_transform=Tru
 
 #GOOD
 nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4.txt 2>&1 &
-
+nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_imbalanced_data.txt 2>&1 &
 
 nohup python -u mnist_double.py --gpu=1 --kn_init=True --weight_align_factor=10 --merge_iter=1000 --graphs=True> ~/iwa/mnist_1.txt 2>&1 &
 nohup python -u mnist_single.py --gpu=1 --kn_init=True --weight_align_factor=10 --merge_iter=500 --graphs=True> ~/iwa/mnist_2.txt 2>&1 &
