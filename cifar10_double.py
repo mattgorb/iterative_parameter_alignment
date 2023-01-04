@@ -364,18 +364,18 @@ class Merge_Iterator:
         model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
-        lr_schedule = [0.001 for i in range(5000)] + \
-                      [0.0005 for i in range(2500)] + \
-                      [0.0001 for i in range(2500)] + \
-                      [0.00005 for i in range(1000)] + \
-                      [0.000025 for i in range(1000)] + \
-                      [0.00001 for i in range(3000)] + \
+        lr_schedule = [0.001 for i in range(3000)] + \
+                      [0.0005 for i in range(2000)] + \
+                      [0.0001 for i in range(3000)] + \
+                      [0.00005 for i in range(2000)] + \
+                      [0.000025 for i in range(3000)] + \
+                      [0.00001 for i in range(2000)] + \
                       [0.000001 for i in range(5000)]
 
         for iter in range(merge_iterations):
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=lr_schedule[iter])
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=lr_schedule[iter])
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             for iter2 in range(1):
@@ -411,7 +411,6 @@ def main():
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
-    parser.add_argument('--f', type=int, default=1, )
     parser.add_argument('--gpu', type=int, default=1, )
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
