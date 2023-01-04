@@ -211,14 +211,14 @@ def get_datasets(args):
         ds2_labels = labels[len(labels) // 2:]
         print(f'ds1_labels: {ds1_labels}')
         print(f'ds2_labels: {ds2_labels}')
+
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
-        '''
+
         #use this code for p/1-p split.  need to test
-        #p=0.8
+        p=0.8
         ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
         ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
-        '''
 
         '''
         #use this code to split dataset down middle. need to test
@@ -411,6 +411,7 @@ def main():
     parser.add_argument('--seed', type=int, default=1, metavar='S',
                         help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
+    parser.add_argument('--f', type=int, default=1, )
     parser.add_argument('--gpu', type=int, default=1, )
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
