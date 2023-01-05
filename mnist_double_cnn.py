@@ -309,8 +309,8 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
             for iter2 in range(1):
@@ -320,6 +320,8 @@ class Merge_Iterator:
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
+                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
