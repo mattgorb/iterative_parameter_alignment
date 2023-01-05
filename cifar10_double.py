@@ -216,9 +216,10 @@ def get_datasets(args):
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
         #use this code for p/1-p split.  need to test
-        p=0.75
-        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        #p=0.75
+        #ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+        #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+
 
         '''
         #use this code to split dataset down middle. need to test
@@ -431,6 +432,10 @@ def main():
         model_parameters = filter(lambda p: p.requires_grad, model.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         print(params)
+        for n,p in model.named_parameters():
+            print(n)
+            print(p.requires)
+        sys.exit()
 
         save_path = f'{weight_dir}cifar10_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
