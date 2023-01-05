@@ -70,5 +70,8 @@ nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --kn_init=True --wei
 nohup python -u cifar10_double.py --gpu=5 --baseline=True --epochs=300 > ~/iwa/4_baseline2.txt 2>&1 &
 
 
+nohup python -u cifar10_double.py --gpu=5  --data_transform=True --epochs=5> ~/iwa/4_new.txt 2>&1 &
+
+
 
 nohup python -u mnist_double_cnn.py --gpu=5 --kn_init=True --weight_align_factor=10 --merge_iter=2000 --epochs=10> ~/iwa/mnist_cnn_epoch.txt 2>&1 &
