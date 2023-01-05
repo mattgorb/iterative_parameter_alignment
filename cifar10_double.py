@@ -435,7 +435,7 @@ def main():
         for n,p in model.named_parameters():
             print(n)
             print(p.requires_grad)
-        sys.exit()
+
 
         save_path = f'{weight_dir}cifar10_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
