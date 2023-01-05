@@ -215,21 +215,6 @@ class Trainer:
         self.model.train()
         train_loss = 0
         train_loss_ce=0
-        
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                self.train_iter_list.append(self.train_iter)
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-
-                else:
-                    self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)
 
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
@@ -246,39 +231,6 @@ class Trainer:
             train_loss_ce += self.criterion(output, target)
             loss.backward()
             self.optimizer.step()
-
-
-            if self.args.graphs:
-                if self.model.fc1.weight is not None:
-                    if batch_idx in [10,25,50,75]:
-                        self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                        self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                        self.train_iter_list.append(self.train_iter)
-                if hasattr(self.model.fc1, 'weight_align'):
-
-                    if self.model.fc1.weight_align is not None:
-                        if batch_idx in [10,25,50,75]:
-                            self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                            self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                    else:
-                        if batch_idx in [10, 25, 50, 75]:
-                            self.wa1_norm_list.append(None)
-                            self.wa2_norm_list.append(None)
-
-
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-                self.train_iter_list.append(self.train_iter)
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                        self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                        self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-                else:
-                        self.wa1_norm_list.append(None)
-                        self.wa2_norm_list.append(None)
-
 
 
         self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)

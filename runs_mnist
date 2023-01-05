@@ -59,6 +59,10 @@ nohup python -u cifar10_double.py --gpu=4 --align_loss='se' --data_transform=Tru
 nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4.txt 2>&1 &
 nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_imbalanced_data.txt 2>&1 &
 nohup python -u cifar10_double.py --gpu=2 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_lr_schedule.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=0 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_lr2.txt 2>&1 &
+
+nohup python -u cifar10_double.py --gpu=2 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3 --epochs=5> ~/iwa/4_epochs.txt 2>&1 &
+
 
 nohup python -u cifar10_double.py --gpu=5 --baseline=True --data_transform=True > ~/iwa/4_baseline.txt 2>&1 &
 
