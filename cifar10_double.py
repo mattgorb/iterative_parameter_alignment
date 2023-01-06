@@ -139,7 +139,7 @@ class Conv4(nn.Module):
             x,wd6 = self.fc2(x)
             x = self.relu(x)
             x,wd7 = self.fc3(x)
-            wd=wd1+wd2+wd3+wd4+wd5+wd6+4*wd7
+            wd=wd1+wd2+wd3+wd4+wd5+wd6+wd7
             return x, wd
         else:
             x=self.conv1(x)
