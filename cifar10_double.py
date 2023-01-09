@@ -216,10 +216,11 @@ def get_datasets(args):
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
-        #use this code for p/1-p split.  need to test
-        p=0.75
-        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        if args.imbalanced:
+            #use this code for p/1-p split.  need to test
+            p=0.75
+            ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+            ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
 
         '''
@@ -405,6 +406,7 @@ def main():
                         help='number of iterations to merge')
     parser.add_argument('--data_transform', type=bool, default=False)
     parser.add_argument('--kn_init', type=bool, default=False)
+    parser.add_argument('--imabalanced', type=bool, default=False)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=250.0, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
