@@ -407,6 +407,7 @@ def main():
     parser.add_argument('--data_transform', type=bool, default=False)
     parser.add_argument('--kn_init', type=bool, default=False)
     parser.add_argument('--imbalanced', type=bool, default=False)
+    parser.add_argument('--bias', type=bool, default=False)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=250.0, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',

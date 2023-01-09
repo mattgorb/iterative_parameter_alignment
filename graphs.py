@@ -1,19 +1,19 @@
 from matplotlib import pyplot as plt
 import pandas as pd
 import numpy as np
-''''''
+'''
 df=pd.read_csv('norms/weight_diff_double.csv')
 #df=df.head(200)
 plt.clf()
-plt.plot([i for i in range(len(df['weight_diff_layer1'].values))], df['weight_diff_layer1'], '.-')
-#plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_diff_layer2'], '.-')
+#plt.plot([i for i in range(len(df['weight_diff_layer1'].values))], df['weight_diff_layer1'], '.-')
+plt.plot([i for i in range(len(df['weight_diff_layer2'].values))], df['weight_diff_layer2'], '.-')
 plt.xlabel('epoch')
 plt.ylabel('weight diff ')
 plt.title("weight diff layer2, sum |m1.w - m2.w|")
-plt.show()
-plt.savefig('images/double_l1weightdiff.png')
-
+#plt.show()
+plt.savefig('images/double_l2weightdiff.png')
 '''
+''''''
 df=pd.read_csv('norms/norms_double.csv')
 #df=df[0:60]
 df=df[6*100:6*100+60]
@@ -33,7 +33,7 @@ plt.plot([i for i in range(len(df['model2_wa2'].values))], df['model2_wa2'], '.-
 plt.vlines([i*6 for i in range(11)], ymin=min(df['model1_fc2'].values), ymax=max(df['model1_fc2'].values),)
 
 plt.show()
-'''
+
 
 
 
