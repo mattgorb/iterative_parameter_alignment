@@ -49,16 +49,11 @@ MNIST_CNN works with factor of 1.  Testing with CIFAR10 now.  linear mlp needs a
 
 FOURTH
 #GOOD
-nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_imbalanced_data.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=2 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_lr_schedule.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=0 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_lr2.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=1 --lr=1e-3> ~/iwa/1.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=2 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3> ~/iwa/3.txt 2>&1 & Great!
+nohup python -u cifar10_double.py --gpu=5 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=10 --lr=1e-3> ~/iwa/6.txt 2>&1 & Great!
+nohup python -u cifar10_double.py --gpu=2 --baseline=True --epochs=350  --data_transform=True  --kn_init=True> ~/iwa/cifar10_baseline2.txt 2>&1 &
 
-nohup python -u cifar10_double.py --gpu=2 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=100 --lr=1e-3 --epochs=5> ~/iwa/4_epochs.txt 2>&1 &
-
-
-nohup python -u cifar10_double.py --gpu=5 --baseline=True --data_transform=True > ~/iwa/4_baseline.txt 2>&1 &
-nohup python -u mnist_double.py --gpu=1 --kn_init=True --weight_align_factor=10 --merge_iter=20000 --graphs=True> ~/iwa/mnist_1.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --kn_init=True --weight_align_factor=100 --lr=1e-3> ~/iwa/4_2.txt 2>&1 &
-nohup python -u cifar10_double.py --gpu=5 --baseline=True --epochs=300 > ~/iwa/4_baseline2.txt 2>&1 &
-
+nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=3 --lr=1e-3> ~/iwa/7.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=7 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=7 --lr=1e-3> ~/iwa/8.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=7 --lr=1e-3> ~/iwa/9.txt 2>&1 &

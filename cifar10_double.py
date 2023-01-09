@@ -56,8 +56,8 @@ class ConvMerge(nn.Conv2d):
         return x, weights_diff
 
 
-def linear_init(in_dim, out_dim, bias=False, args=None, ):
-    layer = LinearMerge(in_dim, out_dim, bias=bias)
+def linear_init(in_dim, out_dim,  args=None, ):
+    layer = LinearMerge(in_dim, out_dim, bias=args.bias)
     layer.init(args)
     return layer
 
@@ -91,9 +91,10 @@ class Conv4(nn.Module):
         self,  args=None, weight_merge=False ) -> None:
         super().__init__()
 
-        self.bias=False
+
         self.args=args
         self.weight_merge=weight_merge
+        self.bias=self.args.bias
 
         if self.weight_merge:
             self.conv1 = conv_init(3, 64, args=self.args)
@@ -216,9 +217,9 @@ def get_datasets(args):
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
 
         #use this code for p/1-p split.  need to test
-        #p=0.75
-        #ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        #ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+        p=0.75
+        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
 
         '''
