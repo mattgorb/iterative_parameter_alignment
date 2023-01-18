@@ -66,7 +66,9 @@ class Net(nn.Module):
             self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
             self.fc2 = nn.Linear(1024, 10, bias=False)
 
+
     def forward(self, x, ):
+        self.wd=torch.tensor(0)
         if self.weight_merge:
             x, wa1 = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)

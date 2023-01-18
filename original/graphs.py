@@ -14,26 +14,32 @@ plt.title("weight diff layer2, sum |m1.w - m2.w|")
 plt.savefig('images/double_l2weightdiff.png')
 '''
 ''''''
-df=pd.read_csv('norms/norms_double.csv')
+df=pd.read_csv('../norms/norms_double.csv')
 #df=df[0:60]
-df=df[6*100:6*100+60]
+df=df[12:150+12]
 #df=df.head(100)
 plt.clf()
-plt.plot([i for i in range(len(df['model1_fc2'].values))], df['model1_fc2'], '.-')
-plt.plot([i for i in range(len(df['model2_fc2'].values))], df['model2_fc2'], '.-')
-plt.plot([i for i in range(len(df['model1_wa2'].values))], df['model1_wa2'], '.-')
-plt.plot([i for i in range(len(df['model2_wa2'].values))], df['model2_wa2'], '.-')
+plt.plot([i for i in range(len(df['model1_fc1'].values))], df['model1_fc1'], '.-', label='model 1 weight')
+plt.plot([i for i in range(len(df['model2_fc1'].values))], df['model2_fc1'], '.-', label='model 2 weight')
+plt.plot([i for i in range(len(df['model1_wa1'].values))], df['model1_wa1'], '.-', label='model 1 weight_align')
+plt.plot([i for i in range(len(df['model2_wa1'].values))], df['model2_wa1'], '.-', label='model 2 weight_align')
 
-#plt.plot([i for i in range(len(df['model1_fc2'].values))], df['model1_fc2']-df['model2_fc2'], '.-')
-#plt.xticks(plt.xticks()[::6])
-#p
-#x=set(df[df['train_epoch'].notnull()]['number'].values)
-#x = [i for i in x if str(i) != 'nan']
-#print(x)
-plt.vlines([i*6 for i in range(11)], ymin=min(df['model1_fc2'].values), ymax=max(df['model1_fc2'].values),)
+plt.vlines([i*6 for i in range(26)], ymin=min(df['model1_fc1'].values), ymax=max(df['model1_fc1'].values),
+           colors='gray', ls=':', lw=1,)
 
-plt.show()
+z=np.arange(0, 151, 6)
+#my_ticks=[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
 
+my_ticks=np.arange(0, 26, 1)
+#my_ticks=[x+26 for x in my_ticks]
+plt.xticks(z,my_ticks)
+
+plt.xlabel('epoch')
+plt.ylabel('layer 1 norm')
+plt.title('layer 1 norm, double merge')
+plt.legend()
+#plt.show()
+plt.savefig('images/double_norms_layer1_epoch26.png')
 
 
 
