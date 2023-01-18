@@ -2,3 +2,4 @@ seed: 0
 dataset: MNIST
 weight_init: kaiming_normal
 model: MLP
+bias: False
