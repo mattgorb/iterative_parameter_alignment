@@ -12,13 +12,13 @@ def model_selector(args):
     '''
     if args.model=='MLP':
         from models.mlp import MLP
-        model = MLP(args, weight_merge=args.baseline).to(args.device)
+        model = MLP(args, weight_merge=not args.baseline).to(args.device)
     elif args.model=='Conv2':
         from models.conv2 import Conv2
-        model = Conv2(args, weight_merge=args.baseline).to(args.device)
+        model = Conv2(args, weight_merge=not args.baseline).to(args.device)
     elif args.model=='Conv4':
         from models.conv4 import Conv4
-        model = Conv4(args, weight_merge=args.baseline).to(args.device)
+        model = Conv4(args, weight_merge=not args.baseline).to(args.device)
     return model
 
 def set_seed(seed):
