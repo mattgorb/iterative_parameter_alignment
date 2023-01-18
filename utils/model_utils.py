@@ -31,6 +31,7 @@ def set_seed(seed):
 
 def _init_weight(args,weight):
     set_seed(args.weight_seed)
+    scale_fan=False
     if args.weight_init == "signed_constant":
         #using signed constant from iterand code
         fan = nn.init._calculate_correct_fan(weight, 'fan_in')
@@ -42,7 +43,7 @@ def _init_weight(args,weight):
     elif args.weight_init == "unsigned_constant":
 
         fan = nn.init._calculate_correct_fan(weight, args.mode)
-        if args.scale_fan:
+        if scale_fan:
             fan = fan * (1 - args.prune_rate)
 
         gain = nn.init.calculate_gain(args.nonlinearity)
@@ -51,7 +52,7 @@ def _init_weight(args,weight):
 
     elif args.weight_init == "kaiming_normal":
 
-        if args.scale_fan:
+        if scale_fan:
             fan = nn.init._calculate_correct_fan(weight, args.mode)
             fan = fan * (1 - args.lin_prune_rate)
             gain = nn.init.calculate_gain(args.nonlinearity)
