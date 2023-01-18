@@ -57,3 +57,7 @@ nohup python -u cifar10_double.py --gpu=2 --baseline=True --epochs=350  --data_t
 nohup python -u cifar10_double.py --gpu=3 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=3 --lr=1e-3> ~/iwa/7.txt 2>&1 &
 nohup python -u cifar10_double.py --gpu=7 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=7 --lr=1e-3> ~/iwa/8.txt 2>&1 &
 nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3 --imbalanced=True> ~/iwa/9.txt 2>&1 &
+
+
+
+nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=4  --align_loss='ae' > ~/iwa/100.txt 2>&1 &

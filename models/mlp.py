@@ -18,7 +18,7 @@ class MLP(nn.Module):
 
 
     def forward(self, x, ):
-        self.wd=torch.tensor(0)
+        #self.wd=torch.tensor(0)
         if self.weight_merge:
             x, wa1 = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
