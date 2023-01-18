@@ -35,11 +35,11 @@ class ConvMerge(nn.Conv2d):
 
     def init(self, args):
         self.args = args
-        #_init_weight(args, self.weight)
+        _init_weight(args, self.weight)
 
-        set_seed(self.args.weight_seed)
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #set_seed(self.args.weight_seed)
+        #if self.args.kn_init:
+            #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # self.args.weight_seed+=1
 
     def forward(self, x):
@@ -68,11 +68,11 @@ class LinearMerge(nn.Linear):
 
     def init(self, args):
         self.args = args
-        # _init_weight(args, self.weight)
+        _init_weight(args, self.weight)
 
-        set_seed(self.args.weight_seed)
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #set_seed(self.args.weight_seed)
+        #if self.args.kn_init:
+            #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # self.args.weight_seed+=1
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
