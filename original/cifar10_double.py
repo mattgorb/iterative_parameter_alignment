@@ -53,6 +53,8 @@ class ConvMerge(nn.Conv2d):
                 weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
                 weights_diff=torch.sum((self.weight-self.weight_align)**2)
+            else:
+                sys.exit()
         return x, weights_diff
 
 

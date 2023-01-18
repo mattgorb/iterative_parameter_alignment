@@ -3,3 +3,4 @@ dataset: MNIST
 weight_init: kaiming_normal
 model: MLP
 bias: False
+#align_loss: ae
