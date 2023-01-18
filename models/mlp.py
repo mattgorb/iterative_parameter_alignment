@@ -10,8 +10,8 @@ class MLP(nn.Module):
         self.weight_merge = weight_merge
         # bias False for now, have not tested adding bias to the loss fn.
         if self.weight_merge:
-            self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
-            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
+            self.fc1 = linear_init(28 * 28, 1024, args=self.args, )
+            self.fc2 = linear_init(1024, 10,  args=self.args, )
         else:
             self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
             self.fc2 = nn.Linear(1024, 10, bias=False)
