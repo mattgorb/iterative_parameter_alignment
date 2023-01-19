@@ -17,3 +17,7 @@ def set_weight_align_param(model1, model2, args):
             # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)s
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+
+            if args.bias:
+                m2.bias_align = nn.Parameter(m1.bias, requires_grad=True)
+                m1.bias_align = nn.Parameter(m2.bias, requires_grad=True)

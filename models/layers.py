@@ -23,8 +23,8 @@ def linear_init(in_dim, out_dim,  args=None, ):
     return layer
 
 
-def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, bias=False, args=None, ):
-    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=bias)
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, args=None, ):
+    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=args.bias)
     layer.init(args)
     return layer
 
@@ -32,14 +32,11 @@ class ConvMerge(nn.Conv2d):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
+        self.bias_align=None
 
     def init(self, args):
         self.args = args
         _init_weight(args, self.weight)
-
-        #set_seed(self.args.weight_seed)
-        #if self.args.kn_init:
-            #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # self.args.weight_seed+=1
 
     def forward(self, x):
@@ -65,20 +62,17 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
+        self.bias_align=None
 
     def init(self, args):
         self.args = args
         _init_weight(args, self.weight)
 
-        #set_seed(self.args.weight_seed)
-        #if self.args.kn_init:
-            #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # self.args.weight_seed+=1
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-
             if self.args.align_loss=='ae':
                 weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
