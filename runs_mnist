@@ -60,4 +60,5 @@ nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=Tru
 
 
 
-nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=4  --align_loss='ae' > ~/iwa/100.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=4 > ~/iwa/100.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=3 --bias=True > ~/iwa/101.txt 2>&1 &

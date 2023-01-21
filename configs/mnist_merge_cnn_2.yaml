@@ -1,0 +1,8 @@
+seed: 0
+dataset: MNIST
+weight_init: kaiming_normal
+model: Conv2
+bias: False
+align_loss: ae
+weight_align_factor: 1
+data_transform: True
