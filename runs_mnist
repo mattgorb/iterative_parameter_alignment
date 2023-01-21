@@ -60,5 +60,16 @@ nohup python -u cifar10_double.py --gpu=4 --align_loss='ae' --data_transform=Tru
 
 
 
-nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=4 > ~/iwa/100.txt 2>&1 &
-nohup python main.py --config=configs/mnist_merge_2.yaml --gpu=3 --bias=True > ~/iwa/101.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_mlp_2.yaml --gpu=0 > ~/iwa/101.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_mlp_2.yaml --gpu=0 --bias=True > ~/iwa/102.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=0 > ~/iwa/103.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=6 --bias=True > ~/iwa/104.txt 2>&1 &
+
+nohup python main.py --config=configs/mnist_merge_mlp_2.yaml --gpu=6 --imbalanced=True > ~/iwa/105.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_mlp_2.yaml --gpu=6 --bias=True --imbalanced=True > ~/iwa/106.txt 2>&1 &
+
+
+nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=6 --imbalanced=True > ~/iwa/107.txt 2>&1 &
+nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=7 --bias=True --imbalanced=True > ~/iwa/108.txt 2>&1 &
+
+nohup python -u cifar10_double.py --gpu=7 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3 --imbalanced=True> ~/iwa/109.txt 2>&1 &
