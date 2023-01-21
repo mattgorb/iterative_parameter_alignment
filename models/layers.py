@@ -38,6 +38,7 @@ class ConvMerge(nn.Conv2d):
         self.args = args
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
+        print(self.weight)
         print(self.bias)
         sys.exit()
 
