@@ -8,6 +8,7 @@ class Conv2(nn.Module):
         super(Conv2, self).__init__()
         self.args=args
         self.weight_merge=weight_merge
+        self.bias = self.args.bias
 
         if self.weight_merge:
             self.conv1 = conv_init(1, 32, 3, 1 , args=self.args, )
@@ -16,11 +17,11 @@ class Conv2(nn.Module):
             self.fc1 = linear_init(9216, 128, args=self.args, )
             self.fc2 = linear_init(128, 10, args=self.args, )
         else:
-            self.conv1 = nn.Conv2d(1, 32, 3, 1, bias=False)
-            self.conv2 = nn.Conv2d(32, 64, 3, 1, bias=False)
+            self.conv1 = nn.Conv2d(1, 32, 3, 1, bias=self.bias)
+            self.conv2 = nn.Conv2d(32, 64, 3, 1, bias=self.bias)
 
-            self.fc1 = nn.Linear(9216, 128, bias=False)
-            self.fc2 = nn.Linear(128, 10, bias=False)
+            self.fc1 = nn.Linear(9216, 128, bias=self.bias)
+            self.fc2 = nn.Linear(128, 10, bias=self.bias)
 
     def forward(self, x):
         if self.weight_merge:

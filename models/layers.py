@@ -40,6 +40,7 @@ class ConvMerge(nn.Conv2d):
         # self.args.weight_seed+=1
         print(self.weight)
         print(self.bias)
+        print(self)
         sys.exit()
 
     def forward(self, x):
