@@ -39,6 +39,9 @@ class ConvMerge(nn.Conv2d):
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
         print(f'bias: {self.args.bias}')
+        print(self.weight.size())
+
+        print(self.bias.size())
 
     def forward(self, x):
         x = F.conv2d(
