@@ -13,8 +13,8 @@ class MLP(nn.Module):
             self.fc1 = linear_init(28 * 28, 1024, args=self.args, )
             self.fc2 = linear_init(1024, 10,  args=self.args, )
         else:
-            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
-            self.fc2 = nn.Linear(1024, 10, bias=False)
+            self.fc1 = nn.Linear(28 * 28, 1024, bias=self.args.bias)
+            self.fc2 = nn.Linear(1024, 10, bias=self.args.bias)
 
 
     def forward(self, x, ):
