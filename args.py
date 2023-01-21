@@ -48,11 +48,11 @@ def get_config(args):
     # override args
     loaded_yaml = yaml.load(yaml_txt, Loader=yaml.FullLoader)
 
-    print(args)
+
     print(f"=> Reading YAML config from {args.config}")
     args.__dict__.update(loaded_yaml)
     print(args)
-    sys.exit()
+
 
 def run_args():
     global args
