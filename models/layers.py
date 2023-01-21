@@ -38,10 +38,7 @@ class ConvMerge(nn.Conv2d):
         self.args = args
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
-        print(self.weight.size())
-        print(self.bias)
-        print(self)
-        sys.exit()
+        print(f'bias: {self.args.bias}')
 
     def forward(self, x):
         x = F.conv2d(
@@ -75,7 +72,7 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         _init_weight(args, self.weight)
-
+        print(f'bias: {self.args.bias}')
         # self.args.weight_seed+=1
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
