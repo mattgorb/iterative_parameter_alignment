@@ -232,6 +232,9 @@ def get_datasets(args):
             p=0.75
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+            print("HEREREEe")
+        print(len(ds1_indices))
+        print(len(ds2_indices))
 
         x=list(np.array(dataset1.targets)[ds1_indices])
         x2=list(np.array(dataset1.targets)[ds2_indices])
