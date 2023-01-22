@@ -82,11 +82,12 @@ def get_datasets(args):
             num_clients = args.num_clients
             lst=np.arange(len(dataset1))
             random.shuffle(lst)
-
-
-            for split in np.array_split(lst, num_clients):
-                print(len(split))
-            print(split)
+            for group in np.array_split(lst, num_clients):
+                dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
+                dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
+                train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+                train_loaders.append(train_loader)
+            #print(split)
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
