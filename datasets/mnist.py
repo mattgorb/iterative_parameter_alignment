@@ -35,7 +35,7 @@ def get_datasets(args):
             print(f'label groupings: {labels_iter}')
 
             index_groupings=[]
-            for label_list in index_groupings:
+            for label_list in labels_iter:
                 index_group=[idx for idx, target in enumerate(dataset1.targets) if target in label_list]
                 index_groupings.append(index_group)
             if args.imbalanced:
