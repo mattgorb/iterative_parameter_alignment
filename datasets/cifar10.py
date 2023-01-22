@@ -2,7 +2,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import numpy as np
 import collections
-
+import random
 def get_datasets(args):
     # not using normalization
     #transform = transforms.Compose([
