@@ -227,6 +227,7 @@ def get_datasets(args):
         print(ds2_labels)
         print(len(ds1_indices))
         print(len(ds2_indices))
+        assert (set(ds1_indices).isdisjoint(ds2_indices))
         if args.imbalanced:
             #use this code for p/1-p split.  need to test
             p=0.75
