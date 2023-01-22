@@ -232,7 +232,8 @@ def get_datasets(args):
             p=0.75
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
-
+            print("HERERREER")
+        print(args)
         print(len(ds1_indices))
         print(len(ds2_indices))
 
