@@ -79,6 +79,9 @@ class LinearMerge(nn.Linear):
         print(f'{self.bias}')
         # self.args.weight_seed+=1
     def forward(self, x):
+        print(x.size())
+        print(self.weight.size())
+        sys.exit()
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
