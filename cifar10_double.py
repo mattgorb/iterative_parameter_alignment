@@ -225,13 +225,16 @@ def get_datasets(args):
         print('here')
         print(ds1_labels)
         print(ds2_labels)
-
-
+        print(len(ds1_indices))
+        print(len(ds2_indices))
         if args.imbalanced:
             #use this code for p/1-p split.  need to test
             p=0.75
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+
+        print(len(ds1_indices))
+        print(len(ds2_indices))
 
         print(ds1_indices[:100])
         print(ds2_indices[:100])
