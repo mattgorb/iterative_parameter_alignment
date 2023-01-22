@@ -238,8 +238,8 @@ def get_datasets(args):
 
 
         import collections
-        counter = collections.Counter(dataset1.targets)
-        counter2=collections.Counter(dataset2.targets)
+        counter = collections.Counter(x)
+        counter2=collections.Counter(x2)
         print(counter)
         print(counter2)
         sys.exit()
