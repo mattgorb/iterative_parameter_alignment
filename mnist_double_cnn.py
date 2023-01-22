@@ -41,6 +41,7 @@ class ConvMerge(nn.Conv2d):
         print(self.kernel_size)
         print(self.stride)
         print(self.padding)
+        sys.exit()
     def forward(self, x):
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
