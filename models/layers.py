@@ -23,7 +23,7 @@ def linear_init(in_dim, out_dim,  args=None, ):
     return layer
 
 
-def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, args=None, ):
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=0, args=None, ):
     layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=args.bias)
     layer.init(args)
     return layer
@@ -40,12 +40,7 @@ class ConvMerge(nn.Conv2d):
         self.args = args
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
-        print(f'bias: {self.args.bias}')
-        print(f'{self.bias}')
-        print(self.kernel_size)
-        print(self.stride)
-        print(self.padding)
-        sys.exit()
+        print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
 
     def forward(self, x):
         x = F.conv2d(
@@ -79,15 +74,11 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         _init_weight(args, self.weight)
-        print(f'bias: {self.args.bias}')
-        print(f'{self.bias}')
+        print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
+        print(self.bias.size())
+
         # self.args.weight_seed+=1
     def forward(self, x):
-        print(x.size())
-        print(self.weight.size())
-
-        x = F.linear(x, self.weight, self.bias)
-        sys.exit()
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
