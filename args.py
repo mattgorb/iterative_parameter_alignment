@@ -32,6 +32,7 @@ def parse_arguments():
 
 
     #dataset configs
+    parser.add_argument('--dataset', type=str, default=None, )
     parser.add_argument('--num_clients', type=int, default=None, )
     parser.add_argument('--disjoint_classes', type=bool, default=None, )
     parser.add_argument('--imbalanced', type=bool, default=False)
