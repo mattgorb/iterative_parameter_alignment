@@ -30,7 +30,7 @@ def parse_arguments():
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/", help='Directory for data and weights')
     parser.add_argument('--config', type=str, default=None, help='config file to use')
     parser.add_argument('--num_clients', type=int, default=None, )
-    parser.add_argument('--disjoint_classes', type=int, default=None, )
+    parser.add_argument('--disjoint_classes', type=bool, default=None, )
     args = parser.parse_args()
 
     # Allow for use from notebook without config file
