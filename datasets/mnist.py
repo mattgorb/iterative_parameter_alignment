@@ -80,7 +80,7 @@ def get_datasets(args):
 
         for i in range(len(train_loaders)):
             #print(f'Train set {i}: Length: {len(train_loaders[i].dataset)}, Labels: {collections.Counter(train_loaders[i].dataset.targets)}')
-            print(train_loaders[i].dataset.targets)
+            print(train_loaders[i].dataset.targets.tolist())
             sys.exit()
 
         print(f'Test set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets)}')
