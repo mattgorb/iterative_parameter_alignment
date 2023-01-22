@@ -46,11 +46,13 @@ def get_datasets(args):
                 p = 0.8
                 d1 = index_groupings[0][:int(len(index_groupings[0]) * p)] + index_groupings[1][int(len(index_groupings[1]) * p):]
                 d2 = index_groupings[0][int(len(index_groupings[0]) * p):] + index_groupings[1][:int(len(index_groupings[1]) * p)]
+
+
                 dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
                 dataset2 = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
 
-                dataset1.data, dataset1.targets = dataset1.data[d1], list(np.array(dataset1.targets)[d1])
-                dataset2.data, dataset2.targets = dataset2.data[d2], list(np.array(dataset2.targets)[d2])
+                dataset1.data, dataset1.targets = dataset1.data[d1], dataset1.targets[d1]
+                dataset2.data, dataset2.targets = dataset2.data[d2], dataset2.targets[d2]
                 assert (set(d1).isdisjoint(d2))
                 train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
                 train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
