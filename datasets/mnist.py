@@ -52,8 +52,8 @@ def get_datasets(args):
                 dataset1.data, dataset1.targets = dataset1.data[d1], list(np.array(dataset1.targets)[d1])
                 dataset2.data, dataset2.targets = dataset2.data[d2], list(np.array(dataset2.targets)[d2])
                 assert (set(d1).isdisjoint(d2))
-                train_loader1 = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
-                train_loader2 = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+                train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
+                train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader1)
                 train_loaders.append(train_loader2)
             else:
