@@ -81,6 +81,10 @@ def get_datasets(args):
         else:
             num_clients = args.num_clients
             lst=random.shuffle(np.arange(len(dataset1)))
+            print(np.array_split(np.arange(10), 3))
+            for i in np.array_split(np.arange(10), 3):
+                print(i)
+            sys.exit()
 
             for split in np.array_split(lst, num_clients):
                 print(len(split))
