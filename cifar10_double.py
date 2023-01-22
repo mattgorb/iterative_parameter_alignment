@@ -250,8 +250,8 @@ def get_datasets(args):
         #assert (set(ds1_indices).isdisjoint(ds2_indices))
 
         import collections
-        counter = collections.Counter(ds1_indices)
-        counter2=collections.Counter(ds2_indices)
+        counter = collections.Counter(dataset1.targets)
+        counter2=collections.Counter(dataset2.targets)
 
         print(counter)
         print(counter2)
