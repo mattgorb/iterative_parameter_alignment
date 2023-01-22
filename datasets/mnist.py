@@ -64,12 +64,18 @@ def get_datasets(args):
                     dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
                     train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                     train_loaders.append(train_loader)
-                #dataset1.data, dataset1.targets = dataset1.data[index_groupings[0]], dataset1.targets[index_groupings[0]]
-                #dataset2.data, dataset2.targets = dataset1.data[index_groupings[1]], dataset1.targets[index_groupings[1]]
                 if num_clients==2:
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                 else:
-                    assert (set(index_groupings[0]).isdisjoint(index_groupings[1]).isdisjoint(index_groupings[2]).isdisjoint(index_groupings[3]).isdisjoint(index_groupings[4]))
+                    assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
+                    assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
+                    assert (set(index_groupings[0]).isdisjoint(index_groupings[3]))
+                    assert (set(index_groupings[0]).isdisjoint(index_groupings[4]))
+                    assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
+                    assert (set(index_groupings[1]).isdisjoint(index_groupings[3]))
+                    assert (set(index_groupings[1]).isdisjoint(index_groupings[4]))
+                    assert (set(index_groupings[2]).isdisjoint(index_groupings[3]))
+                    assert (set(index_groupings[3]).isdisjoint(index_groupings[4]))
 
 
         else:
