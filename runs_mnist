@@ -73,3 +73,7 @@ nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=6 --imbalance
 nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=7 --bias=True --imbalanced=True > ~/iwa/108.txt 2>&1 &
 
 nohup python -u cifar10_double.py --gpu=7 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3 --imbalanced=True> ~/iwa/109.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3 --epochs=25 > ~/iwa/110.txt 2>&1 &
+nohup python -u cifar10_double.py --gpu=6 --align_loss='ae' --data_transform=True  --kn_init=True --weight_align_factor=5 --lr=1e-3 --imbalanced=True --epochs=10> ~/iwa/111.txt 2>&1 &
+
+
