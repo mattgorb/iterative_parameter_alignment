@@ -76,6 +76,7 @@ class LinearMerge(nn.Linear):
         self.args = args
         _init_weight(args, self.weight)
         print(f'bias: {self.args.bias}')
+        print(f'{self.bias}')
         # self.args.weight_seed+=1
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
