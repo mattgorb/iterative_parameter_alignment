@@ -4,6 +4,8 @@ import numpy as np
 import torch
 import collections
 
+import random
+
 def get_datasets(args):
     # not using normalization
     transform = transforms.Compose([
@@ -25,8 +27,6 @@ def get_datasets(args):
         train_loaders = []
         if args.disjoint_classes:
             assert num_clients in [2,5]
-            #ds1_labels = labels[:len(labels) // num_clients]
-            #ds2_labels = labels[len(labels) // num_clients:]
 
             if num_clients==2:
                 labels_iter=[[0,1,2,3,4],[5,6,7,8,9]]
@@ -79,8 +79,12 @@ def get_datasets(args):
 
 
         else:
+            num_clients = args.num_clients
+            lst=random.shuffle(np.arange(len(dataset1)))
 
-            np.array_split(lst, 5)
+            for split in np.array_split(lst, num_clients):
+                print(len(split))
+            print(split)
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
