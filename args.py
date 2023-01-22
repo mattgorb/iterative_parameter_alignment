@@ -14,7 +14,7 @@ def parse_arguments():
     parser.add_argument('--merge_iter', type=int, default=1000,  help='number of iterations to merge')
     parser.add_argument('--data_transform', type=bool, default=False)
     parser.add_argument('--weight_init', type=str, default=None)
-    parser.add_argument('--imbalanced', type=bool, default=False)
+
     parser.add_argument('--bias', type=bool, default=False)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=1.0, )
@@ -29,8 +29,12 @@ def parse_arguments():
 
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/", help='Directory for data and weights')
     parser.add_argument('--config', type=str, default=None, help='config file to use')
+
+
+    #dataset configs
     parser.add_argument('--num_clients', type=int, default=None, )
     parser.add_argument('--disjoint_classes', type=bool, default=None, )
+    parser.add_argument('--imbalanced', type=bool, default=False)
     args = parser.parse_args()
 
     # Allow for use from notebook without config file
