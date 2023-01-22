@@ -34,13 +34,17 @@ class ConvMerge(nn.Conv2d):
         self.weight_align = None
         self.bias_align=None
 
+
+
     def init(self, args):
         self.args = args
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
         print(f'bias: {self.args.bias}')
         print(f'{self.bias}')
-
+        print(self.kernel_size)
+        print(self.stride)
+        print(self.padding)
 
     def forward(self, x):
         x = F.conv2d(
