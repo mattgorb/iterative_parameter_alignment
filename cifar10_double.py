@@ -234,6 +234,11 @@ def get_datasets(args):
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
             print("HEREREEe")
+
+        x=set(a) & set(b)
+        print(x)
+
+        print(len(x))
         assert (set(ds1_indices).isdisjoint(ds2_indices))
         print(len(ds1_indices))
         print(len(ds2_indices))
