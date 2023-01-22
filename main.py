@@ -9,7 +9,7 @@ from utils.merge_iterator import Merge_Iterator
 from utils.model_utils import model_selector
 
 def get_dataloaders(args):
-    print(f'Data config: num_clients: {args.num_clients}, disjoint classes: {args.disjoint_classes}, imbalanced:{args.imbalanced}')
+    print(f'Data config: \n\t Dataset: {args.dataset}, num_clients: {args.num_clients}, disjoint classes: {args.disjoint_classes}, imbalanced:{args.imbalanced}')
     if args.dataset=='MNIST':
         from datasets.mnist import get_datasets
     elif args.dataset=='CIFAR10':
