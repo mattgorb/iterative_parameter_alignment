@@ -71,8 +71,8 @@ def get_datasets(args):
                 dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
                 dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
 
-                dataset1.data, dataset1.targets = dataset1.data[d1], dataset1.targets[d1]
-                dataset2.data, dataset2.targets = dataset2.data[d2], dataset2.targets[d2]
+                dataset1.data, dataset1.targets = dataset1.data[d1], np.array(dataset1.targets)[d1]
+                dataset2.data, dataset2.targets = dataset2.data[d2], np.array(dataset1.targets)[d2]
                 assert (set(d1).isdisjoint(d2))
                 train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
                 train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
@@ -81,7 +81,6 @@ def get_datasets(args):
             else:
                 for group in index_groupings:
                     dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
-                    print(group)
                     dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
                     train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                     train_loaders.append(train_loader)
@@ -102,7 +101,7 @@ def get_datasets(args):
             random.shuffle(lst)
             for group in np.array_split(lst, num_clients):
                 dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
-                dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
+                dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
 
