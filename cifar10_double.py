@@ -239,17 +239,18 @@ def get_datasets(args):
             print(len(ds2_indices[int(len(ds2_indices)*p):]))
             print(len(ds1_indices[int(len(ds1_indices)*p):]))
             print(len(ds2_indices[:int(len(ds2_indices)*p)]))
-            sys.exit()
 
-            ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-            ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
+
+            x=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
+            y=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
             print("HEREREEe")
 
-        x=set(ds1_indices) & set(ds2_indices)
+        x=set(x) & set(y)
         print(x)
 
         print(len(x))
         assert (set(ds1_indices).isdisjoint(ds2_indices))
+        sys.exit()
         print(len(ds1_indices))
         print(len(ds2_indices))
 
