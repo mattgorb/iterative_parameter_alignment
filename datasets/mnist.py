@@ -70,7 +70,7 @@ def get_datasets(args):
                 if num_clients==2:
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                 else:
-                    print('random assertions')
+                    #random assertions
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
@@ -87,7 +87,6 @@ def get_datasets(args):
                 dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
-            #print(split)
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
@@ -99,5 +98,4 @@ def get_datasets(args):
             print(f'Train set {i}: Length: {len(train_loaders[i].dataset)}, Labels: {collections.Counter(train_loaders[i].dataset.targets.tolist())}')
 
         print(f'Test set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets.tolist())}')
-        sys.exit()
         return train_loaders, test_loader
