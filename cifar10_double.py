@@ -232,14 +232,13 @@ def get_datasets(args):
             p=0.75
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
-            print("HERERREER")
-        print(args)
+
         print(len(ds1_indices))
         print(len(ds2_indices))
 
         print(ds1_indices[:100])
         print(ds2_indices[:100])
-        sys.exit()
+
         '''
         #use this code to split dataset down middle. need to test
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
@@ -250,6 +249,13 @@ def get_datasets(args):
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
         #assert (set(ds1_indices).isdisjoint(ds2_indices))
 
+        import collections
+        counter = collections.Counter(ds1_indices)
+        counter2=collections.Counter(ds2_indices)
+
+        print(counter)
+        print(counter2)
+        sys.exit()
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
