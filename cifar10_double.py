@@ -235,7 +235,7 @@ def get_datasets(args):
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
             print("HEREREEe")
 
-        x=set(a) & set(b)
+        x=set(ds1_indices) & set(ds2_indices)
         print(x)
 
         print(len(x))
