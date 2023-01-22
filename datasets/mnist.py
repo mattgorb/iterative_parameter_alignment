@@ -39,7 +39,9 @@ def get_datasets(args):
                 index_group=[idx for idx, target in enumerate(dataset1.targets) if target in label_list]
                 index_groupings.append(index_group)
             if args.imbalanced:
-                assert num_clients.equals(2)
+                if num_clients!=2:
+                    print('Clients needs to be 2')
+                    sys.exit()
                 # use this code for p/1-p split.  need to test
                 p = 0.8
                 d1 = index_groupings[0][:int(len(index_groupings[0]) * p)] + index_groupings[1][int(len(index_groupings[1]) * p):]
