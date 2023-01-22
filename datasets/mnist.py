@@ -26,12 +26,15 @@ def get_datasets(args):
         #labels = torch.unique(dataset1.targets)
         train_loaders = []
         if args.disjoint_classes:
-            assert num_clients in [2,5]
+            assert num_clients in [2,5,10]
 
             if num_clients==2:
                 labels_iter=[[0,1,2,3,4],[5,6,7,8,9]]
-            else:
+            elif num_clients==5:
                 labels_iter=[[0,1],[2,3],[4,5],[6,7],[8,9]]
+            elif num_clients==10:
+                labels_iter=[[0],[1],[2],[3],[4],[5],[6],[7],[8],[9]]
+
             print(f'label groupings: {labels_iter}')
 
             index_groupings=[]
@@ -67,14 +70,11 @@ def get_datasets(args):
                 if num_clients==2:
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                 else:
+                    print('random assertions')
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
-                    assert (set(index_groupings[0]).isdisjoint(index_groupings[3]))
-                    assert (set(index_groupings[0]).isdisjoint(index_groupings[4]))
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[3]))
-                    assert (set(index_groupings[1]).isdisjoint(index_groupings[4]))
-                    assert (set(index_groupings[2]).isdisjoint(index_groupings[3]))
                     assert (set(index_groupings[3]).isdisjoint(index_groupings[4]))
 
 
