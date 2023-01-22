@@ -38,7 +38,7 @@ def get_datasets(args):
 
     else:
         num_clients = args.num_clients
-        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
 
         train_loaders = []
         if args.disjoint_classes:
