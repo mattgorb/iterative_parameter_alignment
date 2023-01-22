@@ -207,7 +207,7 @@ def get_datasets(args):
         return train_loader, test_loader
     else:
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
-        dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+        #dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
         # split dataset in half by labels
         labels = np.unique(dataset1.targets)
         ds1_labels = labels[:len(labels) // 2]
@@ -233,6 +233,18 @@ def get_datasets(args):
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
+        x=list(np.array(dataset1.targets)[ds1_indices])
+        x2=list(np.array(dataset1.targets)[ds2_indices])
+
+
+        import collections
+        counter = collections.Counter(dataset1.targets)
+        counter2=collections.Counter(dataset2.targets)
+        print(counter)
+        print(counter2)
+        sys.exit()
+
+
         print(len(ds1_indices))
         print(len(ds2_indices))
 
@@ -246,12 +258,10 @@ def get_datasets(args):
         '''
 
         dataset1.data,dataset1.targets = dataset1.data[ds1_indices],list(np.array(dataset1.targets)[ds1_indices])
-        dataset2.data, dataset2.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
+        dataset2.data, dataset1.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
         #assert (set(ds1_indices).isdisjoint(ds2_indices))
 
-        import collections
-        counter = collections.Counter(dataset1.targets)
-        counter2=collections.Counter(dataset2.targets)
+
 
         print(counter)
         print(counter2)

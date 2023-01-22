@@ -36,7 +36,7 @@ def get_datasets(args):
         return train_loader, test_loader
     else:
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
-        dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+        #dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
         # split dataset in half by labels
         labels = np.unique(dataset1.targets)
         ds1_labels = labels[:len(labels) // 2]
@@ -46,12 +46,12 @@ def get_datasets(args):
 
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
-        print('herre')
+        '''print('herre')
         print(ds1_indices[:100])
         print(ds2_indices[:100])
         print('here')
         print(ds1_labels)
-        print(ds2_labels)
+        print(ds2_labels)'''
 
         if args.imbalanced:
             #use this code for p/1-p split.  need to test
@@ -59,9 +59,9 @@ def get_datasets(args):
             ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
             ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
 
-        print(ds1_indices[:100])
+        '''print(ds1_indices[:100])
         print(ds2_indices[:100])
-        sys.exit()
+        sys.exit()'''
         '''
         #use this code to split dataset down middle. need to test
         dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
