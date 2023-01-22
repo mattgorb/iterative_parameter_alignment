@@ -80,7 +80,8 @@ def get_datasets(args):
 
         else:
             num_clients = args.num_clients
-            lst=random.shuffle(np.arange(len(dataset1)))
+            lst=np.arange(len(dataset1))
+            random.shuffle(lst)
             print(lst)
             sys.exit()
             print(np.array_split(np.arange(10), 3))
