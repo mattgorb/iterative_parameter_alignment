@@ -82,7 +82,7 @@ def get_datasets(args):
                 for group in index_groupings:
                     dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
                     print(group)
-                    dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
+                    dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
                     train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                     train_loaders.append(train_loader)
                 if num_clients == 2:
