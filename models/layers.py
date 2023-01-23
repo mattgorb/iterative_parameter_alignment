@@ -76,6 +76,7 @@ class LinearMerge(nn.Linear):
         _init_weight(args, self.weight)
         print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
         print(self.bias.size())
+        sys.exit()
 
         # self.args.weight_seed+=1
     def forward(self, x):
