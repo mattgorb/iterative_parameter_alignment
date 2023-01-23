@@ -58,10 +58,6 @@ class Trainer:
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
-            print(output.size())
-            print(target.size())
-            print(self.criterion(output, target))
-            sys.exit()
             train_loss += loss
             train_loss_ce += self.criterion(output, target)
             loss.backward()

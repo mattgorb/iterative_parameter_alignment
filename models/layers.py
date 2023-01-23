@@ -158,7 +158,7 @@ class LinearMerge(nn.Linear):
         # self.args.weight_seed+=1
 
     def forward(self, x):
-        #x = F.linear(x, self.weight, self.bias)
+        x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
