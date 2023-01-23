@@ -31,15 +31,10 @@ class ConvMerge(nn.Conv2d):
         self.args = args
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #if self.args.kn_init:
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        #self.args.weight_seed+=1
-        print(f'{self.bias}')
-        print(self.kernel_size)
-        print(self.stride)
-        print(self.padding)
-        sys.exit()
+
     def forward(self, x):
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
@@ -69,8 +64,8 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
         #set_seed(1)
         # this isn't default initialization.  not sure if necessary, need to test.
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #if self.args.kn_init:
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
         #self.args.weight_seed+=1
 
