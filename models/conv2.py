@@ -32,9 +32,15 @@ class Conv2(nn.Module):
             x = F.relu(x)
             x = F.max_pool2d(x, 2)
             x = torch.flatten(x, 1)
+            print(x.size())
             x,wd3 = self.fc1(x)
             x = F.relu(x)
+
+            print(x.size())
             x,wd4 = self.fc2(x)
+
+            print(x.size())
+            sys.exit()
             wd = wd1+wd2+wd3+wd4
             return x, wd
         else:
@@ -45,12 +51,8 @@ class Conv2(nn.Module):
             x = F.relu(x)
             x = F.max_pool2d(x, 2)
             x = torch.flatten(x, 1)
-            print(x.size())
+
             x = self.fc1(x)
             x = F.relu(x)
-
-            print(x.size())
             x = self.fc2(x)
-            print(x.size())
-            sys.exit()
             return x, torch.tensor(0)
