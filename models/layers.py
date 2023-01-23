@@ -32,7 +32,10 @@ class ConvMerge(nn.Conv2d):
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
         #if self.args.kn_init:
+        print(self.weight[0][:10])
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        print(self.weight[0][:10])
+        sys.exit()
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
 
     def forward(self, x):
