@@ -17,7 +17,7 @@ import sys
 from utils.model_utils import set_seed, _init_weight
 
 
-'''
+
 
 def conv_init(in_channels, out_channels, kernel_size, stride, bias=False, args=None, ):
     layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
@@ -172,4 +172,4 @@ class LinearMerge(nn.Linear):
                 sys.exit(1)
         return x, weights_diff
 
-
+'''
