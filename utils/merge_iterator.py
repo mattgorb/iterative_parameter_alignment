@@ -26,7 +26,7 @@ class Merge_Iterator:
         #model2 = model_selector(self.args)
 
 
-        self.model_trainers=[Trainer(self.args, [self.train_loaders[i], self.test_loader], models[i], self.device,
+        self.model_trainers=[Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
                                  f'{self.weight_dir}model{i}_0.pt', f'model{i}_{self.args.model}')
                         for i in range(self.num_clients)]
         '''model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
