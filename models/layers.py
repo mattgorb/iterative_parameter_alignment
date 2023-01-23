@@ -17,6 +17,73 @@ import sys
 from utils.model_utils import set_seed, _init_weight
 
 
+def conv_init(in_channels, out_channels, kernel_size, stride, bias=False, args=None, ):
+    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
+    layer.init(args)
+    return layer
+
+class ConvMerge(nn.Conv2d):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.weight_align = None
+
+    def init(self, args):
+        self.args = args
+        set_seed(self.args.weight_seed)
+        # this isn't default initialization.  not sure if necessary, need to test.
+        if self.args.kn_init:
+            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
+        #self.args.weight_seed+=1
+        print(f'{self.bias}')
+        print(self.kernel_size)
+        print(self.stride)
+        print(self.padding)
+        sys.exit()
+    def forward(self, x):
+        x = F.conv2d(
+            x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
+        )
+        weights_diff = torch.tensor(0)
+        if self.weight_align is not None:
+            # using absolute error here.
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            # MSE loss -- not able to get as good results using this loss fn.
+            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
+        return x, weights_diff
+
+
+def linear_init(in_dim, out_dim, bias=False, args=None, ):
+    layer = LinearMerge(in_dim, out_dim, bias=bias)
+    layer.init(args)
+    return layer
+
+
+class LinearMerge(nn.Linear):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.weight_align = None
+
+    def init(self, args):
+        self.args = args
+        set_seed(self.args.weight_seed)
+        #set_seed(1)
+        # this isn't default initialization.  not sure if necessary, need to test.
+        if self.args.kn_init:
+            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
+        #self.args.weight_seed+=1
+
+    def forward(self, x):
+        x = F.linear(x, self.weight, self.bias)
+        weights_diff = torch.tensor(0)
+        if self.weight_align is not None:
+            # using absolute error here.
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            # MSE loss -- not able to get as good results using this loss fn.
+            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
+        return x, weights_diff
+'''
 def linear_init(in_dim, out_dim,  args=None, ):
     layer = LinearMerge(in_dim, out_dim, bias=args.bias)
     layer.init(args)
@@ -94,3 +161,6 @@ class LinearMerge(nn.Linear):
             else:
                 sys.exit(1)
         return x, weights_diff
+
+
+'''
