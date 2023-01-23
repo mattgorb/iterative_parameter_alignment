@@ -42,9 +42,9 @@ def main():
         trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
     else:
-        train_loader_list, test_dataset = get_dataloaders(args)
-        train_loader1, train_loader2=train_loader_list
-        merge_iterator = Merge_Iterator(args, [train_loader1, train_loader2, test_dataset], args.device, weight_dir)
+        train_loader_list, test_loader = get_dataloaders(args)
+        #train_loader1, train_loader2=train_loader_list
+        merge_iterator = Merge_Iterator(args, train_loader_list, test_loader, args.device, weight_dir)
         merge_iterator.run()
 
 

@@ -6,35 +6,33 @@ from utils.align_util import set_weight_align_param
 
 
 class Merge_Iterator:
-    def __init__(self, args, datasets, device, weight_dir):
+    def __init__(self, args, train_loaders, test_loader, device, weight_dir):
 
         self.args = args
         self.device = device
         self.weight_dir = weight_dir
-        self.train_loader1 = datasets[0]
-        self.train_loader2 = datasets[1]
-        self.test_dataset = datasets[2]
-
-    def train_single(self, model, save_path, train_dataset, model_name):
-        '''
-        ****** We need to initialize a new optimizer during each iteration.
-        Not sure why, but this is the only way it works.
-        '''
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, model_name)
-        trainer.fit()
-        return trainer
+        #self.train_loader1 = datasets[0]
+        #self.train_loader2 = datasets[1]
+        self.num_clients=self.args.num_clients
+        self.train_loaders=train_loaders
+        self.test_loader = test_loader
 
     def run(self):
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
-        model1 = model_selector(self.args)
-        model2 = model_selector(self.args)
+        self.models=[model_selector(self.args) for i in range(self.num_clients)]
+        #model1 = model_selector(self.args)
+        #model2 = model_selector(self.args)
 
-        model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
+
+        self.model_trainers=[Trainer(self.args, [self.train_loaders[i], self.test_dataset], models[i], self.device,
+                                 f'{self.weight_dir}model{i}_0.pt', f'model{i}_{self.args.model}')
+                        for i in range(self.num_clients)]
+        '''model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
-                                 f'{self.weight_dir}model2_0.pt', 'model2_double')
+                                 f'{self.weight_dir}model2_0.pt', 'model2_double')'''
 
         '''
         AdaDelta works with re-initialization (because of the adadptive state)
@@ -56,16 +54,22 @@ class Merge_Iterator:
 
 
             #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            for iter2 in range(1):
+            #for iter2 in range(1):
             #for iter2 in range(intra_merge_iterations[iter]):
-                model1_trainer.fit()
-                model2_trainer.fit()
+            for trainer in self.model_trainers:
+                trainer.fit()
+                #model2_trainer.fit()
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
-                model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=lr_schedule[iter])
-                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=lr_schedule[iter])
-            print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model2_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                for trainer in self.model_trainers:
+                    trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+                #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=lr_schedule[iter])
+            print(f'Merge Iteration: {iter} \n')
+            for i in range(len(self.model_trainers)):
+                trainer=self.model_trainers[i]
+                print(f'\tModel {i} Train loss: {trainer.train_loss}, '
+                      f'Train CE loss: {trainer.train_loss_ce}, '
+                      f'Test loss: {trainer.test_loss},  '
+                      f'Test accuracy: {trainer.test_acc}\n')
 
