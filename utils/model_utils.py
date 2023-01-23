@@ -62,6 +62,8 @@ def _init_weight(args,weight):
             with torch.no_grad():
                 weight.data.normal_(0, std)
         else:
+
+
             nn.init.kaiming_normal_(
                 weight, mode=mode, nonlinearity=nonlinearity
             )
