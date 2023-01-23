@@ -86,7 +86,7 @@ def _init_weight(args,weight):
     elif args.weight_init == "standard":
         nn.init.kaiming_uniform_(weight, a=math.sqrt(5))
     else:
-        print("Set weight initialization")
-        sys.exit()
+        print("Set default weight initialization")
+        #sys.exit()
 
     return weight
