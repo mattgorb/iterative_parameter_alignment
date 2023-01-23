@@ -40,7 +40,7 @@ class Conv2(nn.Module):
             x,wd4 = self.fc2(x)
 
             print(x.size())
-            sys.exit()
+
             wd = wd1+wd2+wd3+wd4
             return x, wd
         else:

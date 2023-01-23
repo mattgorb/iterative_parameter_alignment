@@ -55,7 +55,13 @@ class Trainer:
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
+
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+
+            print(output.size())
+            print(target.size())
+            print(self.criterion(output, target))
+            sys.exit()
             train_loss += loss
             train_loss_ce += self.criterion(output, target)
             loss.backward()
