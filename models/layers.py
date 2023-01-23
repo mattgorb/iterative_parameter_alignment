@@ -32,10 +32,11 @@ class ConvMerge(nn.Conv2d):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # this isn't default initialization.  not sure if necessary, need to test.
         #if self.args.kn_init:
         print(self.weight[0][:10])
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         print(self.weight[0][:10])
         sys.exit()
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
@@ -104,13 +105,13 @@ class ConvMerge(nn.Conv2d):
 
 
     def init(self, args):
-        self.args = args
-        print(self.weight[0][:10])
-
-        _init_weight(args, self.weight)
+        #self.args = args
+        #_init_weight(args, self.weight)
         # self.args.weight_seed+=1
-        print(self.weight[0][:10])
-        #sys.exit()
+        self.args = args
+        set_seed(self.args.weight_seed)
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+
         print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
 
     def forward(self, x):
@@ -143,12 +144,14 @@ class LinearMerge(nn.Linear):
         self.bias_align=None
 
     def init(self, args):
-        self.args = args
+        '''self.args = args
         _init_weight(args, self.weight)
         print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
         if self.args.bias  :
-            print(self.bias.size())
-        #sys.exit()
+            print(self.bias.size())'''
+        self.args = args
+        set_seed(self.args.weight_seed)
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
         # self.args.weight_seed+=1
     def forward(self, x):
