@@ -36,7 +36,7 @@ def set_weight_align_param(models, args):
         sys.exit()
         if not type(m1) == LinearMerge and not type(m1)==ConvMerge:
             continue
-        if hasattr(m1, "weight"):
+        #if hasattr(m1, "weight"):
             #for m in range(len(models)):
 
         print(n1)
