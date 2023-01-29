@@ -118,8 +118,11 @@ class LinearMerge(nn.Linear):
             else:
                 sys.exit(1)'''
         if len(self.weight_align_list) > 0:
+            print("HEREe")
+
             # using absolute error here.
             for wa, ba in zip(self.weight_align_list, self.bias_align_list):
+                print(wa.size())
                 if self.args.align_loss == 'ae':
                     weights_diff = torch.sum((self.weight - wa).abs())
                     if self.args.bias == True:
@@ -130,5 +133,9 @@ class LinearMerge(nn.Linear):
                         weights_diff += torch.sum((self.bias - ba) ** 2)
                 else:
                     sys.exit(1)
+
+            print('herrere')
+
+            sys.exit()
         return x, weights_diff
 
