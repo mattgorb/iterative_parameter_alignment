@@ -62,7 +62,7 @@ class ConvMerge(nn.Conv2d):
             else:
                 sys.exit(1)'''
 
-        if len(self.weight_align) > 0:
+        if len(self.weight_align_list) > 0:
             # using absolute error here.
             for wa, ba in zip(self.weight_align_list, self.bias_align_list):
                 if self.args.align_loss == 'ae':
@@ -103,7 +103,7 @@ class LinearMerge(nn.Linear):
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
-        if len(self.weight_align) > 0:
+        if len(self.weight_align_list) > 0:
             # using absolute error here.
             for wa, ba in zip(self.weight_align_list, self.bias_align_list):
                 if self.args.align_loss == 'ae':
