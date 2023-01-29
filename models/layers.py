@@ -50,18 +50,6 @@ class ConvMerge(nn.Conv2d):
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
         weights_diff = torch.tensor(0).float().to(self.args.device)
-        '''if self.weight_align is not None:
-            # using absolute error here.
-            if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align).abs())
-            elif self.args.align_loss=='se':
-                weights_diff=torch.sum((self.weight-self.weight_align)**2)
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align)**2)
-            else:
-                sys.exit(1)'''
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 print(wa.size())
@@ -101,8 +89,6 @@ class LinearMerge(nn.Linear):
         print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
         if self.args.bias  :
             print(self.bias.size())
-        #self.args = args
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # self.args.weight_seed+=1
 
     def forward(self, x):
@@ -122,13 +108,7 @@ class LinearMerge(nn.Linear):
             else:
                 sys.exit(1)'''
         if len(self.weight_align_list) > 0:
-            print("HEREe")
-
             for wa in self.weight_align_list:
-                print(wa.size())
-                print(self.weight)
-                print(self.weight_align_list)
-                print(wa)
                 if self.args.align_loss == 'ae':
                     weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
@@ -143,9 +123,5 @@ class LinearMerge(nn.Linear):
                         weights_diff += torch.sum((self.bias - ba) ** 2)
                     else:
                         sys.exit(1)
-
-            print('herrere')
-
-            sys.exit()
         return x, weights_diff
 
