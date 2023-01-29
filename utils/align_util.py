@@ -30,7 +30,7 @@ def set_weight_align_param(models, args):
     print(len(models))
     var = len(models)
     zipall = [model.named_modules() for model in models]
-
+    print(zipall)
     for items  in zip(zipall):
         print(items)
         n1, m1 = items
