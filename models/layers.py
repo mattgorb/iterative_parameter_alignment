@@ -17,77 +17,6 @@ import sys
 from utils.model_utils import set_seed, _init_weight
 
 
-
-'''
-
-def conv_init(in_channels, out_channels, kernel_size, stride, bias=False, args=None, ):
-    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride, bias=bias)
-    layer.init(args)
-    return layer
-
-class ConvMerge(nn.Conv2d):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.weight_align = None
-
-    def init(self, args):
-        self.args = args
-        set_seed(self.args.weight_seed)
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        # this isn't default initialization.  not sure if necessary, need to test.
-        #if self.args.kn_init:
-        #print(self.weight[0][:10])
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        #print(self.weight[0][:10])
-        print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
-
-        #sys.exit()
-        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-
-    def forward(self, x):
-        x = F.conv2d(
-            x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
-        )
-        weights_diff = torch.tensor(0)
-        if self.weight_align is not None:
-            # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
-        return x, weights_diff
-
-
-def linear_init(in_dim, out_dim, bias=False, args=None, ):
-    layer = LinearMerge(in_dim, out_dim, bias=bias)
-    layer.init(args)
-    return layer
-
-
-class LinearMerge(nn.Linear):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.weight_align = None
-
-    def init(self, args):
-        self.args = args
-        set_seed(self.args.weight_seed)
-        #set_seed(1)
-        # this isn't default initialization.  not sure if necessary, need to test.
-        #if self.args.kn_init:
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        #self.args.weight_seed+=1
-
-    def forward(self, x):
-        x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0)
-        if self.weight_align is not None:
-            # using absolute error here.
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
-        return x, weights_diff
-'''
 def linear_init(in_dim, out_dim,  args=None, ):
     layer = LinearMerge(in_dim, out_dim, bias=args.bias)
     layer.init(args)
@@ -102,8 +31,8 @@ def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=0, args
 class ConvMerge(nn.Conv2d):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.weight_align = None
-        self.bias_align=None
+        self.weight_align_list = nn.ModuleList([])
+        self.bias_align_list=nn.ModuleList([])
 
 
 
@@ -112,9 +41,7 @@ class ConvMerge(nn.Conv2d):
         set_seed(self.args.weight_seed)
         _init_weight(args, self.weight)
         # self.args.weight_seed+=1
-        #self.args = args
-        #set_seed(self.args.weight_seed)
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+
         print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
 
     def forward(self, x):
@@ -122,7 +49,7 @@ class ConvMerge(nn.Conv2d):
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
         weights_diff = torch.tensor(0)
-        if self.weight_align is not None:
+        '''if self.weight_align is not None:
             # using absolute error here.
             if self.args.align_loss=='ae':
                 weights_diff = torch.sum((self.weight - self.weight_align).abs())
@@ -133,7 +60,21 @@ class ConvMerge(nn.Conv2d):
                 if self.args.bias==True:
                     weights_diff += torch.sum((self.bias - self.bias_align)**2)
             else:
-                sys.exit(1)
+                sys.exit(1)'''
+
+        if len(self.weight_align) > 0:
+            # using absolute error here.
+            for wa, ba in zip(self.weight_align_list, self.bias_align_list):
+                if self.args.align_loss == 'ae':
+                    weights_diff = torch.sum((self.weight - wa).abs())
+                    if self.args.bias == True:
+                        weights_diff += torch.sum((self.bias - ba).abs())
+                elif self.args.align_loss == 'se':
+                    weights_diff = torch.sum((self.weight - wa) ** 2)
+                    if self.args.bias == True:
+                        weights_diff += torch.sum((self.bias - ba) ** 2)
+                else:
+                    sys.exit(1)
         return x, weights_diff
 
 
@@ -143,8 +84,10 @@ class ConvMerge(nn.Conv2d):
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.weight_align = None
-        self.bias_align=None
+        #self.weight_align = None
+        #self.bias_align=None
+        self.weight_align_list = nn.ModuleList([])
+        self.bias_align_list = nn.ModuleList([])
 
     def init(self, args):
         self.args = args
@@ -160,16 +103,18 @@ class LinearMerge(nn.Linear):
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
-        if self.weight_align is not None:
-            if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align).abs())
-            elif self.args.align_loss=='se':
-                weights_diff=torch.sum((self.weight-self.weight_align)**2)
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align)**2)
-            else:
-                sys.exit(1)
+        if len(self.weight_align) > 0:
+            # using absolute error here.
+            for wa, ba in zip(self.weight_align_list, self.bias_align_list):
+                if self.args.align_loss == 'ae':
+                    weights_diff = torch.sum((self.weight - wa).abs())
+                    if self.args.bias == True:
+                        weights_diff += torch.sum((self.bias - ba).abs())
+                elif self.args.align_loss == 'se':
+                    weights_diff = torch.sum((self.weight - wa) ** 2)
+                    if self.args.bias == True:
+                        weights_diff += torch.sum((self.bias - ba) ** 2)
+                else:
+                    sys.exit(1)
         return x, weights_diff
 
