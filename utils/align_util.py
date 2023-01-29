@@ -1,7 +1,7 @@
 from models.layers import LinearMerge, ConvMerge
 import torch.nn as nn
 
-def set_weight_align_param(model1, model2, args):
+def set_weight_align_param_old(model1, model2, args):
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
@@ -24,6 +24,18 @@ def set_weight_align_param(model1, model2, args):
 
 
 def set_weight_align_param_new(models, args):
+
+
+    print("HEEREErErEE")
+    print(len(models))
+    var = len(models)
+    zipall = zip([model.named_modules() in models])
+
+    for i in range(1, var) in zip(zipall):
+        print(i)
+        sys.exit()
+
+    sys.exit()
     for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(),):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
