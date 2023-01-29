@@ -13,6 +13,8 @@ def set_weight_align_param(models, args):
             This is a simple way to "share" the weights between models. 
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
+
+            print("Aligning...")
             # We only want to merge one models weights in this file
             # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)s
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
