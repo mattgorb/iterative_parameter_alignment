@@ -118,8 +118,6 @@ class LinearMerge(nn.Linear):
             else:
                 sys.exit(1)'''
         if len(self.weight_align_list) > 0:
-            print("HEREe")
-            sys.exit()
             # using absolute error here.
             for wa, ba in zip(self.weight_align_list, self.bias_align_list):
                 if self.args.align_loss == 'ae':
