@@ -31,8 +31,8 @@ def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=0, args
 class ConvMerge(nn.Conv2d):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.weight_align_list = nn.ModuleList([])
-        self.bias_align_list=nn.ModuleList([])
+        self.weight_align_list = nn.ParameterList([])
+        self.bias_align_list=nn.ParameterList([])
 
 
 
@@ -86,8 +86,8 @@ class LinearMerge(nn.Linear):
         super().__init__(*args, **kwargs)
         #self.weight_align = None
         #self.bias_align=None
-        self.weight_align_list = nn.ModuleList([])
-        self.bias_align_list = nn.ModuleList([])
+        self.weight_align_list = nn.ParameterList([])
+        self.bias_align_list = nn.ParameterList([])
 
     def init(self, args):
         self.args = args
