@@ -23,7 +23,7 @@ def set_weight_align_param_old(model1, model2, args):
                 m1.bias_align = nn.Parameter(m2.bias, requires_grad=True)
 
 
-def set_weight_align_param_new(models, args):
+def set_weight_align_param(models, args):
 
 
     print("HEEREErErEE")
