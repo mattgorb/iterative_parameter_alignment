@@ -33,7 +33,7 @@ def set_weight_align_param(models, args):
 
     for items  in zip(zipall):
         print(items)
-        n1, m1 = model1_mods
+        n1, m1 = items
         print(n1)
 
         print(m1)
