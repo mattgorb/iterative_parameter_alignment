@@ -4,4 +4,4 @@ weight_init: kaiming_normal
 model: MLP
 align_loss: ae
 weight_align_factor: 10
-data_transform: True
+#data_transform: True
