@@ -29,16 +29,13 @@ def set_weight_align_param(models, args):
         n2, m2 = model2_mods
         print(n1)
         print(n2)
-    sys.exit()
+
     for model_models in models[0].named_modules():
         n1, m1 = model_models
         print(n1)
         print(n1)
-        sys.exit()
-        if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
-            continue
-        if hasattr(m1, "weight"):
-            print("HHERe")
+    sys.exit()
+
 
 
     sys.exit()
