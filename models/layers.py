@@ -63,18 +63,22 @@ class ConvMerge(nn.Conv2d):
             else:
                 sys.exit(1)'''
         if len(self.weight_align_list) > 0:
-            # using absolute error here.
-            for wa, ba in zip(self.weight_align_list, self.bias_align_list):
+            for wa in self.weight_align_list:
+                print(wa.size())
                 if self.args.align_loss == 'ae':
-                    weights_diff = torch.sum((self.weight - wa).abs())
-                    if self.args.bias == True:
-                        weights_diff += torch.sum((self.bias - ba).abs())
+                    weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
-                    weights_diff = torch.sum((self.weight - wa) ** 2)
-                    if self.args.bias == True:
-                        weights_diff += torch.sum((self.bias - ba) ** 2)
+                    weights_diff += torch.sum((self.weight - wa) ** 2)
                 else:
                     sys.exit(1)
+            if self.args.bias == True:
+                for ba in self.bias_align_list:
+                    if self.args.align_loss == 'ae':
+                        weights_diff += torch.sum((self.bias - ba).abs())
+                    elif self.args.align_loss == 'se':
+                        weights_diff += torch.sum((self.bias - ba) ** 2)
+                    else:
+                        sys.exit(1)
         return x, weights_diff
 
 
@@ -120,7 +124,6 @@ class LinearMerge(nn.Linear):
         if len(self.weight_align_list) > 0:
             print("HEREe")
 
-            # using absolute error here.
             for wa in self.weight_align_list:
                 print(wa.size())
                 if self.args.align_loss == 'ae':
