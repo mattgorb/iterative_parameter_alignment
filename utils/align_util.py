@@ -25,7 +25,7 @@ def set_weight_align_param_old(model1, model2, args):
 
 def set_weight_align_param(models, args):
 
-    for model_models in models[0].named_modules(),:
+    for model_models in models[0].named_modules():
         n1, m1 = model_models
         print(n1)
         sys.exit()
