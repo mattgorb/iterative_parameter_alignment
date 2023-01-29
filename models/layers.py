@@ -49,7 +49,7 @@ class ConvMerge(nn.Conv2d):
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
-        weights_diff = torch.tensor(0)
+        weights_diff = torch.tensor(0).to(self.args.device)
         '''if self.weight_align is not None:
             # using absolute error here.
             if self.args.align_loss=='ae':
@@ -107,7 +107,7 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0)
+        weights_diff = torch.tensor(0).to(self.args.device)
 
         '''if self.weight_align is not None:
             # using absolute error here.
