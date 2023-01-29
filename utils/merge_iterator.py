@@ -64,7 +64,7 @@ class Merge_Iterator:
                 #set_weight_align_param(model1, model2, self.args)
 
                 #set_weight_align_param(self.models[0], self.models[1], self.args)
-                #set_weight_align_param(self.models, self.args)
+                set_weight_align_param(self.models, self.args)
                 for trainer in self.model_trainers:
                     trainer.optimizer=optim.Adam(trainer.model.parameters(), lr=self.args.lr)
             print(f'Merge Iteration: {iter}')
