@@ -134,8 +134,7 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            #if epoch_loss < self.train_loss:
-                #torch.save(self.model.state_dict(), self.save_path)
+
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -147,11 +146,7 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
-
-
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
-
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
@@ -163,7 +158,6 @@ class Trainer:
             train_loss += loss
             loss.backward()
             self.optimizer.step()
-
 
         train_loss /= len(self.train_loader.dataset)
         return train_loss
@@ -186,7 +180,6 @@ class Trainer:
 
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
-
         self.args = args
         self.device = device
         self.weight_dir = weight_dir
