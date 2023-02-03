@@ -26,6 +26,8 @@ def linear_init(in_dim, out_dim, bias=False, args=None, ):
     return layer
 
 
+
+
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -123,8 +125,6 @@ class Trainer:
         self.device = device
         self.save_path = save_path
         self.model_name = model_name
-
-
         self.train_iter=0
 
     def fit(self, log_output=False):
@@ -137,8 +137,7 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            #if epoch_loss < self.train_loss:
-                #torch.save(self.model.state_dict(), self.save_path)
+
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -166,6 +165,7 @@ class Trainer:
 
             loss.backward()
             self.optimizer.step()
+
 
         self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
         self.train_loss= train_loss / len(self.train_loader.dataset)
@@ -229,24 +229,34 @@ class Merge_Iterator:
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
 
-
-        set_weight_align_param(model1, model2, self.args)
-
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+
+        '''
+        AdaDelta works with re-initialization (because of the adadptive state)
+        SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
+        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
+        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
+        '''
+
+
         for iter in range(merge_iterations):
 
-            #model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            #model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
+            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
-            #print(f'Inter Merge Iterations: {intra_merge_iterations[iter]}')
-            #for iter2 in range(1):
-            #for iter2 in range(intra_merge_iterations[iter]):
+
             model1_trainer.fit()
             model2_trainer.fit()
+
+
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
+
+
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
