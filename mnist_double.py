@@ -230,10 +230,7 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
         for iter in range(merge_iterations):
-            model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             model1_trainer.fit()
-
-            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             model2_trainer.fit()
 
             print(f'Merge Iteration: {iter} \n'
@@ -241,8 +238,8 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
-                #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-                #model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch Weight Align')
