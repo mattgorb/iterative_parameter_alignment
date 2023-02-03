@@ -99,17 +99,7 @@ def get_datasets(args):
         print(f'ds2_labels: {ds2_labels}')
         ds1_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds1_labels]
         ds2_indices = [idx for idx, target in enumerate(dataset1.targets) if target in ds2_labels]
-        '''
-        #use this code for p/1-p split.  need to test
-        #p=0.8
-        ds1_indices=ds1_indices[:int(len(ds1_indices)*p)]+ds2_indices[int(len(ds2_indices)*p):]
-        ds2_indices=ds1_indices[int(len(ds1_indices)*p):]+ds2_indices[:int(len(ds2_indices)*p)]
-        '''
-        '''
-        #use this code to split dataset down middle. need to test
-        dataset1.data, dataset1.targets = dataset1.data[:int(len(dataset1.targets)/2)], dataset1.targets[:int(len(dataset1.targets)/2)]
-        dataset2.data, dataset2.targets = dataset2.data[int(len(dataset1.targets)/2):], dataset2.targets[int(len(dataset1.targets)/2):]
-        '''
+
         dataset1.data, dataset1.targets = dataset1.data[ds1_indices], dataset1.targets[ds1_indices]
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         assert (set(ds1_indices).isdisjoint(ds2_indices))
@@ -131,11 +121,7 @@ class Trainer:
         self.save_path = save_path
         self.model_name = model_name
 
-        self.fc1_norm_list = []
-        self.fc2_norm_list = []
-        self.wa1_norm_list = []
-        self.wa2_norm_list = []
-        self.train_iter_list=[]
+
         self.train_iter=0
 
     def fit(self, log_output=False):
@@ -228,16 +214,10 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
-        '''
-        AdaDelta works with re-initialization (because of the adadptive state)
-        SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
-        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
-        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
-        '''
+
 
 
         for iter in range(merge_iterations):
-
             if iter>0:
                 model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)

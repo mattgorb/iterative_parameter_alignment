@@ -1,0 +1,12 @@
+-Replicate double merge with detached tensors
+-Test the method with bias added to the weight alignment.  In the first experiments I turned bias off in all layers including the baseline models. WORKS
+-Test the method on many disjoint datasets and models (>2).  To me, this is the most important remaining experiment.
+-Hyperparameters: I have tested the method with Adam optimization and other set hyperparameters.  I want to test the effects of altering these values.
+-I also want to test the effects of initializing models with different weight seeds.
+    My initial experiments showed the models didn’t merge as well due to permutation invariance.
+-I need to test the effects of different weight initialization.  I have found the most success so far initializing all layers with kaiming_normal,
+    which is different from some of the default initializations.
+-Reduce the communication burden: Right now I have only tested training each model for one epoch each before sharing the weights with the other model.
+    Can we reduce the communication by training each model for x epochs before sharing with the other model?  Ideally, we can lower the required communication.
+-I’d like to get the method working on one other dataset such as CIFAR100.
+-Better explain/visualize/mathematically formalize the method, and why it works.
