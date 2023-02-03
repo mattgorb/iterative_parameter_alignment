@@ -122,11 +122,8 @@ class Trainer:
         self.model_name = model_name
 
 
-        self.train_iter=0
-
     def fit(self, log_output=False):
         self.train_loss = 1e6
-        self.train_iter+=1
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
@@ -134,10 +131,8 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-
             if log_output:
-                print(
-                    f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+                print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
