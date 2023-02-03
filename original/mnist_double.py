@@ -12,7 +12,6 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 import pandas as pd
 
-
 def set_seed(seed):
     random.seed(seed)
     torch.manual_seed(seed)
@@ -27,6 +26,8 @@ def linear_init(in_dim, out_dim, bias=False, args=None, ):
     return layer
 
 
+
+
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,10 +37,9 @@ class LinearMerge(nn.Linear):
         self.args = args
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        # self.args.weight_seed+=1
+        #self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
@@ -48,7 +48,7 @@ class LinearMerge(nn.Linear):
             # using absolute error here.
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
             # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.sum((self.weight-self.weight_align)**2)
+            #weights_diff=torch.sum((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -65,8 +65,9 @@ class Net(nn.Module):
             self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
             self.fc2 = nn.Linear(1024, 10, bias=False)
 
+
     def forward(self, x, ):
-        self.wd = torch.tensor(0)
+        self.wd=torch.tensor(0)
         if self.weight_merge:
             x, wa1 = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -123,12 +124,11 @@ class Trainer:
         self.device = device
         self.save_path = save_path
         self.model_name = model_name
-
-        self.train_iter = 0
+        self.train_iter=0
 
     def fit(self, log_output=False):
 
-        self.train_iter += 1
+        self.train_iter+=1
         for epoch in range(1, self.args.epochs + 1):
             self.train()
 
@@ -136,8 +136,7 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            # if epoch_loss < self.train_loss:
-            # torch.save(self.model.state_dict(), self.save_path)
+
             if log_output:
                 print(
                     f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -148,13 +147,13 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
-        train_loss_ce = 0
+        train_loss_ce=0
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
+
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
-
             '''
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
@@ -166,8 +165,9 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
-        self.train_loss_ce = train_loss_ce / len(self.train_loader.dataset)
-        self.train_loss = train_loss / len(self.train_loader.dataset)
+
+        self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
+        self.train_loss= train_loss / len(self.train_loader.dataset)
 
     def test(self, ):
         self.model.eval()
@@ -198,13 +198,13 @@ def set_weight_align_param(model1, model2, args):
             Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
             '''
             # We only want to merge one models weights in this file
-            # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
+            # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)s
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
 
-
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
+
         self.args = args
         self.device = device
         self.weight_dir = weight_dir
@@ -213,31 +213,54 @@ class Merge_Iterator:
         self.test_dataset = datasets[2]
 
     def train_single(self, model, save_path, train_dataset, model_name):
+        '''
+        ****** We need to initialize a new optimizer during each iteration.
+        Not sure why, but this is the only way it works.
+        '''
         trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, model_name)
         trainer.fit()
         return trainer
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        # intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
+        #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         model1 = Net(self.args, weight_merge=True).to(self.device)
         model2 = Net(self.args, weight_merge=True).to(self.device)
-
-        set_weight_align_param(model1, model2, self.args)
 
         model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
                                  f'{self.weight_dir}model1_0.pt', 'model1_double')
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+
+        '''
+        AdaDelta works with re-initialization (because of the adadptive state)
+        SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
+        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
+        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
+        '''
+
+
         for iter in range(merge_iterations):
+            model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+            model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
+
             model1_trainer.fit()
             model2_trainer.fit()
+
+
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
+
+
+
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+
 
 
 def main():
