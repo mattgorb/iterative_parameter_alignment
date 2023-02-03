@@ -37,8 +37,7 @@ class LinearMerge(nn.Linear):
         self.args = args
         set_seed(self.args.weight_seed)
         # this isn't default initialization.  not sure if necessary, need to test.
-        if self.args.kn_init:
-            nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
         # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
         #self.args.weight_seed+=1
 
@@ -245,8 +244,6 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
 
-            model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
-            model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
             model1_trainer.fit()
@@ -255,6 +252,8 @@ class Merge_Iterator:
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
+                model1_trainer.optimizer=optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer=optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
 
