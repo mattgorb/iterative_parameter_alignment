@@ -253,26 +253,6 @@ class Merge_Iterator:
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 
-            df=pd.DataFrame({'model1_fc1':model1_trainer.fc1_norm_list,
-                             'model1_fc2':model1_trainer.fc2_norm_list,
-                             'model2_fc1': model2_trainer.fc1_norm_list,
-                             'model2_fc2':model2_trainer.fc2_norm_list,
-                             'model2_wa1':model2_trainer.wa1_norm_list,
-                             'model2_wa2':model2_trainer.wa2_norm_list,
-                             'model1_wa1': model1_trainer.wa1_norm_list,
-                             'model1_wa2': model1_trainer.wa2_norm_list,
-                             'train_epoch':model1_trainer.train_iter_list
-                             })
-
-
-            df.to_csv('norms/norms_double.csv')
-
-            df=pd.DataFrame({'weight_diff_layer1':wd1,
-                             'weight_diff_layer2':wd2,
-                             'epoch':ti,
-                             'merge_iter':mi
-                             })
-            df.to_csv('norms/weight_diff_double.csv')
 
 def main():
     # Training settings
