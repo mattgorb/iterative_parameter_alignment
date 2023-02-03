@@ -26,8 +26,6 @@ def linear_init(in_dim, out_dim, bias=False, args=None, ):
     return layer
 
 
-
-
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
