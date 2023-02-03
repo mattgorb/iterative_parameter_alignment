@@ -157,21 +157,6 @@ class Trainer:
         self.model.train()
         train_loss = 0
 
-        if self.args.graphs:
-            if self.model.fc1.weight is not None:
-                self.fc1_norm_list.append(torch.norm(self.model.fc1.weight, p=1).detach().cpu().item())
-                self.fc2_norm_list.append(torch.norm(self.model.fc2.weight, p=1).detach().cpu().item())
-
-            if hasattr(self.model.fc1, 'weight_align'):
-                if self.model.fc1.weight_align is not None:
-                    self.wa1_norm_list.append(torch.norm(self.model.fc1.weight_align, p=1).detach().cpu().item())
-                    self.wa2_norm_list.append(torch.norm(self.model.fc2.weight_align, p=1).detach().cpu().item())
-
-                else:
-                    self.wa1_norm_list.append(None)
-                    self.wa2_norm_list.append(None)
-
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
 
             data, target = data.to(self.device), target.to(self.device)
