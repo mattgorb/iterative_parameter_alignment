@@ -204,8 +204,8 @@ class Merge_Iterator:
             model1_trainer.fit()
             if iter>0:
                 print(model1.fc1.weight[0][:5])
-                print(model2.fc2.weight[0][:5])
-                print(model1.fc1.weight[0][:5])
+                print(model1.fc2.weight[0][:5])
+                print(model2.fc1.weight[0][:5])
                 print(model2.fc2.weight[0][:5])
 
             if iter>0:
@@ -216,8 +216,8 @@ class Merge_Iterator:
             model2_trainer.fit()
             if iter>0:
                 print(model1.fc1.weight[0][:5])
-                print(model2.fc2.weight[0][:5])
-                print(model1.fc1.weight[0][:5])
+                print(model1.fc2.weight[0][:5])
+                print(model2.fc1.weight[0][:5])
                 print(model2.fc2.weight[0][:5])
 
 
