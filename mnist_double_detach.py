@@ -223,7 +223,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
-    parser.add_argument('--merge_iter', type=int, default=20000,
+    parser.add_argument('--merge_iter', type=int, default=1000,
                         help='number of iterations to merge')
     parser.add_argument('--weight_align_factor', type=int, default=250, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
