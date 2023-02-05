@@ -34,19 +34,12 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        # this isn't default initialization.  not sure if necessary, need to test.
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        # self.args.weight_seed+=1
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            # using absolute error here.
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.mean((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -229,7 +222,7 @@ class Merge_Iterator:
 
 def main():
     # Training settings
-    parser = argparse.ArgumentParser(description='PyTorch MNIST Example')
+    parser = argparse.ArgumentParser(description='PyTorch Weight Align')
     parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,

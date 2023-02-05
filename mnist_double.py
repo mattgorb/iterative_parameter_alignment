@@ -35,20 +35,14 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        # this isn't default initialization.  not sure if necessary, need to test.
-        #if self.args.kn_init:
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
-        # models do NOT need to be initialized the same, however they appeared to converge slightly faster with same init
-        # self.args.weight_seed+=1
+
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            # using absolute error here.
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            # MSE loss -- not able to get as good results using this loss fn.
-            # weights_diff=torch.sum((self.weight-self.weight_align)**2)
         return x, weights_diff
 
 
@@ -249,7 +243,7 @@ class Merge_Iterator:
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model2_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
 def main():
     # Training settings
