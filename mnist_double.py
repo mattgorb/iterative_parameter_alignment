@@ -223,16 +223,7 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
             model1_trainer.fit()
-            if iter>0:
-                print(model1.fc2.weight[0][:5])
-                print(model2.fc2.weight[0][:5])
-
             model2_trainer.fit()
-
-            if iter>0:
-                print(model1.fc2.weight[0][:5])
-                print(model2.fc2.weight[0][:5])
-
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
