@@ -192,9 +192,10 @@ class Merge_Iterator:
             if iter>0:
                 model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #if model2.fc1.weight_align is not None:
-                    #model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    #model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
+                if args.set_weight_from_weight_align:
+                    if model2.fc1.weight_align is not None:
+                        model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                        model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
 
@@ -203,9 +204,10 @@ class Merge_Iterator:
             if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #if model2.fc1.weight_align is not None:
-                    #model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    #model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
+                if args.set_weight_from_weight_align:
+                    if model2.fc1.weight_align is not None:
+                        model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                        model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
                 model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             model2_trainer.fit()
@@ -237,6 +239,7 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
+    parser.add_argument('--set_weight_from_weight_align', type=bool, default=False, )
     parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
