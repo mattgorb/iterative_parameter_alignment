@@ -229,6 +229,8 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
             model1_trainer.fit()
+            if iter>0:
+                model2_trainer.model
             model2_trainer.fit()
 
             if iter==0:
