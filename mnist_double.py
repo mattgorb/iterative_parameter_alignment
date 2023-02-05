@@ -213,10 +213,7 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-    def train_single(self, model, save_path, train_dataset, model_name):
-        trainer = Trainer(self.args, [train_dataset, self.test_dataset], model, self.device, save_path, model_name)
-        trainer.fit()
-        return trainer
+
 
     def run(self):
         merge_iterations = self.args.merge_iter
@@ -234,13 +231,15 @@ class Merge_Iterator:
             model1_trainer.fit()
             model2_trainer.fit()
 
-            print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
                 model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
                 model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
+            print(f'Merge Iteration: {iter} \n'
+                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
+                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Train CE loss: {model1_trainer.train_loss_ce}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch Weight Align')
