@@ -195,8 +195,9 @@ class Merge_Iterator:
                 if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
                     model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                     model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                if iter<3:
-                    model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+
+                #need to re-init this every iteration because we are attaching new parameters
+                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
 
             model1_trainer.fit()
@@ -207,8 +208,8 @@ class Merge_Iterator:
                 if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
                     model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
                     model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                if iter<3:
-                    model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
+                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             model2_trainer.fit()
 
