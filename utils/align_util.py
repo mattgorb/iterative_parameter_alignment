@@ -1,10 +1,31 @@
 from models.layers import LinearMerge, ConvMerge
 import torch.nn as nn
 
+
+
 def set_weight_align_param(models, args):
     for model1_mods in zip(models[0].named_modules(), models[1].named_modules(),):
-        print(model1_mods)
-        sys.exit()
+        n1, m1 = model1_mods[0]
+        print(n1)
+        if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
+            continue
+        if hasattr(m1, "weight"):
+            '''
+            m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
+            This is a simple way to "share" the weights between models. 
+            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
+            '''
+
+            print("Aligning...")
+            m2.weight_align_list.append(nn.Parameter(m1.weight, requires_grad=True))
+            m1.weight_align_list.append(nn.Parameter(m2.weight, requires_grad=True))
+
+            if args.bias:
+                m2.bias_align_list.append(nn.Parameter(m1.bias, requires_grad=True))
+                m1.bias_align_list.append(nn.Parameter(m2.bias, requires_grad=True))
+
+def set_weight_align_param_orig(models, args):
+    for model1_mods, model2_mods, in zip(models[0].named_modules(), models[1].named_modules(),):
         n1, m1 = model1_mods
         n2, m2 = model2_mods
         if not type(m2) == LinearMerge and not type(m2)==ConvMerge:

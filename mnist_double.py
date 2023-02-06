@@ -67,6 +67,9 @@ class Net(nn.Module):
             x = F.relu(x)
             x, wa2 = self.fc2(x)
             score_diff = wa1 + wa2
+            print(wa1)
+            print(wa2)
+            sys.exit()
             return x, score_diff
         else:
             x = self.fc1(x.view(-1, 28 * 28))
