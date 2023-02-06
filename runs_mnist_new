@@ -1,0 +1,19 @@
+nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=1 --gpu=0> ~/iwa_results/100.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=10 --gpu=1> ~/iwa_results/101.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=25 --gpu=2> ~/iwa_results/102.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=100 --gpu=3> ~/iwa_results/103.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=250 --gpu=4 > ~/iwa_results/104.txt 2>&1 &
+
+
+
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=1 --gpu=5> ~/iwa_results/105.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=10 --gpu=6> ~/iwa_results/106.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=25 --gpu=7> ~/iwa_results/107.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=100 --gpu=0> ~/iwa_results/108.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=250 --gpu=1 > ~/iwa_results/109.txt 2>&1 &
+
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=1 --gpu=0> ~/iwa_results/110.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=10 --gpu=1> ~/iwa_results/111.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=25 --gpu=2> ~/iwa_results/112.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=100 --gpu=3> ~/iwa_results/113.txt 2>&1 &
+nohup python -u  mnist_double_detach.py --merge_iter=2500  --weight_align_factor=250 --gpu=4 > ~/iwa_results/114.txt 2>&1 &
