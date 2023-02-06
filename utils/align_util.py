@@ -3,6 +3,8 @@ import torch.nn as nn
 
 def set_weight_align_param(models, args):
     for model1_mods, model2_mods, in zip(models[0].named_modules(), models[1].named_modules(),):
+        print(model1_mods)
+        sys.exit()
         n1, m1 = model1_mods
         n2, m2 = model2_mods
         if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
@@ -15,14 +17,6 @@ def set_weight_align_param(models, args):
             '''
 
             print("Aligning...")
-            # We only want to merge one models weights in this file
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            #m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
-
-            #if args.bias:
-                #m2.bias_align = nn.Parameter(m1.bias, requires_grad=True)
-                #m1.bias_align = nn.Parameter(m2.bias, requires_grad=True)
-
             m2.weight_align_list.append(nn.Parameter(m1.weight, requires_grad=True))
             m1.weight_align_list.append(nn.Parameter(m2.weight, requires_grad=True))
 
