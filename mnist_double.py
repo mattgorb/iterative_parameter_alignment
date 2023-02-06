@@ -42,8 +42,8 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            #weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
+            #weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
         return x, weights_diff
 
 
