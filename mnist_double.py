@@ -35,7 +35,7 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
 
     def forward(self, x):
@@ -67,11 +67,11 @@ class Net(nn.Module):
             x = F.relu(x)
             x, wa2 = self.fc2(x)
             score_diff = wa1 + wa2
-            if score_diff>0:
+            #if score_diff>0:
 
-                print('here')
-                print(wa1)
-                print(wa2)
+                #print('here')
+                #print(wa1)
+                #print(wa2)
                 #sys.exit()
             return x, score_diff
         else:
