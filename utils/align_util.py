@@ -9,7 +9,7 @@ def set_weight_align_param(models, args):
         if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
             continue
 
-        if hasattr(m1, "weight"):
+        if hasattr(named_layer_modules[0][1], "weight"):
             for module_i in range(len(named_layer_modules)):
                 for module_j in range(len(named_layer_modules)):
                     if module_j==module_i:
