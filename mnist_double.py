@@ -42,7 +42,7 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            #weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
             weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
         return x, weights_diff
 
@@ -67,12 +67,7 @@ class Net(nn.Module):
             x = F.relu(x)
             x, wa2 = self.fc2(x)
             score_diff = wa1 + wa2
-            #if score_diff>0:
 
-                #print('here')
-                #print(wa1)
-                #print(wa2)
-                #sys.exit()
             return x, score_diff
         else:
             x = self.fc1(x.view(-1, 28 * 28))

@@ -26,13 +26,11 @@ class Merge_Iterator:
         #model2 = model_selector(self.args)
 
 
-        self.model_trainers=[Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
-                                 f'{self.weight_dir}model{i}_0.pt', f'model{i}_{self.args.model}')
+        self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
+                                     self.test_loader], self.models[i], self.device,
+                                  f'{self.weight_dir}model{i}_0.pt', f'model{i}_{self.args.model}')
                         for i in range(self.num_clients)]
-        '''model1_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model1, self.device,
-                                 f'{self.weight_dir}model1_0.pt', 'model1_double')
-        model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
-                                 f'{self.weight_dir}model2_0.pt', 'model2_double')'''
+
 
         '''
         AdaDelta works with re-initialization (because of the adadptive state)
@@ -49,14 +47,8 @@ class Merge_Iterator:
                       [0.000001 for i in range(5000)]
 
         for iter in range(merge_iterations):
-            #model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=lr_schedule[iter])
-            #model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=lr_schedule[iter])
-
-
-
             for trainer in self.model_trainers:
                 trainer.fit()
-                #model2_trainer.fit()
 
             if iter==0:
 

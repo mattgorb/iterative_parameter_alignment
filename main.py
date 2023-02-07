@@ -38,12 +38,11 @@ def main():
             print(p.requires_grad)
 
 
-        save_path = f'{weight_dir}cifar10_baseline.pt'
+        save_path = f'{weight_dir}{args.dataset}_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
     else:
         train_loader_list, test_loader = get_dataloaders(args)
-        #train_loader1, train_loader2=train_loader_list
         merge_iterator = Merge_Iterator(args, train_loader_list, test_loader, args.device, weight_dir)
         merge_iterator.run()
 
