@@ -61,7 +61,6 @@ class Merge_Iterator:
                 #model2_trainer.fit()
 
             if iter==0:
-                #set_weight_align_param(model1, model2, self.args)
 
                 #set_weight_align_param(self.models[0], self.models[1], self.args)
                 set_weight_align_param(self.models, self.args)

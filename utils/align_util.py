@@ -4,11 +4,15 @@ import torch.nn as nn
 
 
 def set_weight_align_param(models, args):
-    for model1_mods in zip(models[0].named_modules(), models[1].named_modules(),):
-        n1, m1 = model1_mods[0]
-        print(n1)
-        if not type(m2) == LinearMerge and not type(m2)==ConvMerge:
+    module_list=[model.named_modules() for model in models]
+    for named_layer_modules in zip(*module_list):
+        #n1, m1 = model1_mods[0]
+        #print(n1)
+        if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
             continue
+        print(len(named_layer_modules))
+        print(named_layer_modules[0][1])
+        sys.exit()
         if hasattr(m1, "weight"):
             '''
             m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
