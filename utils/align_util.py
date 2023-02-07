@@ -15,7 +15,7 @@ def set_weight_align_param(models, args):
                     if module_j==module_i:
                         continue
                     else:
-                        print(f'Layer {named_layer_modules[module_i][0]}: Adding model {j} to {i} ')
+                        print(f'Layer {named_layer_modules[module_i][0]}: Adding model {module_j} to {module_i} ')
                         named_layer_modules[module_i][1].weight_align_list.append(nn.Parameter(named_layer_modules[module_j][1].weight, requires_grad=True))
                         if args.bias:
                             named_layer_modules[module_i][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
