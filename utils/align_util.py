@@ -20,7 +20,7 @@ def set_weight_align_param(models, args):
                         if args.bias:
                             named_layer_modules[module_i][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
                             named_layer_modules[module_i][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
-
+        sys.exit()
 def set_weight_align_param_orig(models, args):
     for model1_mods, model2_mods, in zip(models[0].named_modules(), models[1].named_modules(),):
         n1, m1 = model1_mods
