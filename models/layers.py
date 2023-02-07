@@ -52,7 +52,6 @@ class ConvMerge(nn.Conv2d):
         weights_diff = torch.tensor(0).float().to(self.args.device)
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
-                print(wa.size())
                 if self.args.align_loss == 'ae':
                     weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
