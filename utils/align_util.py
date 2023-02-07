@@ -8,6 +8,9 @@ def set_weight_align_param(models, args):
     for named_layer_modules in zip(*module_list):
         #n1, m1 = model1_mods[0]
         #print(n1)
+        print(len(named_layer_modules))
+        print(named_layer_modules[0][1])
+        sys.exit()
         if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
             continue
         print(len(named_layer_modules))
