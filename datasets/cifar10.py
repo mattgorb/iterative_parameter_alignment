@@ -111,10 +111,9 @@ def get_datasets(args):
         print('Dataset summaries:')
 
         for i in range(len(train_loaders)):
-            print(
-                f'\tTrain set {i}: Length: {len(train_loaders[i].dataset)}, Labels: {collections.Counter(train_loaders[i].dataset.targets.tolist())}')
+            print( f'\tTrain set {i}: Length: {len(train_loaders[i].dataset)}, Labels: {collections.Counter(train_loaders[i].dataset.targets.tolist())}')
 
-        print(   f'\tTest set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets)}')
-        sys.exit()
+        print(f'\tTest set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets)}')
+
         return train_loaders, test_loader
 

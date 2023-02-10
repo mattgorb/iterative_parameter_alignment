@@ -8,7 +8,6 @@ class MLP(nn.Module):
         super(MLP, self).__init__()
         self.args = args
         self.weight_merge = weight_merge
-        # bias False for now, have not tested adding bias to the loss fn.
         if self.weight_merge:
             self.fc1 = linear_init(28 * 28, 1024, args=self.args, )
             self.fc2 = linear_init(1024, 10,  args=self.args, )
@@ -18,7 +17,6 @@ class MLP(nn.Module):
 
 
     def forward(self, x, ):
-        #self.wd=torch.tensor(0)
         if self.weight_merge:
             x, wa1 = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
