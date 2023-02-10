@@ -12,6 +12,7 @@ from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 import pandas as pd
 
+
 def set_seed(seed):
     random.seed(seed)
     torch.manual_seed(seed)
@@ -115,7 +116,6 @@ class Trainer:
         self.save_path = save_path
         self.model_name = model_name
 
-
     def fit(self, log_output=False):
         self.train_loss = 1e6
         for epoch in range(1, self.args.epochs + 1):
@@ -126,7 +126,8 @@ class Trainer:
             self.test_acc = test_acc
 
             if log_output:
-                print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+                print(
+                    f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
@@ -176,7 +177,6 @@ class Merge_Iterator:
         self.train_loader2 = datasets[1]
         self.test_dataset = datasets[2]
 
-
     def run(self):
         merge_iterations = self.args.merge_iter
 
@@ -189,33 +189,21 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
         for iter in range(merge_iterations):
-            if iter>0:
-                model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
-                    model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
+            if iter > 0:
+                model1.fc1.weight_align = nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model1.fc2.weight_align = nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
-
-
-            model1_trainer.fit()
-
-            if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
-                    model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
+            if iter > 0:
+                model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model2.fc2.weight_align = nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
+            model1_trainer.fit()
             model2_trainer.fit()
-
-
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
-
 
 
 def main():
