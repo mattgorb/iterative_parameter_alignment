@@ -35,7 +35,7 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
 
     def forward(self, x):
@@ -43,7 +43,7 @@ class LinearMerge(nn.Linear):
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
+            #weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
         return x, weights_diff
 
 
@@ -195,7 +195,6 @@ def set_weight_align_param(model1, model2, args):
             '''
 
             # We only want to merge one models weights in this file
-            # m1.weight_align=nn.Parameter(m2.weight, requires_grad=True)
             m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
             m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
 
