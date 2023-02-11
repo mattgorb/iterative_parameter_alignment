@@ -165,12 +165,16 @@ class Trainer:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
 
-        self.test_accuracy_list.append(self.test_acc.item())
-        self.train_loss_list.append(self.train_loss.item())
-        self.test_loss_list.append(self.test_loss.item())
+
+        self.test_accuracy_list.append(self.test_acc)
+        self.train_loss_list.append(self.train_loss)
+        self.test_loss_list.append(self.test_loss)
         self.epoch_list.append(self.merge_iter)
 
-
+        print(self.test_accuracy_list)
+        print(self.train_loss_list)
+        print(self.test_loss_list)
+        print(self.epoch_list)
 
     def model_loss(self):
         return self.best_loss
@@ -192,7 +196,7 @@ class Trainer:
             self.weight_align_loss_list.append(weight_align.item())
             self.batch_epoch_list.append(self.merge_iter)
 
-            train_loss += loss
+            train_loss += loss.item()
             loss.backward()
             self.optimizer.step()
 
