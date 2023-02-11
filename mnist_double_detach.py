@@ -11,6 +11,7 @@ import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
 from matplotlib import pyplot as plt
 import pandas as pd
+import numpy as np
 
 def set_seed(seed):
     random.seed(seed)
