@@ -34,7 +34,7 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
+        #nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
