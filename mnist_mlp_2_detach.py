@@ -143,10 +143,17 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-        self.test_accuracy_list.append(self.test_acc)
-        self.train_loss_list.append(self.train_loss)
-        self.test_loss_list.append(self.test_loss)
-        self.epoch_list.append(self.merge_iter)
+            if self.args.baseline:
+                self.test_accuracy_list.append(self.test_acc)
+                self.train_loss_list.append(self.train_loss)
+                self.test_loss_list.append(self.test_loss)
+                self.epoch_list.append(epoch)
+
+        if not self.args.baseline:
+            self.test_accuracy_list.append(self.test_acc)
+            self.train_loss_list.append(self.train_loss)
+            self.test_loss_list.append(self.test_loss)
+            self.epoch_list.append(self.merge_iter)
 
 
     def model_loss(self):
@@ -161,19 +168,19 @@ class Trainer:
             self.optimizer.zero_grad()
             output, weight_align_ae, weight_align_se = self.model(data)
 
-            if self.args.align_loss=='ae' or self.args.baseline==True: #Baseline gets 0 added to loss
+            if self.args.align_loss=='ae' or self.args.baseline==True:
                 weight_align_loss=weight_align_ae
             elif self.args.align_loss == 'se':
                 weight_align_loss=weight_align_se
-
             else:
                 print('Set align loss')
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
 
-            self.weight_align_ae_loss_list.append(weight_align_ae.item())
-            self.weight_align_se_loss_list.append(weight_align_se.item())
-            self.batch_epoch_list.append(self.merge_iter)
+            if not self.args.baseline:
+                self.weight_align_ae_loss_list.append(weight_align_ae.item())
+                self.weight_align_se_loss_list.append(weight_align_se.item())
+                self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
             loss.backward()
@@ -253,8 +260,6 @@ class Merge_Iterator:
             df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
                                'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model2_trainer.batch_epoch_list,})
-
-
             df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{self.args.align_loss}_model2.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
@@ -306,6 +311,14 @@ def main():
         save_path = f'{weight_dir}mnist_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
+
+        df = pd.DataFrame({'trainer.epoch_list': trainer.epoch_list,
+                           'trainer.train_loss_list': trainer.train_loss_list,
+                           'trainer.test_loss_list': trainer.test_loss_list,
+                           'trainer.test_accuracy_list': trainer.test_accuracy_list,
+                           })
+        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_baseline.csv')
+
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
         merge_iterator = Merge_Iterator(args, [train_loader1, train_loader2, test_dataset], device, weight_dir)

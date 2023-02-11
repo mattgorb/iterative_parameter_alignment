@@ -252,8 +252,6 @@ class Merge_Iterator:
             df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
                                'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model2_trainer.batch_epoch_list,})
-
-
             df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{self.args.align_loss}_model2.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
@@ -305,6 +303,14 @@ def main():
         save_path = f'{weight_dir}mnist_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, device, save_path, 'model_baseline')
         trainer.fit(log_output=True)
+
+        df = pd.DataFrame({'trainer.epoch_list': trainer.epoch_list,
+                           'trainer.train_loss_list': trainer.train_loss_list,
+                           'trainer.test_loss_list': trainer.test_loss_list,
+                           'trainer.test_accuracy_list': trainer.test_accuracy_list,
+                           })
+        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_baseline.csv')
+
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
         merge_iterator = Merge_Iterator(args, [train_loader1, train_loader2, test_dataset], device, weight_dir)
