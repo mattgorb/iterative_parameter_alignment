@@ -150,7 +150,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
-            print(self.args.weight_align_factor * weight_align)
+            #print(self.args.weight_align_factor * weight_align)
 
             train_loss += loss
             loss.backward()
