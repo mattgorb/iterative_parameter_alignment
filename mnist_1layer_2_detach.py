@@ -294,7 +294,7 @@ class Merge_Iterator:
                                'model1_trainer.test_accuracy_list':self.model1_trainer.test_accuracy_list,
                                })
 
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{self.rgs.align_loss}_model1.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{self.args.align_loss}_model1.csv')
 
             df = pd.DataFrame({
                                'model2_trainer.epoch_list': self.model2_trainer.epoch_list,
