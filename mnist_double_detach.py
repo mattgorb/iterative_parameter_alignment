@@ -40,9 +40,9 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            #weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff = torch.sum((self.weight - self.weight_align).abs())
             #print(weights_diff)
-            weights_diff = torch.sqrt(torch.sum(torch.square(self.weight - self.weight_align)))
+            #weights_diff = torch.sqrt(torch.sum(torch.square(self.weight - self.weight_align)))
             #print(weights_diff)
             #sys.exit()
         return x, weights_diff
@@ -148,6 +148,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+            print(self.args.weight_align_factor * weight_align)
             train_loss += loss
             loss.backward()
             self.optimizer.step()
