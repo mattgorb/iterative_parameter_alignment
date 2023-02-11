@@ -49,8 +49,29 @@ class LinearMerge(nn.Linear):
             #sys.exit()
         return x, weights_diff
 
-
 class Net(nn.Module):
+    def __init__(self, args, weight_merge=False):
+        super(Net, self).__init__()
+        self.args = args
+        self.weight_merge = weight_merge
+        # bias False for now, have not tested adding bias to the loss fn.
+        if self.weight_merge:
+            self.fc1 = linear_init(28 * 28, 10, bias=False, args=self.args, )
+            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
+        else:
+            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
+            self.fc2 = nn.Linear(1024, 10, bias=False)
+
+    def forward(self, x, ):
+        if self.weight_merge:
+            x, wa1 = self.fc1(x.view(-1, 28 * 28))
+            score_diff = wa1
+            return x, score_diff
+        else:
+            x = self.fc1(x.view(-1, 28 * 28))
+            return x, torch.tensor(0)
+
+class MLP(nn.Module):
     def __init__(self, args, weight_merge=False):
         super(Net, self).__init__()
         self.args = args
