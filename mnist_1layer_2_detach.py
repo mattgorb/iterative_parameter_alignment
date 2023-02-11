@@ -189,7 +189,7 @@ class Trainer:
             '''
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
-            self.weight_align_loss_list.append(weight_align)
+            self.weight_align_loss_list.append(weight_align.item())
             self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss
