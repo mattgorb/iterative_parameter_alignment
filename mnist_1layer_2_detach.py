@@ -237,27 +237,27 @@ class Merge_Iterator:
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
         for iter in range(merge_iterations):
-            model1_trainer.merge_iter=iter
-            model2_trainer.merge_iter=iter
+            self.model1_trainer.merge_iter=iter
+            self.model2_trainer.merge_iter=iter
             if iter>0:
                 model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
                     model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
-            model1_trainer.fit()
+            self.model1_trainer.fit()
 
             if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
                     model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+                self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
-            model2_trainer.fit()
+            self.model2_trainer.fit()
 
             print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
+                  f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
+                  f'\tModel 2 Train loss: {self.model2_trainer.train_loss}, Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
 
             self.results_to_csv()
 
