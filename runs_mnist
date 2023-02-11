@@ -1,2 +1,7 @@
 nohup python -u  mnist_1layer_2_detach.py  --align_loss='ae' > ~/iwa_results/100.txt 2>&1 &
 nohup python -u  mnist_1layer_2_detach.py  --align_loss='se' --gpu=2 > ~/iwa_results/101.txt 2>&1 &
+
+
+nohup python -u  mnist_mlp_2_detach.py  --align_loss='ae' > ~/iwa_results/100.txt 2>&1 &
+nohup python -u  mnist_mlp_2_detach.py  --align_loss='se' --gpu=2 > ~/iwa_results/101.txt 2>&1 &
+
