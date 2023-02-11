@@ -259,6 +259,9 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
+            print(len(model1_trainer.weight_align_loss_list))
+            print(len(model2_trainer.weight_align_loss_list))
+            print(len(model2_trainer.batch_epoch_list,))
             df = pd.DataFrame({'model1_weight_align_loss_list': model1_trainer.weight_align_loss_list,
                                'model2_weight_align_loss_list': model2_trainer.weight_align_loss_list,
                                'merge_iter': model2_trainer.batch_epoch_list,})
