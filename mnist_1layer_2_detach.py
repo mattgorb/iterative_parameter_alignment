@@ -65,7 +65,7 @@ class Net(nn.Module):
             return x, wa1_ae, wa1_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
-            return x, torch.tensor(0)
+            return x, torch.tensor(0), torch.tensor(0)
 
 def get_datasets(args):
     # not using normalization
