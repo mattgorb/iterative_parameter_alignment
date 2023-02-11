@@ -259,14 +259,16 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {model1_trainer.train_loss}, Test loss: {model1_trainer.test_loss},  Test accuracy: {model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {model2_trainer.train_loss}, Test loss: {model2_trainer.test_loss},  Test accuracy: {model2_trainer.test_acc}')
 
-            print(len(model1_trainer.weight_align_loss_list))
-            print(len(model2_trainer.weight_align_loss_list))
-            print(len(model2_trainer.batch_epoch_list,))
-            df = pd.DataFrame({'model1_weight_align_loss_list': model1_trainer.weight_align_loss_list,
-                               'model2_weight_align_loss_list': model2_trainer.weight_align_loss_list,
-                               'merge_iter': model2_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/weight_diff_{args.align_loss}.csv')
+            self.results_to_csv()
 
+    def results_to_csv(self):
+            df = pd.DataFrame({'model1_weight_align_loss_list': model1_trainer.weight_align_loss_list,
+                               'merge_iter': model1_trainer.batch_epoch_list,})
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{args.align_loss}_model1.csv')
+
+            df = pd.DataFrame({'model1_weight_align_loss_list': model1_trainer.weight_align_loss_list,
+                               'merge_iter': model2_trainer.batch_epoch_list,})
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{args.align_loss}_model2.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': model1_trainer.epoch_list,
                                'model1_trainer.train_loss_list': model1_trainer.train_loss_list,
@@ -277,7 +279,24 @@ class Merge_Iterator:
                                'model2_trainer.test_loss_list': model2_trainer.test_loss_list,
                                'model2_trainer.test_accuracy_list': model2_trainer.test_accuracy_list,
                                })
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/model_stats_{args.align_loss}.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{args.align_loss}_model1.csv')
+
+            df = pd.DataFrame({'model1_trainer.epoch_list': model1_trainer.epoch_list,
+                               'model1_trainer.train_loss_list': model1_trainer.train_loss_list,
+                               'model1_trainer.test_loss_list': model1_trainer.test_loss_list,
+                               'model1_trainer.test_accuracy_list':model1_trainer.test_accuracy_list,
+                               })
+
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{args.align_loss}_model1.csv')
+
+            df = pd.DataFrame({
+                               'model2_trainer.epoch_list': model2_trainer.epoch_list,
+                               'model2_trainer.train_loss_list': model2_trainer.train_loss_list,
+                               'model2_trainer.test_loss_list': model2_trainer.test_loss_list,
+                               'model2_trainer.test_accuracy_list': model2_trainer.test_accuracy_list,
+                               })
+
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{args.align_loss}_model2.csv')
 
 def main():
     # Training settings
