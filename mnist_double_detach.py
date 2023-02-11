@@ -34,14 +34,16 @@ class LinearMerge(nn.Linear):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        print(self.weight)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
+
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            print(self.weight)
+            print(self.weight_align)
             print(weights_diff)
             weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
             print(weights_diff)
