@@ -41,22 +41,17 @@ class LinearMerge(nn.Linear):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0)
         if self.weight_align is not None:
-            #print(self.weight-self.weight_align)
-            if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())#*self.weight.size(1)
-            elif self.args.align_loss=='se':
-                weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
-            else:
-                print("Set align loss")
-                sys.exit()
-        return x, weights_diff
+
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
+
+        return x, weights_diff_ae, weights_diff_se
 
 class Net(nn.Module):
     def __init__(self, args, weight_merge=False):
         super(Net, self).__init__()
         self.args = args
         self.weight_merge = weight_merge
-        # bias False for now, have not tested adding bias to the loss fn.
         if self.weight_merge:
             self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
@@ -66,11 +61,12 @@ class Net(nn.Module):
 
     def forward(self, x, ):
         if self.weight_merge:
-            x, wa1 = self.fc1(x.view(-1, 28 * 28))
+            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
-            x, wa2 = self.fc2(x)
-            score_diff = wa1 + wa2
-            return x, score_diff
+            x, wa2_ae, wa2_se = self.fc2(x)
+            score_diff_ae = wa1_ae + wa2_ae
+            score_diff_se = wa1_se + wa2_se
+            return x, score_diff_ae,score_diff_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -124,7 +120,9 @@ class Trainer:
 
 
         #Results lists
-        self.weight_align_loss_list=[]
+        self.weight_align_ae_loss_list=[]
+        self.weight_align_se_loss_list=[]
+
         self.test_accuracy_list=[]
         self.train_loss_list=[]
         self.test_loss_list=[]
@@ -160,14 +158,19 @@ class Trainer:
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
-            output, weight_align = self.model(data)
-            '''
-            weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
-            For model w/o weight alignment paramter, second part of loss is 0  
-            '''
-            loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+            output, weight_align_ae, weight_align_se = self.model(data)
 
-            self.weight_align_loss_list.append(weight_align.item())
+            if self.args.align_loss=='ae':
+                weight_align_loss=weight_align_ae
+            elif self.args.align_loss == 'se':
+                weight_align_loss=weight_align_se
+            else:
+                print('Set align loss')
+                sys.exit()
+            loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
+
+            self.weight_align_ae_loss_list.append(weight_align_ae.item())
+            self.weight_align_se_loss_list.append(weight_align_se.item())
             self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
@@ -240,44 +243,30 @@ class Merge_Iterator:
             self.results_to_csv()
 
     def results_to_csv(self):
-            df = pd.DataFrame({'model1_weight_align_loss_list': self.model1_trainer.weight_align_loss_list,
+            df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
+                               'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model1_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{self.args.align_loss}_model1.csv')
 
-            df = pd.DataFrame({'model1_weight_align_loss_list': self.model2_trainer.weight_align_loss_list,
+            df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
+                               'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model2_trainer.batch_epoch_list,})
 
 
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_weight_diff_{self.args.align_loss}_model2.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
                                'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
                                'model1_trainer.test_loss_list': self.model1_trainer.test_loss_list,
                                'model1_trainer.test_accuracy_list':self.model1_trainer.test_accuracy_list,
 
-                               'model1_trainer.epoch_list': self.model2_trainer.epoch_list,
-                               'model2_trainer.train_loss_list': self.model2_trainer.train_loss_list,
-                               'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
-                               'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
-                               })
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_model1.csv')
-
-            df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
-                               'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
-                               'model1_trainer.test_loss_list': self.model1_trainer.test_loss_list,
-                               'model1_trainer.test_accuracy_list':self.model1_trainer.test_accuracy_list,
-                               })
-
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_model1.csv')
-
-            df = pd.DataFrame({
                                'model2_trainer.epoch_list': self.model2_trainer.epoch_list,
                                'model2_trainer.train_loss_list': self.model2_trainer.train_loss_list,
                                'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
                                'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
                                })
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/1layer_model_stats_{self.args.align_loss}.csv')
 
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_model2.csv')
 
 def main():
     # Training settings
