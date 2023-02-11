@@ -42,6 +42,8 @@ class LinearMerge(nn.Linear):
         if self.weight_align is not None:
 
             weights_diff = torch.sum((self.weight - self.weight_align).abs())
+
+            print("HERE")
             print(self.weight)
             print(self.weight_align)
             print(weights_diff)
