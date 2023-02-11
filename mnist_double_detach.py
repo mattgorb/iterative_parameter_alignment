@@ -195,7 +195,7 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
-        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        model_parameters = filter(lambda p: p.requires_grad, model1.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         print(params)
         sys.exit()
