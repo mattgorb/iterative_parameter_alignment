@@ -39,7 +39,8 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0)
+        weights_diff_ae = torch.tensor(0)
+        weights_diff_se = torch.tensor(0)
         if self.weight_align is not None:
 
             weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
