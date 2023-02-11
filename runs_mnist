@@ -1,2 +1,2 @@
-nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=1 --gpu=0> ~/iwa_results/100.txt 2>&1 &
-nohup python -u  mnist_double_detach.py --merge_iter=2500 --set_weight_from_weight_align=True --weight_align_factor=10 --gpu=1> ~/iwa_results/101.txt 2>&1 &
+nohup python -u  mnist_1layer_2_detach.py  --align_loss='ae' > ~/iwa_results/100.txt 2>&1 &
+nohup python -u  mnist_1layer_2_detach.py  --align_loss='se' --gpu=2 > ~/iwa_results/101.txt 2>&1 &
