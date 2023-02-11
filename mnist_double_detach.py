@@ -42,7 +42,7 @@ class LinearMerge(nn.Linear):
         if self.weight_align is not None:
             #weights_diff = torch.sum((self.weight - self.weight_align).abs())
             #print(weights_diff)
-            weights_diff = torch.sum(torch.square(self.weight - self.weight_align))
+            weights_diff = torch.sqrt(torch.sum(torch.square(self.weight - self.weight_align)))
             #print(weights_diff)
             #sys.exit()
         return x, weights_diff
