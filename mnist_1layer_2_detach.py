@@ -135,10 +135,17 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-        self.test_accuracy_list.append(self.test_acc)
-        self.train_loss_list.append(self.train_loss)
-        self.test_loss_list.append(self.test_loss)
-        self.epoch_list.append(self.merge_iter)
+            if self.args.baseline:
+                self.test_accuracy_list.append(self.test_acc)
+                self.train_loss_list.append(self.train_loss)
+                self.test_loss_list.append(self.test_loss)
+                self.epoch_list.append(self.merge_iter)
+
+        if not self.args.baseline:
+            self.test_accuracy_list.append(self.test_acc)
+            self.train_loss_list.append(self.train_loss)
+            self.test_loss_list.append(self.test_loss)
+            self.epoch_list.append(self.merge_iter)
 
 
     def model_loss(self):
@@ -162,9 +169,10 @@ class Trainer:
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
 
-            self.weight_align_ae_loss_list.append(weight_align_ae.item())
-            self.weight_align_se_loss_list.append(weight_align_se.item())
-            self.batch_epoch_list.append(self.merge_iter)
+            if not self.args.baseline:
+                self.weight_align_ae_loss_list.append(weight_align_ae.item())
+                self.weight_align_se_loss_list.append(weight_align_se.item())
+                self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
             loss.backward()
