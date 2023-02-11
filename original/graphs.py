@@ -14,7 +14,7 @@ plt.title("weight diff layer2, sum |m1.w - m2.w|")
 plt.savefig('images/double_l2weightdiff.png')
 '''
 ''''''
-df=pd.read_csv('../norms/norms_double.csv')
+df=pd.read_csv('norms/norms_double.csv')
 #df=df[0:60]
 df=df[12:150+12]
 #df=df.head(100)
