@@ -153,7 +153,7 @@ class Trainer:
             self.optimizer.zero_grad()
             output, weight_align_ae, weight_align_se = self.model(data)
 
-            if self.args.align_loss=='ae':
+            if self.args.align_loss=='ae' or self.args.baseline==True:
                 weight_align_loss=weight_align_ae
             elif self.args.align_loss == 'se':
                 weight_align_loss=weight_align_se
