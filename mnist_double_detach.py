@@ -195,6 +195,10 @@ class Merge_Iterator:
         model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        params = sum([np.prod(p.size()) for p in model_parameters])
+        print(params)
+        sys.exit()
         for iter in range(merge_iterations):
             if iter>0:
                 model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
