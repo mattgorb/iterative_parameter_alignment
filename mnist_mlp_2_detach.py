@@ -174,9 +174,6 @@ class Trainer:
             else:
                 print('Set align loss')
                 sys.exit()
-            print(weight_align_loss)
-            print(weight_align_ae)
-            sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
 
             if not self.args.baseline:
