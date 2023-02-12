@@ -167,7 +167,6 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align_ae, weight_align_se = self.model(data)
-            print(weight_align_ae)
             if self.args.align_loss=='ae' or self.args.baseline==True:
                 weight_align_loss=weight_align_ae
             elif self.args.align_loss == 'se':
@@ -175,6 +174,9 @@ class Trainer:
             else:
                 print('Set align loss')
                 sys.exit()
+            print(weight_align_loss)
+            print(weight_align_ae)
+            sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
 
             if not self.args.baseline:
