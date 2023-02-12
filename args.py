@@ -10,7 +10,7 @@ args = None
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Iterative Weight Alignment")
     parser.add_argument('--batch-size', type=int, default=256, help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=1, help='number of epochs to train')
+    parser.add_argument('--local_epochs', type=int, default=1, help='number of epochs to train on a client')
     parser.add_argument('--merge_iter', type=int, default=1000,  help='number of iterations to merge')
     parser.add_argument('--data_transform', type=bool, default=False)
     parser.add_argument('--weight_init', type=str, default=None)

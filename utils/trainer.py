@@ -26,7 +26,7 @@ class Trainer:
 
     def fit(self, log_output=False):
         self.train_iter+=1
-        for epoch in range(1, self.args.epochs + 1):
+        for epoch in range(1, self.args.local_epochs + 1):
             self.train()
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
