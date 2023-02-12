@@ -23,7 +23,7 @@ def linear_init(in_dim, out_dim,  args=None, ):
     return layer
 
 
-def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=0, args=None, ):
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, args=None, ):
     layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=args.bias)
     layer.init(args)
     return layer
