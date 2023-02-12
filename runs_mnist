@@ -14,3 +14,4 @@ nohup python -u  mnist_mlp_2.py  --baseline=True --epochs=250 --gpu=6 > ~/iwa_re
 
 
 nohup python main.py --config=configs/cifar10_merge_20.yaml --gpu=7  --merge_iter=25 > ~/iwa_results/1.txt 2>&1 &
+nohup python main.py --config=configs/cifar10_merge_2.yaml --gpu=7  --merge_iter=25 > ~/iwa_results/1.txt 2>&1 &
