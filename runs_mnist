@@ -11,3 +11,6 @@ nohup python -u  mnist_mlp_2_detach.py  --baseline=True --epochs=250 --gpu=6 > ~
 nohup python -u  mnist_mlp_2.py  --align_loss='ae' --gpu=3 --merge_iter=3000 > ~/iwa_results/107.txt 2>&1 &
 nohup python -u  mnist_mlp_2.py  --align_loss='se' --gpu=4 --merge_iter=3000 > ~/iwa_results/108.txt 2>&1 &
 nohup python -u  mnist_mlp_2.py  --baseline=True --epochs=250 --gpu=6 > ~/iwa_results/109.txt 2>&1 &
+
+
+nohup python main.py --config=configs/cifar10_merge_20.yaml --gpu=7  --merge_iter=25 > ~/iwa_results/1.txt 2>&1 &
