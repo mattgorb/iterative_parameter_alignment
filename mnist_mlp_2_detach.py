@@ -60,14 +60,14 @@ class Net(nn.Module):
             self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
             self.fc2 = nn.Linear(1024, 10, bias=False)
 
-    def forward(self, x, ):
+    def forward(self, x,):
         if self.weight_merge:
             x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
             x, wa2_ae, wa2_se = self.fc2(x)
             score_diff_ae = wa1_ae + wa2_ae
-            #score_diff_se = wa1_se + wa2_se
-            return x, score_diff_ae,None
+            score_diff_se = wa1_se + wa2_se
+            return x, score_diff_ae, score_diff_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -230,16 +230,20 @@ class Merge_Iterator:
             self.model2_trainer.merge_iter=iter
             if iter>0:
                 model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
                     model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                    model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
                 self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
             self.model1_trainer.fit()
 
             if iter>0:
                 model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
                     model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
+                    model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
                 self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             self.model2_trainer.fit()
