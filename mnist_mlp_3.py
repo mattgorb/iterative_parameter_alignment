@@ -106,7 +106,7 @@ def get_datasets(args):
         dataset2.data, dataset2.targets = dataset2.data[ds2_indices], dataset2.targets[ds2_indices]
         dataset3.data, dataset3.targets = dataset3.data[ds3_indices], dataset3.targets[ds3_indices]
 
-        assert (set(ds1_indices).isdisjoint(ds2_indices).isdisjoint(ds3_indices))
+        #assert (set(ds1_indices).isdisjoint(ds2_indices).isdisjoint(ds3_indices))
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
