@@ -38,25 +38,22 @@ class Merge_Iterator:
         model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
         model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
         '''
-        lr_schedule = [0.001 for i in range(3000)] + \
-                      [0.0005 for i in range(2000)] + \
-                      [0.0001 for i in range(3000)] + \
-                      [0.00005 for i in range(2000)] + \
-                      [0.000025 for i in range(3000)] + \
-                      [0.00001 for i in range(2000)] + \
-                      [0.000001 for i in range(5000)]
 
         for iter in range(merge_iterations):
             for trainer in self.model_trainers:
                 trainer.fit()
+                print(f'Model {trainer.model} Train loss: {trainer.train_loss}, '
+                      f'Train CE loss: {trainer.train_loss_ce}, '
+                      f'Test loss: {trainer.test_loss},  '
+                      f'Test accuracy: {trainer.test_acc}')
 
             if iter==0:
-
                 #set_weight_align_param(self.models[0], self.models[1], self.args)
                 set_weight_align_param(self.models, self.args)
                 for trainer in self.model_trainers:
                     trainer.optimizer=optim.Adam(trainer.model.parameters(), lr=self.args.lr)
-            print(f'Merge Iteration: {iter}')
+
+            print(f'Summary, Merge Iteration: {iter}')
             for i in range(len(self.model_trainers)):
                 trainer=self.model_trainers[i]
                 print(f'\tModel {i} Train loss: {trainer.train_loss}, '
