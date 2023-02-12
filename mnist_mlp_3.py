@@ -39,7 +39,7 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0)#.float().to(self.args.device)
+        weights_diff = torch.tensor(0).float().to(self.args.device)
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
@@ -306,6 +306,7 @@ def main():
     args = parser.parse_args()
     set_seed(args.seed)
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
+    args.device = device
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
         train_loader1, test_dataset = get_datasets(args)
