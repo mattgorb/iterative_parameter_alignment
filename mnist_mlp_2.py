@@ -264,12 +264,12 @@ class Merge_Iterator:
             df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
                                'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model1_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1_waf_{self.args.weight_align_factor}.csv')
 
             df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
                                'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model2_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2_waf_{self.args.weight_align_factor}.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
                                'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
@@ -281,7 +281,7 @@ class Merge_Iterator:
                                'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
                                'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
                                })
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
 
 
 def main():
@@ -293,7 +293,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=int, default=250, )
+    parser.add_argument('--weight_align_factor', type=int, default=25, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
@@ -326,7 +326,7 @@ def main():
                            'trainer.test_loss_list': trainer.test_loss_list,
                            'trainer.test_accuracy_list': trainer.test_accuracy_list,
                            })
-        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_baseline.csv')
+        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_baseline_waf_{self.args.weight_align_factor}.csv')
 
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
