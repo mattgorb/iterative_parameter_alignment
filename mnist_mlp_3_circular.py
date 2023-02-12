@@ -294,11 +294,7 @@ class Merge_Iterator:
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
 
-
             self.model1_trainer.fit()
-            print(model1.fc2.weight[0][:10])
-            print(model1.fc2.weight_align_list[0][0][:10])
-            print(model1.fc2.weight_align_list[1][0][:10])
 
             #Set Model 2 parameters
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
@@ -318,10 +314,6 @@ class Merge_Iterator:
             self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
 
             self.model2_trainer.fit()
-            print(model2.fc2.weight[0][:10])
-            print(model2.fc2.weight_align_list[0][0][:10])
-            print(model2.fc2.weight_align_list[1][0][:10])
-
 
 
             #Set Model 3 parameters
@@ -342,9 +334,7 @@ class Merge_Iterator:
             self.model3_trainer.optimizer.load_state_dict(transfer_state_dict)
 
             self.model3_trainer.fit()
-            print(model3.fc2.weight[0][:10])
-            print(model3.fc2.weight_align_list[0][0][:10])
-            print(model3.fc2.weight_align_list[1][0][:10])
+
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
