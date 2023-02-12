@@ -225,8 +225,8 @@ def set_weight_align_param(model1, model2,model3,  args):
             m1.weight_align_list.append(nn.Parameter(m2.weight, requires_grad=True))
             m1.weight_align_list.append(nn.Parameter(m3.weight, requires_grad=True))
 
-            m2.weight_align_list.append(nn.Parameter(m1.weight, requires_grad=True))
             m2.weight_align_list.append(nn.Parameter(m3.weight, requires_grad=True))
+            m2.weight_align_list.append(nn.Parameter(m1.weight, requires_grad=True))
 
             m3.weight_align_list.append(nn.Parameter(m1.weight, requires_grad=True))
             m3.weight_align_list.append(nn.Parameter(m2.weight, requires_grad=True))
