@@ -252,18 +252,27 @@ class Merge_Iterator:
             self.model3_trainer.merge_iter=iter
 
             if iter>0:
-                model1.fc1.weight_align_list=nn.ParameterList([])
-                model1.fc2.weight_align_list=nn.ParameterList([])
-
-                model1.fc1.weight_align_list.append(nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-                model1.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-
-                model1.fc2.weight_align_list.append(nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
-                model1.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
-
-                if self.args.set_weight_from_weight_align and len(model3.fc1.weight_align_list)>0:
+                if len(model3.fc1.weight_align_list)>0:
                     model1.fc1.weight=nn.Parameter(model3.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
                     model1.fc2.weight=nn.Parameter(model3.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+
+                    model1.fc1.weight_align_list = nn.ParameterList([])
+                    model1.fc2.weight_align_list = nn.ParameterList([])
+
+                    model1.fc1.weight_align_list.append( nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                    model1.fc1.weight_align_list.append( nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                    model1.fc2.weight_align_list.append( nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                    model1.fc2.weight_align_list.append( nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                else:
+                    model1.fc1.weight_align_list = nn.ParameterList([])
+                    model1.fc2.weight_align_list = nn.ParameterList([])
+
+                    model1.fc1.weight_align_list.append( nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                    model1.fc1.weight_align_list.append( nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                    model1.fc2.weight_align_list.append( nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                    model1.fc2.weight_align_list.append( nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
                 self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
@@ -271,18 +280,21 @@ class Merge_Iterator:
 
 
             if iter>0:
-                model2.fc1.weight_align_list=nn.ParameterList([])
-                model2.fc2.weight_align_list=nn.ParameterList([])
-
-                model2.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-                model2.fc1.weight_align_list.append(nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-
-                model2.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
-                model2.fc2.weight_align_list.append(nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
-
-                if self.args.set_weight_from_weight_align and len(model1.fc1.weight_align_list)>0:
+                if len(model1.fc1.weight_align_list)>0:
                     model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
                     model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+
+                    model2.fc1.weight_align_list = nn.ParameterList([])
+                    model2.fc2.weight_align_list = nn.ParameterList([])
+
+                    model2.fc1.weight_align_list.append(nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                    model2.fc1.weight_align_list.append( nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                    model2.fc2.weight_align_list.append( nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                    model2.fc2.weight_align_list.append( nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+
+
+
                 self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
 
@@ -328,7 +340,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=int, default=250, )
+    parser.add_argument('--weight_align_factor', type=int, default=5, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
