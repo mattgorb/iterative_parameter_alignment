@@ -39,7 +39,6 @@ class Merge_Iterator:
                       f'Test accuracy: {trainer.test_acc}')
 
             if iter==0:
-                #set_weight_align_param(self.models[0], self.models[1], self.args)
                 set_weight_align_param(self.models, self.args)
                 for trainer in self.model_trainers:
                     trainer.optimizer=optim.Adam(trainer.model.parameters(), lr=self.args.lr)

@@ -1,3 +1,9 @@
+'''
+An example of how to explicitly attach and detach model parameters from a 3-client weight alignment setting.
+This file serves as an example of how the method works in a ring network topology, with client 1 passing weights to client 2, client 2 to 3, then client 3 back to 1.
+'''
+
+
 from __future__ import print_function
 import argparse
 import torch
@@ -30,7 +36,7 @@ def linear_init(in_dim, out_dim, bias=False, args=None, ):
 class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.weight_align = None
+        self.weight_align_list = nn.ParameterList([])
 
     def init(self, args):
         self.args = args
@@ -39,14 +45,16 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff_ae = torch.tensor(0)
-        weights_diff_se = torch.tensor(0)
-        if self.weight_align is not None:
-
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
-
-        return x, weights_diff_ae, weights_diff_se
+        weights_diff = torch.tensor(0).float().to(self.args.device)
+        if len(self.weight_align_list) > 0:
+            for wa in self.weight_align_list:
+                if self.args.align_loss == 'ae':
+                    weights_diff += torch.sum((self.weight - wa).abs())
+                elif self.args.align_loss == 'se':
+                    weights_diff += torch.sum((self.weight - wa) ** 2)
+                else:
+                    sys.exit(1)
+        return x, weights_diff, torch.tensor(0)
 
 class Net(nn.Module):
     def __init__(self, args, weight_merge=False):
@@ -213,8 +221,6 @@ class Trainer:
 
 
 
-
-
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
         self.args = args
@@ -246,32 +252,60 @@ class Merge_Iterator:
             self.model3_trainer.merge_iter=iter
 
             if iter>0:
-                model1.fc1.weight_align=nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight_align=nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #if self.args.set_weight_from_weight_align and model3.fc1.weight_align is not None:
-                    #model1.fc1.weight=nn.Parameter(model3.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    #model1.fc2.weight=nn.Parameter(model3.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                self.model2_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                model1.fc1.weight_align_list=nn.ParameterList([])
+                model1.fc2.weight_align_list=nn.ParameterList([])
+
+                model1.fc1.weight_align_list.append(nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                model1.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                model1.fc2.weight_align_list.append(nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                model1.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+
+                if self.args.set_weight_from_weight_align and len(model3.fc1.weight_align_list)>0:
+                    model1.fc1.weight=nn.Parameter(model3.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+                    model1.fc2.weight=nn.Parameter(model3.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+
+                self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
             self.model1_trainer.fit()
 
+
             if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
-                    #model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    #model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
+                model2.fc1.weight_align_list=nn.ParameterList([])
+                model2.fc2.weight_align_list=nn.ParameterList([])
+
+                model2.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                model2.fc1.weight_align_list.append(nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                model2.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                model2.fc2.weight_align_list.append(nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+
+                if self.args.set_weight_from_weight_align and len(model1.fc1.weight_align_list)>0:
+                    model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+                    model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
                 self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
 
             self.model2_trainer.fit()
 
+
+
+
             if iter>0:
-                model3.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model3.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                #if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
-                    #model3.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    #model3.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                self.model2_trainer.optimizer = optim.Adam(model3.parameters(), lr=self.args.lr)
+                model3.fc1.weight_align_list=nn.ParameterList([])
+                model3.fc2.weight_align_list=nn.ParameterList([])
+
+                model3.fc1.weight_align_list.append(nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+                model3.fc1.weight_align_list.append(nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+                model3.fc2.weight_align_list.append(nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+                model3.fc2.weight_align_list.append(nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
+
+                if self.args.set_weight_from_weight_align and len(model2.fc1.weight_align_list)>0:
+                    model3.fc1.weight=nn.Parameter(model2.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+                    model3.fc2.weight=nn.Parameter(model2.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
+
+                self.model3_trainer.optimizer = optim.Adam(model3.parameters(), lr=self.args.lr)
 
             self.model3_trainer.fit()
 
