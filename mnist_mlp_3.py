@@ -268,8 +268,18 @@ class Merge_Iterator:
             self.model3_trainer.merge_iter=iter
 
             self.model1_trainer.fit()
+            print(model1.fc2.weight[0][:10])
+            print(model1.fc2.weight_align_list[0][0][:10])
+            print(model1.fc2.weight_align_list[1][0][:10])
             self.model2_trainer.fit()
+            print(model2.fc2.weight[0][:10])
+            print(model2.fc2.weight_align_list[0][0][:10])
+            print(model2.fc2.weight_align_list[1][0][:10])
+
             self.model3_trainer.fit()
+            print(model3.fc2.weight[0][:10])
+            print(model3.fc2.weight_align_list[0][0][:10])
+            print(model3.fc2.weight_align_list[1][0][:10])
 
 
             print(f'Merge Iteration: {iter} \n'
