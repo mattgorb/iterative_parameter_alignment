@@ -204,6 +204,23 @@ class Trainer:
         return test_loss, 100. * correct / len(self.test_loader.dataset)
 
 
+def set_weight_align_param(model1, model2, args):
+    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules(), ):
+        n1, m1 = model1_mods
+        n2, m2 = model2_mods
+        if not type(m2) == LinearMerge:
+            continue
+        if hasattr(m1, "weight"):
+            '''
+            m1.weight gets updated to m2.weight_align because it is not detached.  and vice versa
+            This is a simple way to "share" the weights between models. 
+            Alternatively we could set m1.weight=m2.weight_align after merge model is done training.  
+            '''
+
+            # We only want to merge one models weights in this file
+            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
         self.args = args
@@ -228,25 +245,14 @@ class Merge_Iterator:
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
-            if iter>0:
-                model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                if self.args.set_weight_from_weight_align and model2.fc1.weight_align is not None:
-                    model1.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    model1.fc2.weight=nn.Parameter(model2.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
 
-            self.model1_trainer.fit()
+            model1_trainer.fit()
+            model2_trainer.fit()
 
-            if iter>0:
-                model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
-                model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True)
-                if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
-                    model2.fc1.weight=nn.Parameter(model1.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)
-                    model2.fc2.weight=nn.Parameter(model1.fc2.weight_align.clone().detach().to(self.device), requires_grad=True)
-                self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
-
-            self.model2_trainer.fit()
+            if iter==0:
+                set_weight_align_param(model1, model2, self.args)
+                model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+                model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
@@ -258,12 +264,12 @@ class Merge_Iterator:
             df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
                                'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model1_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_detach_weight_diff_{self.args.align_loss}_model1.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1.csv')
 
             df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
                                'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
                                'merge_iter': self.model2_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_detach_weight_diff_{self.args.align_loss}_model2.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2.csv')
 
             df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
                                'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
@@ -275,7 +281,7 @@ class Merge_Iterator:
                                'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
                                'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
                                })
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_detach_model_stats_{self.args.align_loss}.csv')
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}.csv')
 
 
 def main():
@@ -320,7 +326,7 @@ def main():
                            'trainer.test_loss_list': trainer.test_loss_list,
                            'trainer.test_accuracy_list': trainer.test_accuracy_list,
                            })
-        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_detach_model_stats_baseline.csv')
+        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_baseline.csv')
 
     else:
         train_loader1, train_loader2, test_dataset = get_datasets(args)
