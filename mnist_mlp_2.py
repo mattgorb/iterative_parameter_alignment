@@ -246,8 +246,8 @@ class Merge_Iterator:
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
 
-            model1_trainer.fit()
-            model2_trainer.fit()
+            self.model1_trainer.fit()
+            self.model2_trainer.fit()
 
             if iter==0:
                 set_weight_align_param(model1, model2, self.args)
