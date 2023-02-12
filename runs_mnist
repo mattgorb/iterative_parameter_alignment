@@ -1,13 +1,13 @@
-nohup python -u  mnist_1layer_2_detach.py  --align_loss='ae' --gpu=1 --merge_iter=15000 -weight_align_factor=3  > ~/iwa_results/100.txt 2>&1 &
-nohup python -u  mnist_1layer_2_detach.py  --align_loss='se' --gpu=2 --merge_iter=15000  -weight_align_factor=3 > ~/iwa_results/101.txt 2>&1 &
+nohup python -u  mnist_1layer_2_detach.py  --align_loss='ae' --gpu=1 --merge_iter=15000 --weight_align_factor=3  > ~/iwa_results/100.txt 2>&1 &
+nohup python -u  mnist_1layer_2_detach.py  --align_loss='se' --gpu=2 --merge_iter=15000  --weight_align_factor=3 > ~/iwa_results/101.txt 2>&1 &
 nohup python -u  mnist_1layer_2_detach.py  --baseline=True --epochs=250 --gpu=5 > ~/iwa_results/103.txt 2>&1 &
 
-nohup python -u  mnist_mlp_2_detach.py  --align_loss='ae' --gpu=3 --merge_iter=1500 -weight_align_factor=3 > ~/iwa_results/104.txt 2>&1 &
-nohup python -u  mnist_mlp_2_detach.py  --align_loss='se' --gpu=4 --merge_iter=1500 -weight_align_factor=3 > ~/iwa_results/105.txt 2>&1 &
+nohup python -u  mnist_mlp_2_detach.py  --align_loss='ae' --gpu=3 --merge_iter=1500 --weight_align_factor=3 > ~/iwa_results/104.txt 2>&1 &
+nohup python -u  mnist_mlp_2_detach.py  --align_loss='se' --gpu=4 --merge_iter=1500 --weight_align_factor=3 > ~/iwa_results/105.txt 2>&1 &
 nohup python -u  mnist_mlp_2_detach.py  --baseline=True --epochs=250 --gpu=6 > ~/iwa_results/106.txt 2>&1 &
 
 
-nohup python -u  mnist_mlp_2.py  --align_loss='ae' --gpu=3 --merge_iter=1500 --weight_align_factor=3 > ~/iwa_results/113.txt 2>&1 &
+nohup python -u  mnist_mlp_2.py  --align_loss='ae' --gpu=5 --merge_iter=1500 --weight_align_factor=3 > ~/iwa_results/113.txt 2>&1 &
 nohup python -u  mnist_mlp_2.py  --align_loss='se' --gpu=2 --merge_iter=1500 --weight_align_factor=3 > ~/iwa_results/114.txt 2>&1 &
 
 
