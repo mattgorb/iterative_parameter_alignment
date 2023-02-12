@@ -290,7 +290,11 @@ class Merge_Iterator:
             model1.fc2.weight_align_list.append( nn.Parameter(model3.fc2.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model1.fc2.weight_align_list.append( nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
+            transfer_state_dict=self.model1_trainer.optimizer.state_dict()
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+            self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
+
+
             self.model1_trainer.fit()
             print(model1.fc2.weight[0][:10])
             print(model1.fc2.weight_align_list[0][0][:10])
@@ -309,7 +313,10 @@ class Merge_Iterator:
             model2.fc2.weight_align_list.append( nn.Parameter(model1.fc2.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc2.weight_align_list.append( nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
+            transfer_state_dict=self.model2_trainer.optimizer.state_dict()
             self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+            self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
+
             self.model2_trainer.fit()
             print(model2.fc2.weight[0][:10])
             print(model2.fc2.weight_align_list[0][0][:10])
@@ -330,7 +337,10 @@ class Merge_Iterator:
             model3.fc2.weight_align_list.append( nn.Parameter(model2.fc2.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model3.fc2.weight_align_list.append( nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
+            transfer_state_dict=self.model3_trainer.optimizer.state_dict()
             self.model3_trainer.optimizer = optim.Adam(model3.parameters(), lr=self.args.lr)
+            self.model3_trainer.optimizer.load_state_dict(transfer_state_dict)
+
             self.model3_trainer.fit()
             print(model3.fc2.weight[0][:10])
             print(model3.fc2.weight_align_list[0][0][:10])
