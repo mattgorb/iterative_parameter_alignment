@@ -266,7 +266,7 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
             if iter>0:
-                model3.fc1.weight_align=nn.Parameter(torch.mean(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+                model3.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
                 model3.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True)
                 #if self.args.set_weight_from_weight_align and model1.fc1.weight_align is not None:
                     #model3.fc1.weight=nn.Parameter(model2.fc1.weight_align.clone().detach().to(self.device), requires_grad=True)

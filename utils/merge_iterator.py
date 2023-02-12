@@ -22,8 +22,6 @@ class Merge_Iterator:
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         self.models=[model_selector(self.args) for i in range(self.num_clients)]
-        #model1 = model_selector(self.args)
-        #model2 = model_selector(self.args)
 
 
         self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
@@ -32,17 +30,10 @@ class Merge_Iterator:
                         for i in range(self.num_clients)]
 
 
-        '''
-        AdaDelta works with re-initialization (because of the adadptive state)
-        SGD works with one initialization, but requires tuning the weight_align_factor and learning rate.
-        model1_trainer.optimizer = optim.SGD(model1.parameters(), lr=self.args.lr)
-        model2_trainer.optimizer = optim.SGD(model2.parameters(), lr=self.args.lr)
-        '''
-
         for iter in range(merge_iterations):
             for trainer in self.model_trainers:
                 trainer.fit()
-                print(f'Model {trainer.model} Train loss: {trainer.train_loss}, '
+                print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
                       f'Train CE loss: {trainer.train_loss_ce}, '
                       f'Test loss: {trainer.test_loss},  '
                       f'Test accuracy: {trainer.test_acc}')

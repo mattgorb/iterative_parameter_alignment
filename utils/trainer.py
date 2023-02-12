@@ -24,7 +24,7 @@ class Trainer:
         self.train_iter_list=[]
         self.train_iter=0
 
-    def fit(self, log_output=False):
+    def fit(self, log_output=True):
         self.train_iter+=1
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
@@ -35,7 +35,7 @@ class Trainer:
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
-                print( f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+                print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
     def model_loss(self):
         return self.best_loss
