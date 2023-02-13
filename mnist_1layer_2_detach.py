@@ -218,6 +218,13 @@ class Merge_Iterator:
         self.model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+
+        model1.fc1.weight_align = nn.Parameter(model2.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+        model2.fc1.weight_align = nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True)
+
+        self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+        self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
