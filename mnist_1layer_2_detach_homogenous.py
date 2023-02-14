@@ -79,7 +79,8 @@ def get_datasets(args):
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
     else:
-        test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
+        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
+
         # split dataset in half by labels
         lst = np.arange(len(dataset1))
         random.shuffle(lst)
