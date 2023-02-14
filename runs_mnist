@@ -11,5 +11,11 @@ nohup python -u mnist_mlp_3_circular.py --align_loss='ae' --weight_align_factor=
 nohup python -u mnist_mlp_3_circular.py --align_loss='se' --weight_align_factor=3 --merge_iter=3000 > ~/iwa_results/108.txt 2>&1 &
 
 
-#1layer baseline: 92.6
-#mlp baseline: 98.3
+
+nohup python -u  mnist_1layer_2_detach_homogenous.py  --align_loss='ae' --gpu=1 --merge_iter=1000 --weight_align_factor=3  > ~/iwa_results/100.txt 2>&1 &
+nohup python -u  mnist_1layer_2_detach_homogenous.py  --align_loss='se' --gpu=2 --merge_iter=1000  --weight_align_factor=3 > ~/iwa_results/101.txt 2>&1 &
+
+
+
+#1layer baseline: 92.6  merge: 92.5
+#mlp baseline: 98.3 merge: 98.3
