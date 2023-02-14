@@ -80,7 +80,6 @@ def get_datasets(args):
         return train_loader, test_loader
     else:
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
-        test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
 
         # split dataset in half by labels
         lst = np.arange(len(dataset1))
@@ -93,10 +92,8 @@ def get_datasets(args):
             train_loaders.append(train_loader)
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
-        train_loader1 = DataLoader(train_loaders[0], batch_size=args.batch_size, shuffle=True)
-        train_loader2 = DataLoader(train_loaders[1], batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
-        return train_loader1, train_loader2, test_loader
+        return train_loaders[0], train_loaders[1], test_loader
 
 
 class Trainer:
