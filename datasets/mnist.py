@@ -5,8 +5,7 @@ import torch
 import collections
 
 import random
-
-
+from datasets.dirichlet_partition import dirichlet,  record_net_data_stats
 
 def get_datasets(args):
     # not using normalization
@@ -22,12 +21,13 @@ def get_datasets(args):
     else:
 
         num_clients=args.num_clients
+
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
 
         # split dataset in half by labels
         #labels = torch.unique(dataset1.targets)
         train_loaders = []
-        if args.disjoint_classes:
+        if args.dataset_split=="disjoint_classes":
             assert num_clients in [2,5,10]
 
             if num_clients==2:
@@ -80,15 +80,38 @@ def get_datasets(args):
                     assert (set(index_groupings[3]).isdisjoint(index_groupings[4]))
 
 
-        else:
+        elif args.dataset_split=='iid':
             num_clients = args.num_clients
             lst=np.arange(len(dataset1))
             random.shuffle(lst)
+            stats_dict={}
+            i=0
             for group in np.array_split(lst, num_clients):
                 dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
                 dataset.data, dataset.targets = dataset.data[group], dataset.targets[group]
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
+                stats_dict[i]=group
+                i+=1
+
+            dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
+            record_net_data_stats(dataset.targets, stats_dict)
+
+        elif args.dataset_split=='dirichlet':
+            X_train, y_train = dataset1.data, dataset1.targets
+            net_dataidx_map=dirichlet(y_train,  num_clients, alpha=args.dirichlet_alpha)
+
+            for i,j in net_dataidx_map.items():
+                dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
+                dataset.data, dataset.targets = dataset.data[j], dataset.targets[j]
+                print(len(dataset.data))
+                train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+                train_loaders.append(train_loader)
+
+        else:
+            print('Choose valid dataset partition')
+            sys.exit()
+
 
         test_dataset = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)

@@ -3,11 +3,10 @@ from torch.utils.data import DataLoader
 import numpy as np
 import collections
 import random
+
+from datasets.dirichlet_partition import dirichlet,  record_net_data_stats
+
 def get_datasets(args):
-    # not using normalization
-    #transform = transforms.Compose([
-        #transforms.ToTensor(),
-    #])
     normalize = transforms.Normalize(
         mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
     )
@@ -41,7 +40,7 @@ def get_datasets(args):
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
 
         train_loaders = []
-        if args.disjoint_classes:
+        if args.dataset_split=="disjoint_classes":
             assert num_clients in [2, 5, 10]
 
             if num_clients == 2:
@@ -94,14 +93,32 @@ def get_datasets(args):
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[3]))
                     assert (set(index_groupings[3]).isdisjoint(index_groupings[4]))
 
-
-        else:
+        elif args.dataset_split == 'iid':
             num_clients = args.num_clients
             lst = np.arange(len(dataset1))
             random.shuffle(lst)
+
+            stats_dict={}
+            i=0
             for group in np.array_split(lst, num_clients):
                 dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
                 dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
+                train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
+                train_loaders.append(train_loader)
+
+                stats_dict[i]=group
+                i+=1
+
+        elif args.dataset_split=='dirichlet':
+            dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+            _, y_train = dataset.data, np.array(dataset.targets)
+
+            net_dataidx_map=dirichlet(y_train,  num_clients, alpha=args.dirichlet_alpha)
+
+            for i,j in net_dataidx_map.items():
+                dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+                dataset.data, dataset.targets = dataset.data[j], np.array(dataset.targets)[j]
+                print(len(dataset.data))
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
 
