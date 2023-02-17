@@ -8,4 +8,5 @@ num_clients: 100
 bias: True
 local_epochs: 15
 dataset_split: iid
+batch_size: 32
 

@@ -9,4 +9,5 @@ bias: True
 local_epochs: 15
 dataset_split: dirichlet
 dirichlet_alpha: 0.3
+batch_size: 32
 
