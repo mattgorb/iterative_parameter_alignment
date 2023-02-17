@@ -9,3 +9,4 @@ num_clients: 2
 bias: True
 local_epochs: 5
 
+dataset_split: iid
