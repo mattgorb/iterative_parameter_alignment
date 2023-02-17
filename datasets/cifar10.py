@@ -122,6 +122,8 @@ def get_datasets(args):
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
 
+        else:
+            print('choose dataset split!')
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
 
