@@ -4,7 +4,7 @@ model: Conv4
 align_loss: se
 weight_align_factor: 3
 data_transform: True
-num_clients: 20
+num_clients: 100
 bias: True
 local_epochs: 15
 dataset_split: iid

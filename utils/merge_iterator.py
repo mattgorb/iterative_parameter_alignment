@@ -30,6 +30,10 @@ class Merge_Iterator:
                         for i in range(self.num_clients)]
 
 
+        set_weight_align_param(self.models, self.args)
+        for trainer in self.model_trainers:
+            trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
+
         for iter in range(merge_iterations):
             for trainer in self.model_trainers:
                 trainer.fit()
