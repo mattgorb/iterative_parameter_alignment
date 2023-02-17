@@ -1,4 +1,4 @@
 nohup python -u main.py --config=configs/cifar10_merge_100.yaml --gpu=7 > ~/iwa/120.txt 2>&1 &
 
 
-nohup python -u main.py --config=configs/cifar10_merge_100_dir_3.yaml --gpu=1 > ~/iwa/121.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_merge_100_dir_p3.yaml --gpu=1 > ~/iwa/121.txt 2>&1 &
