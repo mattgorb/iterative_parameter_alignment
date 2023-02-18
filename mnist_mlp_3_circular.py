@@ -306,6 +306,10 @@ class Merge_Iterator:
             #Set Model 2 parameters
             mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
             mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+
+            print("\n\n\n\nMODEL2")
+
+
             print(f'mem :  {mem_params}')
             print(f'buf:  {mem_bufs}')
             for n,p in model2.named_parameters():
@@ -322,8 +326,8 @@ class Merge_Iterator:
             print(f'buf:  {mem_bufs}')
             for n,p in model2.named_parameters():
                 print(f'{n}:  {p.size()}')
-            print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+            print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}\n\n\n\n")
+            #sys.exit()
 
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])
