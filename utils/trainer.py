@@ -77,7 +77,7 @@ class Trainer:
             print(torch.cuda.memory_allocated(self.args.gpu))
             for n,p in self.model.named_parameters():
                 print(f'{n}:  {p.grad}')
-            sys.exit()
+            #sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
             train_loss += loss
