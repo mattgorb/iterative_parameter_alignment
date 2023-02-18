@@ -310,7 +310,7 @@ class Merge_Iterator:
             print(f'bufs; {mem_bufs}')
             for n,p in model2.named_parameters():
                 print(f'{n}:  {p.size()}')
-
+            print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
