@@ -297,56 +297,12 @@ class Merge_Iterator:
             self.model1_trainer.fit()
 
             #Set Model 2 parameters
-
-            print("\n\n\n\nMODEL2")
-
-
-
-
-            mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
-
-            print(f'm1  mem before:  {mem_params}')
-            print(f'm1 buf before:  {mem_bufs}')
-
-
-            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-
-            print(f'm2 mem before:  {mem_params}')
-            print(f'm2 buf before:  {mem_bufs}')
-            for n,p in model2.named_parameters():
-                print(f'{n}:  {p.size()}')
-
-            print(f"\nBEFORE : {torch.cuda.memory_allocated(self.args.gpu)}")
-
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             torch.cuda.empty_cache()
 
-            mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
-
-            print(f'm1  mem after:  {mem_params}')
-            print(f'm1 buf after:  {mem_bufs}')
-
-            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-
-            print(f'm2 mem after:  {mem_params}')
-            print(f'm2 buf after:  {mem_bufs}')
-            for n, p in model2.named_parameters():
-                print(f'{n}:  {p.size()}')
-
-
-            print(f"\nAfter: {torch.cuda.memory_allocated(self.args.gpu)}\n\n\n\n")
-            #sys.exit()
-
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])
-
-
-
 
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))

@@ -29,35 +29,31 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}_0.pt'
 
     def fit(self, log_output=True):
-        print(f"Begin. fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
+
         if self.train_iter>0:
             checkpoint = torch.load(self.save_path)
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-        print(f"mid fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
+
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
-            print(f"mid fit mem  3: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
-            print(f"mid fit mem4: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
-        print(f"mid fit mem 2: {torch.cuda.memory_allocated(self.args.gpu)}")
+
         torch.save({
             'epoch': self.train_iter,
             'model_state_dict': self.model.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict()
         }, self.save_path)
-        print(f"mid fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
         del self.optimizer
         torch.cuda.empty_cache()
-
-
-        print(f"End fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
 
         self.train_iter+=1
 
@@ -79,8 +75,6 @@ class Trainer:
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
-
-            #print(torch.cuda.memory_allocated(self.args.gpu))
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
