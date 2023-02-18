@@ -23,12 +23,16 @@ class Trainer:
         self.train_iter_list=[]
         self.train_iter=0
 
+        self.weight_dir = f'{self.args.base_dir}iwa_weights/'
+
         self.model_name = model_name
         self.save_path=f'{self.weight_dir}{self.model_name}_0.pt'
 
     def fit(self, log_output=True):
         if self.train_iter>0:
-            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            checkpoint = torch.load(self.save_path)
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+            self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
             test_loss, test_acc = self.test()
@@ -45,6 +49,9 @@ class Trainer:
             'model_state_dict': self.model.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict()
         }, self.save_path)
+
+        del self.optimizer
+        torch.cuda.empty_cache()
 
         self.train_iter+=1
 

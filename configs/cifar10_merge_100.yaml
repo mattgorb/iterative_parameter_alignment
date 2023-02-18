@@ -6,7 +6,7 @@ weight_align_factor: 1
 data_transform: True
 num_clients: 100
 bias: True
-local_epochs: 1
+local_epochs: 10
 dataset_split: iid
 batch_size: 32
 
