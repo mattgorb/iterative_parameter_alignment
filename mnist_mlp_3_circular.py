@@ -304,6 +304,10 @@ class Merge_Iterator:
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             #Set Model 2 parameters
+            del model2.fc1.weight
+            del model2.fc2.weight
+
+
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             print(f"2.1: {torch.cuda.memory_allocated(self.args.gpu)}")
