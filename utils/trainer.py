@@ -74,7 +74,9 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
             #print(torch.cuda.mem_get_info)
+            print('herre')
             print(torch.cuda.memory_allocated(7))
+            print(torch.cuda.memory_allocated(0))
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
             train_loss += loss
