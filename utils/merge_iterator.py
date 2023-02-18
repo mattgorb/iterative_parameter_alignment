@@ -45,10 +45,6 @@ class Merge_Iterator:
                       f'Test loss: {trainer.test_loss},  '
                       f'Test accuracy: {trainer.test_acc}')
 
-            #if iter==0:
-                #set_weight_align_param(self.models, self.args)
-                #for trainer in self.model_trainers:
-                    #trainer.optimizer=optim.Adam(trainer.model.parameters(), lr=self.args.lr)
 
             print(f'Summary, Merge Iteration: {iter}')
             for i in range(len(self.model_trainers)):
