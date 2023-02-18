@@ -24,7 +24,7 @@ class Merge_Iterator:
         #self.models=[model_selector(self.args) for i in range(self.num_clients)]
         self.models = [torch.nn.DataParallel(
             model_selector(self.args),
-            device_ids=[0, 1, 2, 3, 4, 5, 6])
+            device_ids=[7, 0, 1, 2, 3, 4, 5, 6])
             for i in range(self.num_clients)]
         #torch.nn.DataParallel(model, device_ids=[0, 1, 2, 3, 4, 5, 6])
 

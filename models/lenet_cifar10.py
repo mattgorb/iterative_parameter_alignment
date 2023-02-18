@@ -16,23 +16,21 @@ class LeNetCifar10(nn.Module):
         self.bias=self.args.bias
 
         if self.weight_merge:
-
             #fix this section
-            #self.conv1 = conv_init(3, 64, args=self.args)
-            #self.conv2 = conv_init(64, 64, args=self.args)
-            #self.conv3 = conv_init(64, 128, args=self.args)
-            self.conv4 = conv_init(128, 128, args=self.args)
-            self.fc1=linear_init(32*32*8, 256, args=self.args)
-            self.fc2=linear_init(256, 256, args=self.args)
-            self.fc3=linear_init(256, 10, args=self.args)
+            self.conv1 = conv_init(3, 64,kernel_size=5, args=self.args)
+            self.conv2 = conv_init(64, 64, kernel_size=5,args=self.args)
+            self.pool = nn.MaxPool2d(kernel_size=2, stride=2,)
+            self.fc1=linear_init(64*5*5, 384, args=self.args)
+            self.fc2=linear_init(384, 192, args=self.args)
+            self.fc3=linear_init(192, 10, args=self.args)
         else:
             self.n_cls = 10
             self.conv1 = nn.Conv2d(in_channels=3, out_channels=64 , kernel_size=5,  padding=1, bias=self.bias)
             self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5,  padding=1, bias=self.bias)
-            self.pool = nn.MaxPool2d(kernel_size=2, stride=2, bias=self.bias)
+            self.pool = nn.MaxPool2d(kernel_size=2, stride=2,)
             self.fc1 = nn.Linear(64*5*5, 384, bias=self.bias)
             self.fc2 = nn.Linear(384, 192, bias=self.bias)
-            self.fc3 = nn.Linear(192, 100, bias=self.bias)
+            self.fc3 = nn.Linear(192, 10, bias=self.bias)
 
 
 
