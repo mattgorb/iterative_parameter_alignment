@@ -29,10 +29,12 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}_0.pt'
 
     def fit(self, log_output=True):
+        print(f"Begin. fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
         if self.train_iter>0:
             checkpoint = torch.load(self.save_path)
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+        print(f"mid fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
             test_loss, test_acc = self.test()
