@@ -320,7 +320,7 @@ class Merge_Iterator:
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
             self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
-
+            del transfer_state_dict
             print(f"2.6: {torch.cuda.memory_allocated(self.args.gpu)}")
             del self.model1_trainer.optimizer
             torch.cuda.empty_cache()
