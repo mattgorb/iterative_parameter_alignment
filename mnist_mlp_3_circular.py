@@ -309,7 +309,7 @@ class Merge_Iterator:
             print(f'mems; {mem_params}')
             print(f'bufs; {mem_bufs}')
             for n,p in model2.named_parameters():
-                print(f'{n}:  {p}')
+                print(f'{n}:  {p.size()}')
 
 
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
@@ -321,7 +321,7 @@ class Merge_Iterator:
             print(f'mems; {mem_params}')
             print(f'bufs; {mem_bufs}')
             for n,p in model2.named_parameters():
-                print(f'{n}:  {p}')
+                print(f'{n}:  {p.size()}')
             sys.exit()
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])
