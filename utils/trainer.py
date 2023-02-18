@@ -80,7 +80,7 @@ class Trainer:
 
             train_loss += loss
             train_loss_ce += self.criterion(output, target)
-            loss.backward()
+            loss.sum().backward()
 
 
             #for n,p in self.model.named_parameters():
