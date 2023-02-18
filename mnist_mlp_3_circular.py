@@ -274,7 +274,7 @@ class Merge_Iterator:
         print(f'mems; {mem_params}')
         print(f'bufs; {mem_bufs}')
         print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
-
+        sys.exit()
 
 
 
