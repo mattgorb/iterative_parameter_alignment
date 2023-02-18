@@ -78,8 +78,8 @@ class Trainer:
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
-            train_loss += loss
-            train_loss_ce += self.criterion(output, target)
+            train_loss += loss.sum()
+            train_loss_ce += self.criterion(output, target).sum()
             loss.sum().backward()
 
 
