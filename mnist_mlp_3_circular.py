@@ -180,8 +180,6 @@ class Trainer:
         train_loss = 0
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
-            if batch_idx<3:
-                print(f"batch idx{batch_idx} beeforee: {torch.cuda.memory_allocated(self.args.gpu)}")
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
             output, weight_align_ae, weight_align_se = self.model(data)
