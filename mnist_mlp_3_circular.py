@@ -259,23 +259,8 @@ class Merge_Iterator:
         model1.fc2.weight_align_list.append(nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
         model1.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
-        # Set Model 2 parameters
-        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-        print(f'mems; {mem_params}')
-        print(f'bufs; {mem_bufs}')
-        print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
-
         model2.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
         model2.fc1.weight_align_list.append(nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-
-        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-        print(f'mems; {mem_params}')
-        print(f'bufs; {mem_bufs}')
-        print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
-        sys.exit()
-
 
 
         model2.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
@@ -313,38 +298,32 @@ class Merge_Iterator:
             transfer_state_dict=self.model1_trainer.optimizer.state_dict()
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
-            #print(f'summary: {print(torch.cuda.memory_summary(7))}')
+
             print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             #Set Model 2 parameters
-            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-            print(f'mems; {mem_params}')
-            print(f'bufs; {mem_bufs}')
-            for n,p in model2.named_parameters():
-                print(f'{n}:  {p.size()}')
+            #mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+            #mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+            #print(f'mems; {mem_params}')
+            #print(f'bufs; {mem_bufs}')
+            #for n,p in model2.named_parameters():
+                #print(f'{n}:  {p.size()}')
             print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
 
+            print(f"2.02: {torch.cuda.memory_allocated(self.args.gpu)}")
 
-            torch.cuda.empty_cache()
-
-            print(f"2.1: {torch.cuda.memory_allocated(self.args.gpu)}")
-
-            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-            print(f'mems; {mem_params}')
-            print(f'bufs; {mem_bufs}')
-            for n,p in model2.named_parameters():
-                print(f'{n}:  {p.size()}')
-            sys.exit()
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])
+
+
             print(f"2.2: {torch.cuda.memory_allocated(self.args.gpu)}")
+            sys.exit()
+
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
             print(f"2.3: {torch.cuda.memory_allocated(self.args.gpu)}")
