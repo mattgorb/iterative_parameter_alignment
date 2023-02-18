@@ -249,11 +249,11 @@ class Merge_Iterator:
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
-            print(f"\nBefore: {torch.cuda.memory_allocated(self.args.gpu)}\n")
+            print(f"\nBefore: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
-            print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}\n")
+            print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model2_trainer.fit()
-            print(f"After: {torch.cuda.memory_allocated(self.args.gpu)}\n")
+            print(f"After: {torch.cuda.memory_allocated(self.args.gpu)}")
 
 
 
