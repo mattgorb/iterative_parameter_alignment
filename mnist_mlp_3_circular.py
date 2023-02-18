@@ -191,7 +191,9 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
-            print(f"batch idx{batch_idx}: {torch.cuda.memory_allocated(self.args.gpu)}")
+
+            if batch_idx<3:
+                print(f"batch idx{batch_idx}: {torch.cuda.memory_allocated(self.args.gpu)}")
             #sys.exit()
             #if not self.args.baseline:
                 #self.weight_align_ae_loss_list.append(weight_align_ae.item())
@@ -294,6 +296,7 @@ class Merge_Iterator:
             transfer_state_dict=self.model1_trainer.optimizer.state_dict()
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
+
             print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
@@ -318,7 +321,7 @@ class Merge_Iterator:
             print(f"3: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model2_trainer.fit()
             print(f"4: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+
 
             #Set Model 3 parameters
             model3.fc1.weight=nn.Parameter(model2.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
@@ -339,7 +342,7 @@ class Merge_Iterator:
             print(f"5: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model3_trainer.fit()
             print(f"6: {torch.cuda.memory_allocated(self.args.gpu)}")
-
+            sys.exit()
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss}, Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}\n'
