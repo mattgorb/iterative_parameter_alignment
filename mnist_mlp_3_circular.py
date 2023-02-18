@@ -191,11 +191,12 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
-
-            if not self.args.baseline:
-                self.weight_align_ae_loss_list.append(weight_align_ae.item())
-                self.weight_align_se_loss_list.append(weight_align_se.item())
-                self.batch_epoch_list.append(self.merge_iter)
+            print(f"batch idx{batch_idx}: {torch.cuda.memory_allocated(self.args.gpu)}")
+            #sys.exit()
+            #if not self.args.baseline:
+                #self.weight_align_ae_loss_list.append(weight_align_ae.item())
+                #self.weight_align_se_loss_list.append(weight_align_se.item())
+                #self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
             loss.backward()
@@ -296,6 +297,7 @@ class Merge_Iterator:
             print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
+            sys.exit()
             #Set Model 2 parameters
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
