@@ -304,19 +304,26 @@ class Merge_Iterator:
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             #Set Model 2 parameters
-            #mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            #mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-            #print(f'mems; {mem_params}')
-            #print(f'bufs; {mem_bufs}')
-            #for n,p in model2.named_parameters():
-                #print(f'{n}:  {p.size()}')
-            print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
+            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+            print(f'mem :  {mem_params}')
+            print(f'buf:  {mem_bufs}')
+            for n,p in model2.named_parameters():
+                print(f'{n}:  {p.size()}')
+            print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             torch.cuda.empty_cache()
 
-            print(f"2.02: {torch.cuda.memory_allocated(self.args.gpu)}")
+            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+            print(f'mem :  {mem_params}')
+            print(f'buf:  {mem_bufs}')
+            for n,p in model2.named_parameters():
+                print(f'{n}:  {p.size()}')
+            print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
+            sys.exit()
 
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])
