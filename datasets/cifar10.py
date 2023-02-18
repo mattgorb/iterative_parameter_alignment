@@ -118,7 +118,7 @@ def get_datasets(args):
             for i,j in net_dataidx_map.items():
                 dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
                 dataset.data, dataset.targets = dataset.data[j], np.array(dataset.targets)[j]
-                print(len(dataset.data))
+                #print(len(dataset.data))
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
 
