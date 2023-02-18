@@ -194,9 +194,6 @@ class Trainer:
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
 
-            if batch_idx<3:
-                print(f"batch idx{batch_idx}: {torch.cuda.memory_allocated(self.args.gpu)}")
-            #sys.exit()
             #if not self.args.baseline:
                 #self.weight_align_ae_loss_list.append(weight_align_ae.item())
                 #self.weight_align_se_loss_list.append(weight_align_se.item())
@@ -299,9 +296,7 @@ class Merge_Iterator:
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
 
-            print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
-            print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
 
             #Set Model 2 parameters
 
@@ -333,29 +328,25 @@ class Merge_Iterator:
             model2.fc2.weight_align_list = nn.ParameterList([])
 
 
-            print(f"2.2: {torch.cuda.memory_allocated(self.args.gpu)}")
-            #sys.exit()
+
 
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
-            print(f"2.3: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             model2.fc2.weight_align_list.append( nn.Parameter(model1.fc2.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc2.weight_align_list.append( nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
-            print(f"2.5: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
             self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
             del transfer_state_dict
-            print(f"2.6: {torch.cuda.memory_allocated(self.args.gpu)}")
             #del self.model1_trainer.optimizer
-            torch.cuda.empty_cache()
 
-            print(f"3: {torch.cuda.memory_allocated(self.args.gpu)}")
 
 
             self.model2_trainer.fit()
-            print(f"4: {torch.cuda.memory_allocated(self.args.gpu)}")
+
 
 
 
@@ -375,9 +366,9 @@ class Merge_Iterator:
             transfer_state_dict=self.model3_trainer.optimizer.state_dict()
             self.model3_trainer.optimizer = optim.Adam(model3.parameters(), lr=self.args.lr)
             self.model3_trainer.optimizer.load_state_dict(transfer_state_dict)
-            print(f"5: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             self.model3_trainer.fit()
-            print(f"6: {torch.cuda.memory_allocated(self.args.gpu)}")
+
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
