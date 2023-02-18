@@ -73,7 +73,8 @@ class Trainer:
             weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
-            print(torch.cuda.mem_get_info)
+            #print(torch.cuda.mem_get_info)
+            print(torch.cuda.memory_allocated(7))
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
             train_loss += loss
