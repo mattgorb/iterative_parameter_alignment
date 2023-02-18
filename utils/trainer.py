@@ -53,6 +53,9 @@ class Trainer:
         del self.optimizer
         torch.cuda.empty_cache()
 
+
+        print(f"End fit mem: {torch.cuda.memory_allocated(self.args.gpu)}")
+
         self.train_iter+=1
 
     def model_loss(self):
@@ -83,10 +86,10 @@ class Trainer:
             loss.backward()
 
 
-            for n,p in self.model.named_parameters():
-                if p.grad is not None:
-                    print(f'{n}:  {p.grad.size()}')
-            #sys.exit()
+            #for n,p in self.model.named_parameters():
+                #if p.grad is not None:
+                    #print(f'{n}:  {p.grad.size()}')
+
 
             self.optimizer.step()
 
