@@ -12,8 +12,6 @@ class Merge_Iterator:
         self.args = args
         self.device = device
         self.weight_dir = weight_dir
-        #self.train_loader1 = datasets[0]
-        #self.train_loader2 = datasets[1]
         self.num_clients=self.args.num_clients
         self.train_loaders=train_loaders
         self.test_loader = test_loader
@@ -26,7 +24,7 @@ class Merge_Iterator:
         model_parameters = filter(lambda p: p.requires_grad, self.models[0].parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         print(f'Model parameters: {params}')
-        sys.exit()
+
 
         self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
                                      self.test_loader], self.models[i], self.device,
