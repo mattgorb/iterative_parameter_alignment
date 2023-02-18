@@ -323,7 +323,7 @@ class Merge_Iterator:
 
 
             print(f"2.2: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+            #sys.exit()
 
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight_align_list[1].clone().detach().to(self.device), requires_grad=True))
             model2.fc1.weight_align_list.append( nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
@@ -342,11 +342,10 @@ class Merge_Iterator:
 
             print(f"3: {torch.cuda.memory_allocated(self.args.gpu)}")
 
-            #print(f'summary: {print(torch.cuda.memory_summary(7))}')
-            sys.exit()
+
             self.model2_trainer.fit()
             print(f"4: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+
 
 
             #Set Model 3 parameters
@@ -368,7 +367,7 @@ class Merge_Iterator:
             print(f"5: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model3_trainer.fit()
             print(f"6: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss}, Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}\n'
