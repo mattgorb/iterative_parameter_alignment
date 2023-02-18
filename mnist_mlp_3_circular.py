@@ -297,7 +297,7 @@ class Merge_Iterator:
             print(f"1: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model1_trainer.fit()
             print(f"2: {torch.cuda.memory_allocated(self.args.gpu)}")
-            sys.exit()
+
             #Set Model 2 parameters
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
@@ -314,9 +314,11 @@ class Merge_Iterator:
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
             self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
+
             print(f"3: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model2_trainer.fit()
             print(f"4: {torch.cuda.memory_allocated(self.args.gpu)}")
+            sys.exit()
 
             #Set Model 3 parameters
             model3.fc1.weight=nn.Parameter(model2.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
