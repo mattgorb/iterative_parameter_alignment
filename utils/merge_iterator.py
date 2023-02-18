@@ -26,7 +26,7 @@ class Merge_Iterator:
 
         self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
                                      self.test_loader], self.models[i], self.device,
-                                  f'{self.weight_dir}model{i}_0.pt', f'model{i}_{self.args.model}')
+                                   f'model{i}_{self.args.model}_{self.args.dataset}_n_clients{self.args.num_clients}_{self.args.align_loss}')
                         for i in range(self.num_clients)]
 
 

@@ -7,15 +7,14 @@ import torch.optim as optim
 
 
 class Trainer:
-    def __init__(self, args, datasets, model, device, save_path, model_name):
+    def __init__(self, args, datasets, model, device, model_name):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
-        self.save_path = save_path
-        self.model_name = model_name
+
 
         self.fc1_norm_list = []
         self.fc2_norm_list = []
@@ -24,8 +23,12 @@ class Trainer:
         self.train_iter_list=[]
         self.train_iter=0
 
+        self.model_name = model_name
+        self.save_path=f'{self.weight_dir}{self.model_name}_0.pt'
+
     def fit(self, log_output=True):
-        self.train_iter+=1
+        if self.train_iter>0:
+            optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
             test_loss, test_acc = self.test()
@@ -36,6 +39,14 @@ class Trainer:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+
+        torch.save({
+            'epoch': self.train_iter,
+            'model_state_dict': self.model.state_dict(),
+            'optimizer_state_dict': self.optimizer.state_dict()
+        }, self.save_path)
+
+        self.train_iter+=1
 
     def model_loss(self):
         return self.best_loss
