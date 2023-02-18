@@ -259,9 +259,24 @@ class Merge_Iterator:
         model1.fc2.weight_align_list.append(nn.Parameter(model2.fc2.weight.clone().detach().to(self.device), requires_grad=True))
         model1.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
 
+        # Set Model 2 parameters
+        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+        print(f'mems; {mem_params}')
+        print(f'bufs; {mem_bufs}')
+        print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
 
         model2.fc1.weight_align_list.append(nn.Parameter(model3.fc1.weight.clone().detach().to(self.device), requires_grad=True))
         model2.fc1.weight_align_list.append(nn.Parameter(model1.fc1.weight.clone().detach().to(self.device), requires_grad=True))
+
+        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+        print(f'mems; {mem_params}')
+        print(f'bufs; {mem_bufs}')
+        print(f"2.01: {torch.cuda.memory_allocated(self.args.gpu)}")
+
+
+
 
         model2.fc2.weight_align_list.append(nn.Parameter(model3.fc2.weight.clone().detach().to(self.device), requires_grad=True))
         model2.fc2.weight_align_list.append(nn.Parameter(model1.fc2.weight.clone().detach().to(self.device), requires_grad=True))
