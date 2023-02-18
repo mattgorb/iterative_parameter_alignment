@@ -22,7 +22,7 @@ class Merge_Iterator:
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         self.models=[model_selector(self.args) for i in range(self.num_clients)]
-        model_parameters = filter(lambda p: p.requires_grad, model.parameters())
+        model_parameters = filter(lambda p: p.requires_grad, model[0].parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
         print(f'Model parameters: {params}')
         sys.exit()
