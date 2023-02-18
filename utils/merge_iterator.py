@@ -4,6 +4,7 @@ import torch.optim as optim
 from utils.model_utils import model_selector
 from utils.align_util import set_weight_align_param
 import numpy as np
+import torch
 
 
 class Merge_Iterator:
