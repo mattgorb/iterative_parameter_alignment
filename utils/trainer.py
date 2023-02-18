@@ -79,7 +79,7 @@ class Trainer:
             For model w/o weight alignment paramter, second part of loss is 0  
             '''
 
-            print(torch.cuda.memory_allocated(self.args.gpu))
+            #print(torch.cuda.memory_allocated(self.args.gpu))
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
