@@ -84,10 +84,8 @@ class Trainer:
             train_loss_ce += self.criterion(output, target).sum()
             loss.sum().backward()
 
-
-            #for n,p in self.model.named_parameters():
-                #if p.grad is not None:
-                    #print(f'{n}:  {p.grad.size()}')
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),
+                                           max_norm=10)  # Clip gradients to prevent exploding
 
 
             self.optimizer.step()
