@@ -32,11 +32,7 @@ def main():
 
         model_parameters = filter(lambda p: p.requires_grad, model.parameters())
         params = sum([np.prod(p.size()) for p in model_parameters])
-        print(params)
-        for n,p in model.named_parameters():
-            print(n)
-            print(p.requires_grad)
-
+        print(f'Model parameters: {params}')
 
         save_path = f'{args.model}{args.dataset}_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path,)
