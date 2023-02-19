@@ -227,7 +227,7 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
-        print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
+
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -443,6 +443,7 @@ def main():
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
+        print("Running Baseline")
         train_loader1, test_dataset = get_datasets(args)
         model = Net(args, weight_merge=False).to(device)
         save_path = f'{weight_dir}mnist_baseline.pt'
