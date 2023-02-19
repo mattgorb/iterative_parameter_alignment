@@ -208,7 +208,7 @@ class Trainer:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
             mem_report()
 
-            model.eval()
+            self.model.eval()
             mem_report()
             sys.exit()
             sys.exit()
