@@ -282,8 +282,10 @@ def set_weight_align_param(model1, model2, args):
             '''
 
             # We only want to merge one models weights in this file
-            m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+            m2.weight_align = m1.weight
+            m1.weight_align = m2.weight
 
 class Merge_Iterator:
     def __init__(self, args, datasets, device, weight_dir):
