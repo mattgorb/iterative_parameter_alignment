@@ -1,12 +1,6 @@
-
 dataset: CIFAR10
-weight_init: kaiming_normal
-model: Conv4
-align_loss: ae
-weight_align_factor: 1
+model: LeNetCifar10
 data_transform: True
-num_clients: 2
 bias: True
-local_epochs: 5
-
-dataset_split: iid
+local_epochs: 300
+baseline: True
