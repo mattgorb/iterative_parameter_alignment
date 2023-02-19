@@ -41,7 +41,7 @@ class Trainer:
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
-            self.scheduler.step()
+            #self.scheduler.step()
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
@@ -84,8 +84,7 @@ class Trainer:
             train_loss_ce += self.criterion(output, target).sum()
             loss.sum().backward()
 
-            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),
-                                           max_norm=10)  # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
 
 
             self.optimizer.step()
