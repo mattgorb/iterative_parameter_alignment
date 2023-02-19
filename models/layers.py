@@ -49,12 +49,13 @@ class ConvMerge(nn.Conv2d):
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
-        weights_diff = torch.tensor(0)#.float()
+        weights_diff = torch.tensor(0).float()
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
                     weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
+                    print("HEREe")
                     print(self.weight.type())
                     print(wa.type())
                     weights_diff += torch.sum(torch.square(self.weight - wa))
