@@ -39,7 +39,7 @@ def main():
 
 
         save_path = f'{weight_dir}{args.dataset}_baseline.pt'
-        trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path, 'model_baseline')
+        trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path,)
         trainer.fit(log_output=True)
     else:
         train_loader_list, test_loader = get_dataloaders(args)
