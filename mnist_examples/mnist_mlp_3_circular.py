@@ -299,7 +299,7 @@ class Merge_Iterator:
             #Set Model 2 parameters
             model2.fc1.weight=nn.Parameter(model1.fc1.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
             model2.fc2.weight=nn.Parameter(model1.fc2.weight_align_list[0].clone().detach().to(self.device), requires_grad=True)
-            torch.cuda.empty_cache()
+
 
             model2.fc1.weight_align_list = nn.ParameterList([])
             model2.fc2.weight_align_list = nn.ParameterList([])

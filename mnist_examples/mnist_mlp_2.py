@@ -1,4 +1,5 @@
 from __future__ import print_function
+from matplotlib import pyplot as plt
 import argparse
 import torch
 import torch.nn as nn
@@ -9,7 +10,7 @@ from torch.utils.data import DataLoader
 import math
 import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from matplotlib import pyplot as plt
+
 import pandas as pd
 import numpy as np
 
