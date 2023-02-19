@@ -268,7 +268,7 @@ class Merge_Iterator:
         mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
         mem = mem_params + mem_bufs  # in bytes
         print(mem)
-        sys.exit()
+        #sys.exit()
 
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
