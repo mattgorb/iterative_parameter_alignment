@@ -41,7 +41,7 @@ class Trainer:
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
-
+            self.scheduler.step()
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
