@@ -55,9 +55,6 @@ class ConvMerge(nn.Conv2d):
                 if self.args.align_loss == 'ae':
                     weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
-                    print("HEREe")
-                    print(self.weight.type())
-                    print(wa.type())
                     weights_diff += torch.sum(torch.square(self.weight - wa))
                 else:
                     sys.exit(1)
@@ -94,7 +91,7 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0).float()
+        weights_diff = torch.tensor(0).float().cuda()
 
         '''if self.weight_align is not None:
             # using absolute error here.
