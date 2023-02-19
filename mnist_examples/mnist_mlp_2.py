@@ -207,6 +207,10 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
             mem_report()
+
+            model.eval()
+            mem_report()
+            sys.exit()
             sys.exit()
             if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
