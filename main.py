@@ -38,7 +38,7 @@ def main():
             print(p.requires_grad)
 
 
-        save_path = f'{weight_dir}{args.dataset}_baseline.pt'
+        save_path = f'{args.model}{args.dataset}_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path,)
         trainer.fit(log_output=True)
     else:

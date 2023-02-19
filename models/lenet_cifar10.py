@@ -17,8 +17,8 @@ class LeNetCifar10(nn.Module):
 
         if self.weight_merge:
             #fix this section
-            self.conv1 = conv_init(3, 64,kernel_size=5, args=self.args)
-            self.conv2 = conv_init(64, 64, kernel_size=5,args=self.args)
+            self.conv1 = conv_init(3, 64,kernel_size=5, paddding=0, args=self.args)
+            self.conv2 = conv_init(64, 64, kernel_size=5,padding=0, args=self.args)
             self.pool = nn.MaxPool2d(kernel_size=2, stride=2,)
             self.fc1=linear_init(64*5*5, 384, args=self.args)
             self.fc2=linear_init(384, 192, args=self.args)

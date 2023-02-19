@@ -26,7 +26,7 @@ class Trainer:
         self.weight_dir = f'{self.args.base_dir}iwa_weights/'
 
         self.model_name = model_name
-        self.save_path=f'{self.weight_dir}{self.model_name}_0.pt'
+        self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
 
