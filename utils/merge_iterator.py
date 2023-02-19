@@ -22,24 +22,28 @@ class Merge_Iterator:
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         #self.models=[model_selector(self.args) for i in range(self.num_clients)]
-        self.models = [torch.nn.DataParallel(
+        '''self.models = [torch.nn.DataParallel(
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6])
-            for i in range(self.num_clients)]
+            for i in range(self.num_clients)]'''
         #torch.nn.parallel.DistributedDataParallel
 
 
-        '''ngpus_per_node = torch.cuda.device_count()
+        ngpus_per_node = torch.cuda.device_count()
 
         rank = 0
-        torch.distributed.init_process_group(backend="nccl",init_method="env://",
-                                             world_size=ngpus_per_node,
-                                             rank=rank)
-        args.batch_size = int(args.batch_size / ngpus_per_node)
+        #torch.distributed.init_process_group(backend="nccl",init_method="env://",
+                                             #world_size=ngpus_per_node,
+                                             #rank=rank)
+        #args.batch_size = int(args.batch_size / ngpus_per_node)
+        torch.distributed.init_process_group(backend='nccl',
+                                             init_method='env://')
+
         self.models = [torch.nn.parallel.DistributedDataParallel(
-            model_selector(self.args),
+            model_selector(self.args),        device_ids=[0],
+                output_device=0,
         )
-            for i in range(self.num_clients)]'''
+            for i in range(self.num_clients)]
         #torch.nn.DataParallel(model, device_ids=[0, 1, 2, 3, 4, 5, 6])
 
         model_parameters = filter(lambda p: p.requires_grad, self.models[0].parameters())
