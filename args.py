@@ -22,7 +22,7 @@ def parse_arguments():
 
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
-    parser.add_argument('--gpu', type=int, default=1, )
+    parser.add_argument('--gpu', type=str, default=None, )
     parser.add_argument('--save-model', action='store_true', default=False,help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
     parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
