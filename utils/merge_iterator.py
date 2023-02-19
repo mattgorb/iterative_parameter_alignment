@@ -26,7 +26,7 @@ class Merge_Iterator:
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6]).to(self.device)
             for i in range(self.num_clients)]
-        #torch.nn.parallel.DistributedDataParallel
+
 
 
         '''ngpus_per_node = torch.cuda.device_count()
