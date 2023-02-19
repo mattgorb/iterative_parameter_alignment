@@ -208,8 +208,12 @@ class Trainer:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
             mem_report()
 
-            self.model.eval()
-            mem_report()
+            #self.model.eval()
+            #mem_report()
+
+            with torch.inference_mode():
+                mem_report()
+
             sys.exit()
             sys.exit()
             if self.args.baseline:
