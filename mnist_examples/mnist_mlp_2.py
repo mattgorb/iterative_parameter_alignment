@@ -163,6 +163,7 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
+        print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -185,6 +186,7 @@ class Trainer:
             train_loss += loss.item()
             loss.backward()
             self.optimizer.step()
+            print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
 
         train_loss /= len(self.train_loader.dataset)
         return train_loss
