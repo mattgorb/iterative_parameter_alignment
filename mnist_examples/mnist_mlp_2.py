@@ -186,7 +186,6 @@ class Trainer:
             train_loss += loss.item()
             loss.backward()
             self.optimizer.step()
-            print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
 
         train_loss /= len(self.train_loader.dataset)
         return train_loss
