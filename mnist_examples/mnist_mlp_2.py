@@ -258,8 +258,8 @@ class Merge_Iterator:
             del transfer_state_dict
 
             self.model1_trainer.fit()
-
-
+            print(f"Mid1: {torch.cuda.memory_allocated(self.args.gpu)}")
+            sys.exit()
 
 
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
