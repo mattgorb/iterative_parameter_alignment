@@ -249,6 +249,17 @@ class Merge_Iterator:
         self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
         self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
+        mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model.buffers()])
+        mem = mem_params + mem_bufs  # in bytes
+        print(mem)
+
+        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model.buffers()])
+        mem = mem_params + mem_bufs  # in bytes
+        print(mem)
+
+
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
@@ -261,7 +272,15 @@ class Merge_Iterator:
 
             self.model1_trainer.fit()
             print(f"Mid1: {torch.cuda.memory_allocated(self.args.gpu)}")
+            mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
+            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model.buffers()])
+            mem = mem_params + mem_bufs  # in bytes
+            print(mem)
 
+            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model.buffers()])
+            mem = mem_params + mem_bufs  # in bytes
+            print(mem)
 
 
             #transfer_state_dict=self.model2_trainer.optimizer.state_dict()
