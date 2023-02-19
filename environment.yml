@@ -1,0 +1,11 @@
+name: weight_alignment
+channels:
+  - defaults
+dependencies:
+  - python=3.9
+  - pip:
+    - torch
+    - torchdata
+    - torchtext
+    - torchvision
+prefix: /s/luffy/b/nobackup/mgorb/anaconda/envs/weight_alignment
