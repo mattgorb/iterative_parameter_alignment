@@ -31,16 +31,15 @@ class Merge_Iterator:
 
         ngpus_per_node = torch.cuda.device_count()
 
-        rank = 0
-        #torch.distributed.init_process_group(backend="nccl",init_method="env://",
-                                            # world_size=ngpus_per_node, rank=rank)
+        args.gpu = args.local_rank
+        args.world_size = torch.distributed.get_world_size()
         #args.batch_size = int(args.batch_size / ngpus_per_node)
         torch.distributed.init_process_group(backend='nccl',
                                              init_method='env://')
 
         self.models = [torch.nn.parallel.DistributedDataParallel(
-            model_selector(self.args),        #device_ids=[0],
-                #output_device=0,
+            model_selector(self.args),        device_ids=[0],
+                output_device=0,
         )
             for i in range(self.num_clients)]
         #torch.nn.DataParallel(model, device_ids=[0, 1, 2, 3, 4, 5, 6])

@@ -31,6 +31,10 @@ def parse_arguments():
     parser.add_argument('--config', type=str, default=None, help='config file to use')
 
 
+    #distributed
+    parser.add_argument("--local_rank", default=0, type=int)
+
+
     #dataset configs
     parser.add_argument('--dataset', type=str, default=None, )
     parser.add_argument('--num_clients', type=int, default=None, )
