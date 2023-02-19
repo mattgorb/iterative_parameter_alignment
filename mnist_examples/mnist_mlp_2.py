@@ -196,6 +196,7 @@ class Trainer:
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
+        mem_report()
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
@@ -205,7 +206,8 @@ class Trainer:
 
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
-
+            mem_report()
+            sys.exit()
             if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
                 self.train_loss_list.append(self.train_loss)
