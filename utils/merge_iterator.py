@@ -31,8 +31,8 @@ class Merge_Iterator:
 
         ngpus_per_node = torch.cuda.device_count()
 
-        args.gpu = args.local_rank
-        args.world_size = torch.distributed.get_world_size()
+        #self.args.gpu = args.local_rank
+        self.args.world_size = torch.distributed.get_world_size()
         #args.batch_size = int(args.batch_size / ngpus_per_node)
         torch.distributed.init_process_group(backend='nccl',
                                              init_method='env://')
