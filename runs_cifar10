@@ -9,4 +9,4 @@ nohup python -u main.py --config=configs/cifar10_merge_20_dir_p3.yaml --gpu=1 > 
 python -u main.py --config=configs/cifar10_lenet_baseline.yaml --gpu=2
 
 
-python -m torch.distributed.launch --nproc_per_node=2 main.py --config=configs/cifar10_merge_100_dir_p3.yaml --gpu=7
+python -m torch.distributed.launch --nproc_per_node=2 main.py --config=configs/cifar10_merge_100_dir_p3.yaml --gpu=0
