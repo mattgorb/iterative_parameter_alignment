@@ -27,6 +27,9 @@ class Merge_Iterator:
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6])
             for i in range(self.num_clients)]'''
         #torch.nn.parallel.DistributedDataParallel
+
+        torch.distributed.init_process_group(backend="nccl",init_method="env://",)
+
         self.models = [torch.nn.parallel.DistributedDataParallel(
             model_selector(self.args),
             #device_ids=[7, 0, 1, 2, 3, 4, 5, 6]
