@@ -251,7 +251,23 @@ class Merge_Iterator:
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
             print(f"\nBefore: {torch.cuda.memory_allocated(self.args.gpu)}")
+            transfer_state_dict=self.model1_trainer.optimizer.state_dict()
+            del self.model1_trainer.optimizer
+            self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
+            self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
+            del transfer_state_dict
+
             self.model1_trainer.fit()
+
+
+
+
+            transfer_state_dict=self.model2_trainer.optimizer.state_dict()
+            del self.model2_trainer.optimizer
+            self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
+            self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
+            del transfer_state_dict
+
             print(f"Mid: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model2_trainer.fit()
             print(f"After: {torch.cuda.memory_allocated(self.args.gpu)}")
