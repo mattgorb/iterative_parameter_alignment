@@ -41,23 +41,22 @@ class LeNetCifar10(nn.Module):
     def forward(self, x: torch.Tensor) -> torch.Tensor:
 
         if self.weight_merge:
+
             x,wd1 = self.conv1(x)
-            x = self.relu(x)
+            x=F.relu(x)
+            x=self.pool(x)
             x,wd2 = self.conv2(x)
-            x = self.relu(x)
-            x = self.max_pool(x)
-            x,wd3 = self.conv3(x)
-            x = self.relu(x)
-            x,wd4 = self.conv4(x)
-            x = self.relu(x)
-            x = self.max_pool(x)
-            x = x.view(x.size(0), 8192)
-            x,wd5 = self.fc1(x)
-            x = self.relu(x)
-            x,wd6 = self.fc2(x)
-            x = self.relu(x)
-            x,wd7 = self.fc3(x)
-            wd=wd1+wd2+wd3+wd4+wd5+wd6+wd7
+            x=F.relu(x)
+            x=self.pool(x)
+            x = x.view(-1, 64*5*5)
+            x,wd3 = self.fc1(x)
+            x=F.relu(x)
+            x = self.fc2(x)
+            x=F.relu(x)
+            x,wd4 = self.fc3(x)
+
+
+            wd=wd1+wd2+wd3+wd4
             return x, wd
         else:
             x = self.pool(F.relu(self.conv1(x)))
