@@ -1,6 +1,5 @@
-
-from matplotlib import pyplot as plt
 from __future__ import print_function
+from matplotlib import pyplot as plt
 import sys
 import torch
 import numpy as np
