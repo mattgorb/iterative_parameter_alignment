@@ -51,12 +51,12 @@ class LeNetCifar10(nn.Module):
             x = x.view(-1, 64*5*5)
             x,wd3 = self.fc1(x)
             x=F.relu(x)
-            x = self.fc2(x)
+            x, wd4 = self.fc2(x)
             x=F.relu(x)
-            x,wd4 = self.fc3(x)
+            x,wd5 = self.fc3(x)
 
 
-            wd=wd1+wd2+wd3+wd4
+            wd=wd1+wd2+wd3+wd4+wd5
             return x, wd
         else:
             x = self.pool(F.relu(self.conv1(x)))
