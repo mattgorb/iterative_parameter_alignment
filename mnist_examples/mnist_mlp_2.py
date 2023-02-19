@@ -259,6 +259,9 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
+            mem_report()
+            sys.exit()
+
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
