@@ -116,26 +116,26 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.args = args
         self.weight_merge = weight_merge
-        if self.weight_merge:
+        '''if self.weight_merge:
             self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
-        else:
-            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
-            self.fc2 = nn.Linear(1024, 10, bias=False)
+        else:'''
+        self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
+        self.fc2 = nn.Linear(1024, 10, bias=False)
 
     def forward(self, x,):
-        if self.weight_merge:
+        '''if self.weight_merge:
             x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
             x, wa2_ae, wa2_se = self.fc2(x)
             score_diff_ae = wa1_ae + wa2_ae
             score_diff_se = wa1_se + wa2_se
             return x, score_diff_ae, score_diff_se
-        else:
-            x = self.fc1(x.view(-1, 28 * 28))
-            x = F.relu(x)
-            x = self.fc2(x)
-            return x, torch.tensor(0), torch.tensor(0)
+        else:'''
+        x = self.fc1(x.view(-1, 28 * 28))
+        x = F.relu(x)
+        x = self.fc2(x)
+        return x, torch.tensor(0), torch.tensor(0)
 
 
 def get_datasets(args):
