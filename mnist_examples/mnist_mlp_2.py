@@ -1,3 +1,20 @@
+from __future__ import print_function
+from matplotlib import pyplot as plt
+import argparse
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+from torchvision import datasets, transforms
+from torch.utils.data import DataLoader
+import math
+import random
+from torch.optim.lr_scheduler import CosineAnnealingLR
+
+import pandas as pd
+import numpy as np
+
+
 import gc
 
 import torch
@@ -57,21 +74,7 @@ def mem_report():
     print('='*LEN)
 
 
-from __future__ import print_function
-from matplotlib import pyplot as plt
-import argparse
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
-from torchvision import datasets, transforms
-from torch.utils.data import DataLoader
-import math
-import random
-from torch.optim.lr_scheduler import CosineAnnealingLR
 
-import pandas as pd
-import numpy as np
 
 def set_seed(seed):
     random.seed(seed)
