@@ -244,6 +244,17 @@ class Merge_Iterator:
         self.model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+        mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
+        mem = mem_params + mem_bufs  # in bytes
+        print(mem)
+
+        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
+        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
+        mem = mem_params + mem_bufs  # in bytes
+        print(mem)
+
+
         set_weight_align_param(model1, model2, self.args)
         self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
         self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
@@ -257,7 +268,7 @@ class Merge_Iterator:
         mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
         mem = mem_params + mem_bufs  # in bytes
         print(mem)
-
+        sys.exit()
 
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
