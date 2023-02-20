@@ -331,7 +331,9 @@ class Merge_Iterator:
 
             print(f"\n3: {torch.cuda.memory_allocated(self.args.gpu)}")
             del self.model1_trainer.model.fc1.weight_align
-            del self.model2_trainer.model.fc2.weight_align
+            del self.model1_trainer.model.fc2.weight_align
+            torch.cuda.empty_cache()
+
             print(f"\n4: {torch.cuda.memory_allocated(self.args.gpu)}")
             sys.exit()
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
