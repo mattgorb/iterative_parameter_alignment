@@ -213,7 +213,8 @@ class Trainer:
 
 
 
-                print(self.model.fc1.weight.grad)
+                self.model.fc1.weight.grad=None
+                mem_report()
                 sys.exit()
 
             if self.args.baseline:
