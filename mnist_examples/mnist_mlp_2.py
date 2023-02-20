@@ -200,22 +200,17 @@ class Trainer:
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
-            test_loss, test_acc = self.test()
-            self.test_loss = test_loss
-            self.test_acc = test_acc
+            with torch.no_grad():
+                test_loss, test_acc = self.test()
+                self.test_loss = test_loss
+                self.test_acc = test_acc
 
-            if log_output:
-                print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
-            #mem_report()
+                if log_output:
+                    print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-            #self.model.eval()
-            #mem_report()
-
-            with torch.inference_mode():
                 mem_report()
+                sys.exit()
 
-            sys.exit()
-            sys.exit()
             if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
                 self.train_loss_list.append(self.train_loss)
@@ -259,8 +254,7 @@ class Trainer:
             loss.backward()
             self.optimizer.step()
 
-            mem_report()
-            sys.exit()
+
 
         train_loss /= len(self.train_loader.dataset)
         return train_loss
