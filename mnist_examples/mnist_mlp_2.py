@@ -134,7 +134,7 @@ class Net(nn.Module):
         x = self.fc1(x.view(-1, 28 * 28))
         x = F.relu(x)
         x = self.fc2(x)
-        return x, torch.tensor(0), torch.tensor(0)
+        return x, None, None
 
 
 def get_datasets(args):
