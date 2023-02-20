@@ -225,6 +225,8 @@ class Trainer:
 
                 print(self.model.fc2.weight)
                 print(self.model.state_dict().keys())
+
+                print(self.optimizer.state_dict().keys())
                 sys.exit()
 
             if self.args.baseline:
