@@ -18,6 +18,8 @@ import numpy as np
 import gc
 
 import torch
+import gc
+
 
 ## MEM utils ##
 def mem_report():
@@ -335,8 +337,10 @@ class Merge_Iterator:
             print(f"\n3: {torch.cuda.memory_allocated(self.args.gpu)}")
             del self.model1_trainer.model.fc1.weight_align
             del self.model1_trainer.model.fc2.weight_align
+
+
             torch.cuda.empty_cache()
-            del self.model1_trainer.train_loss
+            gc.collect()
 
             print(f"\n4: {torch.cuda.memory_allocated(self.args.gpu)}")
             mem_report()
