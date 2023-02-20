@@ -214,6 +214,10 @@ class Trainer:
 
 
                 self.model.fc1.weight.grad=None
+                print(torch.sum(self.model.fc1.weight.grad.abs()))
+                print(torch.sum(self.model.fc1.weight_align.grad.abs()))
+                print(torch.sum(self.model.fc2.weight.grad.abs()))
+                print(torch.sum(self.model.fc2.weight_alight.grad.abs()))
                 mem_report()
                 sys.exit()
 
