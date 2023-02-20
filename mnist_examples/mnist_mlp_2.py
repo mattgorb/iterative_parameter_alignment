@@ -201,7 +201,7 @@ class Trainer:
             self.train_loss = epoch_loss
             #with torch.no_grad():
             torch.cuda.empty_cache()
-            with torch.inference_mode():
+            with torch.no_grad():
                 test_loss, test_acc = self.test()
                 self.test_loss = test_loss
                 self.test_acc = test_acc
