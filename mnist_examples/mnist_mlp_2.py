@@ -210,6 +210,10 @@ class Trainer:
                     print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
                 mem_report()
+
+
+
+                print(self.model.fc1.weight.grad)
                 sys.exit()
 
             if self.args.baseline:
