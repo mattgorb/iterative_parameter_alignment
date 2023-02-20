@@ -105,7 +105,6 @@ class LinearMerge(nn.Linear):
         weights_diff_ae = torch.tensor(0)
         weights_diff_se = torch.tensor(0)
         if self.weight_align is not None:
-
             weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
 
@@ -201,6 +200,7 @@ class Trainer:
             epoch_loss = self.train()
             self.train_loss = epoch_loss
             #with torch.no_grad():
+            torch.cuda.empty_cache()
             with torch.inference_mode():
                 test_loss, test_acc = self.test()
                 self.test_loss = test_loss

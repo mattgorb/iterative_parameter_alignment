@@ -108,8 +108,8 @@ class LinearMerge(nn.Linear):
         weights_diff_se = torch.tensor(0)
         if self.weight_align is not None:
 
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs()).item()
+            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align)).item()
 
         return x, weights_diff_ae, weights_diff_se
 
