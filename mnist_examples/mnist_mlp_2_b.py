@@ -196,7 +196,7 @@ class Trainer:
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
-        mem_report()
+
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
@@ -330,8 +330,8 @@ class Merge_Iterator:
             self.model1_trainer.fit()
 
             print(f"\n2: {torch.cuda.memory_allocated(self.args.gpu)}")
-            self.model1_trainer.model.fc1.weight_align=None
-            self.model2_trainer.model.fc2.weight_align=None
+            del self.model1_trainer.model.fc1.weight_align
+            del self.model2_trainer.model.fc2.weight_align
             print(f"\n3: {torch.cuda.memory_allocated(self.args.gpu)}")
             sys.exit()
             transfer_state_dict=self.model2_trainer.optimizer.state_dict()
