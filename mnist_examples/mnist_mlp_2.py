@@ -220,7 +220,11 @@ class Trainer:
                 #print(torch.sum(self.model.fc2.weight_alight.grad.abs()))
 
                 self.optimizer.zero_grad(set_to_none=True)
+
                 mem_report()
+
+                print(torch.sum(self.model.fc2.weight))
+
                 sys.exit()
 
             if self.args.baseline:
