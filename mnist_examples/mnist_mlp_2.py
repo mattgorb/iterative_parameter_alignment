@@ -227,6 +227,8 @@ class Trainer:
                 print(self.model.state_dict().keys())
 
                 print(self.optimizer.state_dict().keys())
+                del self.optimizer
+                mem_report()
                 sys.exit()
 
             if self.args.baseline:
