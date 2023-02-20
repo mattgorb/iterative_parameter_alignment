@@ -116,26 +116,26 @@ class Net(nn.Module):
         super(Net, self).__init__()
         self.args = args
         self.weight_merge = weight_merge
-        '''if self.weight_merge:
+        if self.weight_merge:
             self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
             self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
-        else:'''
-        self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
-        self.fc2 = nn.Linear(1024, 10, bias=False)
+        else:
+            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
+            self.fc2 = nn.Linear(1024, 10, bias=False)
 
     def forward(self, x,):
-        '''if self.weight_merge:
+        if self.weight_merge:
             x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
             x, wa2_ae, wa2_se = self.fc2(x)
             score_diff_ae = wa1_ae + wa2_ae
             score_diff_se = wa1_se + wa2_se
             return x, score_diff_ae, score_diff_se
-        else:'''
-        x = self.fc1(x.view(-1, 28 * 28))
-        x = F.relu(x)
-        x = self.fc2(x)
-        return x, torch.tensor(0), torch.tensor(0)
+        else:
+            x = self.fc1(x.view(-1, 28 * 28))
+            x = F.relu(x)
+            x = self.fc2(x)
+            return x, torch.tensor(0), torch.tensor(0)
 
 
 def get_datasets(args):
@@ -200,16 +200,15 @@ class Trainer:
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
-            with torch.no_grad():
-                test_loss, test_acc = self.test()
-                self.test_loss = test_loss
-                self.test_acc = test_acc
+            #with torch.no_grad():
+            test_loss, test_acc = self.test()
+            self.test_loss = test_loss
+            self.test_acc = test_acc
 
-                if log_output:
-                    print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+            if log_output:
+                print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-                mem_report()
-                sys.exit()
+
 
             if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
@@ -230,7 +229,6 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
-
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -315,83 +313,41 @@ class Merge_Iterator:
         self.model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
-        mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
-        mem = mem_params + mem_bufs  # in bytes
-        print(mem)
-
-        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-        mem = mem_params + mem_bufs  # in bytes
-        print(mem)
-
-
         set_weight_align_param(model1, model2, self.args)
         self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
         self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
-        mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
-        mem = mem_params + mem_bufs  # in bytes
-        print(mem)
-
-        mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-        mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-        mem = mem_params + mem_bufs  # in bytes
-        print(mem)
-
-        mem_report()
-
-
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
-            print(f"\nBefore: {torch.cuda.memory_allocated(self.args.gpu)}")
+            print(f"\n1: {torch.cuda.memory_allocated(self.args.gpu)}")
+
             transfer_state_dict=self.model1_trainer.optimizer.state_dict()
-            del self.model1_trainer.optimizer
             self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
             self.model1_trainer.optimizer.load_state_dict(transfer_state_dict)
             del transfer_state_dict
 
             self.model1_trainer.fit()
-            print(f"Mid1: {torch.cuda.memory_allocated(self.args.gpu)}")
 
-            mem_params = sum([param.nelement() * param.element_size() for param in model1.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model1.buffers()])
-            mem = mem_params + mem_bufs  # in bytes
-            print(mem)
-
-            mem_params = sum([param.nelement() * param.element_size() for param in model2.parameters()])
-            mem_bufs = sum([buf.nelement() * buf.element_size() for buf in model2.buffers()])
-            mem = mem_params + mem_bufs  # in bytes
-            print(mem)
-
-
-            #transfer_state_dict=self.model2_trainer.optimizer.state_dict()
-            del self.model1_trainer.optimizer
-            #del transfer_state_dict
-            print(f"Mid2: {torch.cuda.memory_allocated(self.args.gpu)}")
-
-            mem_report()
+            print(f"\n2: {torch.cuda.memory_allocated(self.args.gpu)}")
+            self.model1_trainer.model.fc1.weight_align=None
+            self.model2_trainer.model.fc2.weight_align=None
+            print(f"\n3: {torch.cuda.memory_allocated(self.args.gpu)}")
             sys.exit()
-
-
+            transfer_state_dict=self.model2_trainer.optimizer.state_dict()
             self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
             self.model2_trainer.optimizer.load_state_dict(transfer_state_dict)
             del transfer_state_dict
 
-            print(f"Mid2: {torch.cuda.memory_allocated(self.args.gpu)}")
             self.model2_trainer.fit()
-            print(f"After: {torch.cuda.memory_allocated(self.args.gpu)}")
-
-
+            print(f"4: {torch.cuda.memory_allocated(self.args.gpu)}")
 
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss}, Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
 
-            self.results_to_csv()
+            #self.results_to_csv()
 
     def results_to_csv(self):
             df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,

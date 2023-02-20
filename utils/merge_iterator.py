@@ -21,11 +21,11 @@ class Merge_Iterator:
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
-        #self.models=[model_selector(self.args) for i in range(self.num_clients)]
-        self.models = [torch.nn.DataParallel(
+        self.models=[model_selector(self.args) for i in range(self.num_clients)]
+        '''self.models = [torch.nn.DataParallel(
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6]).to(self.device)
-            for i in range(self.num_clients)]
+            for i in range(self.num_clients)]'''
 
 
         model_parameters = filter(lambda p: p.requires_grad, self.models[0].parameters())
