@@ -200,10 +200,9 @@ class Trainer:
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
-            with torch.no_grad():
-                test_loss, test_acc = self.test()
-                mem_report()
-                sys.exit()
+
+            test_loss, test_acc = self.test()
+
             self.test_loss = test_loss
             self.test_acc = test_acc
 
@@ -322,6 +321,7 @@ class Merge_Iterator:
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
+
             mem_report()
             print(f"\n1: {torch.cuda.memory_allocated(self.args.gpu)}")
 
@@ -336,6 +336,7 @@ class Merge_Iterator:
             del self.model1_trainer.model.fc1.weight_align
             del self.model1_trainer.model.fc2.weight_align
             torch.cuda.empty_cache()
+            del self.model1_trainer.train_loss
 
             print(f"\n4: {torch.cuda.memory_allocated(self.args.gpu)}")
             mem_report()
