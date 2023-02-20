@@ -200,7 +200,8 @@ class Trainer:
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
-            with torch.no_grad():
+            #with torch.no_grad():
+            with torch.inference_mode():
                 test_loss, test_acc = self.test()
                 self.test_loss = test_loss
                 self.test_acc = test_acc
