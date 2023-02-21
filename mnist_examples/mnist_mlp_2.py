@@ -49,7 +49,7 @@ class LinearMerge(nn.Linear):
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<1,
-                                        0.5*torch.square(self.weight-self.weight_align)
+                                        0.5*torch.square(self.weight-self.weight_align),
                                         (self.weight - self.weight_align)-0.5
                                         ))
         return x, weights_diff_ae, weights_diff_se
