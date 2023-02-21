@@ -46,13 +46,13 @@ class LinearMerge(nn.Linear):
         weights_diff_ae = torch.tensor(0)
         weights_diff_se = torch.tensor(0)
         if self.weight_align is not None:
-            #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<1,
                                         #0.5*torch.square(self.weight-self.weight_align),
                                         #(self.weight - self.weight_align)-0.5
                                         #))
-            weights_diff_ae=self.loss(self.weight,self.weight_align)
+            #weights_diff_ae=self.loss(self.weight,self.weight_align)
         return x, weights_diff_ae, weights_diff_se
 
 class Net(nn.Module):
@@ -170,7 +170,7 @@ class Trainer:
     def train(self, ):
         self.model.train()
         train_loss = 0
-
+        train_align_loss=0
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
@@ -184,7 +184,7 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
-
+            train_align_loss+=weight_align_loss
             if not self.args.baseline:
                 self.weight_align_ae_loss_list.append(weight_align_ae.item())
                 self.weight_align_se_loss_list.append(weight_align_se.item())
@@ -193,7 +193,7 @@ class Trainer:
             train_loss += loss.item()
             loss.backward()
             self.optimizer.step()
-
+        self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
@@ -271,8 +271,8 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
             print(f'Merge Iteration: {iter} \n'
-                  f'\tModel 1 Train loss: {self.model1_trainer.train_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
-                  f'\tModel 2 Train loss: {self.model2_trainer.train_loss}, Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
+                  f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
+                  f'\tModel 2 Train loss: {self.model2_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss},Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
 
             #self.results_to_csv()
 
