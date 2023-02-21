@@ -205,6 +205,8 @@ class Trainer:
 
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
 
+            print(self.model.fc1.weight.grad)
+            sys.exit()
             self.optimizer.step()
 
         self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
