@@ -35,7 +35,9 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
-        self.loss=torch.nn.HuberLoss(reduction='sum')
+        #self.loss=torch.nn.HuberLoss(reduction='sum')
+        self.delta=nn.Parameter(1, requires_grad=True)
+
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
@@ -48,10 +50,10 @@ class LinearMerge(nn.Linear):
         if self.weight_align is not None:
             weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
-            #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<1,
-                                        #0.5*torch.square(self.weight-self.weight_align),
-                                        #(self.weight - self.weight_align)-0.5
-                                        #))
+            weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
+                                        0.5*torch.square(self.weight-self.weight_align),
+                                        self.delta((self.weight - self.weight_align)-0.5*self.delta)
+                                        ))
             #weights_diff_ae=self.loss(self.weight,self.weight_align)
         return x, weights_diff_ae, weights_diff_se
 
