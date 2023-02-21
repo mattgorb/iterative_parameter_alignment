@@ -57,6 +57,8 @@ class LinearMerge(nn.Linear):
                                         #self.delta*((self.weight - self.weight_align)-0.5*self.delta)
                                         #))
             #weights_diff_ae=self.loss(self.weight,self.weight_align)
+        print(self.weight.size())
+        print(self.weight_align.size())
         weights_diff_ae=(F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) )**self.delta
         return x, weights_diff_ae, weights_diff_se
 
