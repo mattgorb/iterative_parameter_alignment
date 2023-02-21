@@ -135,7 +135,7 @@ class Trainer:
 
     def fit(self, log_output=False):
         self.train_loss = 1e6
-        mem_report()
+
         for epoch in range(1, self.args.epochs + 1):
             epoch_loss = self.train()
             self.train_loss = epoch_loss
