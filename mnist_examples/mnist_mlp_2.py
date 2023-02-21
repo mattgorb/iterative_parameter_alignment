@@ -205,7 +205,9 @@ class Trainer:
 
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
             torch.set_printoptions(profile="full")
-            print(self.model.fc1.weight.grad)
+            print(self.model.fc1.weight.grad[-1][-1])
+
+            print(self.model.fc1.weight_align[-1][-1])
             sys.exit()
             self.optimizer.step()
 
