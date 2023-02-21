@@ -64,6 +64,7 @@ class LinearMerge(nn.Linear):
         weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ))**self.delta
 
         print(weights_diff_ae)
+        sys.exit()
         return out, weights_diff_ae, weights_diff_se
 
 class Net(nn.Module):
