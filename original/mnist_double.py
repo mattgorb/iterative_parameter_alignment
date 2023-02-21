@@ -272,7 +272,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=10000,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=int, default=250, )
+    parser.add_argument('--weight_align_factor', type=int, default=1, )
     parser.add_argument('--kn_init', type=bool, default=False)
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
