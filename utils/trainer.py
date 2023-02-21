@@ -11,7 +11,13 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+
+
+        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
+
+
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
 
@@ -28,12 +34,14 @@ class Trainer:
         self.model_name = model_name
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
-    def fit(self, log_output=True):
+    def fit(self,merge_iter=None, log_output=True):
 
         if self.train_iter>0:
-            checkpoint = torch.load(self.save_path)
-            self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
-            self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            #checkpoint = torch.load(self.save_path)
+            #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+            #self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+            self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*merge_iter*0.998, weight_decay=1e-3)
+            self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
@@ -41,17 +49,19 @@ class Trainer:
             test_loss, test_acc = self.test()
             self.test_loss = test_loss
             self.test_acc = test_acc
-            #self.scheduler.step()
+
+            self.scheduler.step()
+
             #if epoch_loss < self.train_loss:
                 #torch.save(self.model.state_dict(), self.save_path)
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-        torch.save({
-            'epoch': self.train_iter,
-            'model_state_dict': self.model.state_dict(),
-            'optimizer_state_dict': self.optimizer.state_dict()
-        }, self.save_path)
+        #torch.save({
+            #'epoch': self.train_iter,
+            #'model_state_dict': self.model.state_dict(),
+            #'optimizer_state_dict': self.optimizer.state_dict()
+        #}, self.save_path)
         del self.optimizer
         torch.cuda.empty_cache()
 
