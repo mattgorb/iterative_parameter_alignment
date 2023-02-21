@@ -126,7 +126,7 @@ class Trainer:
 
 
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=.998)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
@@ -206,6 +206,7 @@ class Trainer:
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
 
             self.optimizer.step()
+
         self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
