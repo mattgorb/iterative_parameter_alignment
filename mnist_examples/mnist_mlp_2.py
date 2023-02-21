@@ -202,6 +202,9 @@ class Trainer:
 
             train_loss += loss.item()
             loss.backward()
+
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
+
             self.optimizer.step()
         self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
         train_loss /= len(self.train_loader.dataset)
