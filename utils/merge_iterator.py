@@ -54,10 +54,15 @@ class Merge_Iterator:
 
 
             print(f'Summary, Merge Iteration: {iter}')
+            avg_acc=0
+            avg_loss=0
             for i in range(len(self.model_trainers)):
                 trainer=self.model_trainers[i]
                 print(f'\tModel {i} Train loss: {trainer.train_loss}, '
                       f'Train CE loss: {trainer.train_loss_ce}, '
                       f'Test loss: {trainer.test_loss},  '
                       f'Test accuracy: {trainer.test_acc}')
+                avg_acc+=trainer.test_acc
+                avg_loss+=trainer.test_loss
+            print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
 
