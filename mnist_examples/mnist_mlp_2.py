@@ -35,7 +35,7 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
-        alpha=nn.Paramter()
+        #alpha=nn.Paramter()
 
     def init(self, args):
         self.args = args
