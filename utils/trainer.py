@@ -94,7 +94,7 @@ class Trainer:
             train_loss_ce += self.criterion(output, target).sum()
             loss.sum().backward()
 
-            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
 
 
             self.optimizer.step()
