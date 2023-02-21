@@ -9,7 +9,7 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/
 nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/126.txt 2>&1 & --NEWER SGD optimizer
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=7 > ~/iwa/124.txt 2>&1 &
 
-python -u main.py --config=configs/cifar10_lenet_baseline.yaml --gpu=2
+nohup python -u main.py  --config=configs/cifar10_lenet_baseline.yaml --gpu=2 > ~/iwa/cifar10_baseline.txt 2>&1 &
 
 
 python -m torch.distributed.launch --nproc_per_node=2 main.py --config=configs/cifar10_100_dir_p3.yaml --gpu=0

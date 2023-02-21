@@ -46,7 +46,7 @@ class Merge_Iterator:
 
         for iter in range(merge_iterations):
             for trainer in self.model_trainers:
-                trainer.fit()
+                trainer.fit(merge_iter=iter)
                 print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
                       f'Train CE loss: {trainer.train_loss_ce}, '
                       f'Test loss: {trainer.test_loss},  '

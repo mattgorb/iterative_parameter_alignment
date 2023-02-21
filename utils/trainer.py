@@ -52,8 +52,7 @@ class Trainer:
 
             self.scheduler.step()
 
-            #if epoch_loss < self.train_loss:
-                #torch.save(self.model.state_dict(), self.save_path)
+
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
@@ -62,7 +61,9 @@ class Trainer:
             #'model_state_dict': self.model.state_dict(),
             #'optimizer_state_dict': self.optimizer.state_dict()
         #}, self.save_path)
+
         del self.optimizer
+
         torch.cuda.empty_cache()
 
         self.train_iter+=1
