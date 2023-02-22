@@ -203,7 +203,7 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
-            train_align_loss+=weight_align_loss
+            train_align_loss+=weight_align_loss.item()
             if not self.args.baseline:
                 self.weight_align_ae_loss_list.append(weight_align_ae.item())
                 self.weight_align_se_loss_list.append(weight_align_se.item())
