@@ -52,7 +52,7 @@ class LinearMerge(nn.Linear):
         #print(self.delta)
         if self.weight_align is not None:
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())#**self.delta
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs()**self.delta)#
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
@@ -204,8 +204,8 @@ class Trainer:
             else:
                 print('Set align loss')
                 sys.exit()
-            loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
-            #loss = self.criterion(output, target)+self.args.weight_align_factor * weight_align_loss
+            #loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
+            loss = self.criterion(output, target)+self.args.weight_align_factor * weight_align_loss
 
             if not self.args.baseline:
                 self.weight_align_ae_loss_list.append(weight_align_ae.item())
