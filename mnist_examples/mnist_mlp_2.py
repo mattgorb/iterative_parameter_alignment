@@ -63,8 +63,8 @@ class LinearMerge(nn.Linear):
             #print(self.weight_align.size())
             #print(F.linear(x, self.weight, self.bias).size())
             #print(F.linear(x, self.weight_align, self.bias).size())
-            weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
-
+            #weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
+            weights_diff_ae = F.linear(x, self.weight_align, self.bias)
         #print(weights_diff_ae)
 
         return out, weights_diff_ae, weights_diff_se
@@ -83,12 +83,13 @@ class Net(nn.Module):
 
     def forward(self, x,):
         if self.weight_merge:
-            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
+            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28),x.view(-1, 28 * 28))
             x = F.relu(x)
-            x, wa2_ae, wa2_se = self.fc2(x)
+            wa1_ae=F.relu(x)
+            x, wa2_ae, wa2_se = self.fc2(x,wa1_ae)
             score_diff_ae = wa1_ae + wa2_ae
             score_diff_se = wa1_se + wa2_se
-            return x, score_diff_ae, score_diff_se
+            return x, wa2_ae, score_diff_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -205,7 +206,7 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             #loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
-            loss = self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
+            loss = self.criterion(output, target)#*self.args.weight_align_factor * weight_align_loss
 
             if not self.args.baseline:
                 self.weight_align_ae_loss_list.append(weight_align_ae.item())
