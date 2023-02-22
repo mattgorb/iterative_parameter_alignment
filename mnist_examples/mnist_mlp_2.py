@@ -208,13 +208,10 @@ class Trainer:
             #loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
             loss = self.criterion(output, target)+self.criterion(weight_align_loss, target)#*self.args.weight_align_factor * weight_align_loss
 
-            if not self.args.baseline:
-                self.weight_align_ae_loss_list.append(weight_align_ae.item())
-                self.weight_align_se_loss_list.append(weight_align_se.item())
-                self.batch_epoch_list.append(self.merge_iter)
+
 
             train_loss += loss.item()
-            train_align_loss += weight_align_loss.item()
+            #train_align_loss += weight_align_loss.item()
 
             loss.backward()
 
@@ -222,7 +219,7 @@ class Trainer:
 
             self.optimizer.step()
 
-        self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
+        #self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
