@@ -173,17 +173,17 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-            if self.args.baseline:
+            '''if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
                 self.train_loss_list.append(self.train_loss)
                 self.test_loss_list.append(self.test_loss)
-                self.epoch_list.append(epoch)
+                self.epoch_list.append(epoch)'''
 
-        if not self.args.baseline:
+        '''if not self.args.baseline:
             self.test_accuracy_list.append(self.test_acc)
             self.train_loss_list.append(self.train_loss)
             self.test_loss_list.append(self.test_loss)
-            self.epoch_list.append(self.merge_iter)
+            self.epoch_list.append(self.merge_iter)'''
 
 
     def model_loss(self):
