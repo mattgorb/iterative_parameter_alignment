@@ -37,6 +37,8 @@ class LinearMerge(nn.Linear):
         self.weight_align = None
         #self.loss=torch.nn.HuberLoss(reduction='sum')
         self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
+        self.alpha=1.005
+        self.n=1
 
     def init(self, args):
         self.args = args
@@ -50,7 +52,8 @@ class LinearMerge(nn.Linear):
         #weights_diff_se = torch.tensor(0)
         #print(self.delta)
         if self.weight_align is not None:
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())**self.n
+            self.n+=1
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
