@@ -44,7 +44,7 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    def forward(self, x,x2):
+    def forward(self, x):
         out = F.linear(x, self.weight, self.bias)
 
         weights_diff_ae = torch.tensor(0)
@@ -52,8 +52,8 @@ class LinearMerge(nn.Linear):
         #print(self.delta)
         if self.weight_align is not None:
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-
-            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs()**self.delta)
+            #weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
                                         #self.delta*((self.weight - self.weight_align)-0.5*self.delta)
@@ -64,7 +64,7 @@ class LinearMerge(nn.Linear):
             #print(F.linear(x, self.weight, self.bias).size())
             #print(F.linear(x, self.weight_align, self.bias).size())
             #weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
-            weights_diff_ae = F.linear(x2, self.weight_align, self.bias)
+
         #print(weights_diff_ae)
 
         return out, weights_diff_ae, weights_diff_se
@@ -83,13 +83,12 @@ class Net(nn.Module):
 
     def forward(self, x,):
         if self.weight_merge:
-            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28),x.view(-1, 28 * 28))
+            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
-            wa1_ae=F.relu(x)
-            x, wa2_ae, wa2_se = self.fc2(x,wa1_ae)
-            #score_diff_ae = wa1_ae + wa2_ae
-            #score_diff_se = wa1_se + wa2_se
-            return x, wa2_ae, wa2_se
+            x, wa2_ae, wa2_se = self.fc2(x)
+            score_diff_ae = wa1_ae + wa2_ae
+            score_diff_se = wa1_se + wa2_se
+            return x, score_diff_ae, score_diff_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -173,17 +172,17 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-            '''if self.args.baseline:
+            if self.args.baseline:
                 self.test_accuracy_list.append(self.test_acc)
                 self.train_loss_list.append(self.train_loss)
                 self.test_loss_list.append(self.test_loss)
-                self.epoch_list.append(epoch)'''
+                self.epoch_list.append(epoch)
 
-        '''if not self.args.baseline:
+        if not self.args.baseline:
             self.test_accuracy_list.append(self.test_acc)
             self.train_loss_list.append(self.train_loss)
             self.test_loss_list.append(self.test_loss)
-            self.epoch_list.append(self.merge_iter)'''
+            self.epoch_list.append(self.merge_iter)
 
 
     def model_loss(self):
@@ -206,12 +205,15 @@ class Trainer:
                 print('Set align loss')
                 sys.exit()
             #loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
-            loss = self.criterion(output, target)+self.criterion(weight_align_loss, target)#*self.args.weight_align_factor * weight_align_loss
+            loss = self.criterion(output, target)#*self.args.weight_align_factor * weight_align_loss
 
-
+            if not self.args.baseline:
+                self.weight_align_ae_loss_list.append(weight_align_ae.item())
+                self.weight_align_se_loss_list.append(weight_align_se.item())
+                self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
-            #train_align_loss += weight_align_loss.item()
+            train_align_loss += weight_align_loss.item()
 
             loss.backward()
 
@@ -219,8 +221,7 @@ class Trainer:
 
             self.optimizer.step()
 
-        #self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
-        self.train_align_loss =0
+        self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
