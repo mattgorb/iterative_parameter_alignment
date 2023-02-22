@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         super().__init__(*args, **kwargs)
         self.weight_align = None
         #self.loss=torch.nn.HuberLoss(reduction='sum')
-        self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
+        #self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
 
     def init(self, args):
         self.args = args
@@ -202,14 +202,16 @@ class Trainer:
             else:
                 print('Set align loss')
                 sys.exit()
-            loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
-            train_align_loss+=weight_align_loss.item()
+            loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align_loss
+
             if not self.args.baseline:
                 self.weight_align_ae_loss_list.append(weight_align_ae.item())
                 self.weight_align_se_loss_list.append(weight_align_se.item())
                 self.batch_epoch_list.append(self.merge_iter)
 
             train_loss += loss.item()
+            train_align_loss += weight_align_loss.item()
+
             loss.backward()
 
             #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
