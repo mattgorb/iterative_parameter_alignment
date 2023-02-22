@@ -61,7 +61,7 @@ class LinearMerge(nn.Linear):
         #print(self.weight_align.size())
         #print(F.linear(x, self.weight, self.bias).size())
         #print(F.linear(x, self.weight_align, self.bias).size())
-        weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
+        weights_diff_ae=torch.sum((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
 
         #print(weights_diff_ae)
 
