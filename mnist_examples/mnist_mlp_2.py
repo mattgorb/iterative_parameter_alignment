@@ -220,6 +220,7 @@ class Trainer:
             self.optimizer.step()
 
         #self.train_align_loss=train_align_loss/len(self.train_loader.dataset)
+        self.train_align_loss =0
         train_loss /= len(self.train_loader.dataset)
         return train_loss
 
