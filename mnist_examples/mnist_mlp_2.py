@@ -89,7 +89,7 @@ class Net(nn.Module):
             x, wa2_ae, wa2_se = self.fc2(x,wa1_ae)
             #score_diff_ae = wa1_ae + wa2_ae
             #score_diff_se = wa1_se + wa2_se
-            return x, wa2_ae, score_diff_se
+            return x, wa2_ae, wa2_se
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
