@@ -44,7 +44,7 @@ class LinearMerge(nn.Linear):
         set_seed(self.args.weight_seed)
         nn.init.kaiming_normal_(self.weight, mode="fan_in", nonlinearity="relu")
 
-    def forward(self, x):
+    def forward(self, x,x2):
         out = F.linear(x, self.weight, self.bias)
 
         weights_diff_ae = torch.tensor(0)
@@ -64,7 +64,7 @@ class LinearMerge(nn.Linear):
             #print(F.linear(x, self.weight, self.bias).size())
             #print(F.linear(x, self.weight_align, self.bias).size())
             #weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
-            weights_diff_ae = F.linear(x, self.weight_align, self.bias)
+            weights_diff_ae = F.linear(x2, self.weight_align, self.bias)
         #print(weights_diff_ae)
 
         return out, weights_diff_ae, weights_diff_se
