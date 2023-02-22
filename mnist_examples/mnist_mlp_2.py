@@ -47,21 +47,21 @@ class LinearMerge(nn.Linear):
         out = F.linear(x, self.weight, self.bias)
 
         weights_diff_ae = torch.tensor(0)
-        weights_diff_se = torch.tensor(0)
+        #weights_diff_se = torch.tensor(0)
         #print(self.delta)
         if self.weight_align is not None:
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
+            #weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
                                         #self.delta*((self.weight - self.weight_align)-0.5*self.delta)
                                         #))
             #weights_diff_ae=self.loss(self.weight,self.weight_align)
-        #print(self.weight.size())
-        #print(self.weight_align.size())
-        #print(F.linear(x, self.weight, self.bias).size())
-        #print(F.linear(x, self.weight_align, self.bias).size())
-        weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
+            #print(self.weight.size())
+            #print(self.weight_align.size())
+            #print(F.linear(x, self.weight, self.bias).size())
+            #print(F.linear(x, self.weight_align, self.bias).size())
+            weights_diff_ae=torch.mean((F.linear(x, self.weight, self.bias)-F.linear(x, self.weight_align, self.bias) ).abs())**self.delta
 
         #print(weights_diff_ae)
 
@@ -134,9 +134,9 @@ class Trainer:
         self.train_loader, self.test_loader = datasets[0], datasets[1]
 
 
-        #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
+        #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
@@ -165,7 +165,7 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            self.scheduler.step()
+            #self.scheduler.step()
 
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -212,7 +212,7 @@ class Trainer:
             train_loss += loss.item()
             loss.backward()
 
-            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
+            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
 
             self.optimizer.step()
 
@@ -295,6 +295,7 @@ class Merge_Iterator:
             print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
             print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
             print(f'm2 d: {self.model2_trainer.model.fc2.delta}')
+
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss},Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
