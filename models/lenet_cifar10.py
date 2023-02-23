@@ -33,11 +33,6 @@ class LeNetCifar10(nn.Module):
 
 
 
-
-        self.max_pool=nn.MaxPool2d((2, 2))
-        self.relu=nn.ReLU(True)
-
-
     def forward(self, x: torch.Tensor) -> torch.Tensor:
 
         if self.weight_merge:
