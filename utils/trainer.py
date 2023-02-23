@@ -37,13 +37,13 @@ class Trainer:
 
     def fit(self, log_output=True):
         self.train_iter+=1
-        if self.train_iter>0:
+        #if self.train_iter>0:
             #checkpoint = torch.load(self.save_path)
             #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
             #self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*(0.998**self.train_iter), weight_decay=1e-3)
             #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
-            sys.exit()
+            #sys.exit()
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
 
