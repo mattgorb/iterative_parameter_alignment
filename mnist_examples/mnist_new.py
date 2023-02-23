@@ -279,8 +279,9 @@ class Merge_Iterator:
             self.model2_trainer.merge_iter=iter
 
             if iter>25:
+                print("HERHERHEEHREE")
                 self.args.align_loss='se'
-
+                print(self.args.align_loss)
             else:
                 self.args.align_loss='ae'
 
