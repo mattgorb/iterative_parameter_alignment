@@ -62,6 +62,7 @@ class Trainer:
             #'optimizer_state_dict': self.optimizer.state_dict()
         #}, self.save_path)
 
+        self.optimizer.zero_grad()
         del self.optimizer
 
         torch.cuda.empty_cache()
@@ -91,9 +92,9 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
 
 
-            train_loss += loss.sum()
-            train_loss_ce += self.criterion(output, target).sum()
-            loss.sum().backward()
+            train_loss += loss.item()
+            train_loss_ce += self.criterion(output, target).item()
+            loss.backward()
 
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
 
