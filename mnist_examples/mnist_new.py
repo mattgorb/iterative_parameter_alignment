@@ -47,22 +47,19 @@ class LinearMerge(nn.Linear):
     def forward(self, x):
         out = F.linear(x, self.weight, self.bias)
 
-        weights_diff_ae = torch.tensor(0)
-        weights_diff_se = torch.tensor(0)
-        #print(self.delta)
+        weights_diff = torch.tensor(0)
+
         if self.weight_align is not None:
-            #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_se = torch.sum(torch.sqrt(torch.square(self.weight - self.weight_align)))
+            if self.args.weight_align_loss=='ae':
+                weights_diff = torch.sum((self.weight - self.weight_align).abs())
+            elif self.args.weight_align_loss=='se':
+                weights_diff = torch.sum(torch.sqrt(torch.square(self.weight - self.weight_align)))
 
 
-            #if weights_diff_se!=weights_diff_ae:
-            #sys.exit()
 
         #align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
 
-        return out, weights_diff_ae, weights_diff_se
+        return out, weights_diff
 
 class Net(nn.Module):
     def __init__(self, args, weight_merge=False):
@@ -78,12 +75,12 @@ class Net(nn.Module):
 
     def forward(self, x,):
         if self.weight_merge:
-            x, wa1_ae, wa1_se = self.fc1(x.view(-1, 28 * 28))
+            x, wd = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
-            x, wa2_ae, wa2_se = self.fc2(x)
-            score_diff_ae = wa1_ae + wa2_ae
-            score_diff_se = wa1_se + wa2_se
-            return x, score_diff_ae, score_diff_se
+            x, wd2= self.fc2(x)
+            score_diff = wd+wd2
+
+            return x, score_diff
         else:
             x = self.fc1(x.view(-1, 28 * 28))
             x = F.relu(x)
@@ -191,14 +188,7 @@ class Trainer:
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
             self.optimizer.zero_grad()
-            output, weight_align_ae, weight_align_se = self.model(data)
-            if self.args.align_loss=='ae' or self.args.baseline==True:
-                weight_align_loss=weight_align_ae
-            elif self.args.align_loss == 'se':
-                weight_align_loss=weight_align_se
-            else:
-                print('Set align loss')
-                sys.exit()
+            output, weight_align_loss = self.model(data)
             #loss = self.criterion(output, target) + self.criterion(output, target)*self.args.weight_align_factor * weight_align_loss
             loss = self.criterion(output, target)+self.args.weight_align_factor * weight_align_loss
 
@@ -224,7 +214,7 @@ class Trainer:
         with torch.no_grad():
             for data, target in self.test_loader:
                 data, target = data.to(self.device), target.to(self.device)
-                output, _, _ = self.model(data, )
+                output, _ = self.model(data, )
                 test_loss += self.criterion(output, target).item()
                 pred = output.argmax(dim=1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
