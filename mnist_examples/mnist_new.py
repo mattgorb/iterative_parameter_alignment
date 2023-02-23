@@ -55,7 +55,7 @@ class LinearMerge(nn.Linear):
             weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())#
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
 
-        align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
+        #align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
 
         return out, weights_diff_ae, weights_diff_se
 
@@ -277,6 +277,12 @@ class Merge_Iterator:
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
+
+            if iter>25:
+                self.args.align_loss='se'
+
+            else:
+                self.args.align_loss='ae'
 
             self.model1_trainer.fit()
             self.model2_trainer.fit()
