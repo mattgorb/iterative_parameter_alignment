@@ -57,7 +57,7 @@ class ConvMerge(nn.Conv2d):
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - wa))
                 elif self.args.align_loss == 'pd':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.delta))
                 else:
                     sys.exit(1)
             if self.args.bias == True:
@@ -67,7 +67,7 @@ class ConvMerge(nn.Conv2d):
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
                     elif self.args.align_loss == 'pd':
-                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
+                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
@@ -103,7 +103,7 @@ class LinearMerge(nn.Linear):
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum((self.weight - wa) ** 2)
                 elif self.args.align_loss == 'pd':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.delta))
                 else:
                     sys.exit(1)
             if self.args.bias == True:
@@ -113,7 +113,7 @@ class LinearMerge(nn.Linear):
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
                     elif self.args.align_loss == 'pd':
-                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
+                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
