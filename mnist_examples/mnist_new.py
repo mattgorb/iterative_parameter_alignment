@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         super().__init__(*args, **kwargs)
         self.weight_align = None
         #self.loss=torch.nn.HuberLoss(reduction='sum')
-        self.delta=nn.Parameter(torch.zeros(1), requires_grad=True)
+        self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
 
 
     def init(self, args):
