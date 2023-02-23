@@ -18,7 +18,8 @@ class Trainer:
         self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.992)
 
-
+        print(len(self.train_loader.dataset))
+        sys.exit()
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
 
