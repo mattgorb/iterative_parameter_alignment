@@ -14,10 +14,7 @@ class Trainer:
 
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
-        for n,m in self.model.named_parameters():
-            print(n)
-        #print(self.model.named_parameters().keys())
-        sys.exit()
+
         self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
@@ -93,16 +90,13 @@ class Trainer:
             '''
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
-
-
-            train_loss += loss.item()
-            train_loss_ce += self.criterion(output, target).item()
             loss.backward()
 
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
-
-
             self.optimizer.step()
+
+            train_loss += loss.item()
+            train_loss_ce += self.criterion(output, target).item()
 
         self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
         self.train_loss= train_loss / len(self.train_loader.dataset)
