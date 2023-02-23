@@ -62,7 +62,7 @@ class Trainer:
             #'optimizer_state_dict': self.optimizer.state_dict()
         #}, self.save_path)
 
-        self.optimizer.zero_grad()
+        #self.optimizer.zero_grad()
         #del self.optimizer
 
         #torch.cuda.empty_cache()
