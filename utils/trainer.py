@@ -36,8 +36,8 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
-        self.train_iter+=1
-        if self.train_iter>0:
+
+        if self.optimizer is None:
             checkpoint = torch.load(self.save_path)
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -66,7 +66,7 @@ class Trainer:
         del self.optimizer
         torch.cuda.empty_cache()
 
-
+        self.train_iter+=1
 
     def model_loss(self):
         return self.best_loss
