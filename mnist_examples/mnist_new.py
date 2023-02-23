@@ -57,7 +57,7 @@ class LinearMerge(nn.Linear):
 
         align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
 
-        return out, align_loss, weights_diff_se
+        return out, weights_diff_ae, weights_diff_se
 
 class Net(nn.Module):
     def __init__(self, args, weight_merge=False):
