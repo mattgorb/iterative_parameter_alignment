@@ -17,8 +17,7 @@ class Trainer:
 
         self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.992)
-        print(self.optimizer)
-        print(self.scheduler)
+
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
@@ -53,7 +52,7 @@ class Trainer:
             self.test_acc = test_acc
 
             self.scheduler.step()
-            print(f'lr: {self.scheduler.get_last_lr()}')
+            #print(f'lr: {self.scheduler.get_last_lr()}')
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
