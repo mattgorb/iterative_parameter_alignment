@@ -12,7 +12,7 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
 
 
         #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
