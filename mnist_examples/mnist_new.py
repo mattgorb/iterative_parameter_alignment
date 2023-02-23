@@ -51,7 +51,8 @@ class LinearMerge(nn.Linear):
 
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
+                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/1.5)
+                print(weights_diff)
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
             elif self.args.align_loss == 'le':
@@ -281,10 +282,10 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
-            print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
+            '''print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
             print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
             print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')'''
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
