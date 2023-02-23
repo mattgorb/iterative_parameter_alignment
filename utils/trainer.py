@@ -11,11 +11,11 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
-        #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
 
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
+        #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
+        #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
@@ -50,7 +50,7 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            self.scheduler.step()
+            #self.scheduler.step()
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
