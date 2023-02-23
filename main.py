@@ -37,9 +37,6 @@ def main():
         save_path = f'{args.model}{args.dataset}_baseline.pt'
         trainer = Trainer(args, [train_loader1, test_dataset], model, args.device, save_path,)
 
-        #trainer.optimizer= torch.optim.SGD(model.parameters(), lr=0.1, weight_decay=.998)
-        #trainer.scheduler = torch.optim.lr_scheduler.StepLR(trainer.optimizer, step_size=1, gamma=1)
-
         trainer.fit(log_output=True)
     else:
         train_loader_list, test_loader = get_dataloaders(args)
