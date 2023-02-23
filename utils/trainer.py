@@ -53,6 +53,7 @@ class Trainer:
             self.test_acc = test_acc
 
             self.scheduler.step()
+            print(f'lr: {self.scheduler.get_last_lr()}')
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
