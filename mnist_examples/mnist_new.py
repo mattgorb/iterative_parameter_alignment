@@ -51,9 +51,9 @@ class LinearMerge(nn.Linear):
 
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())
+                weights_diff = torch.mean((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
-                weights_diff = torch.sum((self.weight - self.weight_align)**2)
+                weights_diff = torch.mean((self.weight - self.weight_align)**2)
             else:
                 sys.exit()
 
