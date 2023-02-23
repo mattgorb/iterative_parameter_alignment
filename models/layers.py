@@ -53,7 +53,7 @@ class ConvMerge(nn.Conv2d):
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.5))
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.25))
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - wa))
                 else:
@@ -61,7 +61,7 @@ class ConvMerge(nn.Conv2d):
             if self.args.bias == True:
                 for ba in self.bias_align_list:
                     if self.args.align_loss == 'ae':
-                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.5))
+                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.25))
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
                     else:
@@ -91,24 +91,11 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()#
-
-        '''if self.weight_align is not None:
-            # using absolute error here.
-            if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align).abs())
-            elif self.args.align_loss=='se':
-                weights_diff=torch.sum((self.weight-self.weight_align)**2)
-                if self.args.bias==True:
-                    weights_diff += torch.sum((self.bias - self.bias_align)**2)
-            else:
-                sys.exit(1)'''
+        weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.5))
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.25))
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum((self.weight - wa) ** 2)
                 else:
@@ -116,7 +103,7 @@ class LinearMerge(nn.Linear):
             if self.args.bias == True:
                 for ba in self.bias_align_list:
                     if self.args.align_loss == 'ae':
-                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.5))
+                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.25))
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
                     else:
