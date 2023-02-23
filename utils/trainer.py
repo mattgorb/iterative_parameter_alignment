@@ -82,14 +82,12 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
 
 
-            self.optimizer.zero_grad()
+            #self.optimizer.zero_grad()
             output, weight_align = self.model(data)
-            '''
-            weight_align_factor=250 works for this particular combination, summing both CrossEntropyLoss and weight alignment
-            For model w/o weight alignment paramter, second part of loss is 0  
-            '''
+
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
+            self.optimizer.zero_grad()
             loss.backward()
 
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
