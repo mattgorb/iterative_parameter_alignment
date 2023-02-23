@@ -15,7 +15,7 @@ class Trainer:
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
 
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=0.05,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
 
@@ -43,7 +43,7 @@ class Trainer:
             #self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
             self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*(0.998**self.train_iter), weight_decay=1e-3)
             self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
-            #sys.exit()
+
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
 
