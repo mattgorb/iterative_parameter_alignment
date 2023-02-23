@@ -29,6 +29,8 @@ def get_datasets(args):
     else:
         train_transform=test_transform
     if args.baseline:
+        print(train_transform)
+        sys.exit()
         dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)

@@ -4,4 +4,4 @@ data_transform: True
 bias: True
 local_epochs: 500
 baseline: True
-batch_size: 10
+batch_size: 50
