@@ -53,17 +53,21 @@ class ConvMerge(nn.Conv2d):
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.5))
+                    weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - wa))
+                elif self.args.align_loss == 'pd':
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
                 else:
                     sys.exit(1)
             if self.args.bias == True:
                 for ba in self.bias_align_list:
                     if self.args.align_loss == 'ae':
-                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.5))
+                        weights_diff += torch.sum((self.bias - ba).abs())
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
+                    elif self.args.align_loss == 'pd':
+                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
@@ -95,17 +99,21 @@ class LinearMerge(nn.Linear):
         if len(self.weight_align_list) > 0:
             for wa in self.weight_align_list:
                 if self.args.align_loss == 'ae':
-                    weights_diff += torch.sum((self.weight - wa).abs().pow(1.5))
+                    weights_diff += torch.sum((self.weight - wa).abs())
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum((self.weight - wa) ** 2)
+                elif self.args.align_loss == 'pd':
+                    weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
                 else:
                     sys.exit(1)
             if self.args.bias == True:
                 for ba in self.bias_align_list:
                     if self.args.align_loss == 'ae':
-                        weights_diff += torch.sum((self.bias - ba).abs().pow(1.5))
+                        weights_diff += torch.sum((self.bias - ba).abs())
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - ba))
+                    elif self.args.align_loss == 'pd':
+                        weights_diff += torch.sum((self.weight - wa).abs().pow(self.args.power_delta))
                     else:
                         sys.exit(1)
         return x, weights_diff

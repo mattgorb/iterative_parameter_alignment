@@ -1,7 +1,10 @@
 dataset: CIFAR10
 weight_init: kaiming_normal
 model: LeNetCifar10
-align_loss: ae
+
+align_loss: pd
+power_delta: 1.5
+
 weight_align_factor: 3
 data_transform: True
 num_clients: 20
