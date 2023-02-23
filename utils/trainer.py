@@ -28,7 +28,7 @@ class Trainer:
         self.wa1_norm_list = []
         self.wa2_norm_list = []
         self.train_iter_list=[]
-        self.train_iter=0
+        self.merge_iter=1
 
         self.weight_dir = f'{self.args.base_dir}iwa_weights/'
 
@@ -36,8 +36,8 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
-
-        if self.optimizer is None:
+        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}')
+        if self.merge_iter>1:
             checkpoint = torch.load(self.save_path)
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
             self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
@@ -66,7 +66,7 @@ class Trainer:
         del self.optimizer
         torch.cuda.empty_cache()
 
-        self.train_iter+=1
+        self.merge_iter+=1
 
     def model_loss(self):
         return self.best_loss
