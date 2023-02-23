@@ -57,11 +57,11 @@ class LinearMerge(nn.Linear):
             weights_diff_se = torch.sum(torch.sqrt(torch.square(self.weight - self.weight_align)))
 
 
-            if weights_diff_se!=weights_diff_ae:
-                print('heresss')
-                print(weights_diff_se)
-                print(weights_diff_ae)
-                sys.exit()
+            #if weights_diff_se!=weights_diff_ae:
+            print('heresss')
+            print(weights_diff_se)
+            print(weights_diff_ae)
+            #sys.exit()
 
         #align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
 
