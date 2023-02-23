@@ -15,8 +15,8 @@ class Trainer:
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
 
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
-        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.992)
+        #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
+        #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.992)
 
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
