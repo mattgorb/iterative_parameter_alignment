@@ -6,7 +6,7 @@ nohup python -u main.py --config=configs/cifar10_100_dir_p3.yaml --gpu=1 > ~/iwa
 nohup python -u main.py --config=configs/cifar10_20.yaml --gpu=7 > ~/iwa/122.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/123.txt 2>&1 & --OLD
 nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/125.txt 2>&1 & --NEW
-nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/126.txt 2>&1 & --NEWER SGD optimizer
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=7 > ~/iwa/126.txt 2>&1 & --NEWER SGD optimizer
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=7 > ~/iwa/124.txt 2>&1 &
 
 nohup python -u main.py  --config=configs/cifar10_lenet_baseline.yaml --gpu=2 > ~/iwa/cifar10_baseline.txt 2>&1 &

@@ -57,7 +57,7 @@ class Trainer:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
         torch.save({
-            'epoch': self.train_iter,
+            'epoch': self.merge_iter,
             'model_state_dict': self.model.state_dict(),
             'optimizer_state_dict': self.optimizer.state_dict()
         }, self.save_path)
