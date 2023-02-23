@@ -14,7 +14,9 @@ class Trainer:
 
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
-        print(self.model.named_parameters().keys())
+        for n,m in self.model.named_parameters():
+            print(n)
+        #print(self.model.named_parameters().keys())
         sys.exit()
         self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
