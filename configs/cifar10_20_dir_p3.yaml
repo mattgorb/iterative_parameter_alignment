@@ -9,5 +9,5 @@ bias: True
 local_epochs: 5
 dataset_split: dirichlet
 dirichlet_alpha: 0.3
-batch_size: 32
+batch_size: 50
 merge_iter: 300
