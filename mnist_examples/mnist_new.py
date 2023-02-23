@@ -286,12 +286,6 @@ class Merge_Iterator:
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
 
-            if iter>25:
-                print("HERHERHEEHREE")
-                self.args.align_loss='se'
-                print(self.args.align_loss)
-            else:
-                self.args.align_loss='ae'
 
             self.model1_trainer.fit()
             self.model2_trainer.fit()
