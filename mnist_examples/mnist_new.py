@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         super().__init__(*args, **kwargs)
         self.weight_align = None
         #self.loss=torch.nn.HuberLoss(reduction='sum')
-        #self.delta=nn.Parameter(torch.zeros(1), requires_grad=True)
+        self.delta=nn.Parameter(torch.zeros(1), requires_grad=True)
 
 
     def init(self, args):
@@ -54,6 +54,8 @@ class LinearMerge(nn.Linear):
                 weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
+            elif self.args.align_loss == 'le':
+                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(self.delta)).pow(1/self.delta)
             else:
                 sys.exit()
 
@@ -279,10 +281,10 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
-            #print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
-            #print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
-            #print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
-            #rint(f'm2 d: {self.model2_trainer.model.fc2.delta}')
+            print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
+            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
