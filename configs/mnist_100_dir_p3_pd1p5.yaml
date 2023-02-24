@@ -1,6 +1,6 @@
 dataset: MNIST
 weight_init: kaiming_normal
-model: LeNetCifar10
+model: MLP
 
 align_loss: pd
 delta: 1.5

@@ -3,13 +3,9 @@ nohup python -u main.py --config=configs/cifar10_100.yaml --gpu=7 > ~/iwa/120.tx
 nohup python -u main.py --config=configs/cifar10_100_dir_p3.yaml --gpu=1 > ~/iwa/121.txt 2>&1 &
 
 
-nohup python -u main.py --config=configs/cifar10_20.yaml --gpu=7 > ~/iwa/122.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/123.txt 2>&1 & --OLD
-nohup python -u main.py --config=configs/cifar10_20_dir_p3.yaml --gpu=7 > ~/iwa/125.txt 2>&1 & --NEW
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=7 > ~/iwa/126.txt 2>&1 & --NEWER SGD optimizer
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=7 > ~/iwa/124.txt 2>&1 &
 
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=7 > ~/iwa/126.txt 2>&1 &
 nohup python -u main.py  --config=configs/cifar10_lenet_baseline.yaml --gpu=2 > ~/iwa/cifar10_baseline.txt 2>&1 &
 
 
-python -m torch.distributed.launch --nproc_per_node=2 main.py --config=configs/cifar10_100_dir_p3.yaml --gpu=0
+nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=5 > ~/iwa/130.txt 2>&1 &
