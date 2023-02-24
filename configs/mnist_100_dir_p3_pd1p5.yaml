@@ -1,0 +1,16 @@
+dataset: MNIST
+weight_init: kaiming_normal
+model: LeNetCifar10
+
+align_loss: pd
+delta: 1.5
+
+#weight_align_factor: 3
+data_transform: True
+num_clients: 100
+bias: True
+local_epochs: 5
+dataset_split: dirichlet
+dirichlet_alpha: 0.3
+batch_size: 50
+merge_iter: 300
