@@ -94,6 +94,7 @@ class LinearMerge(nn.Linear):
         # self.args.weight_seed+=1
 
     def forward(self, x):
+        print(self.args.delta)
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()
         if len(self.weight_align_list) > 0:

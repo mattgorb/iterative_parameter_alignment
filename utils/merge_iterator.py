@@ -45,8 +45,10 @@ class Merge_Iterator:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
 
         for iter in range(1,merge_iterations+1):
+
             for trainer in self.model_trainers:
                 trainer.fit()
+                self.args.delta=1.2
                 print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
                       f'Train CE loss: {trainer.train_loss_ce}, '
                       f'Test loss: {trainer.test_loss},  '
