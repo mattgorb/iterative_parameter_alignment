@@ -5,7 +5,7 @@ model: LeNetCifar10
 align_loss: pd
 delta: 1.5
 
-#weight_align_factor: 3
+weight_align_factor: 3
 data_transform: True
 num_clients: 100
 bias: True
