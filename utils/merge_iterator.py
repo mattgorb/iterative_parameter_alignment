@@ -48,7 +48,7 @@ class Merge_Iterator:
 
             for trainer in self.model_trainers:
                 trainer.fit()
-                self.args.delta=self.args.delta*.99
+
                 print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
                       f'Train CE loss: {trainer.train_loss_ce}, '
                       f'Test loss: {trainer.test_loss},  '

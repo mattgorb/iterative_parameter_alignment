@@ -3,7 +3,7 @@ weight_init: kaiming_normal
 model: MLP
 
 align_loss: pd
-delta: 1.5
+#delta: 1.5
 
 weight_align_factor: 3
 data_transform: True
