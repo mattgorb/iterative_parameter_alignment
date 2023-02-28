@@ -23,8 +23,8 @@ class Net(nn.Module):
     def __init__(self, args,):
         super(Net, self).__init__()
         self.args = args
-        self.fc1 = nn.Linear(28 * 28, 128, bias=True)
-        self.fc2 = nn.Linear(128, 10, bias=True)
+        self.fc1 = nn.Linear(28 * 28, 128, bias=False)
+        self.fc2 = nn.Linear(128, 10, bias=False)
         set_seed(self.args.seed)
         nn.init.kaiming_normal_(self.fc1.weight, mode="fan_in", nonlinearity="relu")
 
@@ -232,13 +232,9 @@ def main():
                 #absolute weight
                 loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
                     model_merge.fc1.weight - model2.fc1.weight).abs().pow(1.5))
-                loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs() + (
-                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.5).pow(1.5))
 
                 loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1.5) + (
                     model_merge.fc2.weight - model2.fc2.weight).abs().pow(1.5))
-                loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1.5) + (
-                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
 
                 '''data = torch.randn(50, 28, 28).to(device)
                 loss = torch.sum((model_merge.fc1_out(data) - model1.fc1_out(data)).abs() + (
@@ -252,7 +248,7 @@ def main():
             model_merge.eval()
             test(model_merge, device, test_dataset)
 
-        model1.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
+        '''model1.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
         model1.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
         model2.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
         model2.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
@@ -260,17 +256,14 @@ def main():
         model1.fc2.weight=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
         model1.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
         model2.fc2.weight=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
-        model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
+        model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)'''
 
-        model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(device), requires_grad=True)
-        #model1.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(device), requires_grad=True)
-        #model2.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
+        if i==0:
+            model1.fc1.weight_align=model2.fc1.weight
+            model2.fc1.weight_align=model1.fc1.weight
 
-        model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(device), requires_grad=True)
-        #model1.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(device), requires_grad=True)
-        #model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
+            model1.fc2.weight_align=model2.fc1.weight
+            model2.fc2.weight_align=model1.fc1.weight
 
 if __name__ == '__main__':
     main()
