@@ -13,8 +13,10 @@ nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=5 > ~
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=7 > ~/iwa/126.txt 2>&1 &
 
 
-nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=0 --delta=1.5 > ~/iwa/130.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=1 --delta=1.5 > ~/iwa/130.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=2 --delta=1.5 > ~/iwa/130.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=0 --delta=1.0 > ~/iwa/130.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=1 --delta=1.25 > ~/iwa/131.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=2 --delta=1.5 > ~/iwa/132.txt 2>&1 &
 
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=7 > ~/iwa/126.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=3  --delta=1.0 > ~/iwa/127.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=4  --delta=1.25 > ~/iwa/128.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=5  --delta=1.5 > ~/iwa/129.txt 2>&1 &
