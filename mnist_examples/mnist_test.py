@@ -107,13 +107,6 @@ class Trainer:
             output = self.model(data)
 
             loss = self.criterion(output, target)
-            if hasattr(self.model.fc1, "weight_align"):
-
-                loss+=torch.sum((self.model.fc1.weight-self.model.fc1.weight_align).abs().pow(1.5))
-                loss+=torch.sum((self.model.fc2.weight - self.model.fc2.weight_align).abs().pow(1.5))
-
-                loss+=torch.sum((self.model.fc1.bias-self.model.fc1.bias_align).abs().pow(1.5))
-                loss+=torch.sum((self.model.fc2.bias - self.model.fc2.bias_align).abs().pow(1.5))
 
             train_loss += loss.item()
             loss.backward()
@@ -269,15 +262,6 @@ def main():
 
 
 
-        model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(device), requires_grad=True)
-        model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(device), requires_grad=True)
-        model1.fc1.bias_align=nn.Parameter(model2.fc1.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc1.bias_align=nn.Parameter(model1.fc1.bias.clone().detach().to(device), requires_grad=True)
-
-        model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(device), requires_grad=True)
-        model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(device), requires_grad=True)
-        model1.fc2.bias_align=nn.Parameter(model2.fc2.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc2.bias_align=nn.Parameter(model1.fc2.bias.clone().detach().to(device), requires_grad=True)
 
         '''if i==0:
             model1.fc1.weight_align=model2.fc1.weight
