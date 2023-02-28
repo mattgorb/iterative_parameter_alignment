@@ -107,7 +107,7 @@ class Trainer:
             output = self.model(data)
 
             loss = self.criterion(output, target)
-            if self.model.fc1.weight_align is not None:
+            if hasattr(self.model.fc1, "weight_align") :
                 loss+=torch.sum((self.model.fc1.weight-self.model.fc1.weight_align).abs().pow(1.5))
                 loss+=torch.sum((self.model.fc2.weight - self.model.fc2.weight_align).abs().pow(1.5))
             train_loss += loss.item()
