@@ -135,6 +135,7 @@ class Trainer:
                 pred = output.argmax(dim=1, keepdim=True)
                 correct += pred.eq(target.view_as(pred)).sum().item()
         test_loss /= len(self.test_loader.dataset)
+        print(f'Test accuracy:  {100. * correct / len(self.test_loader.dataset)}')
         return test_loss, 100. * correct / len(self.test_loader.dataset)
 
 def test(model, device,test_loader):
