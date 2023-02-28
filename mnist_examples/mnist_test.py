@@ -107,9 +107,8 @@ class Trainer:
             output = self.model(data)
 
             loss = self.criterion(output, target)
-            if hasattr(self.model.fc1, "weight_align") :
-                print("HERE")
-                sys.exit()
+            if hasattr(self.model.fc1, "weight_align"):
+
                 loss+=torch.sum((self.model.fc1.weight-self.model.fc1.weight_align).abs().pow(1.5))
                 loss+=torch.sum((self.model.fc2.weight - self.model.fc2.weight_align).abs().pow(1.5))
             train_loss += loss.item()
@@ -205,8 +204,8 @@ def main():
         trainer2.fit(log_output=True)
 
 
-        #model1.eval()
-        #model2.eval()
+        model1.eval()
+        model2.eval()
 
         for i in range(5):
             for _ in range(500):
