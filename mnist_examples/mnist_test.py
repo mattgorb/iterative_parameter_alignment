@@ -262,14 +262,14 @@ def main():
         model2.fc2.weight=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
         model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)'''
 
-        model1.fc1.weight_align=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
+        model1.fc1.weight_align=nn.Parameter(model2.fc1.weight.clone().detach().to(device), requires_grad=True)
         #model1.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc1.weight_align=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
+        model2.fc1.weight_align=nn.Parameter(model1.fc1.weight.clone().detach().to(device), requires_grad=True)
         #model2.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
 
-        model1.fc2.weight_align=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
+        model1.fc2.weight_align=nn.Parameter(model2.fc2.weight.clone().detach().to(device), requires_grad=True)
         #model1.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
-        model2.fc2.weight_align=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
+        model2.fc2.weight_align=nn.Parameter(model1.fc2.weight.clone().detach().to(device), requires_grad=True)
         #model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
 
 if __name__ == '__main__':
