@@ -201,6 +201,7 @@ def main():
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
         trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
+        trainer1.test()
         trainer1.fit(log_output=True)
 
         print(f"Training model 2")
