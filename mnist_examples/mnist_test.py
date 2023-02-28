@@ -27,7 +27,7 @@ class Net(nn.Module):
         self.fc2 = nn.Linear(128, 10, bias=True)
         set_seed(self.args.seed)
         nn.init.kaiming_normal_(self.fc1.weight, mode="fan_in", nonlinearity="relu")
-        #nn.init.kaiming_normal_(self.fc2.weight, mode="fan_in", nonlinearity="relu")
+        nn.init.kaiming_normal_(self.fc2.weight, mode="fan_in", nonlinearity="relu")
     def fc1_out(self, x):
         x = self.fc1(x.view(-1, 28 * 28))
         x=F.relu(x)
