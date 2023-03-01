@@ -147,7 +147,7 @@ def test(model, device,test_loader):
             correct += pred.eq(target.view_as(pred)).sum().item()
     test_loss /= len(test_loader.dataset)
     test_acc=(100. * correct / len(test_loader.dataset))
-    print(f'Test accuracy:  {test_acc}')
+    print(f'Test accuracy:  {test_acc}, loss: {test_loss}')
 
 def main():
     # Training settings
