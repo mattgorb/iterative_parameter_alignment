@@ -89,7 +89,7 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                     learning_rate=learning_rate, batch_size=batch_size, epoch=epoch, 
                                     com_amount=com_amount, print_per=print_per, weight_decay=weight_decay, 
                                     model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
-                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, triall=True,
+                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 ## ####
 sys.exit(0)
@@ -107,7 +107,7 @@ print_per = 1
                                     learning_rate=learning_rate, batch_size=batch_size, epoch=epoch,
                                     com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
                                     model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
-                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, triall=True,
+                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 
@@ -126,7 +126,7 @@ print_per = 1
                                     learning_rate=learning_rate, batch_size=batch_size, epoch=epoch, 
                                     com_amount=com_amount, print_per=print_per, weight_decay=weight_decay, 
                                     model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
-                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, triall=True,
+                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 # ###
@@ -147,7 +147,7 @@ print_per = 1
                                     com_amount=com_amount, print_per=n_minibatch//2, weight_decay=weight_decay, 
                                     model_func=model_func, init_model=init_model,
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
-                                    triall=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
+                                    trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 '''
 
 ####
@@ -162,7 +162,7 @@ print_per = 1
                                     com_amount=com_amount, print_per=print_per, weight_decay=weight_decay, 
                                     model_func=model_func, init_model=init_model,
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
-                                    triall=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
+                                    trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
         
 #### 
 print('FedProx')
@@ -177,7 +177,7 @@ mu = 1e-4
                                 learning_rate=learning_rate, batch_size=batch_size, epoch=epoch, 
                                 com_amount=com_amount, print_per=print_per, weight_decay=weight_decay, 
                                 model_func=model_func, init_model=init_model, sch_step=1, sch_gamma=1,
-                                save_period=save_period, mu=mu, suffix=suffix, triall=True,
+                                save_period=save_period, mu=mu, suffix=suffix, trial=True,
                                 data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 exit(0)
 
