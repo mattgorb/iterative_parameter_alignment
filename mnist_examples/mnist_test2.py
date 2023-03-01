@@ -206,7 +206,7 @@ def main():
         model2.eval()
 
         model_merge.fc1.weight=torch.nn.Parameter(torch.mean(torch.cat([model1.fc1.weight, model2.fc1.weight], 0)), requires_grad=False)
-        model_merge.fc1.bias=torch.nn.Parameter(torch.mean(torch.cat([model1.fc1.weight, model2.fc1.bias], 0)), requires_grad=False)
+        model_merge.fc1.bias=torch.nn.Parameter(torch.mean(torch.cat([model1.fc1.bias, model2.fc1.bias], 0)), requires_grad=False)
 
         model_merge.fc2.weight=torch.nn.Parameter(torch.mean(torch.cat([model1.fc2.weight, model2.fc2.weight], 0)), requires_grad=False)
         model_merge.fc2.bias=torch.nn.Parameter(torch.mean(torch.cat([model1.fc2.bias, model2.fc2.bias], 0)), requires_grad=False)
