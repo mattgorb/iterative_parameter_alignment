@@ -207,7 +207,9 @@ def main():
 
 
         print(torch.mean(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0)).size())
+        print(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0).size())
 
+        sys.exit()
         model_merge.fc1.weight=torch.nn.Parameter(torch.mean(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0)), requires_grad=False)
         model_merge.fc1.bias=torch.nn.Parameter(torch.mean(torch.stack([model1.fc1.bias, model2.fc1.bias], dim=0)), requires_grad=False)
 
