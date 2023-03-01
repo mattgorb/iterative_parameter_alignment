@@ -43,12 +43,12 @@ model_name = 'mnist_2NN' # Model type
 
 ###
 # Common hyperparameters
-com_amount = 300
+com_amount = 1
 save_period = 100
 weight_decay = 1e-3
 batch_size = 50
-#act_prob = 1
-act_prob = 0.15
+act_prob = 1
+#act_prob = 0.15
 suffix = model_name
 lr_decay_per_round = 0.998
 
@@ -77,7 +77,7 @@ print('FedDC')
 epoch = 5
 alpha_coef =0.1
 learning_rate = 0.1
-print_per = epoch // 2
+print_per = epoch #// 2
 
 n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_client
 n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
