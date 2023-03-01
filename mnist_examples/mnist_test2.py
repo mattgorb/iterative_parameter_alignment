@@ -206,7 +206,7 @@ def main():
         model2.eval()
 
 
-        print(torch.mean(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0)).size())
+        print(torch.mean(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0), dim=0).size())
         print(torch.stack([model1.fc1.weight, model2.fc1.weight], dim=0).size())
 
         sys.exit()
