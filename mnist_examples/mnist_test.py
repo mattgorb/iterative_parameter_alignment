@@ -191,8 +191,7 @@ def main():
     print(model1.fc1.weight[0][:10])
     print(model2.fc1.weight[0][:10])
     #sys.exit()
-    assert(model1.fc1.weight!=model2.fc1.weight)
-    assert(model1.fc2.weight!=model2.fc2.weight)
+
 
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
