@@ -230,7 +230,7 @@ def main():
                 #absolute weight
                 loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1) + (
                     model_merge.fc1.weight - model2.fc1.weight).abs().pow(1))
-                loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs() + (
+                loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs().pow(1) + (
                     model_merge.fc1.bias - model2.fc1.bias).abs().pow(1))
 
                 loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1) + (

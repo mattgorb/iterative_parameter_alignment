@@ -45,7 +45,7 @@ model_name = 'mnist_2NN' # Model type
 
 ###
 # Common hyperparameters
-com_amount = 10
+com_amount = 1
 save_period = 100
 weight_decay = 1e-3
 batch_size = 50
@@ -71,7 +71,7 @@ else:
     # Load model
     init_model.load_state_dict(torch.load('%sModel/%s/%s_init_mdl.pt' %(data_path, data_obj.name, model_name)))    
     
-'''
+
 
 # # ####
 print('FedDC')
@@ -148,7 +148,7 @@ print_per = 1
                                     model_func=model_func, init_model=init_model,
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
                                     trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-'''
+
 
 ####
 print('FedAvg')
