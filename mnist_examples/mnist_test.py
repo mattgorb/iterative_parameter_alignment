@@ -25,7 +25,7 @@ class Net(nn.Module):
         self.args = args
         self.fc1 = nn.Linear(28 * 28, 128, bias=True)
         self.fc2 = nn.Linear(128, 10, bias=True)
-        set_seed(self.args.seed)
+        #set_seed(self.args.seed)
         #nn.init.kaiming_normal_(self.fc1.weight, mode="fan_in", nonlinearity="relu")
         #nn.init.kaiming_normal_(self.fc2.weight, mode="fan_in", nonlinearity="relu")
 
@@ -179,14 +179,16 @@ def main():
     save_path = f'{weight_dir}mnist_model1_2.pt'
     #trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
 
-
-
-    args.seed+=1
+    #set_seed(self.args.seed)
+    #args.seed+=1
 
 
     model2 = Net(args, ).to(device)
     save_path = f'{weight_dir}mnist_model2_2.pt'
     #trainer2 = Trainer(args, [train_loader2, test_dataset], model2, device, save_path, 'mnist_model2')
+
+    print(model1.fc1.weight[0][:10])
+    print(model2.fc1.weight[0][:10])
 
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
