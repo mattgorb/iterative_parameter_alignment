@@ -205,6 +205,10 @@ def main():
         model1.eval()
         model2.eval()
 
+
+        print(torch.mean(torch.cat([model1.fc1.weight, model2.fc1.weight], 0).size()))
+        print(model1.fc1.weight.size())
+        sys.exit()
         model_merge.fc1.weight=torch.nn.Parameter(torch.mean(torch.cat([model1.fc1.weight, model2.fc1.weight], 0)), requires_grad=False)
         model_merge.fc1.bias=torch.nn.Parameter(torch.mean(torch.cat([model1.fc1.bias, model2.fc1.bias], 0)), requires_grad=False)
 
