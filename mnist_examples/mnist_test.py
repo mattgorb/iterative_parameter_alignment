@@ -181,7 +181,7 @@ def main():
 
 
 
-    #args.seed+=1
+    args.seed+=1
 
 
     model2 = Net(args, ).to(device)
@@ -191,7 +191,7 @@ def main():
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
 
-    for i in range(350):
+    for i in range(5):
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
         trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
