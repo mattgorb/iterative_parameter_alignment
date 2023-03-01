@@ -182,7 +182,7 @@ def main():
 
 
 
-    #args.seed+=1
+    args.seed+=1
 
 
     model2 = Net(args, ).to(device)
