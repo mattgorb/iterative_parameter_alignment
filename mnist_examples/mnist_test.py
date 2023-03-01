@@ -228,15 +228,15 @@ def main():
                     model_merge.fc2.bias - model2.fc2.bias).abs())'''
 
                 #absolute weight
-                loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
-                    model_merge.fc1.weight - model2.fc1.weight).abs().pow(1.5))
+                loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1) + (
+                    model_merge.fc1.weight - model2.fc1.weight).abs().pow(1))
                 loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs() + (
-                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.5).pow(1.5))
+                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1))
 
-                loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1.5) + (
-                    model_merge.fc2.weight - model2.fc2.weight).abs().pow(1.5))
-                loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1.5) + (
-                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
+                loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1) + (
+                    model_merge.fc2.weight - model2.fc2.weight).abs().pow(1))
+                loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1) + (
+                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1))
 
                 '''data = torch.randn(50, 28, 28).to(device)
                 loss = torch.sum((model_merge.fc1_out(data) - model1.fc1_out(data)).abs() + (
