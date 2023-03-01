@@ -234,7 +234,7 @@ def get_datasets(args):
             assert (set(d1).isdisjoint(d2))
         else:
             dataset1.data,dataset1.targets = dataset1.data[ds1_indices],list(np.array(dataset1.targets)[ds1_indices])
-            dataset2.data, dataset1.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
+            dataset2.data, dataset2.targets = dataset2.data[ds2_indices], list(np.array(dataset2.targets)[ds2_indices])
             assert (set(ds1_indices).isdisjoint(ds2_indices))
 
         test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)

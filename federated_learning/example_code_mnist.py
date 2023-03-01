@@ -45,7 +45,7 @@ model_name = 'mnist_2NN' # Model type
 
 ###
 # Common hyperparameters
-com_amount = 1
+com_amount = 250
 save_period = 100
 weight_decay = 1e-3
 batch_size = 50
