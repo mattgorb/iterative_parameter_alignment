@@ -184,7 +184,9 @@ def train_FedDC(data_obj, act_prob,n_minibatch,
                         
             avg_mdl_param_sel = np.mean(clnt_params_list[selected_clnts], axis = 0)
             delta_g_cur = 1 / n_clnt * delta_g_sum  
-            state_gadient_diffs[-1] += delta_g_cur  
+            state_gadient_diffs[-1] += delta_g_cur
+
+
             
             cld_mdl_param = avg_mdl_param_sel + np.mean(parameter_drifts, axis=0)
             
