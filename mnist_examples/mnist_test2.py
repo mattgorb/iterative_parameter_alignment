@@ -197,7 +197,7 @@ def main():
 
 
 
-    for i in range(2):
+    for i in range(5):
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
         trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
