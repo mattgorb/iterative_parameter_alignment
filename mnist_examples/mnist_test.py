@@ -182,7 +182,8 @@ def main():
 
     #set_seed(self.args.seed)
     #args.seed+=1
-
+    args.seed+=5
+    set_seed(self.args.seed)
 
     model2 = Net(args, ).to(device)
     save_path = f'{weight_dir}mnist_model2_2.pt'
