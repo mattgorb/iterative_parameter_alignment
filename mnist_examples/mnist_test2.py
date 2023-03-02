@@ -197,8 +197,6 @@ def main():
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
 
 
-
-
     for i in range(5):
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
