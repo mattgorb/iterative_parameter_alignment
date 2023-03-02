@@ -12,11 +12,11 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
 
-        #self.optimizer = optim.SGD(self.model.parameters(), lr=0.05,  weight_decay=1e-3)
-        #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=0.05,  weight_decay=1e-3)
+        self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
@@ -38,11 +38,15 @@ class Trainer:
     def fit(self, log_output=True):
         print(f'Model {self.model_name}, merge iteration: {self.merge_iter}')
         if self.merge_iter>1:
-            checkpoint = torch.load(self.save_path)
-            self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
-            self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
-            #self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*(0.998**self.train_iter), weight_decay=1e-3)
-            #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
+            #adam opt
+            #checkpoint = torch.load(self.save_path)
+            #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+            #self.optimizer.load_state_dict(checkpoint['optimizer_state_dict'])
+
+
+            #sgd opt
+            self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*(0.998**self.train_iter), weight_decay=1e-3)
+            self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
         for epoch in range(1, self.args.local_epochs + 1):
             self.train()
@@ -51,7 +55,9 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-            #self.scheduler.step()
+
+
+            self.scheduler.step()
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -88,7 +94,7 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
-            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
             self.optimizer.step()
 
             train_loss += loss.item()
