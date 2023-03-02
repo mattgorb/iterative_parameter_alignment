@@ -8,5 +8,5 @@ num_clients: 20
 bias: True
 local_epochs: 3
 dataset_split: iid
-batch_size: 32s
+batch_size: 32
 merge_iter: 100
