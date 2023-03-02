@@ -183,7 +183,7 @@ def main():
 
 
     args.seed+=5
-    set_seed(self.args.seed)
+    set_seed(args.seed)
 
     model2 = Net(args, ).to(device)
     save_path = f'{weight_dir}mnist_model2_2.pt'
@@ -191,7 +191,6 @@ def main():
 
     print(model1.fc1.weight[0][:10])
     print(model2.fc1.weight[0][:10])
-    #sys.exit()
 
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
