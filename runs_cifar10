@@ -20,3 +20,5 @@ nohup python -u main.py --config=configs/mnist_100_dir_p3_pd1p5.yaml --gpu=2 --d
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=3  --delta=1.0 > ~/iwa/127.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=4  --delta=1.25 > ~/iwa/128.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_pd1p5.yaml --gpu=5  --delta=1.5 > ~/iwa/129.txt 2>&1 &
+
+python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5  --delta=1.5
