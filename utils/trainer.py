@@ -15,7 +15,7 @@ class Trainer:
         #self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
 
-        self.optimizer = optim.SGD(self.model.parameters(), lr=0.05,  weight_decay=1e-3)
+        self.optimizer = optim.SGD(self.model.parameters(), lr=0.1,  weight_decay=1e-3)
         self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
 
@@ -36,7 +36,7 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
-        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}')
+        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}, LR: {0.1*(0.998**self.merge_iter)}')
         if self.merge_iter>1:
             #adam opt
             #checkpoint = torch.load(self.save_path)
@@ -45,6 +45,7 @@ class Trainer:
 
 
             #sgd opt
+
             self.optimizer = optim.SGD(self.model.parameters(), lr=0.1*(0.998**self.merge_iter), weight_decay=1e-3)
             self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
