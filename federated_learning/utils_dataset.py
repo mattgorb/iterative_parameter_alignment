@@ -215,6 +215,12 @@ class DatasetObject:
                 if self.n_client!=2:
                     print('set clients to 2 for split_label')
                     sys.exit()
+
+                clnt_x = [np.zeros((clnt_data_list[clnt__], self.channels, self.height, self.width)).astype(np.float32)
+                          for clnt__ in range(self.n_client)]
+                clnt_y = [np.zeros((clnt_data_list[clnt__], 1)).astype(np.int64) for clnt__ in range(self.n_client)]
+
+
                 labels=np.unique(trn_y)
 
                 ds1_labels = labels[:len(labels) // 2]
