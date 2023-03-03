@@ -36,7 +36,7 @@ class LinearMerge(nn.Linear):
         super().__init__(*args, **kwargs)
         self.weight_align = None
         #self.loss=torch.nn.HuberLoss(reduction='sum')
-        self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
+        #self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
 
 
     def init(self, args):
@@ -53,7 +53,7 @@ class LinearMerge(nn.Linear):
             if self.args.align_loss=='ae':
                 weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
                 #x = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/1.5)
-
+                weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
             elif self.args.align_loss == 'le':
@@ -283,10 +283,6 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
-            '''print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
-            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')'''
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
@@ -303,7 +299,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=float, default=25, )
+    parser.add_argument('--weight_align_factor', type=float, default=1, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
