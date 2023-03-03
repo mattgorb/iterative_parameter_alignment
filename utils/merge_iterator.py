@@ -25,12 +25,12 @@ class Merge_Iterator:
         self.train_ce_losses=[]
         self.test_losses=[]
         self.test_accuracy_list=[]
-
         self.best_test_accuracy=[]
         self.average_test_accuracy=[]
 
         self.writer = SummaryWriter(f'{self.args.base_dir}Runs/{self.args.dataset}/'
-                                    f'n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_alpha_{self.args.dirichlet_alpha}')
+                                    f'n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}'
+                                    f'_align_{self.args.align_loss}_delta_{self.args.delta}')
 
     def run(self):
         merge_iterations = self.args.merge_iter
