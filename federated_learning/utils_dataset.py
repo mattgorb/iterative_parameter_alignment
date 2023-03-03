@@ -223,7 +223,7 @@ class DatasetObject:
                 clnt_y = np.asarray(clnt_y)
 
                 print(trn_y)
-
+                sys.exit()
             
             self.clnt_x = clnt_x; self.clnt_y = clnt_y
 
