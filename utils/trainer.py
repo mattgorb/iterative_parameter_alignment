@@ -30,7 +30,7 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
-        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}, LR: {args.lr}')
+        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}sss')
         if self.merge_iter>1:
             #adam opt
             checkpoint = torch.load(self.save_path)
