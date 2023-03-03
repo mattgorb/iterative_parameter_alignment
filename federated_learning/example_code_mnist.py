@@ -31,6 +31,8 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 # data_obj = ShakespeareObjectCrop_noniid(storage_path, name, crop_amount = 2000)
 #########
 
+print("HHERE")
+sys.eexit()
 
 # Generate IID or Dirichlet distribution
 # IID
