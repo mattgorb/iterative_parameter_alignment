@@ -35,6 +35,9 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
+        #self.loss=torch.nn.HuberLoss(reduction='sum')
+        self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
+
 
     def init(self, args):
         self.args = args
@@ -45,10 +48,11 @@ class LinearMerge(nn.Linear):
         out = F.linear(x, self.weight, self.bias)
 
         weights_diff_ae = torch.tensor(0)
-
+        #weights_diff_se = torch.tensor(0)
+        #print(self.delta)
         if self.weight_align is not None:
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())#
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs()**self.delta)#
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
@@ -292,12 +296,39 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
+            print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
+            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss},Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
 
+            #self.results_to_csv()
 
+    def results_to_csv(self):
+            df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
+                               'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
+                               'merge_iter': self.model1_trainer.batch_epoch_list,})
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1_waf_{self.args.weight_align_factor}.csv')
+
+            df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
+                               'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
+                               'merge_iter': self.model2_trainer.batch_epoch_list,})
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2_waf_{self.args.weight_align_factor}.csv')
+
+            df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
+                               'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
+                               'model1_trainer.test_loss_list': self.model1_trainer.test_loss_list,
+                               'model1_trainer.test_accuracy_list':self.model1_trainer.test_accuracy_list,
+
+                               'model2_trainer.epoch_list': self.model2_trainer.epoch_list,
+                               'model2_trainer.train_loss_list': self.model2_trainer.train_loss_list,
+                               'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
+                               'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
+                               })
+            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
 
 
 def main():
@@ -309,7 +340,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=float, default=3, )
+    parser.add_argument('--weight_align_factor', type=float, default=25, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
