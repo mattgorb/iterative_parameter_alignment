@@ -231,7 +231,8 @@ class DatasetObject:
                 ds1_indices = [idx for idx, target in enumerate(trn_y) if target in ds1_labels]
                 ds2_indices = [idx for idx, target in enumerate(trn_y) if target in ds1_labels]
 
-
+                print(ds1_indices)
+                sys.exit()
                 clnt_x[0]=trn_x[ds1_indices]
                 clnt_y[0]=trn_y[ds1_indices]
 
@@ -240,6 +241,8 @@ class DatasetObject:
 
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
+
+
 
                 print(clnt_y)
                 print(trn_y)
