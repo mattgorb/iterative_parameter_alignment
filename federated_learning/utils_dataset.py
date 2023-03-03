@@ -212,18 +212,12 @@ class DatasetObject:
 
 
             elif self.rule == 'split_label':
-
-                clnt_x = [np.zeros((clnt_data_list[clnt__], self.channels, self.height, self.width)).astype(np.float32)
-                          for clnt__ in range(self.n_client)]
-                clnt_y = [np.zeros((clnt_data_list[clnt__], 1)).astype(np.int64) for clnt__ in range(self.n_client)]
-
-                clnt_data_list_cum_sum = np.concatenate(([0], np.cumsum(clnt_data_list)))
-                for clnt_idx_ in range(self.n_client):
-                    clnt_x[clnt_idx_] = trn_x[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
-                    clnt_y[clnt_idx_] = trn_y[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
+                if self.n_client!=2:
+                    print('set clients to 2 for split_label')
+                    sys.exit()
 
                 labels=np.unique(trn_y)
-                print(labels)
+
                 ds1_labels = labels[:len(labels) // 2]
                 ds2_labels = labels[len(labels) // 2:]
                 print(f'ds1_labels: {ds1_labels}')
@@ -231,25 +225,10 @@ class DatasetObject:
                 ds1_indices = [idx for idx, target in enumerate(trn_y) if target in ds1_labels]
                 ds2_indices = [idx for idx, target in enumerate(trn_y) if target in ds2_labels]
 
-
-                clnt_x[0]=trn_x[ds1_indices]
-                clnt_y[0]=trn_y[ds1_indices]
-                clnt_x[1]=trn_x[ds2_indices]
-                clnt_y[1]=trn_y[ds2_indices]
-                print(np.unique(clnt_y[0]))
-                print(np.unique(clnt_y[1]))
-                sys.exit()
-
-
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
 
 
-
-                print(clnt_y)
-                print(trn_y)
-                sys.exit()
-            
             self.clnt_x = clnt_x; self.clnt_y = clnt_y
 
             self.tst_x  = tst_x;  self.tst_y  = tst_y
