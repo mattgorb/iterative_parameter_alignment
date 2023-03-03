@@ -40,6 +40,7 @@ n_client = 2
 
 rule='split_label'
 rule_arg=0.6
+epoch = 1
 # Dirichlet (0.6)
 # data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.6, data_path=data_path)
 data_obj = DatasetObject(dataset='MNIST', n_client=n_client,  seed=20, unbalanced_sgm=0, rule=rule, rule_arg=rule_arg, data_path=data_path)
@@ -79,7 +80,7 @@ else:
 # # ####
 print('FedDC')
 
-epoch = 5
+
 alpha_coef =0.1
 learning_rate = 0.1
 print_per = 1
@@ -96,28 +97,12 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 ## ####
 
-print('FedDyn with alignment')
-
-epoch = 5
-alpha_coef = 1e-2
-learning_rate = 0.1
-print_per = 1
-
-
-
-[avg_ins_mdls, avg_cld_mdls, avg_all_mdls, trn_sel_clt_perf, tst_sel_clt_perf, trn_cur_cld_perf, tst_cur_cld_perf, trn_all_clt_perf, tst_all_clt_perf] = train_FedDyn_with_alignment(data_obj=data_obj, act_prob=act_prob,
-                                    learning_rate=learning_rate, batch_size=batch_size, epoch=epoch,
-                                    com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
-                                    model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
-                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
-                                    data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-
 
 
 # baselines
 print('FedDyn')
 
-epoch = 5
+
 alpha_coef = 1e-2
 learning_rate = 0.1
 print_per = 1
@@ -134,7 +119,7 @@ print_per = 1
 # ###
 print('SCAFFOLD')
 
-epoch = 5
+
 
 n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_client
 n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
@@ -155,7 +140,6 @@ print_per = 1
 ####
 print('FedAvg')
 
-epoch = 5
 learning_rate = 0.1
 print_per = 1
 
@@ -169,7 +153,6 @@ print_per = 1
 #### 
 print('FedProx')
 
-epoch = 5
 learning_rate = 0.1
 print_per = 1
 mu = 1e-4
