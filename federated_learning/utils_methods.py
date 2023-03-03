@@ -28,15 +28,7 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
     weight_list = np.asarray([len(clnt_y[i]) for i in range(n_clnt)])
     weight_list = weight_list.reshape((n_clnt, 1))
 
-    all_train_acc = []
-    all_train_loss = []
-    all_test_acc = []
-    all_test_loss = []
 
-    sel_train_acc = []
-    sel_train_loss = []
-    sel_test_acc = []
-    sel_test_loss = []
 
 
 
@@ -171,8 +163,6 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
 
 
 
-            sel_test_acc.append(acc_tst)
-            sel_test_loss.append(loss_tst)
             
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, 
@@ -182,8 +172,6 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
                   %(i+1, acc_tst, loss_tst))
             
 
-            sel_train_acc.append(acc_tst)
-            sel_train_loss.append(loss_tst)
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y, 
                                              all_model, data_obj.dataset, 0)
@@ -194,8 +182,6 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
 
 
 
-            all_test_acc.append(acc_tst)
-            all_test_loss.append(loss_tst)
 
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, 
@@ -204,8 +190,7 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
             print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f" 
                   %(i+1, acc_tst, loss_tst))
 
-            all_train_acc.append(acc_tst)
-            all_train_loss.append(loss_tst)
+
 
 
             df = pd.DataFrame({'all_train_acc': all_train_acc,
@@ -217,10 +202,7 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
                                'sel_test_acc': sel_test_acc,
                                'sel_test_loss': sel_test_loss,
                                })
-            df.to_csv(
-                f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_cli'
-                f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
-                f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
+
             
             writer.add_scalars('Loss/train_wd', 
                    {
@@ -315,20 +297,7 @@ def train_FedProx(data_obj, act_prob ,learning_rate, batch_size, epoch,
     weight_list = weight_list.reshape((n_clnt, 1))
 
 
-    all_train_acc = []
-    all_train_loss = []
-    all_test_acc = []
-    all_test_loss = []
 
-    sel_train_acc = []
-    sel_train_loss = []
-    sel_test_acc = []
-    sel_test_loss = []
-
-    cld_train_acc = []
-    cld_train_loss = []
-    cld_test_acc = []
-    cld_test_loss = []
 
         
     if (not trial) and (not os.path.exists('%sModel/%s/%s' %(data_path, data_obj.name, suffix))):
@@ -464,22 +433,6 @@ def train_FedProx(data_obj, act_prob ,learning_rate, batch_size, epoch,
 
             print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f" 
                   %(i+1, acc_tst, loss_tst))
-
-
-            all_train_acc.append()
-            all_train_loss.append()
-            all_test_acc.append()
-            all_test_loss.append()
-
-            sel_train_acc.append()
-            sel_train_loss.append()
-            sel_test_acc.append()
-            sel_test_loss.append()
-
-            cld_train_acc.append()
-            cld_train_loss.append()
-            cld_test_acc.append()
-            cld_test_loss.append()
             
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y, 

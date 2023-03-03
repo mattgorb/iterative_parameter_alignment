@@ -13,14 +13,14 @@ def train_FedDC(data_obj, act_prob,n_minibatch,
                   sch_step, sch_gamma, save_period,
                   suffix = '', trial=True, data_path='', rand_seed=0, lr_decay_per_round=1):
 
-    print(suffix)
+
     suffix  = 'FedDC_' + str(alpha_coef)+suffix
     suffix += '_S%d_F%f_Lr%f_%d_%f_B%d_E%d_W%f_a%f' %(save_period, act_prob, learning_rate, sch_step, sch_gamma, batch_size, epoch, weight_decay, alpha_coef)
     suffix += '_seed%d' %rand_seed
     suffix += '_lrdecay%f' %lr_decay_per_round
 
-    print(suffix)
-    sys.exit()
+
+
     n_clnt = data_obj.n_client
     clnt_x = data_obj.clnt_x; clnt_y=data_obj.clnt_y
     

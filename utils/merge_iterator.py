@@ -29,6 +29,7 @@ class Merge_Iterator:
         self.best_test_accuracy=[]
         self.average_test_accuracy=[]
 
+        self.writer = SummaryWriter(f'{self.args.base_dir}Runs/%s/%s' % (data_path, data_obj.name, suffix))
 
     def run(self):
         merge_iterations = self.args.merge_iter
@@ -93,6 +94,7 @@ class Merge_Iterator:
                 self.average_test_accuracy.append(avg_loss/len(self.model_trainers))
 
             print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
+
             self.results_to_csv()
 
 

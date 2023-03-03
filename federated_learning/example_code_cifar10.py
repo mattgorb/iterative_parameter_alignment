@@ -24,7 +24,9 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 n_client = 100
 # Generate IID or Dirichlet distribution
 # IID
-data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0, data_path=data_path)
+rule='split_label'
+rule_arg=0.6
+data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg, unbalanced_sgm=0, data_path=data_path)
 # unbalanced
 #data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0.3, data_path=data_path)
 
@@ -44,7 +46,7 @@ weight_decay = 1e-3
 batch_size = 50
 #act_prob = 1
 act_prob = 0.15
-suffix = model_name
+suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}'
 lr_decay_per_round = 0.998
 
 # Model function
