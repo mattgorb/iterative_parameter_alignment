@@ -126,7 +126,8 @@ class DatasetObject:
             clnt_data_list = (np.random.lognormal(mean=np.log(n_data_per_clnt), sigma=self.unbalanced_sgm, size=self.n_client))
             clnt_data_list = (clnt_data_list/np.sum(clnt_data_list)*len(trn_y)).astype(int)
             diff = np.sum(clnt_data_list) - len(trn_y)
-            
+
+            print("HEREREekleja;ldksjf;")
             # Add/Subtract the excess number starting from first client
             if diff!= 0:
                 for clnt_i in range(self.n_client):
@@ -134,7 +135,9 @@ class DatasetObject:
                         clnt_data_list[clnt_i] -= diff
                         break
             ###     
-            
+
+            print("2;ldksjf;")
+            sys.exit()
             if self.rule == 'Drichlet':
                 cls_priors   = np.random.dirichlet(alpha=[self.rule_arg]*self.n_cls,size=self.n_client)
                 prior_cumsum = np.cumsum(cls_priors, axis=1)
