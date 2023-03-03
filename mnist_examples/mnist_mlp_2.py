@@ -54,6 +54,7 @@ class LinearMerge(nn.Linear):
             #weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_ae = torch.sum((self.weight - self.weight_align).abs().pow(1))#
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
+            weights_diff_ae=torch.sum((out-F.linear(x,self.weight_align, self.bias)).abs())
             #weights_diff_ae=torch.sum(torch.where((self.weight-self.weight_align)<self.delta,
                                         #0.5*torch.square(self.weight-self.weight_align),
                                         #self.delta*((self.weight - self.weight_align)-0.5*self.delta)
