@@ -98,7 +98,7 @@ class Merge_Iterator:
 
             self.results_to_csv()
 
-            self.to_tensorboard(iter)
+
             self.writer.add_scalars('Accuracy/test', {  'max_client_test_accuracy': max(test_accs),
                                         'avg_client_test_accuracy': avg_acc/len(self.model_trainers) ,
                                         'avg_client_test_loss': avg_loss/len(self.model_trainers)}, iter)
