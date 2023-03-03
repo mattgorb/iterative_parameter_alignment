@@ -6,7 +6,7 @@ from utils.align_util import set_weight_align_param
 import numpy as np
 import torch
 import pandas as pd
-
+from tensorboardX import SummaryWriter
 
 class Merge_Iterator:
     def __init__(self, args, train_loaders, test_loader, device, weight_dir):
