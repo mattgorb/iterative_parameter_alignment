@@ -18,11 +18,6 @@ class Trainer:
         #self.optimizer = optim.SGD(self.model.parameters(), lr=0.01,  weight_decay=1e-3)
         #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
-        df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
-                           'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
-                           'merge_iter': self.model1_trainer.batch_epoch_list, })
-        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1_waf_{self.args.weight_align_factor}.csv')
-
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
 
