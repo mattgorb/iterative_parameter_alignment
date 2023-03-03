@@ -297,30 +297,7 @@ class Merge_Iterator:
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
                   f'\tModel 2 Train loss: {self.model2_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss},Test loss: {self.model2_trainer.test_loss},  Test accuracy: {self.model2_trainer.test_acc}')
 
-            #self.results_to_csv()
 
-    def results_to_csv(self):
-            df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
-                               'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
-                               'merge_iter': self.model1_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1_waf_{self.args.weight_align_factor}.csv')
-
-            df = pd.DataFrame({'model2_weight_align_ae_loss_list': self.model2_trainer.weight_align_ae_loss_list,
-                               'model2_weight_align_se_loss_list': self.model2_trainer.weight_align_se_loss_list,
-                               'merge_iter': self.model2_trainer.batch_epoch_list,})
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model2_waf_{self.args.weight_align_factor}.csv')
-
-            df = pd.DataFrame({'model1_trainer.epoch_list': self.model1_trainer.epoch_list,
-                               'model1_trainer.train_loss_list': self.model1_trainer.train_loss_list,
-                               'model1_trainer.test_loss_list': self.model1_trainer.test_loss_list,
-                               'model1_trainer.test_accuracy_list':self.model1_trainer.test_accuracy_list,
-
-                               'model2_trainer.epoch_list': self.model2_trainer.epoch_list,
-                               'model2_trainer.train_loss_list': self.model2_trainer.train_loss_list,
-                               'model2_trainer.test_loss_list': self.model2_trainer.test_loss_list,
-                               'model2_trainer.test_accuracy_list': self.model2_trainer.test_accuracy_list,
-                               })
-            df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_model_stats_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
 
 
 def main():
