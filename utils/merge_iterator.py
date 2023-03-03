@@ -29,7 +29,8 @@ class Merge_Iterator:
         self.best_test_accuracy=[]
         self.average_test_accuracy=[]
 
-        self.writer = SummaryWriter(f'{self.args.base_dir}Runs/%s/%s' % (data_path, data_obj.name, suffix))
+        self.writer = SummaryWriter(f'{self.args.base_dir}Runs/{self.args.dataset}/'
+                                    f'n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_alpha_{self.args.dirichlet_alpha}')
 
     def run(self):
         merge_iterations = self.args.merge_iter
@@ -69,13 +70,13 @@ class Merge_Iterator:
                       f'Test accuracy: {trainer.test_acc}')
 
                 client+=1
-                self.client_list.append(client)
-                self.iter_list.append(iter)
-                self.train_losses.append(trainer.train_loss)
-                self.train_ce_losses.append(trainer.train_loss_ce)
-                self.test_losses.append(trainer.test_loss)
-                self.test_accuracy_list.append(trainer.test_acc)
 
+                self.client_to_tensorboard(iter, client, trainer)
+
+
+            self.log_results()
+
+    def log_results(self):
             print(f'Summary, Merge Iteration: {iter}')
             avg_acc=0
             avg_loss=0
@@ -90,12 +91,38 @@ class Merge_Iterator:
                 avg_loss+=trainer.test_loss
                 test_accs.append(trainer.test_acc)
 
-                self.best_test_accuracy.append(max(test_accs))
-                self.average_test_accuracy.append(avg_loss/len(self.model_trainers))
+            self.best_test_accuracy.append(max(test_accs))
+            self.average_test_accuracy.append(avg_loss/len(self.model_trainers))
 
             print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
 
             self.results_to_csv()
+
+            self.to_tensorboard(iter)
+            self.writer.add_scalars('Accuracy/test', {  'max_client_test_accuracy': max(test_accs),
+                                        'avg_client_test_accuracy': avg_acc/len(self.model_trainers) ,
+                                        'avg_client_test_loss': avg_loss/len(self.model_trainers)}, iter)
+
+
+
+
+
+
+
+    def client_to_tensorboard(self,iter, client , trainer):
+        self.client_list.append(client)
+        self.iter_list.append(iter)
+        self.train_losses.append(trainer.train_loss)
+        self.train_ce_losses.append(trainer.train_loss_ce)
+        self.test_losses.append(trainer.test_loss)
+        self.test_accuracy_list.append(trainer.test_acc)
+
+        self.writer.add_scalars('ClientPerformance/test',
+                           {
+                               'client_num':client,
+                               'test_loss':trainer.test_loss,
+                               'test_acc':trainer.test_acc
+                           }, iter)
 
 
     def results_to_csv(self):

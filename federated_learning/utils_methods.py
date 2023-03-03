@@ -193,15 +193,7 @@ def train_FedAvg(data_obj, act_prob ,learning_rate, batch_size, epoch,
 
 
 
-            df = pd.DataFrame({'all_train_acc': all_train_acc,
-                               'all_train_loss': all_train_loss,
-                               'all_test_acc': all_test_acc,
-                               'all_test_loss': all_test_loss,
-                               'sel_train_acc': sel_train_acc,
-                               'sel_train_loss': sel_train_loss,
-                               'sel_test_acc': sel_test_acc,
-                               'sel_test_loss': sel_test_loss,
-                               })
+
 
             
             writer.add_scalars('Loss/train_wd', 

@@ -265,7 +265,7 @@ class DatasetObject:
             self.tst_x  = np.load('%sData/%s/tst_x.npy'  %(self.data_path, self.name),allow_pickle=True)
             self.tst_y  = np.load('%sData/%s/tst_y.npy'  %(self.data_path, self.name),allow_pickle=True)
             
-            if self.dataset == 'mnist':
+            if self.dataset == 'MNIST':
                 self.channels = 1; self.width = 28; self.height = 28; self.n_cls = 10;
             if self.dataset == 'CIFAR10':
                 self.channels = 3; self.width = 32; self.height = 32; self.n_cls = 10;
