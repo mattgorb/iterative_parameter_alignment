@@ -234,10 +234,12 @@ class DatasetObject:
 
                 clnt_x[0]=trn_x[ds1_indices]
                 clnt_y[0]=trn_y[ds1_indices]
-                print(clnt_y[0])
-                sys.exit()
                 clnt_x[1]=trn_x[ds2_indices]
                 clnt_y[1]=trn_y[ds2_indices]
+                print(np.unique(clnt_y[0]))
+                print(np.unique(clnt_y[1]))
+                sys.exit()
+
 
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
