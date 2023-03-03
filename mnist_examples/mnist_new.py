@@ -35,8 +35,6 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
-        #self.loss=torch.nn.HuberLoss(reduction='sum')
-        #self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
 
 
     def init(self, args):
@@ -51,7 +49,7 @@ class LinearMerge(nn.Linear):
 
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())#.pow(1/1.5)
+                #weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
                 #x = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/1.5)
                 weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
@@ -62,8 +60,6 @@ class LinearMerge(nn.Linear):
                 sys.exit()
 
 
-        #align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
-
         return out, weights_diff
 
 class Net(nn.Module):
@@ -72,11 +68,11 @@ class Net(nn.Module):
         self.args = args
         self.weight_merge = weight_merge
         if self.weight_merge:
-            self.fc1 = linear_init(28 * 28, 200, bias=False, args=self.args, )
-            self.fc2 = linear_init(200, 10, bias=False, args=self.args, )
+            self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
+            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
         else:
-            self.fc1 = nn.Linear(28 * 28, 200, bias=False)
-            self.fc2 = nn.Linear(200, 10, bias=False)
+            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
+            self.fc2 = nn.Linear(1024, 10, bias=False)
 
     def forward(self, x,):
         if self.weight_merge:
@@ -169,17 +165,7 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
-            if self.args.baseline:
-                self.test_accuracy_list.append(self.test_acc)
-                self.train_loss_list.append(self.train_loss)
-                self.test_loss_list.append(self.test_loss)
-                self.epoch_list.append(epoch)
 
-        if not self.args.baseline:
-            self.test_accuracy_list.append(self.test_acc)
-            self.train_loss_list.append(self.train_loss)
-            self.test_loss_list.append(self.test_loss)
-            self.epoch_list.append(self.merge_iter)
 
 
     def model_loss(self):
@@ -202,8 +188,6 @@ class Trainer:
             train_align_loss += weight_align_loss.item()
 
             loss.backward()
-
-            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
 
             self.optimizer.step()
 
@@ -241,8 +225,7 @@ def set_weight_align_param(model1, model2, args):
             '''
 
             # We only want to merge one models weights in this file
-            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
-            #m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
+
             m2.weight_align = m1.weight
             m1.weight_align = m2.weight
 
