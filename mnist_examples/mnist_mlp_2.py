@@ -296,10 +296,6 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
-            print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
-            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
