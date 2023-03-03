@@ -17,6 +17,8 @@ def train_FedDC(data_obj, act_prob,n_minibatch,
     suffix += '_seed%d' %rand_seed
     suffix += '_lrdecay%f' %lr_decay_per_round
 
+    print(suffix)
+    sys.exit()
     n_clnt = data_obj.n_client
     clnt_x = data_obj.clnt_x; clnt_y=data_obj.clnt_y
     
