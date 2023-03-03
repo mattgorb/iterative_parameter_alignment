@@ -9,7 +9,7 @@ weight_align_factor: 1
 data_transform: True
 num_clients: 2
 bias: True
-local_epochs: 5
+local_epochs: 1
 dataset_split: disjoint_classes
 dirichlet_alpha: 0.3
 batch_size: 50
