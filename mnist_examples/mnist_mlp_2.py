@@ -75,11 +75,11 @@ class Net(nn.Module):
         self.args = args
         self.weight_merge = weight_merge
         if self.weight_merge:
-            self.fc1 = linear_init(28 * 28, 1024, bias=False, args=self.args, )
-            self.fc2 = linear_init(1024, 10, bias=False, args=self.args, )
+            self.fc1 = linear_init(28 * 28, 200, bias=False, args=self.args, )
+            self.fc2 = linear_init(200, 10, bias=False, args=self.args, )
         else:
-            self.fc1 = nn.Linear(28 * 28, 1024, bias=False)
-            self.fc2 = nn.Linear(1024, 10, bias=False)
+            self.fc1 = nn.Linear(28 * 28, 200, bias=False)
+            self.fc2 = nn.Linear(200, 10, bias=False)
 
     def forward(self, x,):
         if self.weight_merge:
