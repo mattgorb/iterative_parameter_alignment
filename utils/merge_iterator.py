@@ -74,9 +74,9 @@ class Merge_Iterator:
                 self.client_to_tensorboard(iter, client, trainer)
 
 
-            self.log_results()
+            self.log_results(iter)
 
-    def log_results(self):
+    def log_results(self,iter):
             print(f'Summary, Merge Iteration: {iter}')
             avg_acc=0
             avg_loss=0
