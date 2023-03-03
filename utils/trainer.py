@@ -12,22 +12,21 @@ class Trainer:
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
 
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
 
         #self.optimizer = optim.SGD(self.model.parameters(), lr=0.01,  weight_decay=1e-3)
         #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
 
+        df = pd.DataFrame({'model1_weight_align_ae_loss_list': self.model1_trainer.weight_align_ae_loss_list,
+                           'model1_weight_align_se_loss_list': self.model1_trainer.weight_align_se_loss_list,
+                           'merge_iter': self.model1_trainer.batch_epoch_list, })
+        df.to_csv(f'/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/mlp_weight_diff_{self.args.align_loss}_model1_waf_{self.args.weight_align_factor}.csv')
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
 
 
-        self.fc1_norm_list = []
-        self.fc2_norm_list = []
-        self.wa1_norm_list = []
-        self.wa2_norm_list = []
-        self.train_iter_list=[]
         self.merge_iter=1
 
         self.weight_dir = f'{self.args.base_dir}iwa_weights/'
@@ -36,7 +35,7 @@ class Trainer:
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
 
     def fit(self, log_output=True):
-        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}, LR: {0.1*(0.998**self.merge_iter)}')
+        print(f'Model {self.model_name}, merge iteration: {self.merge_iter}, LR: {args.lr}')
         if self.merge_iter>1:
             #adam opt
             checkpoint = torch.load(self.save_path)
@@ -55,8 +54,6 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
-
-
             #self.scheduler.step()
 
             if log_output:
@@ -73,6 +70,9 @@ class Trainer:
         torch.cuda.empty_cache()
 
         self.merge_iter+=1
+
+
+
 
     def model_loss(self):
         return self.best_loss
@@ -117,3 +117,4 @@ class Trainer:
                 correct += pred.eq(target.view_as(pred)).sum().item()
         test_loss /= len(self.test_loader.dataset)
         return test_loss, 100. * correct / len(self.test_loader.dataset)
+

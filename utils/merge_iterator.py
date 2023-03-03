@@ -17,6 +17,17 @@ class Merge_Iterator:
         self.train_loaders=train_loaders
         self.test_loader = test_loader
 
+        #for logging
+        self.client_list=[]
+        self.iter_list=[]
+        self.train_losses=[]
+        self.train_ce_losses=[]
+        self.test_losses=[]
+        self.test_accuracy_list=[]
+        self.best_test_accuracy=[]
+        self.average_test_accuracy=[]
+
+
     def run(self):
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
@@ -45,7 +56,7 @@ class Merge_Iterator:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
 
         for iter in range(1,merge_iterations+1):
-
+            client=0
             for trainer in self.model_trainers:
                 trainer.fit()
 
@@ -54,10 +65,18 @@ class Merge_Iterator:
                       f'Test loss: {trainer.test_loss},  '
                       f'Test accuracy: {trainer.test_acc}')
 
+                client+=1
+                self.client_list.append(client)
+                self.iter_list.append(iter)
+                self.train_losses.append(trainer.train_loss)
+                self.train_ce_losses.append(trainer.train_loss_ce)
+                self.test_losses.append(trainer.test_loss)
+                self.test_accuracy_list.append(trainer.test_acc)
 
             print(f'Summary, Merge Iteration: {iter}')
             avg_acc=0
             avg_loss=0
+            test_accs=[]
             for i in range(len(self.model_trainers)):
                 trainer=self.model_trainers[i]
                 print(f'\tModel {i} Train loss: {trainer.train_loss}, '
@@ -66,5 +85,31 @@ class Merge_Iterator:
                       f'Test accuracy: {trainer.test_acc}')
                 avg_acc+=trainer.test_acc
                 avg_loss+=trainer.test_loss
-            print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
+                test_accs.append(trainer.test_acc)
 
+                self.best_test_accuracy.append(max(test_accs))
+                self.average_test_accuracy.append(avg_loss/len(self.model_trainers))
+
+            print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
+            self.results_to_csv()
+
+
+    def results_to_csv(self):
+
+        df = pd.DataFrame({'client_list': self.client_list,
+                           'iter_list': self.iter_list,
+                           'train_losses': self.train_losses,
+                           'train_ce_losses': self.train_ce_losses,
+                           'test_losses': self.test_losses,
+                           'test_accuracy_list': self.test_accuracy_list, })
+        df.to_csv(
+            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_cli'
+            f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
+            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
+
+        df = pd.DataFrame({'best_test_accuracy': self.best_test_accuracy,
+                           'average_test_accuracy': self.average_test_accuracy, })
+        df.to_csv(
+            f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_cli'
+            f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
+            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')

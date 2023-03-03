@@ -21,6 +21,8 @@ def parse_arguments():
     parser.add_argument('--delta', type=float, default=1.0, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',  help='learning rate (default: 1.0)')
 
+    parser.add_argument('--optimizer', type=str, default=None,)
+
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
     parser.add_argument('--gpu', type=int, default=1, )
