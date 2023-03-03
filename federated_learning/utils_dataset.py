@@ -17,7 +17,7 @@ class DatasetObject:
     def set_data(self):
         # Prepare data if not ready
         print('%sData/%s' %(self.data_path, self.name))
-        sys.exit()
+
         if not os.path.exists('%sData/%s' %(self.data_path, self.name)):
             # Get Raw data                
             if self.dataset == 'mnist':
@@ -222,9 +222,25 @@ class DatasetObject:
                     clnt_x[clnt_idx_] = trn_x[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
                     clnt_y[clnt_idx_] = trn_y[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
 
+                labels=np.unique(trn_y)
+                print(labels)
+                ds1_labels = labels[:len(labels) // 2]
+                ds2_labels = labels[len(labels) // 2:]
+                print(f'ds1_labels: {ds1_labels}')
+                print(f'ds2_labels: {ds2_labels}')
+                ds1_indices = [idx for idx, target in enumerate(clnt_y) if target in ds1_labels]
+                ds2_indices = [idx for idx, target in enumerate(clnt_y) if target in ds1_labels]
+
+                clnt_x[0]=trn_x[ds1_indices]
+                clnt_y[0]=trn_y[ds1_indices]
+
+                clnt_x[1]=trn_x[ds2_indices]
+                clnt_y[1]=trn_y[ds2_indices]
+
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
 
+                print(clnt_y)
                 print(trn_y)
                 sys.exit()
             
