@@ -1,9 +1,0 @@
-
-dataset: MNIST
-#weight_init: kaiming_normal
-weight_init: default
-model: Conv2
-align_loss: se
-weight_align_factor: 1
-data_transform: True
-num_clients: 20
