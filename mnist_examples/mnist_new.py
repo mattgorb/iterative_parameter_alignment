@@ -49,9 +49,9 @@ class LinearMerge(nn.Linear):
 
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
-                #weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
+                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
                 #x = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/1.5)
-                weights_diff = torch.sum((self.weight - self.weight_align).abs())
+                #weights_diff = torch.sum((self.weight - self.weight_align).abs())
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
             elif self.args.align_loss == 'le':
@@ -299,8 +299,10 @@ def main():
     parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
+
     args = parser.parse_args()
     set_seed(args.seed)
+
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:

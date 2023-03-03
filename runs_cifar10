@@ -13,4 +13,4 @@ python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3
 
 
 
-nohup python example_code_mnist.py > ~/iwa/1.txt 2>&1 &
+nohup python -u example_code_mnist.py > ~/iwa/1.txt 2>&1 &
