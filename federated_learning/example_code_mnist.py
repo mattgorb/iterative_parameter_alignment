@@ -31,8 +31,7 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 # data_obj = ShakespeareObjectCrop_noniid(storage_path, name, crop_amount = 2000)
 #########
 
-print("HHERE")
-sys.eexit()
+
 
 # Generate IID or Dirichlet distribution
 # IID
@@ -42,7 +41,8 @@ n_client = 20
 # Dirichlet (0.6)
 # data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.6, data_path=data_path)
 data_obj = DatasetObject(dataset='mnist', n_client=n_client,  seed=20, unbalanced_sgm=0, rule='split_label', rule_arg=0.6, data_path=data_path)
-
+print("HHERE")
+sys.eexit()
 model_name = 'mnist_2NN' # Model type
 
 ###
