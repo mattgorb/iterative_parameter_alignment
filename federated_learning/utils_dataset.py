@@ -20,7 +20,7 @@ class DatasetObject:
 
         if not os.path.exists('%sData/%s' %(self.data_path, self.name)):
             # Get Raw data                
-            if self.dataset == 'mnist':
+            if self.dataset == 'MNIST':
                 transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
                 trnset = torchvision.datasets.MNIST(root='%sData/Raw' %self.data_path, 
                                                     train=True , download=True, transform=transform)
