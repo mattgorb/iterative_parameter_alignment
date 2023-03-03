@@ -35,7 +35,7 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 
 # Generate IID or Dirichlet distribution
 # IID
-n_client = 20
+n_client = 2
 #data_obj = DatasetObject(dataset='mnist', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0, data_path=data_path)
 
 # Dirichlet (0.6)
