@@ -207,6 +207,23 @@ class DatasetObject:
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
 
+
+            elif self.rule == 'split_label':
+
+                clnt_x = [np.zeros((clnt_data_list[clnt__], self.channels, self.height, self.width)).astype(np.float32)
+                          for clnt__ in range(self.n_client)]
+                clnt_y = [np.zeros((clnt_data_list[clnt__], 1)).astype(np.int64) for clnt__ in range(self.n_client)]
+
+                clnt_data_list_cum_sum = np.concatenate(([0], np.cumsum(clnt_data_list)))
+                for clnt_idx_ in range(self.n_client):
+                    clnt_x[clnt_idx_] = trn_x[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
+                    clnt_y[clnt_idx_] = trn_y[clnt_data_list_cum_sum[clnt_idx_]:clnt_data_list_cum_sum[clnt_idx_ + 1]]
+
+                clnt_x = np.asarray(clnt_x)
+                clnt_y = np.asarray(clnt_y)
+
+                print(trn_y)
+
             
             self.clnt_x = clnt_x; self.clnt_y = clnt_y
 

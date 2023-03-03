@@ -25,6 +25,7 @@ class Merge_Iterator:
         self.train_ce_losses=[]
         self.test_losses=[]
         self.test_accuracy_list=[]
+
         self.best_test_accuracy=[]
         self.average_test_accuracy=[]
 
