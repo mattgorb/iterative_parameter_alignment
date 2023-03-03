@@ -45,7 +45,7 @@ class LinearMerge(nn.Linear):
         weights_diff_se = torch.tensor(0)
         if self.weight_align is not None:
 
-            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs().pow(1.5))
+            weights_diff_ae = torch.sum((self.weight - self.weight_align).abs())
             weights_diff_se = torch.sum(torch.square(self.weight - self.weight_align))
 
         return x, weights_diff_ae, weights_diff_se
@@ -302,7 +302,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=int, default=1, )
+    parser.add_argument('--weight_align_factor', type=int, default=250, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,

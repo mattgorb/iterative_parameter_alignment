@@ -1,5 +1,4 @@
 
-python -u main.py --config=configs/mnist_2_iid.yaml --gpu=1
 
 nohup  python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5  > ~/iwa/141.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa/140.txt 2>&1 &
@@ -7,3 +6,11 @@ nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa
 
 #nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 > ~/iwa/140.txt 2>&1 &
 python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3
+
+
+
+
+
+
+
+nohup python example_code_mnist.py > ~/iwa/1.txt 2>&1 &

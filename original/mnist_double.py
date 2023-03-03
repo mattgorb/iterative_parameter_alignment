@@ -9,8 +9,8 @@ from torch.utils.data import DataLoader
 import math
 import random
 from torch.optim.lr_scheduler import CosineAnnealingLR
-from matplotlib import pyplot as plt
-import pandas as pd
+#from matplotlib import pyplot as plt
+#import pandas as pd
 
 def set_seed(seed):
     random.seed(seed)
