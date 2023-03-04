@@ -47,28 +47,29 @@ rule='Drichlet'
 rule_arg=0.3
 n_client = 20
 optim='SGD'
-
+'''
 
 
 rule='split_label'
 rule_arg=0.3
 n_client = 2
 optim='SGD'
-'''
+
 
 #IF Adam, import utils_general_adam in utils_methods file
-'''rule='Drichlet'
+'''
+rule='Drichlet'
 rule_arg=0.3
 n_client = 20
 optim='Adam'
 '''
 
-
+'''
 rule='split_label'
 rule_arg=0.3
 n_client = 2
 optim='Adam'
-
+'''
 
 # Dirichlet (0.6)
 # data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.6, data_path=data_path)
