@@ -39,11 +39,28 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #rule='split_label'
 #n_client = 2
 
+'''
 rule='Drichlet'
 n_client = 20
+optim='SGD'
+
+
 
 rule_arg=0.3
 epoch = 1
+optim='SGD'
+'''
+
+#IF Adam, import utils_general_adam in utils_methods file
+rule='Drichlet'
+n_client = 20
+optim='ADAM'
+
+rule_arg=0.3
+epoch = 1
+optim='ADAM'
+
+
 # Dirichlet (0.6)
 # data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.6, data_path=data_path)
 data_obj = DatasetObject(dataset='MNIST', n_client=n_client,  seed=20, unbalanced_sgm=0, rule=rule, rule_arg=rule_arg, data_path=data_path)

@@ -110,7 +110,6 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
 
     model.train(); model = model.to(device)
     
-    #scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=sch_step, gamma=sch_gamma)
 
     # Put tst_x=False if no tst data given
     print_test = not isinstance(tst_x, bool)
