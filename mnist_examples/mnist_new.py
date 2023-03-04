@@ -123,6 +123,10 @@ def get_datasets(args):
         train_loader1 = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         train_loader2 = DataLoader(dataset2, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
+
+        print(len(dataset1.targets))
+        print(len(dataset2.targets))
+
         return train_loader1, train_loader2, test_loader
 
 

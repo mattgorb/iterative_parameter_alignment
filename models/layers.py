@@ -33,8 +33,7 @@ class ConvMerge(nn.Conv2d):
         super().__init__(*args, **kwargs)
         self.weight_align_list = nn.ParameterList([])
         self.bias_align_list=nn.ParameterList([])
-        #self.weight_align = None
-        #self.bias_align=None
+
 
 
     def init(self, args):

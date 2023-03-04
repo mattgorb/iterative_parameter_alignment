@@ -18,17 +18,16 @@ def parse_arguments():
     parser.add_argument('--bias', type=bool, default=False)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=1.0, )
-    parser.add_argument('--delta', type=float, default=1.0, )
+    parser.add_argument('--delta', type=float, default=None, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',  help='learning rate (default: 1.0)')
 
-    parser.add_argument('--optimizer', type=str, default=None,)
 
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
     parser.add_argument('--gpu', type=int, default=1, )
     parser.add_argument('--save-model', action='store_true', default=False,help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
-    parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
+
 
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/", help='Directory for data and weights')
     parser.add_argument('--config', type=str, default=None, help='config file to use')
