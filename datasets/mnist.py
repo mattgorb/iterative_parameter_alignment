@@ -123,4 +123,11 @@ def get_datasets(args):
             print(f'Train set {i}: Length: {len(train_loaders[i].dataset)}, Labels: {collections.Counter(train_loaders[i].dataset.targets.tolist())}')
 
         print(f'Test set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets.tolist())}')
+
+        weights=[]
+        dataset_len = len(datasets.MNIST(f'{args.base_dir}data', train=True,).targets)
+        for dataset in train_loaders:
+            print(len(dataset.targets))
+        print(dataset_len)
+        sys.exit()
         return train_loaders, test_loader
