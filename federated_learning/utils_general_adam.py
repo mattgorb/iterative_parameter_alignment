@@ -117,7 +117,7 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
     loss_trn, acc_trn = get_acc_loss(trn_x, trn_y, model, dataset_name, weight_decay)
     if print_test:
         loss_tst, acc_tst = get_acc_loss(tst_x, tst_y, model, dataset_name, 0)
-        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f, LR: %.4f" 
+        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f, "
               %(0, acc_trn, loss_trn, acc_tst, loss_tst))
     else:
         print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f"
@@ -150,10 +150,10 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
             loss_trn, acc_trn = get_acc_loss(trn_x, trn_y, model, dataset_name, weight_decay)
             if print_test:
                 loss_tst, acc_tst = get_acc_loss(tst_x, tst_y, model, dataset_name, 0)
-                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f, LR: %.4f" 
+                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f,"
                       %(e+1, acc_trn, loss_trn, acc_tst, loss_tst))
             else:
-                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, LR: %.4f" %(e+1, acc_trn, loss_trn))
+                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f" %(e+1, acc_trn, loss_trn))
     
             
             model.train()
@@ -183,10 +183,10 @@ def train_model_prox(model, cld_mdl_param, trn_x, trn_y, tst_x, tst_y, learning_
     loss_trn, acc_trn = get_acc_loss(trn_x, trn_y, model, dataset_name, weight_decay)
     if print_test:
         loss_tst, acc_tst = get_acc_loss(tst_x, tst_y, model, dataset_name, 0)
-        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f, LR: %.4f" 
+        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f"
               %(0, acc_trn, loss_trn, acc_tst, loss_tst))
     else:
-        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, LR: %.4f" 
+        print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f"
               %(0, acc_trn, loss_trn))
     
     model.train()
@@ -225,10 +225,10 @@ def train_model_prox(model, cld_mdl_param, trn_x, trn_y, tst_x, tst_y, learning_
             loss_trn, acc_trn = get_acc_loss(trn_x, trn_y, model, dataset_name, weight_decay)
             if print_test:
                 loss_tst, acc_tst = get_acc_loss(tst_x, tst_y, model, dataset_name, 0)
-                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f, LR: %.4f" 
+                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, Test Accuracy: %.4f, Loss: %.4f"
                       %(e+1, acc_trn, loss_trn, acc_tst, loss_tst))
             else:
-                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, LR: %.4f" %(e+1, acc_trn, loss_trn))
+                print("Epoch %3d, Training Accuracy: %.4f, Loss: %.4f, " %(e+1, acc_trn, loss_trn))
     
             
             model.train()
@@ -319,7 +319,7 @@ def train_scaffold_mdl(model, model_func, state_params_diff, trn_x, trn_y,
                     params = get_mdl_params([model], n_par)
                     step_loss += (weight_decay)/2 * np.sum(params * params)
 
-                print("Step %3d, Training Loss: %.4f, LR: %.5f"
+                print("Step %3d, Training Loss: %.4f,"
                       %(count_step, step_loss))
                 step_loss = 0; n_data_step = 0
             
@@ -397,7 +397,7 @@ def train_model_alg(model, model_func, alpha_coef, avg_mdl_param, hist_params_di
                 params = get_mdl_params([model], n_par)
                 epoch_loss += (alpha_coef+weight_decay)/2 * np.sum(params * params)
             
-            print("Epoch %3d, Training Loss: %.4f, LR: %.5f"
+            print("Epoch %3d, Training Loss: %.4f, "
                   %(e+1, epoch_loss))
             
             
@@ -478,7 +478,7 @@ def train_model_FedDC(model, model_func, alpha, local_update_last, global_update
                 params = get_mdl_params([model], n_par)
                 epoch_loss += (weight_decay)/2 * np.sum(params * params)
             
-            print("Epoch %3d, Training Loss: %.4f, LR: %.5f"
+            print("Epoch %3d, Training Loss: %.4f"
                   %(e+1, epoch_loss))
             
             
