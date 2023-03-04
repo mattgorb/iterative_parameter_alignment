@@ -303,7 +303,8 @@ class Merge_Iterator:
             print(torch.sum((model1.fc2.weight-model2.fc2.weight).abs()).item())
             self.model_merged_trainer.model.fc1.weight=nn.Parameter((0.5*model1.fc1.weight+0.5*model2.fc1.weight), requires_grad=False)
             self.model_merged_trainer.model.fc2.weight=nn.Parameter((0.5*model1.fc2.weight+0.5*model2.fc2.weight), requires_grad=False)
-            self.model_merged_trainer.test()
+            test_loss, test_acc=self.model_merged_trainer.test()
+            print(f'Test acc {test_acc}')
 
 
 def main():
