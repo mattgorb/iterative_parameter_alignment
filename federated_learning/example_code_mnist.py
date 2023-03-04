@@ -35,9 +35,12 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 # IID
 #n_client = 20
 #data_obj = DatasetObject(dataset='mnist', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0, data_path=data_path)
-
+epoch = 1
 #rule='split_label'
-#n_client = 2
+
+
+
+
 
 '''
 rule='Drichlet'
@@ -48,7 +51,7 @@ optim='SGD'
 
 
 rule='split_label'
-epoch = 1
+n_client = 2
 optim='SGD'
 '''
 
@@ -61,7 +64,7 @@ optim='Adam'
 
 
 #rule='split_label'
-#epoch = 1
+#n_client = 2
 #optim='Adam'
 
 
