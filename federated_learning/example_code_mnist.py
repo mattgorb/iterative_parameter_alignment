@@ -51,21 +51,23 @@ optim='SGD'
 
 
 rule='split_label'
+rule_arg=0.3
 n_client = 2
 optim='SGD'
 '''
 
 #IF Adam, import utils_general_adam in utils_methods file
-rule='Drichlet'
+'''rule='Drichlet'
 rule_arg=0.3
 n_client = 20
 optim='Adam'
+'''
 
 
-
-#rule='split_label'
-#n_client = 2
-#optim='Adam'
+rule='split_label'
+rule_arg=0.3
+n_client = 2
+optim='Adam'
 
 
 # Dirichlet (0.6)
