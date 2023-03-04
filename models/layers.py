@@ -113,9 +113,6 @@ class LinearMerge(nn.Linear):
                 else:
                     sys.exit(1)
 
-                print(self.train_weight_list[wa])
-
-            sys.exit()
             if self.args.bias == True:
                 for ba in range(len(self.bias_align_list)):
                     if self.args.align_loss == 'ae':
