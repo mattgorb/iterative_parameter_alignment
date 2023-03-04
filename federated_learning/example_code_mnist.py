@@ -56,9 +56,9 @@ rule='Drichlet'
 n_client = 20
 optim='ADAM'
 
-rule_arg=0.3
-epoch = 1
-optim='ADAM'
+#rule_arg=0.3
+#epoch = 1
+#optim='ADAM'
 
 
 # Dirichlet (0.6)
