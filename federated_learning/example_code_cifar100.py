@@ -45,7 +45,7 @@ batch_size = 50
 #act_prob = 1
 act_prob = 0.15
 #suffix = model_name
-suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}_SGD'
+suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}_{optim}'
 lr_decay_per_round = 0.998
 
 # Model function

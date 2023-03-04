@@ -41,24 +41,28 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 
 '''
 rule='Drichlet'
+rule_arg=0.3
 n_client = 20
 optim='SGD'
 
 
 
-rule_arg=0.3
+rule='split_label'
 epoch = 1
 optim='SGD'
 '''
 
 #IF Adam, import utils_general_adam in utils_methods file
 rule='Drichlet'
+rule_arg=0.3
 n_client = 20
-optim='ADAM'
+optim='Adam'
 
-#rule_arg=0.3
+
+
+#rule='split_label'
 #epoch = 1
-#optim='ADAM'
+#optim='Adam'
 
 
 # Dirichlet (0.6)
@@ -75,7 +79,7 @@ weight_decay = 1e-3
 batch_size = 50
 act_prob = 1
 #act_prob = 0.15
-suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}_SGD'
+suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}_{optim}'
 lr_decay_per_round = 0.998
 
 # Model function
