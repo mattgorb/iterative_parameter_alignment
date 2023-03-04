@@ -5,7 +5,19 @@ from utils_general import *
 from tensorboardX import SummaryWriter
 
 
-def train_FedDyn_with_alignment(data_obj, act_prob,
+def set_client_from_params_wa(mdl, params):
+    dict_param = copy.deepcopy(dict(mdl.named_parameters()))
+    idx = 0
+    for name, param in mdl.named_parameters():
+        weights = param.data
+        length = len(weights.reshape(-1))
+        dict_param[name].data.copy_(torch.tensor(params[idx:idx + length].reshape(weights.shape)).to(device))
+        idx += length
+
+    mdl.load_state_dict(dict_param)
+    return mdl
+
+def train_weight_alignment(data_obj, act_prob,
                  learning_rate, batch_size, epoch, com_amount, print_per,
                  weight_decay,  model_func, init_model, alpha_coef,
                  sch_step, sch_gamma, save_period,
