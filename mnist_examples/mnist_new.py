@@ -51,13 +51,13 @@ class LinearMerge(nn.Linear):
 
         if self.weight_align is not None:
             if self.args.align_loss=='ae':
-                #weights_diff = torch.sum((self.weight - self.weight_align).abs())#.pow(1/1.5)#.pow(1.5)
+                weights_diff = torch.sum((self.weight - self.weight_align).abs())#.pow(1/1.5)#.pow(1.5)
                 #weights_diff = torch.sum((out - F.linear(x, self.weight_align, self.bias)).abs())
-                out=0.5*out+F.linear(x, self.weight_align, self.bias)
+                #out=0.5*out+F.linear(x, self.weight_align, self.bias)
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
             elif self.args.align_loss == 'le':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/self.delta)
+                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/self.delta)
             else:
                 sys.exit()
 
