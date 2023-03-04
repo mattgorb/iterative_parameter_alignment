@@ -9,7 +9,7 @@ import pandas as pd
 from tensorboardX import SummaryWriter
 
 class Merge_Iterator:
-    def __init__(self, args, train_loaders, test_loader, device, weight_dir):
+    def __init__(self, args, train_loaders, test_loader,train_weight_list, device, weight_dir):
 
         self.args = args
         self.device = device
@@ -17,6 +17,7 @@ class Merge_Iterator:
         self.num_clients=self.args.num_clients
         self.train_loaders=train_loaders
         self.test_loader = test_loader
+        self.train_weight_list=train_weight_list
 
         #for logging
         self.client_list=[]
@@ -50,11 +51,11 @@ class Merge_Iterator:
 
         self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
                                      self.test_loader], self.models[i], self.device,
-                                   f'model_{i}_{self.args.model}_{self.args.dataset}_n_clients{self.args.num_clients}_{self.args.align_loss}')
+                                   f'model_{i}_{self.args.model}_{self.args.dataset}_n_clients{self.args.num_clients}_{self.args.align_loss}', )
                         for i in range(self.num_clients)]
 
 
-        set_weight_align_param(self.models, self.args)
+        set_weight_align_param(self.models, self.args, self.train_weight_list)
 
         for trainer in self.model_trainers:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)

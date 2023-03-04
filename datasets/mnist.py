@@ -127,7 +127,6 @@ def get_datasets(args):
         weights=[]
         dataset_len = len(datasets.MNIST(f'{args.base_dir}data', train=True,).targets)
         for loader in train_loaders:
-            print(len(loader.dataset.targets))
-        print(dataset_len)
-        sys.exit()
-        return train_loaders, test_loader
+            weights.append(len(loader.dataset.targets)/dataset_len)
+        print(weights)
+        return train_loaders, test_loader, weights

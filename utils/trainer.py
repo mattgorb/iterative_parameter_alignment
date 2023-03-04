@@ -7,7 +7,7 @@ import torch.optim as optim
 
 
 class Trainer:
-    def __init__(self, args, datasets, model, device, model_name):
+    def __init__(self, args, datasets, model, device, model_name,):
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]

@@ -39,8 +39,8 @@ def main():
 
         trainer.fit(log_output=True)
     else:
-        train_loader_list, test_loader = get_dataloaders(args)
-        merge_iterator = Merge_Iterator(args, train_loader_list, test_loader, args.device, weight_dir)
+        train_loader_list, test_loader,train_weight_list = get_dataloaders(args)
+        merge_iterator = Merge_Iterator(args, train_loader_list, test_loader,train_weight_list, args.device, weight_dir)
         merge_iterator.run()
 
 
