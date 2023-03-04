@@ -35,6 +35,8 @@ class LinearMerge(nn.Linear):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.weight_align = None
+        #self.loss=torch.nn.HuberLoss(reduction='sum')
+        self.delta=nn.Parameter(torch.ones(1), requires_grad=True)
 
 
     def init(self, args):
@@ -51,14 +53,18 @@ class LinearMerge(nn.Linear):
             if self.args.align_loss=='ae':
                 weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(1.5))#.pow(1/1.5)
                 #x = torch.sum((self.weight - self.weight_align).abs().pow(1.5)).pow(1/1.5)
-                #weights_diff = torch.sum((self.weight - self.weight_align).abs())
+                #print("HERE")
+                #print(x)
+                print(weights_diff)
             elif self.args.align_loss=='se':
                 weights_diff = torch.sum((self.weight - self.weight_align)**2)
             elif self.args.align_loss == 'le':
-                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(self.delta)).pow(1/self.delta)
+                weights_diff = torch.sum((self.weight - self.weight_align).abs().pow(self.delta))#.pow(1/self.delta)
             else:
                 sys.exit()
 
+
+        #align_loss=F.sigmoid(self.delta)*weights_diff_ae+(1-F.sigmoid(self.delta))*weights_diff_se
 
         return out, weights_diff
 
@@ -165,7 +171,17 @@ class Trainer:
             if log_output:
                 print(f'Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
 
+            if self.args.baseline:
+                self.test_accuracy_list.append(self.test_acc)
+                self.train_loss_list.append(self.train_loss)
+                self.test_loss_list.append(self.test_loss)
+                self.epoch_list.append(epoch)
 
+        if not self.args.baseline:
+            self.test_accuracy_list.append(self.test_acc)
+            self.train_loss_list.append(self.train_loss)
+            self.test_loss_list.append(self.test_loss)
+            self.epoch_list.append(self.merge_iter)
 
 
     def model_loss(self):
@@ -188,6 +204,8 @@ class Trainer:
             train_align_loss += weight_align_loss.item()
 
             loss.backward()
+
+            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)
 
             self.optimizer.step()
 
@@ -225,7 +243,8 @@ def set_weight_align_param(model1, model2, args):
             '''
 
             # We only want to merge one models weights in this file
-
+            #m2.weight_align = nn.Parameter(m1.weight, requires_grad=True)
+            #m1.weight_align = nn.Parameter(m2.weight, requires_grad=True)
             m2.weight_align = m1.weight
             m1.weight_align = m2.weight
 
@@ -266,6 +285,10 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
+            '''print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
+            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
+            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')'''
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
@@ -282,7 +305,7 @@ def main():
                         help='number of epochs to train')
     parser.add_argument('--merge_iter', type=int, default=2500,
                         help='number of iterations to merge')
-    parser.add_argument('--weight_align_factor', type=float, default=3, )
+    parser.add_argument('--weight_align_factor', type=float, default=25, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
                         help='learning rate (default: 1.0)')
     parser.add_argument('--gamma', type=float, default=0.7,
@@ -299,10 +322,8 @@ def main():
     parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
-
     args = parser.parse_args()
     set_seed(args.seed)
-
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
