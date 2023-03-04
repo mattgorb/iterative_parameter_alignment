@@ -301,7 +301,7 @@ class Merge_Iterator:
             #print('distances')
             #print(torch.sum((model1.fc1.weight-model2.fc1.weight).abs()).item())
             #print(torch.sum((model1.fc2.weight-model2.fc2.weight).abs()).item())
-            for i in [0.1, 0.2, 0.3, 0.5,0.7, 0.8, 0.9]
+            for i in [0.1, 0.2, 0.3, 0.5,0.7, 0.8, 0.9]:
                 self.model_merged_trainer.model.fc1.weight=nn.Parameter((0.5*model1.fc1.weight+0.5*model2.fc1.weight), requires_grad=False)
                 self.model_merged_trainer.model.fc2.weight=nn.Parameter((0.5*model1.fc2.weight+0.5*model2.fc2.weight), requires_grad=False)
                 test_loss, test_acc=self.model_merged_trainer.test()
