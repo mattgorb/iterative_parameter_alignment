@@ -267,6 +267,12 @@ class Merge_Iterator:
         self.model2_trainer = Trainer(self.args, [self.train_loader2, self.test_dataset], model2, self.device,
                                  f'{self.weight_dir}model2_0.pt', 'model2_double')
 
+        model_merged = Net(self.args, weight_merge=True).to(self.device)
+
+        self.model_merged_trainer = Trainer(self.args, [self.train_loader1, self.test_dataset], model_merged, self.device,
+                                      f'{self.weight_dir}model1_0.pt', 'model1_double')
+
+
 
 
         set_weight_align_param(model1, model2, self.args)
@@ -295,8 +301,9 @@ class Merge_Iterator:
             print('distances')
             print(torch.sum((model1.fc1.weight-model2.fc1.weight).abs()).item())
             print(torch.sum((model1.fc2.weight-model2.fc2.weight).abs()).item())
-            print(torch.sum((model1.fc1.weight-model2.fc1.weight)**2).item())
-            print(torch.sum((model1.fc2.weight-model2.fc2.weight)**2).item())
+            self.model_merged_trainer.model.fc1.weight=(0.5*model1.fc1.weight+0.5*model2.fc1.weight)
+            self.model_merged_trainer.model.fc2.weight=(0.5*model1.fc2.weight+0.5*model2.fc2.weight)
+            self.model_merged_trainer.test()
 
 
 def main():
