@@ -13,7 +13,7 @@ class Trainer:
         self.train_loader, self.test_loader = datasets[0], datasets[1]
 
 
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.01)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
 
         #self.optimizer = optim.SGD(self.model.parameters(), lr=0.01,  weight_decay=1e-3)
         #self.scheduler = torch.optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=.998)
@@ -89,7 +89,7 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
-            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(),  max_norm=10)  # Clip gradients to prevent exploding
             self.optimizer.step()
 
             train_loss += loss.item()
