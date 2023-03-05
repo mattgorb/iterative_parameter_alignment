@@ -25,6 +25,7 @@ class MLP(nn.Module):
             x, wa2 = self.fc2(x)
             x = F.relu(x)
             x, wa3 = self.fc2(x)
+            print("HERE")
             score_diff = wa1 + wa2 + wa3
             return x, score_diff
         else:
