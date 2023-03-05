@@ -17,7 +17,7 @@ nohup python -u example_code_mnist.py > ~/iwa/adam_split.txt 2>&1 & DONE
 
 nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 --merge_iter=10 > ~/iwa/1.txt 2>&1 &
 nohup python -u main.py --config=configs/mnist_20_dir_p3_pd1p5.yaml --gpu=4 > ~/iwa/2.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p3_pd1p5.yaml --gpu=5 > ~/iwa/3.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5 > ~/iwa/3.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/sgd_split.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/sgd_dir_p3.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 &
