@@ -96,6 +96,7 @@ class Merge_Iterator:
             self.average_test_accuracy.append(avg_loss/len(self.model_trainers))
 
             print(f'\tAverages: Test loss: {avg_loss/len(self.model_trainers)},Test accuracy: {avg_acc/len(self.model_trainers)}')
+            print(f'\tBest Test accuracy: {max(test_accs)}')
 
             self.results_to_csv()
 
