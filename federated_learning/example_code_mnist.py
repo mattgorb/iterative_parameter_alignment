@@ -47,20 +47,20 @@ n_client = 2
 optim='SGD'
 '''
 
-''''''
+'''
 rule='Drichlet'
 rule_arg=0.3
 n_client = 20
 optim='SGD'
-
-
-
 '''
+
+
+''''''
 rule='iid'
 rule_arg=0.3
 n_client = 20
 optim='SGD'
-'''
+
 
 
 '''
