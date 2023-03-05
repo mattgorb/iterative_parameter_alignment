@@ -327,6 +327,20 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 clnt_params_list[clnt] = get_mdl_params([clnt_models[clnt]], n_par)[0]
 
             # Scale with weights
+            print("NEW HERE")
+            print(weight_list)
+            print(len(clnt_params_list[selected_clnts]))
+            for i in range(len(clnt_params_list[selected_clnts])):
+                model_i=set_client_from_params(model_func(), clnt_params_list[i])
+                print(model_i)
+            global_model=model_func()
+            print(global_model)
+            sys.exit()
+
+            avg_model = set_client_from_params(model_func(), np.sum(
+                clnt_params_list[selected_clnts] * weight_list[selected_clnts] / np.sum(weight_list[selected_clnts]),
+                axis=0))
+
 
             avg_model = set_client_from_params(model_func(), np.sum(
                 clnt_params_list[selected_clnts] * weight_list[selected_clnts] / np.sum(weight_list[selected_clnts]),
