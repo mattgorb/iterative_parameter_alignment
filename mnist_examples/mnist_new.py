@@ -293,10 +293,6 @@ class Merge_Iterator:
             self.model2_trainer.fit()
 
 
-            '''print(f'm1 d: {self.model1_trainer.model.fc1.delta}')
-            print(f'm1 d: {self.model1_trainer.model.fc2.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc1.delta}')
-            print(f'm2 d: {self.model2_trainer.model.fc2.delta}')'''
 
             print(f'Merge Iteration: {iter} \n'
                   f'\tModel 1 Train loss: {self.model1_trainer.train_loss},Train align loss: {self.model1_trainer.train_align_loss}, Test loss: {self.model1_trainer.test_loss},  Test accuracy: {self.model1_trainer.test_acc}\n'
@@ -308,7 +304,7 @@ class Merge_Iterator:
 def main():
     # Training settings
     parser = argparse.ArgumentParser(description='PyTorch Weight Align')
-    parser.add_argument('--batch-size', type=int, default=256,
+    parser.add_argument('--batch-size', type=int, default=50,
                         help='input batch size for training (default: 64)')
     parser.add_argument('--epochs', type=int, default=1,
                         help='number of epochs to train')
