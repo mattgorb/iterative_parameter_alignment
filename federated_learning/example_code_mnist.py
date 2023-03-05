@@ -116,15 +116,10 @@ n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_client
 n_iter_per_epoch  = np.ceil(n_data_per_client/batch_size)
 n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
 
-[avg_ins_mdls, avg_cld_mdls, avg_all_mdls, trn_sel_clt_perf, tst_sel_clt_perf, trn_cur_cld_perf, tst_cur_cld_perf, trn_all_clt_perf, tst_all_clt_perf] = train_weight_alignment(data_obj=data_obj, act_prob=act_prob, n_minibatch=n_minibatch,
-                                    learning_rate=learning_rate, batch_size=batch_size, epoch=epoch,
-                                    com_amount=com_amount, print_per=print_per, weight_decay=weight_decay,
-                                    model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
-                                    sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
-                                    data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-
-
-
+[fed_mdls_sel, trn_perf_sel, tst_perf_sel, fed_mdls_all, trn_perf_all, tst_perf_all] = train_FedAvg(data_obj=data_obj,act_prob=act_prob, learning_rate=learning_rate, batch_size=batch_size,epoch=epoch, com_amount=com_amount,
+                                                                                                    print_per=print_per,weight_decay=weight_decay, model_func=model_func, init_model=init_model,
+                                                                                                    sch_step=1,sch_gamma=1,save_period=save_period,suffix=suffix, trial=True,
+                                                                                                    data_path=data_path,lr_decay_per_round=lr_decay_per_round)
 
 # # ####
 print('FedDC')
