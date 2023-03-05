@@ -2,7 +2,8 @@ dataset: MNIST
 weight_init: kaiming_normal
 model: MLP
 
-align_loss: ae
+align_loss: pd
+delta: 1.5
 
 weight_align_factor: 1
 data_transform: True
