@@ -346,7 +346,7 @@ def train_weight_alignment(data_obj, act_prob, n_minibatch,
                 global_update_last = state_gadient_diffs[-1] / weight_list[clnt]  # delta theta
                 alpha = alpha_coef / weight_list[clnt]
                 hist_i = torch.tensor(parameter_drifts[clnt], dtype=torch.float32, device=device)  # h_i
-                clnt_models[clnt] = train_model_FedDC(model, model_func, alpha, local_update_last, global_update_last,
+                clnt_models[clnt] = train_weight_alignment(model, model_func, alpha, local_update_last, global_update_last,
                                                       global_mdl, hist_i,
                                                       trn_x, trn_y, learning_rate * (lr_decay_per_round ** i),
                                                       batch_size, epoch, print_per, weight_decay, data_obj.dataset,
