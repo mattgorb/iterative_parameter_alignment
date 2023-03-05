@@ -63,12 +63,6 @@ optim='SGD'
 
 
 
-'''
-rule='iid'
-rule_arg=0.3
-n_client = 2
-optim='SGD'
-'''
 
 
 
