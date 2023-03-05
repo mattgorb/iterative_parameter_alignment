@@ -120,7 +120,7 @@ class LinearMerge(nn.Linear):
                     elif self.args.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - self.bias_align_list[ba]))
                     elif self.args.align_loss == 'pd':
-                        weights_diff += torch.sum((self.weight - self.bias_align_list[ba]).abs()).pow(self.args.delta)
+                        weights_diff += torch.sum((self.weight - self.bias_align_list[ba]).abs().pow(self.args.delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
