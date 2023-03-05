@@ -1,8 +1,8 @@
 from utils_libs import *
 import torchvision.models as models
-from models.layers import *
+#from models.layers import *
 
-
+'''
 class global_model(nn.Module):
     def __init__(self, name, args=True):
         super(client_model, self).__init__()
@@ -137,7 +137,7 @@ class global_model(nn.Module):
             x = self.fc(last_hidden)
 
         return x
-
+'''
 
 class client_model(nn.Module):
     def __init__(self, name, args=True):
