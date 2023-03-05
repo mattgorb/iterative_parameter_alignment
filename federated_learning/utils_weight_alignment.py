@@ -187,7 +187,11 @@ def train_weight_alignment(data_obj, act_prob, n_minibatch,
                 weight_decay, model_func, init_model, alpha_coef,
                 sch_step, sch_gamma, save_period,
                 suffix='', trial=True, data_path='', rand_seed=0, lr_decay_per_round=1):
-    suffix = f'Weight_alignment_{alpha_coef}_suffix'
+    suffix = f'Weight_alignment_{alpha_coef}_{suffix}'
+    print(suffix)
+    print(alpha_coef)
+
+    sys.exit()
     suffix += '_S%d_F%f_Lr%f_%d_%f_B%d_E%d_W%f_a%f' % (
     save_period, act_prob, learning_rate, sch_step, sch_gamma, batch_size, epoch, weight_decay, alpha_coef)
     suffix += '_seed%d' % rand_seed
