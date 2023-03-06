@@ -39,6 +39,7 @@ class ConvMerge(nn.Conv2d):
     def init(self, args,device):
         self.args = args
         self.device=device
+        self.align_loss='ae'
         set_seed(self.args.weight_seed)
         #_init_weight(args, self.weight)
         # self.args.weight_seed+=1
@@ -52,12 +53,12 @@ class ConvMerge(nn.Conv2d):
         weights_diff = torch.tensor(0).float().to(self.device)#.cuda()#
         if len(self.weight_align_list) > 0:
             for wa in range(len(self.weight_align_list)):
-                if self.args.align_loss == 'ae':
+                if self.align_loss == 'ae':
                     #weights_diff += torch.sum((self.weight - self.weight_align_list[wa]).abs())
                     weights_diff += (self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs()))
-                elif self.args.align_loss == 'se':
+                elif self.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - self.weight_align_list[wa]))
-                elif self.args.align_loss == 'pd':
+                elif self.align_loss == 'pd':
                     weights_diff += (self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs().pow(self.args.delta)))
                 else:
                     sys.exit(1)
@@ -65,12 +66,12 @@ class ConvMerge(nn.Conv2d):
 
             if self.args.bias == True:
                 for ba in range(len(self.bias_align_list)):
-                    if self.args.align_loss == 'ae':
+                    if self.align_loss == 'ae':
                         #weights_diff += torch.sum((self.bias - self.bias_align_list[ba]).abs())
                         weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs()))
-                    elif self.args.align_loss == 'se':
+                    elif self.align_loss == 'se':
                         weights_diff += torch.sum(torch.square(self.bias - self.bias_align_list[ba]))
-                    elif self.args.align_loss == 'pd':
+                    elif self.align_loss == 'pd':
                         weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs().pow(self.args.delta)))
                     else:
                         sys.exit(1)
@@ -91,6 +92,7 @@ class LinearMerge(nn.Linear):
     def init(self, args,device):
         self.args = args
         self.device=device
+        self.align_loss='ae'
         #set_seed(self.args.weight_seed)
         #_init_weight(args, self.weight)
         #print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
@@ -101,12 +103,12 @@ class LinearMerge(nn.Linear):
         weights_diff = torch.tensor(0).float().to(self.device)#.cuda()
         if len(self.weight_align_list) > 0:
             for wa in range(len(self.weight_align_list)):
-                if self.args.align_loss == 'ae':
+                if self.align_loss == 'ae':
 
                     weights_diff += (self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs()))
-                elif self.args.align_loss == 'se':
+                elif self.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - self.weight_align_list[wa]))
-                elif self.args.align_loss == 'pd':
+                elif self.align_loss == 'pd':
                     weights_diff += (self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs().pow(self.args.delta)))
                 else:
                     sys.exit(1)
