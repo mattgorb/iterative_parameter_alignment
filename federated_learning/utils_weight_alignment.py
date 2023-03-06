@@ -257,7 +257,7 @@ def test(model, device, test_loader, client=False):
 
     test_loss /= len(test_loader.dataset)
 
-    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+    print('Test set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)'.format(
         test_loss, correct, len(test_loader.dataset),
         100. * correct / len(test_loader.dataset)))
 
@@ -416,7 +416,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             for i in range(len(clnt_params_list[selected_clnts])):
                 model_i=set_client_from_params(model_func(), clnt_params_list[i]).to(device)
                 test(model_i, device, test_loader, client=True)
-                print(model_i.training)
+
                 model_i.eval()
                 client_models.append(model_i)
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
@@ -435,7 +435,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                     print(align_out)
 
                     print('here')
-                    print(global_model.fc3.weight_align[0][:10])
+                    print(global_model.fc3.weight_align_list[0][:10])
                     '''loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
                             global_model.fc1.weight - client_models[1].fc1.weight).abs().pow(1.5))
                     loss += torch.sum((global_model.fc1.bias - client_models[0].fc1.bias).abs() + (
