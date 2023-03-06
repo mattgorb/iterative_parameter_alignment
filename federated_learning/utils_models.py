@@ -1,6 +1,6 @@
 from utils_libs import *
 import torchvision.models as models
-from models.layers import *
+from models.layers import LinearMerge, ConvMerge
 
 
 class global_model(nn.Module):
