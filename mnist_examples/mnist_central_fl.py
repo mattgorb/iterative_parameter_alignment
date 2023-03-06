@@ -222,8 +222,6 @@ def main():
                     model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
 
 
-                #print(model1.fc2.weight[0][:10])
-
                 loss.backward()
                 trainer1.optimizer.step()
                 trainer2.optimizer.step()
@@ -233,8 +231,7 @@ def main():
 
             model_merge.eval()
             test(model_merge, device, test_dataset)
-        sys.exit()
-        model1.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
+        '''model1.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
         model1.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
         model2.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
         model2.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
@@ -242,7 +239,7 @@ def main():
         model1.fc2.weight=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
         model1.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
         model2.fc2.weight=nn.Parameter(model_merge.fc2.weight.clone().detach().to(device), requires_grad=True)
-        model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)
+        model2.fc2.bias=nn.Parameter(model_merge.fc2.bias.clone().detach().to(device), requires_grad=True)'''
 
 
 
