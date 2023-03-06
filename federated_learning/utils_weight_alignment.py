@@ -147,10 +147,12 @@ class global_model(nn.Module):
 
 
 def set_weight_align_param(models, global_model,train_weight_list):
+    print(train_weight_list)
     train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
-
+    print(train_weight_list)
     print('Aligning weights...')
     models=[global_model]+models
+    sys.exit()
     module_list=[model.named_modules() for model in models]
     for named_layer_modules in zip(*module_list):
         if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
@@ -409,7 +411,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 model_i=set_client_from_params(model_func(), clnt_params_list[i])
 
                 client_models.append(model_i)
-            global_model=model_func()
+            global_model=global_model(name='mnist_2NN')
             set_weight_align_param(models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(self.model.parameters(), lr=self.args.lr)
