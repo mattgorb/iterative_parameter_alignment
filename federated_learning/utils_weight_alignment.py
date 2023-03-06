@@ -35,9 +35,9 @@ class GlobalModel(nn.Module):
             #self.fc1 = nn.Linear(1 * 28 * 28, 200)
             #self.fc2 = nn.Linear(200, 200)
             #self.fc3 = nn.Linear(200, self.n_cls)
-            self.fc1 = linear_init(28 * 28, 200, args=self.args, )
-            self.fc2 = linear_init(200, 200, args=self.args, )
-            self.fc3 = linear_init(200, 10,  args=self.args, )
+            self.fc1 = linear_init(28 * 28, 200,  )
+            self.fc2 = linear_init(200, 200,  )
+            self.fc3 = linear_init(200, 10,   )
 
         if self.name == 'emnist_NN':
             self.n_cls = 10
