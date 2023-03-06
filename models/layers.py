@@ -105,7 +105,7 @@ class LinearMerge(nn.Linear):
                 if self.args.align_loss == 'ae':
                     print(self.train_weight_list[wa])
                     print(self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs()))
-                    sys.exit()
+
                     weights_diff += (self.train_weight_list[wa]*torch.sum((self.weight - self.weight_align_list[wa]).abs()))
                 elif self.args.align_loss == 'se':
                     weights_diff += torch.sum(torch.square(self.weight - self.weight_align_list[wa]))
