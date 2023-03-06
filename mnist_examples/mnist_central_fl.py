@@ -233,7 +233,7 @@ def main():
 
             model_merge.eval()
             test(model_merge, device, test_dataset)
-
+        sys.exit()
         model1.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
         model1.fc1.bias=nn.Parameter(model_merge.fc1.bias.clone().detach().to(device), requires_grad=True)
         model2.fc1.weight=nn.Parameter(model_merge.fc1.weight.clone().detach().to(device), requires_grad=True)
