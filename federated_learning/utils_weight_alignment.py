@@ -416,8 +416,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 client_models.append(model_i)
             global_model=Global_Model(name='mnist_2NN')
 
-            print(global_model)
-            sys.exit()
+
             set_weight_align_param(models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(self.model.parameters(), lr=self.args.lr)
