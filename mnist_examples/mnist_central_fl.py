@@ -207,8 +207,8 @@ def main():
             for j in range(500):
                 model_merge.train()
                 optim_merge.zero_grad()
-                #trainer1.optimizer.zero_grad()
-                #trainer2.optimizer.zero_grad()
+                trainer1.optimizer.zero_grad()
+                trainer2.optimizer.zero_grad()
 
                 #absolute weight
                 loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
@@ -222,15 +222,14 @@ def main():
                     model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
 
 
-                print(model1.fc2.weight[0][:10])
+                #print(model1.fc2.weight[0][:10])
 
                 loss.backward()
-                #trainer1.optimizer.step()
-                #trainer2.optimizer.step()
+                trainer1.optimizer.step()
+                trainer2.optimizer.step()
                 optim_merge.step()
 
-                if j>3:
-                    sys.exit()
+
 
             model_merge.eval()
             test(model_merge, device, test_dataset)
