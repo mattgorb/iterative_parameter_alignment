@@ -224,8 +224,8 @@ def main():
                 print(model1.fc1.weight[0][:10])
 
                 loss.backward()
-                trainer1.step()
-                trainer2.step()
+                trainer1.optimizer.step()
+                trainer2.optimizer.step()
                 optim_merge.step()
 
             model_merge.eval()
