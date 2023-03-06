@@ -189,7 +189,7 @@ def main():
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
 
-    for i in range(3):
+    for i in range(10):
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
         trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path1, 'mnist_model1')
@@ -213,8 +213,8 @@ def main():
                 #absolute weight
                 loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
                     model_merge.fc1.weight - model2.fc1.weight).abs().pow(1.5))
-                loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs() + (
-                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.5).pow(1.5))
+                loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs().pow(1.5) + (
+                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.5))
 
                 loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1.5) + (
                     model_merge.fc2.weight - model2.fc2.weight).abs().pow(1.5))
