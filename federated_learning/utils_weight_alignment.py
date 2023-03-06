@@ -435,6 +435,8 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                     print(align_out)
 
                     print('here')
+
+
                     print(global_model.fc3.weight_align_list[0][:10])
                     '''loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
                             global_model.fc1.weight - client_models[1].fc1.weight).abs().pow(1.5))
