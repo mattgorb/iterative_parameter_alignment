@@ -75,7 +75,7 @@ class Trainer:
         self.train_loader, self.test_loader = datasets[0], datasets[1]
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
-        device = device
+
         self.save_path = save_path
         self.model_name = model_name
 
@@ -176,29 +176,27 @@ def main():
 
 
     model1 = Net(args, ).to(device)
-    save_path = f'{weight_dir}mnist_model1_2.pt'
+    save_path1 = f'{weight_dir}mnist_model1_2.pt'
     #trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
 
 
 
-    #args.seed+=1
 
 
     model2 = Net(args, ).to(device)
-    save_path = f'{weight_dir}mnist_model2_2.pt'
-    #trainer2 = Trainer(args, [train_loader2, test_dataset], model2, device, save_path, 'mnist_model2')
+    save_path2 = f'{weight_dir}mnist_model2_2.pt'
 
     model_merge = Net(args, ).to(device)
     optim_merge = optim.Adam(model_merge.parameters(), lr=args.lr)
 
-    for i in range(350):
+    for i in range(3):
         print(f'Iteration, activation alignment: {i}')
         print(f"Training model 1")
-        trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
+        trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path1, 'mnist_model1')
         trainer1.fit(log_output=True)
 
         print(f"Training model 2")
-        trainer2 = Trainer(args, [train_loader2, test_dataset], model2, device, save_path, 'mnist_model2')
+        trainer2 = Trainer(args, [train_loader2, test_dataset], model2, device, save_path2, 'mnist_model2')
         trainer2.fit(log_output=True)
 
 
@@ -210,26 +208,17 @@ def main():
                 model_merge.train()
                 optim_merge.zero_grad()
 
-                '''loss = torch.sum(torch.square(model_merge.fc1.weight - model1.fc1.weight).abs() + torch.square(
-                    model_merge.fc1.weight - model2.fc1.weight).abs())
-                loss += torch.sum(torch.square(model_merge.fc1.bias - model1.fc1.bias).abs() + torch.square(
-                    model_merge.fc1.bias - model2.fc1.bias).abs())
-
-                loss += torch.sum(torch.square(model_merge.fc2.weight - model1.fc2.weight).abs() + torch.square(
-                    model_merge.fc2.weight - model2.fc2.weight).abs())
-                loss += torch.sum(torch.square(model_merge.fc2.bias - model1.fc2.bias).abs() + torch.square(
-                    model_merge.fc2.bias - model2.fc2.bias).abs())'''
 
                 #absolute weight
-                loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.0) + (
-                    model_merge.fc1.weight - model2.fc1.weight).abs().pow(1.0))
+                loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
+                    model_merge.fc1.weight - model2.fc1.weight).abs().pow(1.5))
                 loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs() + (
-                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.0).pow(1.0))
+                    model_merge.fc1.bias - model2.fc1.bias).abs().pow(1.5).pow(1.5))
 
-                loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1.0) + (
-                    model_merge.fc2.weight - model2.fc2.weight).abs().pow(1.0))
-                loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1.0) + (
-                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.0))
+                loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1.5) + (
+                    model_merge.fc2.weight - model2.fc2.weight).abs().pow(1.5))
+                loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1.5) + (
+                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
 
 
 
