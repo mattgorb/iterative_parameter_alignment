@@ -149,7 +149,9 @@ class Global_Model(nn.Module):
 
 def set_weight_align_param(models, global_model,train_weight_list):
     print(train_weight_list)
-    train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
+    train_weight_list=[float(i/sum(train_weight_list)) for i in train_weight_list]
+    print(train_weight_list)
+    sys.exit()
     print(train_weight_list)
     print('Aligning weights...')
 
