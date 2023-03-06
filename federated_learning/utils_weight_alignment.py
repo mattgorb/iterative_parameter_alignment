@@ -239,7 +239,7 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
 
     return model
 
-def test(model, device, test_loader):
+def test(model, device, test_loader, client=False):
     model.eval()
     test_loss = 0
     correct = 0
@@ -247,7 +247,10 @@ def test(model, device, test_loader):
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
-            output,_ = model(data)
+            if client:
+                output = model(data)
+            else:
+                output,_ = model(data)
             test_loss += criterion(output, target,).item()  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
@@ -413,7 +416,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             client_models=[]
             for i in range(len(clnt_params_list[selected_clnts])):
                 model_i=set_client_from_params(model_func(), clnt_params_list[i])
-
+                test(model_i, device, test_loader, client=True)
                 client_models.append(model_i.to(device))
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
