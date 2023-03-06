@@ -151,9 +151,7 @@ def set_weight_align_param(models, global_model,train_weight_list):
     train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
     print(train_weight_list)
     print('Aligning weights...')
-    print(models)
-    print(global_model)
-    sys.exit()
+
 
     models=[global_model]+models
 
@@ -418,7 +416,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             global_model=Global_Model(name='mnist_2NN')
 
 
-            set_weight_align_param(models, global_model, weight_list[selected_clnts])
+            set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(self.model.parameters(), lr=self.args.lr)
             for i in range(10):
