@@ -18,13 +18,13 @@ import sys
 
 
 def linear_init(in_dim, out_dim,  args=None, ):
-    layer = LinearMerge(in_dim, out_dim, bias=args.bias)
+    layer = LinearMerge(in_dim, out_dim, bias=True)
     layer.init(args)
     return layer
 
 
 def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, args=None, ):
-    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=args.bias)
+    layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=True)
     layer.init(args)
     return layer
 
@@ -39,7 +39,7 @@ class ConvMerge(nn.Conv2d):
     def init(self, args):
         self.args = args
         set_seed(self.args.weight_seed)
-        _init_weight(args, self.weight)
+        #_init_weight(args, self.weight)
         # self.args.weight_seed+=1
 
         print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
@@ -89,11 +89,9 @@ class LinearMerge(nn.Linear):
 
     def init(self, args):
         self.args = args
-        set_seed(self.args.weight_seed)
-        _init_weight(args, self.weight)
-        print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
-        if self.args.bias:
-            print(self.bias.size())
+        #set_seed(self.args.weight_seed)
+        #_init_weight(args, self.weight)
+        #print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
         # self.args.weight_seed+=1
 
     def forward(self, x):
