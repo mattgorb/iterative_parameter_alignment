@@ -430,13 +430,13 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 for j in range(100):
                     opt.zero_grad()
 
-                    #_,align_out = global_model(torch.randn(50,28,28).to(device))
-                    #align_out.backward()
-                    #print(align_out)
+                    _,align_out = global_model(torch.randn(50,28,28).to(device))
+                    align_out.backward()
+                    print(align_out)
 
                     print('here')
-                    print(client_models[0].fc3.weight[0][:10])
-                    loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
+                    print(global_model.fc3.weight_align[0][:10])
+                    '''loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
                             global_model.fc1.weight - client_models[1].fc1.weight).abs().pow(1.5))
                     loss += torch.sum((global_model.fc1.bias - client_models[0].fc1.bias).abs() + (
                             global_model.fc1.bias - client_models[1].fc1.bias).abs().pow(1.5).pow(1.5))
@@ -451,8 +451,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                             global_model.fc3.weight - client_models[1].fc3.weight).abs().pow(1.5))
                     loss += torch.sum((global_model.fc3.bias - client_models[0].fc3.bias).abs().pow(1.5) + (
                             global_model.fc3.bias - client_models[1].fc3.bias).abs().pow(1.5))
-
-                    loss.backward()
+                    loss.backward()'''
 
                     opt.step()
                 test(global_model, device, test_loader)
