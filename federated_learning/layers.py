@@ -17,15 +17,15 @@ import sys
 #from utils.model_utils import set_seed, _init_weight
 
 
-def linear_init(in_dim, out_dim,  args=None, ):
+def linear_init(in_dim, out_dim, device, args=None,):
     layer = LinearMerge(in_dim, out_dim, bias=True)
-    layer.init(args)
+    layer.init(args,device)
     return layer
 
 
-def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, args=None, ):
+def conv_init(in_channels, out_channels, kernel_size=3, stride=1,padding=1, device=None, args=None, ):
     layer = ConvMerge(in_channels, out_channels, kernel_size, stride=stride,padding=padding, bias=True)
-    layer.init(args)
+    layer.init(args,device)
     return layer
 
 class ConvMerge(nn.Conv2d):
@@ -36,19 +36,20 @@ class ConvMerge(nn.Conv2d):
         self.train_weight_list=[]
 
 
-    def init(self, args):
+    def init(self, args,device):
         self.args = args
+        self.device=device
         set_seed(self.args.weight_seed)
         #_init_weight(args, self.weight)
         # self.args.weight_seed+=1
 
-        print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
+        print(f'Conv layer info: Weight size: {self.weight.size()} Bias: {self.bias}, Kernel Size:{self.kernel_size}, Stride: {self.stride}, Padding: {self.padding}')
 
     def forward(self, x):
         x = F.conv2d(
             x, self.weight, self.bias, stride=self.stride, padding=self.padding, dilation=self.dilation, groups=self.groups
         )
-        weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()#
+        weights_diff = torch.tensor(0).float().to(self.device)#.cuda()#
         if len(self.weight_align_list) > 0:
             for wa in range(len(self.weight_align_list)):
                 if self.args.align_loss == 'ae':
@@ -87,8 +88,9 @@ class LinearMerge(nn.Linear):
         self.bias_align_list=nn.ParameterList([])
         self.train_weight_list=[]
 
-    def init(self, args):
+    def init(self, args,device):
         self.args = args
+        self.device=device
         #set_seed(self.args.weight_seed)
         #_init_weight(args, self.weight)
         #print(f'Linear layer info: Weight size: {self.weight.size()} Bias: {self.args.bias}')
@@ -96,7 +98,7 @@ class LinearMerge(nn.Linear):
 
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
-        weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()
+        weights_diff = torch.tensor(0).float().to(self.device)#.cuda()
         if len(self.weight_align_list) > 0:
             for wa in range(len(self.weight_align_list)):
                 if self.args.align_loss == 'ae':

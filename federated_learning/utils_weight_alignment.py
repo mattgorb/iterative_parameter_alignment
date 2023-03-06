@@ -23,9 +23,10 @@ max_norm = 10
 
 
 class Global_Model(nn.Module):
-    def __init__(self, name, args=True):
+    def __init__(self, name,device, args=True):
         super(Global_Model, self).__init__()
         self.name = name
+        self.device=device
         if self.name == 'Linear':
             [self.n_dim, self.n_out] = args
             self.fc = nn.Linear(self.n_dim, self.n_out)
@@ -35,9 +36,9 @@ class Global_Model(nn.Module):
             #self.fc1 = nn.Linear(1 * 28 * 28, 200)
             #self.fc2 = nn.Linear(200, 200)
             #self.fc3 = nn.Linear(200, self.n_cls)
-            self.fc1 = linear_init(28 * 28, 200,  )
-            self.fc2 = linear_init(200, 200,  )
-            self.fc3 = linear_init(200, 10,   )
+            self.fc1 = linear_init(28 * 28, 200, self.device )
+            self.fc2 = linear_init(200, 200, self.device )
+            self.fc3 = linear_init(200, 10, self.device  )
 
         if self.name == 'emnist_NN':
             self.n_cls = 10
@@ -412,7 +413,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 model_i=set_client_from_params(model_func(), clnt_params_list[i])
 
                 client_models.append(model_i)
-            global_model=Global_Model(name='mnist_2NN').to(device)
+            global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
 
             set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
