@@ -222,7 +222,7 @@ def main():
                     model_merge.fc2.bias - model2.fc2.bias).abs().pow(1.5))
 
 
-                print(model1.fc1.weight[0][:10])
+                print(model1.fc2.weight[0][:10])
 
                 loss.backward()
                 trainer1.optimizer.step()
