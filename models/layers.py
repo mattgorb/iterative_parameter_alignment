@@ -99,8 +99,7 @@ class LinearMerge(nn.Linear):
     def forward(self, x):
         x = F.linear(x, self.weight, self.bias)
         weights_diff = torch.tensor(0).float().to(self.args.device)#.cuda()
-        print(len(self.weight_align_list))
-        sys.exit()
+
         if len(self.weight_align_list) > 0:
             for wa in range(len(self.weight_align_list)):
                 if self.args.align_loss == 'ae':
