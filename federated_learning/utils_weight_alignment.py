@@ -151,6 +151,10 @@ def set_weight_align_param(models, global_model,train_weight_list):
     train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
     print(train_weight_list)
     print('Aligning weights...')
+    print(global_model)
+
+    print("HEREe")
+    print(models)
     models=[global_model]+models
     sys.exit()
     module_list=[model.named_modules() for model in models]
