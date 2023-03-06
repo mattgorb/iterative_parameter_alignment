@@ -112,4 +112,3 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                                                                                     print_per=print_per,weight_decay=weight_decay, model_func=model_func, init_model=init_model,
                                                                                                     sch_step=1,sch_gamma=1,save_period=save_period,suffix=suffix, trial=True,
                                                                                                     data_path=data_path,lr_decay_per_round=lr_decay_per_round)
-sys.exit()
