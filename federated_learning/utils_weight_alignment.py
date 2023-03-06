@@ -273,7 +273,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
     cent_y = np.concatenate(clnt_y, axis=0)
 
     transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
-    dataset2 = datasets.MNIST('../data', train=False,  transform=transform)
+    dataset2 = torchvision.datasets.MNIST('../data', train=False,  transform=transform)
     test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     weight_list = np.asarray([len(clnt_y[i]) for i in range(n_clnt)])
