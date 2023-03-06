@@ -415,9 +415,9 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
             client_models=[]
             for i in range(len(clnt_params_list[selected_clnts])):
-                model_i=set_client_from_params(model_func(), clnt_params_list[i])
+                model_i=set_client_from_params(model_func(), clnt_params_list[i]).to(device)
                 test(model_i, device, test_loader, client=True)
-                client_models.append(model_i.to(device))
+                client_models.append(model_i)
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
 
