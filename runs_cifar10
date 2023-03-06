@@ -24,4 +24,4 @@ nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 &
 
 
 
-python -u main.py --config=configs/cifar10_merge_2.yaml
+python -u main.py --config=configs/mnist_2_iid.yaml
