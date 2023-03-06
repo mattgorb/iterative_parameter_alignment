@@ -243,11 +243,12 @@ def test(model, device, test_loader):
     model.eval()
     test_loss = 0
     correct = 0
+    criterion=nn.CrossEntropyLoss(reduction='sum')
     with torch.no_grad():
         for data, target in test_loader:
             data, target = data.to(device), target.to(device)
             output,_ = model(data)
-            test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
+            test_loss += criterion(output, target,).item()  # sum up batch loss
             pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
             correct += pred.eq(target.view_as(pred)).sum().item()
 
@@ -421,6 +422,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
             for i in range(10):
+                model.train()
                 for j in range(100):
                     opt.zero_grad()
                     opt.zero_grad()
