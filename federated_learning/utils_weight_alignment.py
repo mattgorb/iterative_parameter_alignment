@@ -24,7 +24,7 @@ max_norm = 10
 
 class GlobalModel(nn.Module):
     def __init__(self, name, args=True):
-        super(client_model, self).__init__()
+        super(GlobalModel, self).__init__()
         self.name = name
         if self.name == 'Linear':
             [self.n_dim, self.n_out] = args
