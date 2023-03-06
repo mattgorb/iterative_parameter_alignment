@@ -21,3 +21,7 @@ nohup python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5 > ~/iwa/3.txt
 nohup python -u example_code_mnist.py > ~/iwa/sgd_split.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/sgd_dir_p3.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 &
+
+
+
+python -u main.py --config=configs/cifar10_merge_2.yaml
