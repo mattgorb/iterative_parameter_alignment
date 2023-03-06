@@ -417,6 +417,8 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             for i in range(len(clnt_params_list[selected_clnts])):
                 model_i=set_client_from_params(model_func(), clnt_params_list[i]).to(device)
                 test(model_i, device, test_loader, client=True)
+                print(model_i.training)
+                model_i.eval()
                 client_models.append(model_i)
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
@@ -426,7 +428,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
             for i in range(10):
                 global_model.train()
-                for j in range(25):
+                for j in range(5):
                     opt.zero_grad()
 
                     _,align_out = global_model(torch.randn(50,28,28).to(device))
