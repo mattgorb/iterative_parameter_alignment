@@ -204,10 +204,11 @@ def main():
         model2.train()
 
         for i in range(5):
-            for _ in range(500):
+            for j in range(500):
                 model_merge.train()
                 optim_merge.zero_grad()
-
+                trainer1.optimizer.zero_grad()
+                trainer2.optimizer.zero_grad()
 
                 #absolute weight
                 loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1.5) + (
@@ -227,6 +228,9 @@ def main():
                 trainer1.optimizer.step()
                 trainer2.optimizer.step()
                 optim_merge.step()
+
+                if j>3:
+                    sys.exit()
 
             model_merge.eval()
             test(model_merge, device, test_dataset)
