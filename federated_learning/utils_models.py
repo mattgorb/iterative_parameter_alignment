@@ -1,8 +1,8 @@
 from utils_libs import *
 import torchvision.models as models
-#from models.layers import *
+from models.layers import *
 
-'''
+
 class global_model(nn.Module):
     def __init__(self, name, args=True):
         super(client_model, self).__init__()
@@ -124,20 +124,8 @@ class global_model(nn.Module):
             x = F.relu(self.fc1(x))
             x = F.relu(self.fc2(x))
             x = self.fc3(x)
-
-        if self.name == 'Resnet18':
-            x = self.model(x)
-
-        if self.name == 'shakes_LSTM':
-            x = self.embedding(x)
-            x = x.permute(1, 0, 2)  # lstm accepts in this style
-            output, (h_, c_) = self.stacked_LSTM(x)
-            # Choose last hidden layer
-            last_hidden = output[-1, :, :]
-            x = self.fc(last_hidden)
-
         return x
-'''
+
 
 class client_model(nn.Module):
     def __init__(self, name, args=True):
