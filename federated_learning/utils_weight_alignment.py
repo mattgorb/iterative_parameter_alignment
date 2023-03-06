@@ -163,8 +163,7 @@ def set_weight_align_param(models, global_model,train_weight_list):
             for module_i in range(1,len(named_layer_modules)):
                 named_layer_modules[0][1].weight_align_list.append(nn.Parameter(named_layer_modules[module_i][1].weight, requires_grad=True))
                 named_layer_modules[0][1].train_weight_list.append(train_weight_list[module_i])
-                if args.bias:
-                    named_layer_modules[0][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_i][1].bias, requires_grad=True))
+                named_layer_modules[0][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_i][1].bias, requires_grad=True))
 
                 print(f'Layer {named_layer_modules[module_i][0]}: Added models to global model')
 
