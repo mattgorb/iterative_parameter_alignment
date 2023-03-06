@@ -200,8 +200,8 @@ def main():
         trainer2.fit(log_output=True)
 
 
-        model1.eval()
-        model2.eval()
+        model1.train()
+        model2.train()
 
         for i in range(5):
             for _ in range(500):
