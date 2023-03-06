@@ -428,11 +428,11 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
             for i in range(10):
                 global_model.train()
-                for j in range(5):
+                for j in range(50):
                     opt.zero_grad()
 
                     _,align_out = global_model(torch.randn(50,28,28).to(device))
-                    print(align_out)
+                    #print(align_out)
                     align_out.backward()
                     opt.step()
                 test(global_model, device, test_loader)
