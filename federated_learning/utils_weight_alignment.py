@@ -8,6 +8,7 @@ from utils_libs import *
 from utils_dataset import *
 from utils_models import *
 from utils_general import get_mdl_params, set_client_from_params, get_acc_loss
+from layers import LinearMerge, ConvMerge
 
 # Global parameters
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -19,6 +20,148 @@ import time
 
 max_norm = 10
 
+
+
+class global_model(nn.Module):
+    def __init__(self, name, args=True):
+        super(client_model, self).__init__()
+        self.name = name
+        if self.name == 'Linear':
+            [self.n_dim, self.n_out] = args
+            self.fc = nn.Linear(self.n_dim, self.n_out)
+
+        if self.name == 'mnist_2NN':
+            self.n_cls = 10
+            #self.fc1 = nn.Linear(1 * 28 * 28, 200)
+            #self.fc2 = nn.Linear(200, 200)
+            #self.fc3 = nn.Linear(200, self.n_cls)
+            self.fc1 = linear_init(28 * 28, 200, args=self.args, )
+            self.fc2 = linear_init(200, 200, args=self.args, )
+            self.fc3 = linear_init(200, 10,  args=self.args, )
+
+        if self.name == 'emnist_NN':
+            self.n_cls = 10
+            self.fc1 = nn.Linear(1 * 28 * 28, 100)
+            self.fc2 = nn.Linear(100, 100)
+            self.fc3 = nn.Linear(100, self.n_cls)
+
+        if self.name == 'cifar10_LeNet':
+            self.n_cls = 10
+            self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=5)
+            self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5)
+            self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.fc1 = nn.Linear(64 * 5 * 5, 384)
+            self.fc2 = nn.Linear(384, 192)
+            self.fc3 = nn.Linear(192, self.n_cls)
+
+        if self.name == 'cifar100_LeNet':
+            self.n_cls = 100
+            self.conv1 = nn.Conv2d(in_channels=3, out_channels=64, kernel_size=5)
+            self.conv2 = nn.Conv2d(in_channels=64, out_channels=64, kernel_size=5)
+            self.pool = nn.MaxPool2d(kernel_size=2, stride=2)
+            self.fc1 = nn.Linear(64 * 5 * 5, 384)
+            self.fc2 = nn.Linear(384, 192)
+            self.fc3 = nn.Linear(192, self.n_cls)
+
+        if self.name == 'Resnet18':
+            resnet18 = models.resnet18()
+            resnet18.fc = nn.Linear(512, 10)
+
+            # Change BN to GN
+            resnet18.bn1 = nn.GroupNorm(num_groups=2, num_channels=64)
+
+            resnet18.layer1[0].bn1 = nn.GroupNorm(num_groups=2, num_channels=64)
+            resnet18.layer1[0].bn2 = nn.GroupNorm(num_groups=2, num_channels=64)
+            resnet18.layer1[1].bn1 = nn.GroupNorm(num_groups=2, num_channels=64)
+            resnet18.layer1[1].bn2 = nn.GroupNorm(num_groups=2, num_channels=64)
+
+            resnet18.layer2[0].bn1 = nn.GroupNorm(num_groups=2, num_channels=128)
+            resnet18.layer2[0].bn2 = nn.GroupNorm(num_groups=2, num_channels=128)
+            resnet18.layer2[0].downsample[1] = nn.GroupNorm(num_groups=2, num_channels=128)
+            resnet18.layer2[1].bn1 = nn.GroupNorm(num_groups=2, num_channels=128)
+            resnet18.layer2[1].bn2 = nn.GroupNorm(num_groups=2, num_channels=128)
+
+            resnet18.layer3[0].bn1 = nn.GroupNorm(num_groups=2, num_channels=256)
+            resnet18.layer3[0].bn2 = nn.GroupNorm(num_groups=2, num_channels=256)
+            resnet18.layer3[0].downsample[1] = nn.GroupNorm(num_groups=2, num_channels=256)
+            resnet18.layer3[1].bn1 = nn.GroupNorm(num_groups=2, num_channels=256)
+            resnet18.layer3[1].bn2 = nn.GroupNorm(num_groups=2, num_channels=256)
+
+            resnet18.layer4[0].bn1 = nn.GroupNorm(num_groups=2, num_channels=512)
+            resnet18.layer4[0].bn2 = nn.GroupNorm(num_groups=2, num_channels=512)
+            resnet18.layer4[0].downsample[1] = nn.GroupNorm(num_groups=2, num_channels=512)
+            resnet18.layer4[1].bn1 = nn.GroupNorm(num_groups=2, num_channels=512)
+            resnet18.layer4[1].bn2 = nn.GroupNorm(num_groups=2, num_channels=512)
+
+            assert len(dict(resnet18.named_parameters()).keys()) == len(
+                resnet18.state_dict().keys()), 'More BN layers are there...'
+
+            self.model = resnet18
+
+        if self.name == 'shakes_LSTM':
+            embedding_dim = 8
+            hidden_size = 100
+            num_LSTM = 2
+            input_length = 80
+            self.n_cls = 80
+
+            self.embedding = nn.Embedding(input_length, embedding_dim)
+            self.stacked_LSTM = nn.LSTM(input_size=embedding_dim, hidden_size=hidden_size, num_layers=num_LSTM)
+            self.fc = nn.Linear(hidden_size, self.n_cls)
+
+    def forward(self, x):
+        if self.name == 'Linear':
+            x = self.fc(x)
+
+        if self.name == 'mnist_2NN':
+            x, wa1 = self.fc1(x.view(-1, 28 * 28))
+            x = F.relu(x)
+            x, wa2 = self.fc2(x)
+            x = F.relu(x)
+            x, wa3 = self.fc3(x)
+            score_diff = wa1 + wa2 + wa3
+            return x, score_diff
+
+        if self.name == 'emnist_NN':
+            x = x.view(-1, 1 * 28 * 28)
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+
+        if self.name == 'cifar10_LeNet':
+            x = self.pool(F.relu(self.conv1(x)))
+            x = self.pool(F.relu(self.conv2(x)))
+            x = x.view(-1, 64 * 5 * 5)
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+
+        if self.name == 'cifar100_LeNet':
+            x = self.pool(F.relu(self.conv1(x)))
+            x = self.pool(F.relu(self.conv2(x)))
+            x = x.view(-1, 64 * 5 * 5)
+            x = F.relu(self.fc1(x))
+            x = F.relu(self.fc2(x))
+            x = self.fc3(x)
+        return x
+
+
+def set_weight_align_param(models, global_model,train_weight_list):
+    train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
+
+    print('Aligning weights...')
+    module_list=[model.named_modules() for model in [global_model]+models]
+    for named_layer_modules in zip(*module_list):
+        if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
+            continue
+        if hasattr(named_layer_modules[0][1], "weight"):
+            for module_i in range(1,len(named_layer_modules)):
+                named_layer_modules[0][1].weight_align_list.append(nn.Parameter(named_layer_modules[module_i][1].weight, requires_grad=True))
+                named_layer_modules[0][1].train_weight_list.append(train_weight_list[module_i])
+                if args.bias:
+                    named_layer_modules[0][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_i][1].bias, requires_grad=True))
+
+                print(f'Layer {named_layer_modules[module_i][0]}: Added models to global model')
 
 
 
@@ -90,6 +233,24 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
 
     return model
 
+def test(model, device, test_loader):
+    model.eval()
+    test_loss = 0
+    correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+            test_loss += F.nll_loss(output, target, reduction='sum').item()  # sum up batch loss
+            pred = output.argmax(dim=1, keepdim=True)  # get the index of the max log-probability
+            correct += pred.eq(target.view_as(pred)).sum().item()
+
+    test_loss /= len(test_loader.dataset)
+
+    print('\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+        test_loss, correct, len(test_loader.dataset),
+        100. * correct / len(test_loader.dataset)))
+
 
 ### Methods
 def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
@@ -110,6 +271,10 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
     cent_x = np.concatenate(clnt_x, axis=0)
     cent_y = np.concatenate(clnt_y, axis=0)
+
+    transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))])
+    dataset2 = datasets.MNIST('../data', train=False,  transform=transform)
+    test_loader = torch.utils.data.DataLoader(dataset2, **test_kwargs)
 
     weight_list = np.asarray([len(clnt_y[i]) for i in range(n_clnt)])
     weight_list = weight_list.reshape((n_clnt, 1))
@@ -237,13 +402,25 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
             # Scale with weights
             print("NEW HERE")
-            print(weight_list)
-            print(len(clnt_params_list[selected_clnts]))
+
+            client_models=[]
             for i in range(len(clnt_params_list[selected_clnts])):
                 model_i=set_client_from_params(model_func(), clnt_params_list[i])
-                print(model_i)
+
+                client_models.append(model_i)
             global_model=model_func()
-            print(global_model)
+            set_weight_align_param(models, global_model, weight_list[selected_clnts])
+
+            opt=optim.Adam(self.model.parameters(), lr=self.args.lr)
+            for i in range(10):
+                for j in range(100):
+                    opt.zero_grad()
+                    data, target = data.to(device), target.to(device)
+                    self.optimizer.zero_grad()
+                    _,align_out = global_model(torch.randn(50,28,28))
+                    align_out.backward()
+                    opt.step()
+                test(global_model, device, test_loader)
             sys.exit()
 
             avg_model = set_client_from_params(model_func(), np.sum(
