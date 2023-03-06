@@ -150,7 +150,8 @@ def set_weight_align_param(models, global_model,train_weight_list):
     train_weight_list=[i/sum(train_weight_list) for i in train_weight_list]
 
     print('Aligning weights...')
-    module_list=[model.named_modules() for model in [global_model]+models]
+    models=[global_model]+models
+    module_list=[model.named_modules() for model in models]
     for named_layer_modules in zip(*module_list):
         if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1])==ConvMerge:
             continue
