@@ -22,7 +22,7 @@ max_norm = 10
 
 
 
-class global_model(nn.Module):
+class GlobalModel(nn.Module):
     def __init__(self, name, args=True):
         super(client_model, self).__init__()
         self.name = name
@@ -411,7 +411,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 model_i=set_client_from_params(model_func(), clnt_params_list[i])
 
                 client_models.append(model_i)
-            global_model=global_model(name='mnist_2NN')
+            global_model=GlobalModel(name='mnist_2NN')
             set_weight_align_param(models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(self.model.parameters(), lr=self.args.lr)
