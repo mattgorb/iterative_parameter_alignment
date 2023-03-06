@@ -410,8 +410,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
                 clnt_params_list[clnt] = get_mdl_params([clnt_models[clnt]], n_par)[0]
 
-            # Scale with weights
-            print("NEW HERE")
+
 
             client_models=[]
             for i in range(len(clnt_params_list[selected_clnts])):
@@ -423,17 +422,35 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
 
-            set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
+            #set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
-            for i in range(10):
+            for i in range(5):
                 global_model.train()
-                for j in range(50):
+                for j in range(100):
                     opt.zero_grad()
 
-                    _,align_out = global_model(torch.randn(50,28,28).to(device))
+                    #_,align_out = global_model(torch.randn(50,28,28).to(device))
+                    #align_out.backward()
                     #print(align_out)
-                    align_out.backward()
+                    loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
+                            global_model.fc1.weight - client_models[1].fc1.weight).abs().pow(1.5))
+                    loss += torch.sum((global_model.fc1.bias - client_models[0].fc1.bias).abs() + (
+                            global_model.fc1.bias - client_models[1].fc1.bias).abs().pow(1.5).pow(1.5))
+
+                    loss += torch.sum((global_model.fc2.weight - client_models[0].fc2.weight).abs().pow(1.5) + (
+                            global_model.fc2.weight - client_models[1].fc2.weight).abs().pow(1.5))
+                    loss += torch.sum((global_model.fc2.bias - client_models[0].fc2.bias).abs().pow(1.5) + (
+                            global_model.fc2.bias - client_models[1].fc2.bias).abs().pow(1.5))
+
+
+                    loss += torch.sum((global_model.fc3.weight - client_models[0].fc3.weight).abs().pow(1.5) + (
+                            global_model.fc3.weight - client_models[1].fc3.weight).abs().pow(1.5))
+                    loss += torch.sum((global_model.fc3.bias - client_models[0].fc3.bias).abs().pow(1.5) + (
+                            global_model.fc3.bias - client_models[1].fc3.bias).abs().pow(1.5))
+
+                    loss.backward()
+
                     opt.step()
                 test(global_model, device, test_loader)
             sys.exit()
