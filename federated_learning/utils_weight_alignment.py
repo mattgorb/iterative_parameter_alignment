@@ -425,7 +425,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             #set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
-            for i in range(5):
+            for i in range(25):
                 global_model.train()
                 for j in range(100):
                     opt.zero_grad()
