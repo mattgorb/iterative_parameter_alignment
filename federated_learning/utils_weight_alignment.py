@@ -422,7 +422,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             global_model=Global_Model(name='mnist_2NN', device=device).to(device)
 
 
-            set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
+            #set_weight_align_param(client_models, global_model, weight_list[selected_clnts])
 
             opt=optim.Adam(global_model.parameters(), lr=1e-3)
             for i in range(5):
@@ -454,7 +454,9 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                     opt.step()
                 test(global_model, device, test_loader)
 
+
             global_model.eval()
+            #del global_model.fc1.weight_a
             avg_model = global_model
 
             all_model = global_model
