@@ -1,15 +1,15 @@
-dataset: CIFAR10
+dataset: MNIST
 weight_init: kaiming_normal
-model: LeNetCifar10
+model: MLP
 
-align_loss: pd
-#delta: 1.5
+align_loss: ae
+
 
 weight_align_factor: 1
 data_transform: True
-num_clients: 20
+num_clients: 100
 bias: True
-local_epochs: 5
+local_epochs: 1
 dataset_split: dirichlet
 dirichlet_alpha: 0.3
 batch_size: 50
