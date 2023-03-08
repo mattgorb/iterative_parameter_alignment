@@ -10,7 +10,7 @@ from torch.utils.tensorboard import SummaryWriter
 import time
 max_norm = 10
 # --- Evaluate a NN model
-def get_acc_loss(data_x, data_y, model, dataset_name, w_decay = None):
+def get_acc_loss(data_x, data_y, model, dataset_name, w_decay = None, weight_align=False):
     acc_overall = 0; loss_overall = 0;
     loss_fn = torch.nn.CrossEntropyLoss(reduction='sum')
     
@@ -25,7 +25,10 @@ def get_acc_loss(data_x, data_y, model, dataset_name, w_decay = None):
             batch_x, batch_y = tst_gen_iter.__next__()
             batch_x = batch_x.to(device)
             batch_y = batch_y.to(device)
-            y_pred = model(batch_x)
+            if weight_align:
+                y_pred,_ = model(batch_x)
+            else:
+                y_pred = model(batch_x)
             
             loss = loss_fn(y_pred, batch_y.reshape(-1).long())
 

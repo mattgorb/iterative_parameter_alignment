@@ -457,12 +457,10 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             global_model.eval()
             avg_model = global_model
 
-
-
             all_model = global_model
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y,
-                                             avg_model, data_obj.dataset, 0)
+                                             avg_model, data_obj.dataset, 0,weight_align=True)
             tst_perf_sel[i] = [loss_tst, acc_tst]
 
             print("**** Communication sel %3d, Test Accuracy: %.4f, Loss: %.4f"
@@ -470,14 +468,14 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y,
-                                             avg_model, data_obj.dataset, 0)
+                                             avg_model, data_obj.dataset, 0,weight_align=True)
             trn_perf_sel[i] = [loss_tst, acc_tst]
             print("**** Communication sel %3d, Cent Accuracy: %.4f, Loss: %.4f"
                   % (i + 1, acc_tst, loss_tst))
 
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y,
-                                             all_model, data_obj.dataset, 0)
+                                             all_model, data_obj.dataset, 0,weight_align=True)
             tst_perf_all[i] = [loss_tst, acc_tst]
 
             print("**** Communication all %3d, Test Accuracy: %.4f, Loss: %.4f"
@@ -485,7 +483,7 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
 
             ###
             loss_tst, acc_tst = get_acc_loss(cent_x, cent_y,
-                                             all_model, data_obj.dataset, 0)
+                                             all_model, data_obj.dataset, 0,weight_align=True)
             trn_perf_all[i] = [loss_tst, acc_tst]
             print("**** Communication all %3d, Cent Accuracy: %.4f, Loss: %.4f"
                   % (i + 1, acc_tst, loss_tst))
