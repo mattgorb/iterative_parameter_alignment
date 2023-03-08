@@ -430,16 +430,11 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                 for j in range(100):
                     opt.zero_grad()
 
-                    _,align_out = global_model(torch.randn(50,28,28).to(device))
-                    align_out.backward()
-                    print(align_out)
+                    #_,align_out = global_model(torch.randn(50,28,28).to(device))
+                    #align_out.backward()
+                    #print(align_out)
 
-                    print('here')
-
-
-                    print(global_model.fc3.weight_align_list)
-                    sys.exit()
-                    '''loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
+                    loss = torch.sum((global_model.fc1.weight - client_models[0].fc1.weight).abs().pow(1.5) + (
                             global_model.fc1.weight - client_models[1].fc1.weight).abs().pow(1.5))
                     loss += torch.sum((global_model.fc1.bias - client_models[0].fc1.bias).abs() + (
                             global_model.fc1.bias - client_models[1].fc1.bias).abs().pow(1.5).pow(1.5))
@@ -449,28 +444,22 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
                     loss += torch.sum((global_model.fc2.bias - client_models[0].fc2.bias).abs().pow(1.5) + (
                             global_model.fc2.bias - client_models[1].fc2.bias).abs().pow(1.5))
 
-
                     loss += torch.sum((global_model.fc3.weight - client_models[0].fc3.weight).abs().pow(1.5) + (
                             global_model.fc3.weight - client_models[1].fc3.weight).abs().pow(1.5))
                     loss += torch.sum((global_model.fc3.bias - client_models[0].fc3.bias).abs().pow(1.5) + (
                             global_model.fc3.bias - client_models[1].fc3.bias).abs().pow(1.5))
-                    loss.backward()'''
+
+                    loss.backward()
 
                     opt.step()
                 test(global_model, device, test_loader)
-            sys.exit()
 
-            avg_model = set_client_from_params(model_func(), np.sum(
-                clnt_params_list[selected_clnts] * weight_list[selected_clnts] / np.sum(weight_list[selected_clnts]),
-                axis=0))
+            global_model.eval()
+            avg_model = global_model
 
 
-            avg_model = set_client_from_params(model_func(), np.sum(
-                clnt_params_list[selected_clnts] * weight_list[selected_clnts] / np.sum(weight_list[selected_clnts]),
-                axis=0))
-            all_model = set_client_from_params(model_func(),
-                                               np.sum(clnt_params_list * weight_list / np.sum(weight_list), axis=0))
 
+            all_model = global_model
             ###
             loss_tst, acc_tst = get_acc_loss(data_obj.tst_x, data_obj.tst_y,
                                              avg_model, data_obj.dataset, 0)
