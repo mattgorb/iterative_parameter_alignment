@@ -491,9 +491,9 @@ def train_weight_alignment(data_obj, act_prob, learning_rate, batch_size, epoch,
             writer.add_scalars('Loss/train_wd',
                                {
                                    'Sel clients':
-                                       get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset, weight_decay)[0],
+                                       get_acc_loss(cent_x, cent_y, avg_model, data_obj.dataset, weight_decay,weight_align=True)[0],
                                    'All clients':
-                                       get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset, weight_decay)[0]
+                                       get_acc_loss(cent_x, cent_y, all_model, data_obj.dataset, weight_decay,weight_align=True)[0]
                                }, i
                                )
 
