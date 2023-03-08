@@ -135,5 +135,11 @@ def get_datasets(args):
 
         print(f'\tTest set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets)}')
 
-        return train_loaders, test_loader
+        weights=[]
+        dataset_len = len(datasets.CIFAR10(f'{args.base_dir}data', train=True,).targets)
+        for loader in train_loaders:
+            weights.append(len(loader.dataset.targets)/dataset_len)
+        print(weights)
+
+        return train_loaders, test_loader,weights
 
