@@ -21,11 +21,21 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #########
 
 
-n_client = 100
+#n_client = 20
 # Generate IID or Dirichlet distribution
 # IID
-rule='split_label'
-rule_arg=0.6
+#rule='split_label'
+#rule_arg=0.6
+
+
+
+
+rule='iid'
+rule_arg=0.3
+n_client = 20
+optim='SGD'
+
+
 data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg, unbalanced_sgm=0, data_path=data_path)
 # unbalanced
 #data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0.3, data_path=data_path)
@@ -40,12 +50,12 @@ model_name = 'cifar10_LeNet' # Model type
 ###
 # Common hyperparameters
 
-com_amount = 10000
+com_amount = 1000
 save_period = 200
 weight_decay = 1e-3
 batch_size = 50
-#act_prob = 1
-act_prob = 0.15
+act_prob = 1
+#act_prob = 0.15
 suffix = f'{model_name}_n_cli_{n_client}_rule_{rule}_rule_arg_{rule_arg}_{optim}'
 lr_decay_per_round = 0.998
 
