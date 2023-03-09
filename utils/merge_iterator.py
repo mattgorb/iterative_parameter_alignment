@@ -31,13 +31,22 @@ class Merge_Iterator:
 
         self.writer = SummaryWriter(f'{self.args.base_dir}Runs/{self.args.dataset}/'
                                     f'n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}'
-                                    f'_align_{self.args.align_loss}_delta_{self.args.delta}')
+                                    f'_align_{self.args.align_loss}_delta_{self.args.delta}_init_type_{self.args.weight_init}'
+                                    f'_same_init_{self.args.same_initialization}')
 
     def run(self):
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
 
         self.models=[model_selector(self.args) for i in range(self.num_clients)]
+        #if not self.args.same_initialization:
+            #self.args.weight_seed+=1
+            #print(f'Setting weight seed to {self.args.weight_seed}')
+
+
+
+
+
         '''self.models = [torch.nn.DataParallel(
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6]).to(self.device)
