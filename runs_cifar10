@@ -24,5 +24,6 @@ nohup python -u main.py --config=configs/mnist_100_dir_p3_ae.yaml --gpu=5 > ~/iw
 nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa/5.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_iid.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_dir_p3.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=5 > ~/iwa/6.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=5 > ~/iwa/7.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &

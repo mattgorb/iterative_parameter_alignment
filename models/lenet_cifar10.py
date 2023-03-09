@@ -16,7 +16,6 @@ class LeNetCifar10(nn.Module):
         self.bias=self.args.bias
 
         if self.weight_merge:
-            #fix this section
             self.conv1 = conv_init(3, 64,kernel_size=5, padding=0, args=self.args)
             self.conv2 = conv_init(64, 64, kernel_size=5,padding=0, args=self.args)
             self.pool = nn.MaxPool2d(kernel_size=2, stride=2,)
@@ -49,8 +48,6 @@ class LeNetCifar10(nn.Module):
             x, wd4 = self.fc2(x)
             x=F.relu(x)
             x,wd5 = self.fc3(x)
-
-
             wd=wd1+wd2+wd3+wd4+wd5
             return x, wd
         else:

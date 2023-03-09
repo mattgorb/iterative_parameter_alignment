@@ -16,7 +16,6 @@ def set_weight_align_param(models, args,train_weight_list):
                     if module_j==module_i:
                         continue
                     else:
-
                         named_layer_modules[module_i][1].weight_align_list.append(nn.Parameter(named_layer_modules[module_j][1].weight, requires_grad=True))
                         named_layer_modules[module_i][1].train_weight_list.append(train_weight_list[module_j])
                         if args.bias:
