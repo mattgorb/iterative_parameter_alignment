@@ -150,11 +150,13 @@ class Merge_Iterator:
         df.to_csv(
             f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_cli'
             f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
-            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
+            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
+                                    f'_same_init_{self.args.same_initialization}.csv')
 
         df = pd.DataFrame({'best_test_accuracy': self.best_test_accuracy,
                            'average_test_accuracy': self.average_test_accuracy, })
         df.to_csv(
             f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_cli'
             f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
-            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}.csv')
+            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
+                                    f'_same_init_{self.args.same_initialization}.csv')
