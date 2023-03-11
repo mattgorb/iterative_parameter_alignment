@@ -5,29 +5,28 @@ ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.col
 localhost:16006
 
 
-
-
-
-nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 --merge_iter=10 > ~/iwa/1.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=4 > ~/iwa/2.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5 > ~/iwa/3.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/sgd_split.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/sgd_dir_p3.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 --merge_iter=10 > ~/iwa/1.txt 2>&1 & -> DONE
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=4 > ~/iwa/2.txt 2>&1 & -> Epoch 86
+nohup python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5 > ~/iwa/3.txt 2>&1 & -> Epoch 2
+nohup python -u example_code_mnist.py > ~/iwa/sgd_split.txt 2>&1 & -> DONE
+nohup python -u example_code_mnist.py > ~/iwa/sgd_dir_p3.txt 2>&1 & -> DONE
+nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 & -> DONE
 
 #Check this one
 nohup python example_code_mnist_weight_alignment.py > ~/iwa/weight_alignment_split_label.txt 2>&1 &
 
 
 #Running:
-nohup python -u main.py --config=configs/mnist_100_dir_p3_ae.yaml --gpu=5 > ~/iwa/4.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa/5.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_100_dir_p3_ae.yaml --gpu=5 > ~/iwa/4.txt 2>&1 & -> 100+ Epochs
+nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa/5.txt 2>&1 & -> Epoch 15 80%
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_iid.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_dir_p3.txt 2>&1 &
 
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &
+#nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
+#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &
+#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=4 > ~/iwa/10.txt 2>&1 &
+
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae_default_init.yaml --gpu=7 > ~/iwa/8.txt 2>&1 &-> 77 epochs
+nohup python -u main.py --config=configs/mnist_20_dir_p3_se.yaml --gpu=6 > ~/iwa/9.txt 2>&1  & -> Epoch 34
 
 
-nohup python -u main.py --config=configs/mnist_20_dir_p3_ae_default_init.yaml --gpu=7 > ~/iwa/8.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p3_se.yaml --gpu=6 > ~/iwa/9.txt 2>&1 &
