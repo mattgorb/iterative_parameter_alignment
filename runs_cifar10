@@ -22,9 +22,9 @@ nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_iid.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_dir_p3.txt 2>&1 &
 
-#nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
-#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &
-#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=4 > ~/iwa/10.txt 2>&1 &
+#nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 & -> NO GOOD
+#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 & -> NO GOOD
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=4 > ~/iwa/10.txt 2>&1 &
 
 nohup python -u main.py --config=configs/mnist_20_dir_p3_ae_default_init.yaml --gpu=7 > ~/iwa/8.txt 2>&1 &-> 77 epochs
 nohup python -u main.py --config=configs/mnist_20_dir_p3_se.yaml --gpu=6 > ~/iwa/9.txt 2>&1  & -> Epoch 34

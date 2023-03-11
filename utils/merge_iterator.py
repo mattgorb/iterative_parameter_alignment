@@ -43,10 +43,6 @@ class Merge_Iterator:
             #self.args.weight_seed+=1
             #print(f'Setting weight seed to {self.args.weight_seed}')
 
-
-
-
-
         '''self.models = [torch.nn.DataParallel(
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6]).to(self.device)

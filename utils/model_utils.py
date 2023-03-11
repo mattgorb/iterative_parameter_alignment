@@ -7,10 +7,6 @@ import sys
 import numpy as np
 
 def model_selector(args):
-    '''
-    MLP, Conv2 for MNIST
-    Conv4 for CIFAR10
-    '''
     if args.model=='MLP':
         from models.mlp import MLP
         model = MLP(args, weight_merge=not args.baseline).to(args.device)
