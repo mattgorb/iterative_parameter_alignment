@@ -127,23 +127,17 @@ def get_datasets(args):
         weights=[]
         dataset_len = len(datasets.MNIST(f'{args.base_dir}data', train=True,).targets)
         for loader in train_loaders:
-            weights.append(len(loader.dataset.targets)/dataset_len)
+            #original balance
+            #weights.append(len(loader.dataset.targets)/dataset_len)
+
+
 
             cls_counter=collections.Counter(loader.dataset.targets.tolist())
             cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
             cls_cnt_ls_pct=[i/sum(cls_cnt_ls) for i in cls_cnt_ls]
-            #print(cls_cnt_ls_pct)
-            #print(cls_cnt_ls)
             #(n*√d-1)/(√d-1), n is l2 norm of class list
             s_uni = (1- (np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1))+1e-7
-            #s_uni=(torch.norm(torch.FloatTensor(cls_cnt_ls_pct))*torch.sqrt(torch.FloatTensor(10)-torch.FloatTensor(1)))\
-                  #/(torch.sqrt(torch.FloatTensor(10)-torch.FloatTensor(1)))
 
+            weights.append(s_uni)
 
-            #print(len(loader.dataset.targets)/dataset_len)
-            print(s_uni)
-            #print((len(loader.dataset.targets)/dataset_len)*s_uni)
-        print(weights)
-
-        sys.exit()
         return train_loaders, test_loader, weights
