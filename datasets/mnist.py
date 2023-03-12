@@ -140,8 +140,8 @@ def get_datasets(args):
                   #/(torch.sqrt(torch.FloatTensor(10)-torch.FloatTensor(1)))
 
 
-            print(len(loader.dataset.targets)/dataset_len)
-            print(s_uni)
+            #print(len(loader.dataset.targets)/dataset_len)
+            #print(s_uni)
             print((len(loader.dataset.targets)/dataset_len)*s_uni)
         print(weights)
 
