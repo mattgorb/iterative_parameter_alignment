@@ -129,9 +129,9 @@ def get_datasets(args):
         for loader in train_loaders:
             weights.append(len(loader.dataset.targets)/dataset_len)
 
-            x=collections.Counter(loader.dataset.targets.tolist())
-            print(x)
-            print(list(x.values()))
+            cls_counter=collections.Counter(loader.dataset.targets.tolist())
+            cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
+            print(cls_cnt_ls)
 
         sys.exit()
         print(weights)
