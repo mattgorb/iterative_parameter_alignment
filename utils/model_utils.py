@@ -17,7 +17,6 @@ def model_selector(args):
         from models.conv4 import Conv4
         model = Conv4(args, weight_merge=not args.baseline).to(args.device)
     elif args.model=='LeNetCifar10':
-
         from models.lenet_cifar10 import LeNetCifar10
         model = LeNetCifar10(args, weight_merge=not args.baseline).to(args.device)
     return model

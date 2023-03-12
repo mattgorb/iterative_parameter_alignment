@@ -34,7 +34,8 @@ nohup python -u main.py --config=configs/mnist_20_dir_p3_se_kaiming.yaml --gpu=6
 nohup python -u main.py --config=configs/mnist_20_dir_p3_se_default.yaml --gpu=6 > ~/iwa/11.txt 2>&1  & -> Epoch 63 (First weight type)
 
 
-nohup python -u main.py --config=configs/mnist_20_dir_p3_se_kaiming.yaml --gpu=6 > ~/iwa/12.txt 2>&1  & -> This is second run with this config with different weighting
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 & -> NO GOOD
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 & -> NO GOOD
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=2 > ~/iwa/10.txt 2>&1 & -> NO GOOD
+nohup python -u main.py --config=configs/mnist_20_dir_p3_se_kaiming.yaml --gpu=6 > ~/iwa/12.txt 2>&1  &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=2 > ~/iwa/10.txt 2>&1 &
+
