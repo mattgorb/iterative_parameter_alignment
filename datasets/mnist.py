@@ -135,7 +135,7 @@ def get_datasets(args):
             print(cls_cnt_ls_pct)
 
             #(n*√d-1)/(√d-1), n is l2 norm of class list
-            s_uni =(np.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1)
+            s_uni =(np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1)
             #s_uni=(torch.norm(torch.FloatTensor(cls_cnt_ls_pct))*torch.sqrt(torch.FloatTensor(10)-torch.FloatTensor(1)))\
                   #/(torch.sqrt(torch.FloatTensor(10)-torch.FloatTensor(1)))
             print(s_uni)
