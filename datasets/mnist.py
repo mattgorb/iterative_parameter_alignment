@@ -141,8 +141,8 @@ def get_datasets(args):
 
 
             #print(len(loader.dataset.targets)/dataset_len)
-            #print(s_uni)
-            print((len(loader.dataset.targets)/dataset_len)*s_uni)
+            print(s_uni)
+            #print((len(loader.dataset.targets)/dataset_len)*s_uni)
         print(weights)
 
         sys.exit()
