@@ -131,10 +131,12 @@ def get_datasets(args):
 
             cls_counter=collections.Counter(loader.dataset.targets.tolist())
             cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
-            print(cls_cnt_ls)
             cls_cnt_ls_pct=[i/sum(cls_cnt_ls) for i in cls_cnt_ls]
             print(cls_cnt_ls_pct)
 
+            #(n*√d-1)/(√d-1), n is l2 norm of class list
+            s_uni=(torch.norm(torch.tensor(cls_cnt_ls_pct))*torch.sqrt(torch.tensor(10)-1))/(torch.sqrt(torch.tensor(10)-1))
+            print(s_uni)
         print(weights)
 
         sys.exit()
