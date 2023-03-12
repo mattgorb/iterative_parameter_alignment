@@ -7,10 +7,8 @@ from models.layers import *
 
 class LeNetCifar10(nn.Module):
     def __init__(
-        self,  args=None, weight_merge=False ) -> None:
+        self,  args=None, weight_merge=False) -> None:
         super().__init__()
-
-
         self.args=args
         self.weight_merge=weight_merge
         self.bias=self.args.bias
