@@ -132,7 +132,10 @@ def get_datasets(args):
             cls_counter=collections.Counter(loader.dataset.targets.tolist())
             cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
             print(cls_cnt_ls)
+            cls_cnt_ls_pct=[i/sum(cls_cnt_ls) for i in cls_cnt_ls]
+            print(cls_cnt_ls_pct)
+
+        print(weights)
 
         sys.exit()
-        print(weights)
         return train_loaders, test_loader, weights
