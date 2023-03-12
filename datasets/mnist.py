@@ -139,5 +139,10 @@ def get_datasets(args):
             s_uni = (1- (np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1))+1e-7
 
             weights.append(s_uni)
+        print(weights)
 
+
+        weights=[i/sum(weights) for i in weights]
+
+        print(weights)
         return train_loaders, test_loader, weights
