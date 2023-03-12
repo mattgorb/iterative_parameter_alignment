@@ -131,7 +131,7 @@ def get_datasets(args):
 
             x=collections.Counter(loader.dataset.targets.tolist())
             print(x)
-            print(x.values())
+            print(x.values().tolist())
 
         sys.exit()
         print(weights)
