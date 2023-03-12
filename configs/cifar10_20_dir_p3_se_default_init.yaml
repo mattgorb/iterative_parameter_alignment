@@ -6,7 +6,7 @@ weight_align_factor: 1
 data_transform: True
 num_clients: 20
 bias: True
-local_epochs: 1
+local_epochs: 5
 dataset_split: dirichlet
 dirichlet_alpha: 0.3
 batch_size: 32
