@@ -138,7 +138,8 @@ def get_datasets(args):
             #(n*√d-1)/(√d-1), n is l2 norm of class list
             s_uni = (1- (np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1))+1e-7
 
-            weights.append(s_uni)
+            weights.append(s_uni*len(loader.dataset.targets))
+
         print(weights)
 
 
