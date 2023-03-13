@@ -30,7 +30,7 @@ class Merge_Iterator:
         self.average_test_accuracy=[]
 
         self.writer = SummaryWriter(f'{self.args.base_dir}Runs/{self.args.dataset}/'
-                                    f'n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}'
+                                    f'model_{self.args.model}_n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}'
                                     f'_align_{self.args.align_loss}_delta_{self.args.delta}_init_type_{self.args.weight_init}'
                                     f'_same_init_{self.args.same_initialization}')
 
@@ -144,7 +144,7 @@ class Merge_Iterator:
                            'test_losses': self.test_losses,
                            'test_accuracy_list': self.test_accuracy_list, })
         df.to_csv(
-            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_cli'
+            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_model_{self.args.model}_cli'
             f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
             f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
                                     f'_same_init_{self.args.same_initialization}.csv')
@@ -152,7 +152,7 @@ class Merge_Iterator:
         df = pd.DataFrame({'best_test_accuracy': self.best_test_accuracy,
                            'average_test_accuracy': self.average_test_accuracy, })
         df.to_csv(
-            f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_cli'
+            f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_model_{self.args.model}_cli'
             f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
             f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
                                     f'_same_init_{self.args.same_initialization}.csv')
