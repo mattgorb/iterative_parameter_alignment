@@ -1,0 +1,13 @@
+dataset: CIFAR10
+weight_init: kaiming_normal
+model: LeNetCifar10
+align_loss: ae
+weight_align_factor: 25
+data_transform: True
+num_clients: 20
+bias: True
+local_epochs: 5
+dataset_split: dirichlet
+dirichlet_alpha: 0.3
+batch_size: 50
+merge_iter: 1000
