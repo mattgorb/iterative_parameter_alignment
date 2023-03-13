@@ -47,4 +47,4 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4.yaml --gpu=3
 
 nohup python -u main.py --config=configs/mnist_2_split_label_se.yaml --gpu=6 > ~/iwa/15.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_2_split_label.yaml --gpu=6 > ~/iwa/16.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/17.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=2 > ~/iwa/17.txt 2>&1 &
