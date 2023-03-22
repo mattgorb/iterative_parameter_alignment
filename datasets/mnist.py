@@ -132,18 +132,12 @@ def get_datasets(args):
 
 
 
-            cls_counter=collections.Counter(loader.dataset.targets.tolist())
-            cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
-            cls_cnt_ls_pct=[i/sum(cls_cnt_ls) for i in cls_cnt_ls]
+            #cls_counter=collections.Counter(loader.dataset.targets.tolist())
+            #cls_cnt_ls=list(cls_counter.values())+[0 for i in range(10-len(list(cls_counter.values())))]
+            #cls_cnt_ls_pct=[i/sum(cls_cnt_ls) for i in cls_cnt_ls]
+
             #(n*√d-1)/(√d-1), n is l2 norm of class list
-            s_uni = (1- (np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1))+1e-7
-
-            #weights.append(s_uni*len(loader.dataset.targets))
-
-        #print(weights)
-
-
-        #weights=[i/sum(weights) for i in weights]
+            #s_uni = (1- (np.linalg.norm(cls_cnt_ls_pct)*np.sqrt(10)-1)/(np.sqrt(10)-1))+1e-7
 
         print(weights)
         return train_loaders, test_loader, weights
