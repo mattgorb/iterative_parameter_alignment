@@ -45,7 +45,7 @@ data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule=rul
 # Dirichlet (0.3)
 # data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.3, data_path=data_path)
 
-model_name = 'cifar10_LeNet' # Model type
+model_name = 'cifar10_Conv4' # Model type
 
 ###
 # Common hyperparameters
