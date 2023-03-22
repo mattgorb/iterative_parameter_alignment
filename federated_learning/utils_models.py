@@ -39,7 +39,9 @@ class client_model(nn.Module):
             self.fc1=nn.Linear(32*32*8, 256, )
             self.fc2=nn.Linear(256, 256, )
             self.fc3=nn.Linear(256, 10, )
-            
+            self.max_pool = nn.MaxPool2d((2, 2))
+            self.relu = nn.ReLU(True)
+
         if self.name == 'cifar100_LeNet':
             self.n_cls = 100
             self.conv1 = nn.Conv2d(in_channels=3, out_channels=64 , kernel_size=5)
@@ -122,22 +124,22 @@ class client_model(nn.Module):
 
         if self.name == 'cifar10_Conv4':
             x=self.conv1(x)
-            x=self.relu(x)
+            x=F.relu(x)
             x=self.conv2(x)
-            x=self.relu(x)
+            x=F.relu(x)
             x=self.max_pool(x)
             x=self.conv3(x)
-            x=self.relu(x)
+            x=F.relu(x)
             x=self.conv4(x)
-            x=self.relu(x)
+            x=F.relu(x)
 
             x=self.max_pool(x)
             x = x.view(x.size(0), 8192)
             x = self.fc1(x)
 
-            x = self.relu(x)
+            x = F.relu(x)
             x = self.fc2(x)
-            x = self.relu(x)
+            x = F.relu(x)
             x = self.fc3(x)
             return x
             

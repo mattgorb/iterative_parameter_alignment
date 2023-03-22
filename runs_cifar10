@@ -50,3 +50,7 @@ nohup python -u main.py --config=configs/cifar10_2_split_label.yaml --gpu=6 > ~/
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_default_init.yaml --gpu=3 > ~/iwa/14.txt 2>&1 &
+
+
+
+nohup python -u example_code_cifar10.py > ~/iwa/cifar10_fl_conv4.txt 2>&1 &
