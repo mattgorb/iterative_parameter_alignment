@@ -1,5 +1,5 @@
 dataset: CIFAR10
-weight_init: default
+weight_init: kaiming_normal
 model: Conv4
 align_loss: ae
 weight_align_factor: 1
