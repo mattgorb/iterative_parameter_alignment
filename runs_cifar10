@@ -55,6 +55,7 @@ cifar10_20_dir_p3_ae_conv4_kaiming_init.yml ~/iwa/14.txt 2>&1 & -> this is reall
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init.yaml --gpu=3 > ~/iwa/18.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_default_init.yaml --gpu=3 > ~/iwa/19.txt 2>&1 & -> this is really kaiming normal init
-
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init.yaml --gpu=2 > ~/iwa/18.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_default_init.yaml --gpu=3 > ~/iwa/19.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=4 > ~/iwa/20.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --gpu=2 > ~/iwa/21.txt 2>&1 &
