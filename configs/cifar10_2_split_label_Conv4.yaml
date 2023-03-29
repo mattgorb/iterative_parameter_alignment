@@ -1,6 +1,6 @@
 dataset: CIFAR10
 weight_init: kaiming_normal
-model: LeNetCifar10
+model: Conv4
 
 align_loss: ae
 
