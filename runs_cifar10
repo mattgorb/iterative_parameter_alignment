@@ -55,9 +55,19 @@ cifar10_20_dir_p3_ae_conv4_kaiming_init.yml ~/iwa/14.txt 2>&1 & -> this is reall
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init.yaml --gpu=2 > ~/iwa/18.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init.yaml --gpu=2 > ~/iwa/18.txt 2>&1 & -> up to 70% then then down to 10%
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_default_init.yaml --gpu=3 > ~/iwa/19.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=4 > ~/iwa/20.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --gpu=5 > ~/iwa/21.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=5 > ~/iwa/22.txt 2>&1 &
+
+
+
+model_Conv4_n_cli_20_ds_split_dirichlet_ds_alpha_0.3_align_se_delta_None_init_type_kaiming_normal_same_init_True -> up to 70% then then down to 10%
+
+
+
+tensorboard --logdir=/s/luffy/b/nobackup/mgorb/Runs/CIFAR10
+ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu
+localhost:16006
