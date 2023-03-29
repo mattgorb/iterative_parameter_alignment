@@ -59,3 +59,5 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_default_init.yaml --gpu=3 > ~/iwa/19.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=4 > ~/iwa/20.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --gpu=5 > ~/iwa/21.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=5 > ~/iwa/22.txt 2>&1 &
