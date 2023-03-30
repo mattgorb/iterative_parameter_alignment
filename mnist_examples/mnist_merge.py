@@ -154,7 +154,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch Weight Align')
     parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=25,
+    parser.add_argument('--epochs', type=int, default=5,
                         help='number of epochs to train')
 
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
