@@ -153,7 +153,7 @@ def main():
     parser = argparse.ArgumentParser(description='PyTorch Weight Align')
     parser.add_argument('--batch-size', type=int, default=256,
                         help='input batch size for training (default: 64)')
-    parser.add_argument('--epochs', type=int, default=25,
+    parser.add_argument('--epochs', type=int, default=5,
                         help='number of epochs to train')
 
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',
@@ -203,8 +203,8 @@ def main():
         model1.train()
         model2.train()
 
-        for i in range(5):
-            for j in range(500):
+        for i in range(50):
+            for j in range(1):
                 model_merge.train()
                 optim_merge.zero_grad()
                 trainer1.optimizer.zero_grad()
