@@ -53,16 +53,13 @@ nohup python -u main.py --config=configs/cifar10_2_split_label.yaml --gpu=6 > ~/
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_fl_conv4.txt 2>&1 &
 cifar10_20_dir_p3_ae_conv4_kaiming_init.yml ~/iwa/14.txt 2>&1 & -> this is really kaiming normal init
 
-
-
-
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=5 > ~/iwa/22.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=2 > ~/iwa/20.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --gpu=3 > ~/iwa/21.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_pd.yaml --gpu=6 > ~/iwa/23.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_se.yaml --gpu=7 > ~/iwa/24.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init_epoch1.yaml --gpu=3 > ~/iwa/21.txt 2>&1 &
+
 
 
 
