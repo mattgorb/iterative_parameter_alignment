@@ -211,7 +211,7 @@ def main():
                 trainer2.optimizer.zero_grad()
 
                 #absolute weight
-                loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1) + (
+                '''loss = torch.sum((model_merge.fc1.weight - model1.fc1.weight).abs().pow(1) + (
                     model_merge.fc1.weight - model2.fc1.weight).abs().pow(1))
                 loss += torch.sum((model_merge.fc1.bias - model1.fc1.bias).abs().pow(1) + (
                     model_merge.fc1.bias - model2.fc1.bias).abs().pow(1))
@@ -219,7 +219,16 @@ def main():
                 loss += torch.sum((model_merge.fc2.weight - model1.fc2.weight).abs().pow(1) + (
                     model_merge.fc2.weight - model2.fc2.weight).abs().pow(1))
                 loss += torch.sum((model_merge.fc2.bias - model1.fc2.bias).abs().pow(1) + (
-                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1))
+                    model_merge.fc2.bias - model2.fc2.bias).abs().pow(1))'''
+                loss = torch.sum(torch.square(model_merge.fc1.weight - model1.fc1.weight) + torch.square(
+                    model_merge.fc1.weight - model2.fc1.weight))
+                loss += torch.sum(torch.square(model_merge.fc1.bias - model1.fc1.bias) + torch.square(
+                    model_merge.fc1.bias - model2.fc1.bias))
+
+                loss += torch.sum(torch.square(model_merge.fc2.weight - model1.fc2.weight) + torch.square(
+                    model_merge.fc2.weight - model2.fc2.weight))
+                loss += torch.sum(torch.square(model_merge.fc2.bias - model1.fc2.bias) + torch.square(
+                    model_merge.fc2.bias - model2.fc2.bias))
 
 
                 loss.backward()
