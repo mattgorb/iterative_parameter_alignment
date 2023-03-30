@@ -182,7 +182,7 @@ def main():
 
 
 
-    args.seed+=5
+    args.seed+=3
     set_seed(args.seed)
 
     model2 = Net(args, ).to(device)

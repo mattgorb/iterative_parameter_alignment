@@ -180,7 +180,7 @@ def main():
     #trainer1 = Trainer(args, [train_loader1, test_dataset], model1, device, save_path, 'mnist_model1')
 
 
-    args.seed+=5
+    args.seed+=3
     set_seed(args.seed)
 
 
