@@ -37,7 +37,10 @@ model_name = 'cifar100_Conv4' # Model type
 ###
 # Common hyperparameters
 
-com_amount = 10000
+if rule=='split_label':
+    com_amount=2500
+else:
+    com_amount = 1500
 save_period = 200
 weight_decay = 1e-3
 batch_size = 50

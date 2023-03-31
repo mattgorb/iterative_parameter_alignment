@@ -118,7 +118,11 @@ model_name = 'mnist_2NN' # Model type
 
 ###
 # Common hyperparameters
-com_amount = 1000
+if rule=='split_label':
+    com_amount=3000
+else:
+    com_amount = 1000
+
 save_period = 100
 weight_decay = 1e-3
 batch_size = 50
