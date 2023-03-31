@@ -8,6 +8,7 @@ import torch
 import pandas as pd
 from tensorboardX import SummaryWriter
 import os
+import shutil
 
 class Merge_Iterator:
     def __init__(self, args, train_loaders, test_loader,train_weight_list, device, weight_dir):
@@ -35,7 +36,8 @@ class Merge_Iterator:
                              f'_align_{self.args.align_loss}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
                              f'_same_init_{self.args.same_initialization}'
         if os.path.exists(self.tensorboard_dir):
-            os.remove(self.tensorboard_dir)
+            shutil.rmtree(self.tensorboard_dir)
+
         self.writer = SummaryWriter(self.tensorboard_dir)
 
     def run(self):
