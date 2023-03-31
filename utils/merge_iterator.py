@@ -7,6 +7,7 @@ import numpy as np
 import torch
 import pandas as pd
 from tensorboardX import SummaryWriter
+import os
 
 class Merge_Iterator:
     def __init__(self, args, train_loaders, test_loader,train_weight_list, device, weight_dir):
@@ -29,10 +30,13 @@ class Merge_Iterator:
         self.best_test_accuracy=[]
         self.average_test_accuracy=[]
 
-        self.writer = SummaryWriter(f'{self.args.base_dir}Runs/{self.args.dataset}/'
-                                    f'model_{self.args.model}_n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}'
-                                    f'_align_{self.args.align_loss}_delta_{self.args.delta}_init_type_{self.args.weight_init}'
-                                    f'_same_init_{self.args.same_initialization}')
+        self.tensorboard_dir=f'{self.args.base_dir}Runs/{self.args.dataset}/' \
+                             f'model_{self.args.model}_n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}' \
+                             f'_align_{self.args.align_loss}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
+                             f'_same_init_{self.args.same_initialization}'
+        if os.path.exists(self.tensorboard_dir):
+            os.remove(self.tensorboard_dir)
+        self.writer = SummaryWriter(self.tensorboard_dir)
 
     def run(self):
         merge_iterations = self.args.merge_iter
