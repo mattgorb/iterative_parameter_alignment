@@ -31,6 +31,8 @@ def parse_arguments():
 
 
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/", help='Directory for data and weights')
+    parser.add_argument('--data_dir', type=str, default="data")
+
     parser.add_argument('--config', type=str, default=None, help='config file to use')
 
 
