@@ -30,15 +30,15 @@ def get_datasets(args):
         train_transform=test_transform
     if args.baseline:
 
-        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
-        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, download=True, transform=train_transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=False, transform=test_transform)
         train_loader = DataLoader(dataset1, batch_size=args.batch_size, shuffle=True)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
         return train_loader, test_loader
 
     else:
         num_clients = args.num_clients
-        dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, download=True, transform=train_transform)
+        dataset1 = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, download=True, transform=train_transform)
 
         train_loaders = []
         if args.dataset_split=="disjoint_classes":
@@ -68,8 +68,8 @@ def get_datasets(args):
                 d2 = index_groupings[0][int(len(index_groupings[0]) * p):] + index_groupings[1][
                                                                              :int(len(index_groupings[1]) * p)]
 
-                dataset1 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
-                dataset2 = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+                dataset1 = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
+                dataset2 = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
 
                 dataset1.data, dataset1.targets = dataset1.data[d1], np.array(dataset1.targets)[d1]
                 dataset2.data, dataset2.targets = dataset2.data[d2], np.array(dataset2.targets)[d2]
@@ -80,7 +80,7 @@ def get_datasets(args):
                 train_loaders.append(train_loader2)
             else:
                 for group in index_groupings:
-                    dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+                    dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
                     dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
                     train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                     train_loaders.append(train_loader)
@@ -102,7 +102,7 @@ def get_datasets(args):
             stats_dict={}
             i=0
             for group in np.array_split(lst, num_clients):
-                dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+                dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
                 dataset.data, dataset.targets = dataset.data[group], np.array(dataset1.targets)[group]
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
@@ -111,13 +111,13 @@ def get_datasets(args):
                 i+=1
 
         elif args.dataset_split=='dirichlet':
-            dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+            dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
             _, y_train = dataset.data, np.array(dataset.targets)
 
             net_dataidx_map=dirichlet(y_train,  num_clients, alpha=args.dirichlet_alpha)
 
             for i,j in net_dataidx_map.items():
-                dataset = datasets.CIFAR10(f'{args.base_dir}data', train=True, transform=train_transform)
+                dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
                 dataset.data, dataset.targets = dataset.data[j], np.array(dataset.targets)[j]
                 #print(len(dataset.data))
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
@@ -125,7 +125,7 @@ def get_datasets(args):
 
         else:
             print('choose dataset split!')
-        test_dataset = datasets.CIFAR10(f'{args.base_dir}data', train=False, transform=test_transform)
+        test_dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=False, transform=test_transform)
         test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
 
         print('Dataset summaries:')
@@ -136,7 +136,7 @@ def get_datasets(args):
         print(f'\tTest set: Length: {len(test_loader.dataset)}, Labels: {collections.Counter(test_loader.dataset.targets)}')
 
         weights=[]
-        dataset_len = len(datasets.CIFAR10(f'{args.base_dir}data', train=True,).targets)
+        dataset_len = len(datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True,).targets)
         for loader in train_loaders:
             weights.append(len(loader.dataset.targets)/dataset_len)
         print(weights)
