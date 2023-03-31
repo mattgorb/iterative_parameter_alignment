@@ -20,11 +20,10 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 # data_obj = ShakespeareObjectCrop_noniid(storage_path, name, crop_amount = 2000)
 #########
 
-n_client = 100
-# Generate IID or Dirichlet distribution
-# IID
-rule='split_label'
-rule_arg=0.6
+rule='iid'
+rule_arg=0.3
+n_client = 20
+optim='SGD'
 
 data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg,unbalanced_sgm=0, data_path=data_path)
 # unbalanced
@@ -33,7 +32,7 @@ data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=23, rule=ru
 # Dirichlet (0.6)
 # data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=20, unbalanced_sgm=0, rule='Drichlet', rule_arg=0.6, data_path=data_path)
 
-model_name = 'cifar100_LeNet' # Model type
+model_name = 'cifar100_Conv4' # Model type
 
 ###
 # Common hyperparameters
