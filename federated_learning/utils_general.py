@@ -3,7 +3,7 @@ from utils_dataset import *
 from utils_models import *
 # Global parameters
 os.environ["CUDA_DEVICE_ORDER"]    = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
+#os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
 from torch.utils.tensorboard import SummaryWriter
 
