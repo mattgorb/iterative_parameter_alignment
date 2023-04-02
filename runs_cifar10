@@ -82,7 +82,7 @@ nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=2 >
 
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_iid.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_iid.txt 2>&1 &
-
+nohup python -u example_code_cifar10.py > ~/iwa/cifar100_split.txt 2>&1 &
 
 
 
