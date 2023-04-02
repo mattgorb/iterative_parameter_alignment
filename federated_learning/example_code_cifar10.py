@@ -21,18 +21,19 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #########
 
 
-n_client = 2
+
 # Generate IID or Dirichlet distribution
 # IID
-rule='split_label'
+
 #rule_arg=0.6
 
-
+#n_client = 2
+#rule='split_label'
 
 #rule='Drichlet'
-#rule='iid'
-#rule_arg=0.3
-#n_client = 20
+rule='iid'
+rule_arg=0.3
+n_client = 20
 optim='SGD'
 
 
