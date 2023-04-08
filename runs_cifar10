@@ -12,3 +12,5 @@ nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp3.txt 2>
 
 
 
+nohup python -u example_code_cifar10.py > ~/iwa/cifar_20dirp6.txt 2>&1 &
+
