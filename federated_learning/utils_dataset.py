@@ -284,7 +284,7 @@ class DatasetObject:
                 self.channels = 3; self.width = 32; self.height = 32; self.n_cls = 10;
             if self.dataset == 'CIFAR100':
                 self.channels = 3; self.width = 32; self.height = 32; self.n_cls = 100;
-            if self.dataset == 'fashion_mnist':
+            if self.dataset == 'Fashion_MNIST':
                 self.channels = 1; self.width = 28; self.height = 28; self.n_cls = 10;
             if self.dataset == 'emnist':
                 self.channels = 1; self.width = 28; self.height = 28; self.n_cls = 10;
