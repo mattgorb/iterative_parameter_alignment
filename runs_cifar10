@@ -1,101 +1,14 @@
 /s/luffy/b/nobackup/mgorb/Runs/*
-
-tensorboard --logdir=/s/luffy/b/nobackup/mgorb/Runs/CIFAR10
-ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu
-localhost:16006
-
-
-nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 --merge_iter=10 > ~/iwa/1.txt 2>&1 & -> DONE
-nohup python -u main.py --config=configs/mnist_20_iid.yaml --gpu=5 > ~/iwa/3.txt 2>&1 & -> Epoch 2
-nohup python -u example_code_mnist.py > ~/iwa/sgd_split.txt 2>&1 & -> DONE
-nohup python -u example_code_mnist.py > ~/iwa/sgd_dir_p3.txt 2>&1 & -> DONE
-nohup python -u example_code_mnist.py > ~/iwa/sgd_iid_20.txt 2>&1 & -> DONE
-
-#Check this one
-nohup python example_code_mnist_weight_alignment.py > ~/iwa/weight_alignment_split_label.txt 2>&1 &
-
-
-#Running:
-nohup python -u main.py --config=configs/mnist_100_dir_p3_ae.yaml --gpu=5 > ~/iwa/4.txt 2>&1 & -> 100+ Epochs
-nohup python -u main.py --config=configs/cifar10_20_iid_se1.yaml --gpu=6 > ~/iwa/5.txt 2>&1 & -> Epoch 15 80%
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_iid.txt 2>&1 &
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20_dir_p3.txt 2>&1 &
-
-#nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 & -> NO GOOD
-#nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 & -> NO GOOD
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_default_init.yaml --gpu=2 > ~/iwa/10.txt 2>&1 & -> NO GOOD
-
-
-nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=4 > ~/iwa/2.txt 2>&1 & -> Epoch 86 (No weighting, I think)
-nohup python -u main.py --config=configs/mnist_20_dir_p3_ae_default_init.yaml --gpu=7 > ~/iwa/8.txt 2>&1 & -> 77 epochs (First weight type, I think)
-nohup python -u main.py --config=configs/mnist_20_dir_p3_se_kaiming.yaml --gpu=6 > ~/iwa/9.txt 2>&1  & -> Epoch 34 (First weight type)
-
-
-nohup python -u main.py --config=configs/mnist_20_dir_p3_se_default.yaml --gpu=6 > ~/iwa/11.txt 2>&1  & -> Epoch 63 (First weight type)
-
-
-
-#Check this group
-nohup python -u main.py --config=configs/mnist_20_dir_p3_se_kaiming.yaml --gpu=6 > ~/iwa/12.txt 2>&1  &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae.yaml --gpu=3 > ~/iwa/6.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se.yaml --gpu=4 > ~/iwa/7.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_baseline.yaml --gpu=1 --baseline=True> ~/iwa/13.txt 2>&1  &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4.yaml --gpu=3 > ~/iwa/14.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_2_split_label_se.yaml --gpu=6 > ~/iwa/15.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label.yaml --gpu=6 > ~/iwa/16.txt 2>&1 &
-
-
-
-
-#DONE
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_default.yaml  --data_dir=data3 --gpu=6 > ~/iwa/22.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/mnist_dir6.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
-
-
-
-#done
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_fl_conv4.txt 2>&1 &
-cifar10_20_dir_p3_ae_conv4_kaiming_init.yml ~/iwa/14.txt 2>&1 & -> this is really kaiming normal init
-<<<<<<< HEAD
-
-
-
-
-
-
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=2 --data_dir=data4 > ~/iwa/24.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --data_dir=data4 --gpu=3 > ~/iwa/25.txt 2>&1 &
-
-nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=4 --data_dir=data6 > ~/iwa/20.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_default1.yaml --gpu=7 --data_dir=data7 > ~/iwa/23.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_kaiming.yaml --gpu=6 --data_dir=data7 > ~/iwa/26.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --data_dir=data2 --gpu=5 > ~/iwa/21.txt 2>&1 &
-
-python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_default1.yaml --gpu=7 > ~/iwa/23.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_ae_conv4_waf25.yaml --gpu=1 > ~/iwa/17.txt 2>&1 &
-
-
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=5 > ~/iwa/24.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_iid_se1_conv4.yaml --gpu=2 > ~/iwa/20.txt 2>&1 &
-
-
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_iid.txt 2>&1 &
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_iid.txt 2>&1 &
-
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split.txt 2>&1 &
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/mnist_split.txt 2>&1 &
-
-
-=======
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init1.yaml --data_dir=data2 --gpu=3 > ~/iwa/21.txt 2>&1 & --bad
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_default.yaml  --data_dir=data3 --gpu=6 > ~/iwa/22.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --data_dir=data4 --gpu=5 > ~/iwa/25.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_kaiming_init.yaml --data_dir=data2 --gpu=3 > ~/iwa/26.txt 2>&1 & --bad
-
-
 tensorboard --logdir=/s/luffy/b/nobackup/mgorb/Runs/CIFAR10
 ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu
 ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa_new mgorb@luffy.cs.colostate.edu
 localhost:16006
+
+
+nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split.txt 2>&1 &
+nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split.txt 2>&1 &
+nohup python -u example_code_mnist.py > ~/iwa/mnist_split.txt 2>&1 &
+nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp3.txt 2>&1 &
+
+
+
