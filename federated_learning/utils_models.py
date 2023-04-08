@@ -15,13 +15,17 @@ class client_model(nn.Module):
             self.fc1 = nn.Linear(1 * 28 * 28, 200)
             self.fc2 = nn.Linear(200, 200)
             self.fc3 = nn.Linear(200, self.n_cls)
-            
+        if self.name == 'fashionmnist_2NN':
+            self.n_cls = 10
+            self.fc1 = nn.Linear(1 * 28 * 28, 200)
+            self.fc2 = nn.Linear(200, 200)
+            self.fc3 = nn.Linear(200, self.n_cls)
         if self.name == 'emnist_NN':
             self.n_cls = 10
             self.fc1 = nn.Linear(1 * 28 * 28, 100)
             self.fc2 = nn.Linear(100, 100)
             self.fc3 = nn.Linear(100, self.n_cls)
-        
+
         if self.name == 'cifar10_LeNet':
             self.n_cls = 10
             self.conv1 = nn.Conv2d(in_channels=3, out_channels=64 , kernel_size=5)
