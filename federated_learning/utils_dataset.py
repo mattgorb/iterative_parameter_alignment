@@ -401,7 +401,7 @@ class Dataset(torch.utils.data.Dataset):
     
     def __init__(self, data_x, data_y=True, train=False, dataset_name=''):
         self.name = dataset_name
-        if self.name == 'MNIST' or self.name == 'synt' or self.name == 'emnist' :
+        if self.name == 'MNIST' or self.name == 'Fashion_MNIST' or self.name == 'synt' or self.name == 'emnist' :
             self.X_data = torch.tensor(data_x).float()
             self.y_data = data_y
             if not isinstance(data_y, bool):
@@ -430,7 +430,7 @@ class Dataset(torch.utils.data.Dataset):
         return len(self.X_data)
 
     def __getitem__(self, idx):
-        if self.name == 'MNIST' or self.name == 'synt' or self.name == 'emnist':
+        if self.name == 'MNIST' or self.name == 'Fashion_MNIST' or self.name == 'synt' or self.name == 'emnist' :
             X = self.X_data[idx, :]
             if isinstance(self.y_data, bool):
                 return X
