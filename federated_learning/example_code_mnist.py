@@ -40,12 +40,12 @@ epoch = 1
 
 
 
-'''
+''''''
 rule='split_label'
 rule_arg=0.3
 n_client = 2
 optim='SGD'
-'''
+
 
 '''
 rule='Drichlet'
@@ -62,12 +62,12 @@ n_client = 20
 optim='SGD'
 '''
 
-
+'''
 rule='Drichlet'
 rule_arg=0.6
 n_client = 20
 optim='SGD'
-
+'''
 
 
 
