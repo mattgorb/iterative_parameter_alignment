@@ -9,7 +9,7 @@ bias: True
 local_epochs: 1
 dataset_split: dirichlet
 #dataset_split: iid
-dirichlet_alpha: 0.3
+dirichlet_alpha: 0.05
 batch_size: 50
 merge_iter: 10
 single_model: True
