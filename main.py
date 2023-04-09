@@ -44,6 +44,7 @@ def main():
         trainer.fit(log_output=True)
     else:
         train_loader_list, test_loader,train_weight_list = get_dataloaders(args)
+        sys.exit(0)
         merge_iterator = Merge_Iterator(args, train_loader_list, test_loader,train_weight_list, args.device, weight_dir)
         merge_iterator.run()
 
