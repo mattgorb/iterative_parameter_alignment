@@ -4,7 +4,7 @@ model: MLP
 align_loss: ae
 weight_align_factor: 1
 data_transform: True
-num_clients: 7
+num_clients: 3
 bias: True
 local_epochs: 1
 dataset_split: dirichlet
