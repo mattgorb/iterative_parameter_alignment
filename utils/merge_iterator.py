@@ -61,9 +61,6 @@ class Merge_Iterator:
                     else:
                         out_all=torch.cat([out_all, output.unsqueeze(dim=2)], dim=2)
                         out_max = torch.cat([out_max, output], dim=1)
-                    #print(out_all.size())
-
-
 
                 avg_pred_ensemble=torch.mean(out_all, dim=2)
                 avg_pred_ensemble = avg_pred_ensemble.argmax(dim=1, keepdim=True)
