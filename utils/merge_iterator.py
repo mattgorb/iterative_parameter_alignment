@@ -109,6 +109,7 @@ class Merge_Iterator:
 
         #run this for IID datasets
         if self.args.single_model:
+            print("Running single model")
             self.models = model_selector(self.args)
             self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
                                      self.test_loader], self.models, self.device,
@@ -116,6 +117,7 @@ class Merge_Iterator:
                         for i in range(self.num_clients)]
 
         else:
+
             self.model_trainers = [Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
                                            f'model_{i}_{self.args.dataset}_' + self.model_cnf_str, ) for i in range(self.num_clients)]
 
