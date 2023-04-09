@@ -149,10 +149,16 @@ class Merge_Iterator:
             for _ in range(self.num_clients):
                 self.models.append(model_selector(self.args))
                 self.args.weight_seed+=1
+                set_seed(seed)
                 print(f'Setting weight seed to {self.args.weight_seed}')
-
-
-
+                for idx,model1 in enumerate(self.models):
+                    for idx2, model2 in enumerate(self.models):
+                        if idx==idx2:
+                            continue
+                        #assert(model1.fc1.weight[0][0]!=model2.fc1.weight[0][0])
+                        if model1.fc1.weight[0][0]==model2.fc1.weight[0][0]:
+                            print('initial weights are the same')
+                            sys.exit(0)
         '''
         self.models = [torch.nn.DataParallel(
             model_selector(self.args),
@@ -202,7 +208,7 @@ class Merge_Iterator:
                 self.client_to_tensorboard(iter, client, trainer)
 
             self.ensemble()
-            self.comparison_statistics(iter)
+            #self.comparison_statistics(iter)
 
             self.log_results(iter)
 
