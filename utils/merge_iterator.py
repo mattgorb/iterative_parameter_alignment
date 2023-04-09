@@ -74,9 +74,57 @@ class Merge_Iterator:
         print(f"Ensemeble test set results: \n\tAveraged across clients: {100. * correct1 / len(self.test_loader.dataset)}"
               f"\n\tTop prediction across clients: {100. * correct2 / len(self.test_loader.dataset)}")
 
-    def comparison_statistics(self):
-        correct1 = 0
-        correct2 = 0
+    def comparison_statistics(self, iteration):
+
+        '''
+        1. Distance between each model: AE, SE
+        2. Similarity between each model: Pearson
+
+        '''
+        dir=f'{self.args.base_dir}/weight_alignment_csvs/{self.model_cnf_str+iteration}'.csv
+        print('Aligning weights...')
+        module_list = [model.named_modules() for model in models]
+        for named_layer_modules in zip(*module_list):
+            if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1]) == ConvMerge:
+                continue
+
+            if hasattr(named_layer_modules[0][1], "weight"):
+
+                for module_i in range(len(named_layer_modules)):
+                    for module_j in range(len(named_layer_modules)):
+                        if module_j == module_i:
+                            continue
+                        else:
+                            named_layer_modules[module_i][1].weight_align_list.append(
+                                nn.Parameter(named_layer_modules[module_j][1].weight, requires_grad=True))
+                            named_layer_modules[module_i][1].train_weight_list.append(train_weight_list[module_j])
+                            if args.bias:
+                                named_layer_modules[module_i][1].bias_align_list.append(
+                                    nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
+                    print(f'Layer {named_layer_modules[module_i][0]}: Added models to {module_i} ')
+
+        for idx, trainer in enumerate(self.model_trainers):
+            model = trainer.model
+            model.eval()
+            for idx, trainer2 in enumerate(self.model_trainers):
+                model2 = trainer2.model
+                model2.eval()
+                if idx==idx:
+                    continue
+                module_list = [model.named_modules() for model in [model,model2]]
+                model1_param_list=nn.Parameter([])
+                model2_param_list=nn.Parameter([])
+                for named_layer_modules in zip(*module_list):
+                    if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1]) == ConvMerge:
+                        continue
+                    if hasattr(named_layer_modules[0][1], "weight"):
+                        model1_param_list=torch.cat([model1_param_list, ])
+                        model2_param_list = nn.Parameter([])
+
+
+
+                del model1_param_list
+                del model2_param_list
 
         with torch.no_grad():
 
@@ -154,6 +202,7 @@ class Merge_Iterator:
                 self.client_to_tensorboard(iter, client, trainer)
 
             self.ensemble()
+            self.comparison_statistics(iter)
 
             self.log_results(iter)
 
