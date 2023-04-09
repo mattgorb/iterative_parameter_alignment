@@ -7,12 +7,9 @@ localhost:16006
 
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/mnist_split.txt 2>&1 &
 nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp3.txt 2>&1 &
-
-nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp6.txt 2>&1 &
-nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20iid.txt 2>&1 &
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 &
-
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp6.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp3.txt 2>&1 &
+
+
+nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 &
+nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp6.txt 2>&1 &

@@ -53,6 +53,8 @@ model_name = 'cifar10_Conv4' # Model type
 
 if rule=='iid':
     com_amount=350
+elif rule=='Drichlet' and rule_arg==0.6:
+    com_amount=500
 elif rule=='split_label':
     com_amount=3000
 else:

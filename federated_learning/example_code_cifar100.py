@@ -45,6 +45,8 @@ model_name = 'cifar100_Conv4' # Model type
 
 if rule=='iid':
     com_amount=350
+elif rule=='Drichlet' and rule_arg==0.6:
+    com_amount=500
 elif rule=='split_label':
     com_amount=3000
 else:
@@ -96,7 +98,7 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                      model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
                                      sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                      data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-exit(0)
+
 ###
 # baselines
 
