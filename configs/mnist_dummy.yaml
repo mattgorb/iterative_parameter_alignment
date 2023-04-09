@@ -1,4 +1,4 @@
-dataset: CIFAR10
+dataset: CIFAR100
 weight_init: kaiming_normal
 model: MLP
 align_loss: ae
