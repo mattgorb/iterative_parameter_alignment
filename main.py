@@ -12,8 +12,12 @@ def get_dataloaders(args):
     print(f'Data config: \n\t Dataset: {args.dataset}, num_clients: {args.num_clients}, disjoint classes: {args.disjoint_classes}, imbalanced:{args.imbalanced}')
     if args.dataset=='MNIST':
         from datasets.mnist import get_datasets
+    elif args.dataset=='Fashion_MNIST':
+        from datasets.fashionmnist import get_datasets
     elif args.dataset=='CIFAR10':
         from datasets.cifar10 import get_datasets
+    elif args.dataset=='CIFAR100':
+        from datasets.cifar100 import get_datasets
     else:
         sys.exit()
     return get_datasets(args)

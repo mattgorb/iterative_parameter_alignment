@@ -11,5 +11,5 @@ dataset_split: dirichlet
 #dataset_split: iid
 dirichlet_alpha: 0.05
 batch_size: 50
-merge_iter: 10
+merge_iter: 5
 single_model: True

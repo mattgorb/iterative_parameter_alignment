@@ -6,18 +6,28 @@ import collections
 
 import random
 
-def record_net_data_stats(y_train, net_dataidx_map):
+import pickle
 
-	net_cls_counts = {}
 
-	for net_i, dataidx in net_dataidx_map.items():
-		unq, unq_cnt = np.unique(y_train[dataidx], return_counts=True)
-		tmp = {unq[i]: unq_cnt[i] for i in range(len(unq))}
-		net_cls_counts[net_i] = tmp
+def record_net_data_stats(y_train, net_dataidx_map, args):
 
-	print(f'Data statistics: {net_cls_counts}')
+    save_str = f"dataset_split_info_model_{args.model}_n_cli_{args.num_clients}_ds_split_{args.dataset_split}_ds_alpha_{args.dirichlet_alpha}_align_{args.align_loss}_waf_{args.weight_align_factor}_delta_{args.delta}_init_type_{args.weight_init}_same_init_{args.same_initialization}_le_{args.local_epochs}_s_{args.single_model}"
 
-	return net_cls_counts
+    net_cls_counts = {}
+
+    for net_i, dataidx in net_dataidx_map.items():
+        unq, unq_cnt = np.unique(y_train[dataidx], return_counts=True)
+        tmp = {unq[i]: unq_cnt[i] for i in range(len(unq))}
+        net_cls_counts[net_i] = tmp
+
+    print(f'Data statistics: {net_cls_counts}')
+
+
+
+    with open(f'{args.base_dir}weight_alignment_csvs/{save_str}.pkl', 'wb') as f:
+        pickle.dump(dictionary, f)
+
+    return net_cls_counts
 
 
 def dirichlet(y_train,  n_nets, alpha=0.5):
@@ -48,6 +58,6 @@ def dirichlet(y_train,  n_nets, alpha=0.5):
         np.random.shuffle(idx_batch[j])
         net_dataidx_map[j] = idx_batch[j]
 
-    record_net_data_stats(y_train, net_dataidx_map)
 
-    return net_dataidx_map
+
+    return net_dataidx_map,y_train

@@ -74,6 +74,19 @@ class Merge_Iterator:
         print(f"Ensemeble test set results: \n\tAveraged across clients: {100. * correct1 / len(self.test_loader.dataset)}"
               f"\n\tTop prediction across clients: {100. * correct2 / len(self.test_loader.dataset)}")
 
+    def comparison_statistics(self):
+        correct1 = 0
+        correct2 = 0
+
+        with torch.no_grad():
+
+            for data, target in self.model_trainers[0].test_loader:
+                data, target = data.to(self.device), target.to(self.device)
+
+                for idx,trainer in enumerate(self.model_trainers):
+                    model=trainer.model
+                    model.eval()
+                    output, sd = model(data, )
 
 
     def run(self):

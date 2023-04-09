@@ -95,11 +95,12 @@ def get_datasets(args):
                 i+=1
 
             dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
-            record_net_data_stats(dataset.targets, stats_dict)
+            record_net_data_stats(dataset.targets, stats_dict, args)
 
         elif args.dataset_split=='dirichlet':
             X_train, y_train = dataset1.data, dataset1.targets
-            net_dataidx_map=dirichlet(y_train,  num_clients, alpha=args.dirichlet_alpha)
+            net_dataidx_map,y_train=dirichlet(y_train,  num_clients, alpha=args.dirichlet_alpha)
+            record_net_data_stats(y_train, net_dataidx_map, args)
 
             for i,j in net_dataidx_map.items():
                 dataset = datasets.MNIST(f'{args.base_dir}data', train=True, transform=transform)
