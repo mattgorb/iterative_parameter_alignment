@@ -10,6 +10,6 @@ local_epochs: 1
 dataset_split: iid
 dirichlet_alpha: 0.6
 batch_size: 50
-merge_iter: 10
+merge_iter: 3
 
 single_model: True
