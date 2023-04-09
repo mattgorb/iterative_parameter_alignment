@@ -16,3 +16,8 @@ nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp6.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 &
 
 nohup python -u main.py --config=configs/mnist_10_dir_p3_ae_diff_seed.yaml --gpu=3 > ~/iwa/1.txt 2>&1 &
+
+
+
+
+python -u main.py --config=configs/mnist_dummy.yaml --gpu=6

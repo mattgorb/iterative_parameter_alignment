@@ -33,7 +33,7 @@ class Merge_Iterator:
 
         self.model_cnf_str= f'model_{self.args.model}_n_cli_{self.args.num_clients}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}' \
                              f'_align_{self.args.align_loss}_waf_{self.args.weight_align_factor}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
-                             f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_e_{self.args.ensemble}_s_{self.args.single}'
+                             f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_s_{self.args.single_model}'
 
         self.tensorboard_dir=f'{self.args.base_dir}Runs/{self.args.dataset}/self.model_cnf_str'
 
