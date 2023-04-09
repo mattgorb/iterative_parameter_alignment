@@ -54,7 +54,7 @@ class Merge_Iterator:
                 for idx,trainer in enumerate(self.model_trainers):
                     model=trainer.model
                     model.eval()
-                    output, sd = self.model(data, )
+                    output, sd = model(data, )
                     if idx==0:
                         out_all=output.unsqueeze(dim=2)
                         out_max=output
