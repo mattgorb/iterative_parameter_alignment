@@ -149,7 +149,7 @@ class Merge_Iterator:
             for _ in range(self.num_clients):
                 self.models.append(model_selector(self.args))
                 self.args.weight_seed+=1
-                set_seed(seed)
+
                 print(f'Setting weight seed to {self.args.weight_seed}')
                 for idx,model1 in enumerate(self.models):
                     for idx2, model2 in enumerate(self.models):
