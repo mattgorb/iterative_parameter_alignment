@@ -71,13 +71,10 @@ class Trainer:
         train_loss=0
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
-
             data, target = data.to(self.device), target.to(self.device)
-
 
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
-
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()

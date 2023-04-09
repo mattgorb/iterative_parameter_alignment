@@ -42,6 +42,45 @@ class Merge_Iterator:
 
         self.writer = SummaryWriter(self.tensorboard_dir)
 
+    def ensemble(self):
+        self.model.eval()
+        correct1 = 0
+        correct2 = 0
+
+        with torch.no_grad():
+
+            for data, target in self.model_trainers[0].test_loader:
+                data, target = data.to(self.device), target.to(self.device)
+
+                for idx,trainer in enumerate(self.model_trainers):
+                    model=trainer.model
+                    model.eval()
+                    output, sd = self.model(data, )
+                    if idx==0:
+                        out_all=output.unsqueeze(dim=2)
+                        out_max=output
+                    else:
+                        out_all=torch.cat([out_all, output.unsqueeze(dim=2)])
+                        out_max = torch.cat([out_max, output], dim=1)
+
+
+                avg_pred_ensemble=torch.mean(out_all, dim=2)
+                avg_pred_ensemble = avg_pred_ensemble.argmax(dim=1, keepdim=True)
+
+                out_max=out_max.view(out_max.size(0), -1)
+                top_pred_ensemble = torch.remainder(out_max.argmax(1), output.size(1))
+
+
+                correct1 += avg_pred_ensemble.eq(target.view_as(avg_pred_ensemble)).sum().item()
+
+
+                correct2 += top_pred_ensemble.eq(target.view_as(top_pred_ensemble)).sum().item()
+
+        print(f"Ensemeble test set results: \n\tAveraged across clients: {100. * correct1 / len(self.test_loader.dataset)}"
+              f"\n\tTop prediction across clients: {100. * correct2 / len(self.test_loader.dataset)}")
+
+
+
     def run(self):
         merge_iterations = self.args.merge_iter
         #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
@@ -51,15 +90,19 @@ class Merge_Iterator:
             self.models = [model_selector(self.args) for i in range(self.num_clients)]
         else:
             self.models=[]
-            for i in range(self.num_clients):
+            for _ in range(self.num_clients):
                 self.models.append(model_selector(self.args))
                 self.args.weight_seed+=1
                 print(f'Setting weight seed to {self.args.weight_seed}')
 
-        '''self.models = [torch.nn.DataParallel(
+
+
+        '''
+        self.models = [torch.nn.DataParallel(
             model_selector(self.args),
             device_ids=[7, 0, 1, 2, 3, 4, 5, 6]).to(self.device)
-            for i in range(self.num_clients)]'''
+            for i in range(self.num_clients)]
+        '''
 
 
         model_parameters = filter(lambda p: p.requires_grad, self.models[0].parameters())
@@ -67,13 +110,21 @@ class Merge_Iterator:
         print(f'Model parameters: {params}')
 
 
-        self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
-                                     self.test_loader], self.models[i], self.device,
-                                   f'model_{i}_{self.args.dataset}_'+self.model_cnf_str, )
+
+
+        #run this for IID datasets
+        if self.args.single_model:
+            self.models = model_selector(self.args)
+            self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
+                                     self.test_loader], self.model, self.device,
+                                   f'model_single_{self.args.dataset}_'+self.model_cnf_str, )
                         for i in range(self.num_clients)]
 
+        else:
+            self.model_trainers = [Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
+                                           f'model_{i}_{self.args.dataset}_' + self.model_cnf_str, ) for i in range(self.num_clients)]
 
-        set_weight_align_param(self.models, self.args, self.train_weight_list)
+            set_weight_align_param(self.models, self.args, self.train_weight_list)
 
         for trainer in self.model_trainers:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
@@ -92,6 +143,7 @@ class Merge_Iterator:
 
                 self.client_to_tensorboard(iter, client, trainer)
 
+            self.ensemble()
 
             self.log_results(iter)
 

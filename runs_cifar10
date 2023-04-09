@@ -1,3 +1,6 @@
+example: nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_default1.yaml --gpu=7 --data_dir=data7 > ~/iwa/23.txt 2>&1 &
+
+
 /s/luffy/b/nobackup/mgorb/Runs/*
 tensorboard --logdir=/s/luffy/b/nobackup/mgorb/Runs/CIFAR10
 ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu
@@ -12,3 +15,4 @@ nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp3.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp6.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 &
 
+nohup python -u main.py --config=configs/mnist_10_dir_p3_ae_diff_seed.yaml --gpu=3 > ~/iwa/1.txt 2>&1 &
