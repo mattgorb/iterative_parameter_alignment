@@ -159,6 +159,8 @@ class Merge_Iterator:
                         if model1.fc1.weight[0][0]==model2.fc1.weight[0][0]:
                             print('initial weights are the same')
                             sys.exit(0)
+                        else:
+                            print('models have different weights')
         '''
         self.models = [torch.nn.DataParallel(
             model_selector(self.args),
