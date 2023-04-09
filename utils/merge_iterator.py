@@ -61,7 +61,7 @@ class Merge_Iterator:
                     else:
                         out_all=torch.cat([out_all, output.unsqueeze(dim=2)])
                         out_max = torch.cat([out_max, output], dim=1)
-
+                    print(out_all.size())
 
                 print(out_all.size())
                 print(out_max.size())
