@@ -1,4 +1,4 @@
-dataset: CIFAR100
+dataset: Fashion_MNIST
 weight_init: kaiming_normal
 model: MLP
 align_loss: ae
