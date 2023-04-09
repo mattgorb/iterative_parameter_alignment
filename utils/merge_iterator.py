@@ -43,7 +43,6 @@ class Merge_Iterator:
         self.writer = SummaryWriter(self.tensorboard_dir)
 
     def ensemble(self):
-        self.model.eval()
         correct1 = 0
         correct2 = 0
 
