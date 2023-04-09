@@ -63,12 +63,18 @@ class Merge_Iterator:
                         out_max = torch.cat([out_max, output], dim=1)
 
 
+                print(out_all.size())
+                print(out_max.size())
+
                 avg_pred_ensemble=torch.mean(out_all, dim=2)
                 avg_pred_ensemble = avg_pred_ensemble.argmax(dim=1, keepdim=True)
 
                 out_max=out_max.view(out_max.size(0), -1)
                 top_pred_ensemble = torch.remainder(out_max.argmax(1), output.size(1))
 
+                print("HERE")
+                print(avg_pred_ensemble.size())
+                print(top_pred_ensemble.size())
 
                 correct1 += avg_pred_ensemble.eq(target.view_as(avg_pred_ensemble)).sum().item()
 
