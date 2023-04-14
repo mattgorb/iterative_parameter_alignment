@@ -18,6 +18,8 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 & Compl
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_10dirp3.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_10dirp3.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/mnist_10dirp3.txt 2>&1 & Complete
+nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_split5.txt 2>&1 &
+
 
 
 nohup python -u main.py --config=configs/mnist_10_dir_p3_ae_diff_seed.yaml --gpu=3 > ~/iwa/1.txt 2>&1 &

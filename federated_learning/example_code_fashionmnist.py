@@ -60,7 +60,7 @@ n_client = 20
 optim='SGD'
 '''
 
-'''
+
 rule='Drichlet'
 rule_arg=0.3
 n_client = 20
@@ -72,7 +72,7 @@ rule='split_label5'
 rule_arg=0.3
 n_client = 5
 optim='SGD'
-
+'''
 
 
 # IF Adam, import utils_general_adam in utils_methods file
@@ -132,6 +132,10 @@ init_model = model_func()
 
 # Initalise the model for all methods with a random seed or load it from a saved initial model
 torch.manual_seed(37)
+
+print('%sModel/%s/%s_init_mdl.pt' % (data_path, data_obj.name, model_name))
+sys.exit()
+
 init_model = model_func()
 if not os.path.exists('%sModel/%s/%s_init_mdl.pt' % (data_path, data_obj.name, model_name)):
     if not os.path.exists('%sModel/%s/' % (data_path, data_obj.name)):
