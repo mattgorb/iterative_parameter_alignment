@@ -42,14 +42,14 @@ def get_datasets(args):
 
         train_loaders = []
         if args.dataset_split=="disjoint_classes":
-            assert num_clients in [2, 5, 10]
+            assert num_clients in [2, 5]
 
             if num_clients == 2:
-                labels_iter = [[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]]
+                labels_iter = [[i for i in range(50)],[i for i in range(50,100)]]
             elif num_clients == 5:
-                labels_iter = [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
-            elif num_clients == 10:
-                labels_iter = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
+                labels_iter = [[i for i in range(20)], [i for i in range(20,40)],
+                               [i for i in range(40,60)], [i for i in range(60,80)], [i for i in range(80,100)]]
+
 
             print(f'label groupings: {labels_iter}')
 

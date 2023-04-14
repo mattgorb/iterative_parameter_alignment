@@ -253,7 +253,62 @@ class DatasetObject:
 
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
+            elif self.rule == 'split_label5':
+                if self.n_client!=5:
+                    print('set clients to 5 for split_label')
+                    sys.exit()
 
+                clnt_x = [np.zeros((clnt_data_list[clnt__], self.channels, self.height, self.width)).astype(np.float32)
+                          for clnt__ in range(self.n_client)]
+                clnt_y = [np.zeros((clnt_data_list[clnt__], 1)).astype(np.int64) for clnt__ in range(self.n_client)]
+
+
+                labels=np.unique(trn_y)
+
+                if self.dataset == 'CIFAR100':
+
+                    labels_iter = [[i for i in range(20)], [i for i in range(20,40)],
+                                   [i for i in range(40,60)], [i for i in range(60,80)], [i for i in range(80,100)]]
+                else:
+                    labels_iter = [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
+
+
+                ds1_labels = labels[labels_iter[0]]
+                ds2_labels = labels[labels_iter[1]]
+                ds3_labels = labels[labels_iter[2]]
+                ds4_labels = labels[labels_iter[3]]
+                ds5_labels = labels[labels_iter[4]]
+
+                print(f'ds1_labels: {ds1_labels}')
+                print(f'ds2_labels: {ds2_labels}')
+                print(f'ds3_labels: {ds3_labels}')
+                print(f'ds4_labels: {ds4_labels}')
+                print(f'ds5_labels: {ds5_labels}')
+
+                ds1_indices = [idx for idx, target in enumerate(trn_y) if target in ds1_labels]
+                ds2_indices = [idx for idx, target in enumerate(trn_y) if target in ds2_labels]
+                ds3_indices = [idx for idx, target in enumerate(trn_y) if target in ds3_labels]
+                ds4_indices = [idx for idx, target in enumerate(trn_y) if target in ds4_labels]
+                ds5_indices = [idx for idx, target in enumerate(trn_y) if target in ds5_labels]
+
+                clnt_x[0]=trn_x[ds1_indices]
+                clnt_y[0]=trn_y[ds1_indices]
+
+
+                clnt_x[1]=trn_x[ds2_indices]
+                clnt_y[1]=trn_y[ds2_indices]
+
+                clnt_x[2]=trn_x[ds3_indices]
+                clnt_y[2]=trn_y[ds3_indices]
+
+                clnt_x[3]=trn_x[ds4_indices]
+                clnt_y[3]=trn_y[ds4_indices]
+
+                clnt_x[4]=trn_x[ds5_indices]
+                clnt_y[4]=trn_y[ds5_indices]
+
+                clnt_x = np.asarray(clnt_x)
+                clnt_y = np.asarray(clnt_y)
 
 
             self.clnt_x = clnt_x; self.clnt_y = clnt_y
