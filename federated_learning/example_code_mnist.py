@@ -40,19 +40,19 @@ epoch = 1
 
 
 
-''''''
+'''
 rule='split_label'
 rule_arg=0.3
 n_client = 2
 optim='SGD'
-
-
 '''
+
+''''''
 rule='Drichlet'
 rule_arg=0.3
-n_client = 20
+n_client = 10
 optim='SGD'
-'''
+
 
 
 '''
