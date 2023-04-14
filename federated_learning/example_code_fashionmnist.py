@@ -134,7 +134,7 @@ init_model = model_func()
 torch.manual_seed(37)
 
 print('%sModel/%s/%s_init_mdl.pt' % (data_path, data_obj.name, model_name))
-sys.exit()
+
 
 init_model = model_func()
 if not os.path.exists('%sModel/%s/%s_init_mdl.pt' % (data_path, data_obj.name, model_name)):
