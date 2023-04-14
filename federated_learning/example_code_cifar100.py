@@ -27,8 +27,8 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 
 
 rule='Drichlet'
-rule_arg=0.6
-n_client = 20
+rule_arg=0.3
+n_client = 10
 optim='SGD'
 
 data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg,unbalanced_sgm=0, data_path=data_path)
