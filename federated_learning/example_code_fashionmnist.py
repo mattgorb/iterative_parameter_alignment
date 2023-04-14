@@ -60,7 +60,7 @@ n_client = 20
 optim='SGD'
 '''
 
-
+'''
 rule='Drichlet'
 rule_arg=0.3
 n_client = 20
@@ -72,7 +72,7 @@ rule='split_label5'
 rule_arg=0.3
 n_client = 5
 optim='SGD'
-'''
+
 
 
 # IF Adam, import utils_general_adam in utils_methods file
