@@ -35,7 +35,9 @@ class Merge_Iterator:
                              f'_align_{self.args.align_loss}_waf_{self.args.weight_align_factor}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
                              f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_s_{self.args.single_model}'
 
-        self.tensorboard_dir=f'{self.args.base_dir}Runs/{self.args.dataset}/self.model_cnf_str'
+        self.tensorboard_dir=f'{self.args.base_dir}Runs/{self.args.dataset}/{self.model_cnf_str}'
+
+
 
         if os.path.exists(self.tensorboard_dir):
             shutil.rmtree(self.tensorboard_dir)
@@ -75,66 +77,100 @@ class Merge_Iterator:
               f"\n\tTop prediction across clients: {100. * correct2 / len(self.test_loader.dataset)}")
 
     def comparison_statistics(self, iteration):
-
         '''
-        1. Distance between each model: AE, SE
-        2. Similarity between each model: Pearson
-
+        1. Distance between each models parameters
+        2. Distance between each models outputs on test set
         '''
-        dir=f'{self.args.base_dir}/weight_alignment_csvs/{self.model_cnf_str+iteration}'.csv
-        print('Aligning weights...')
-        module_list = [model.named_modules() for model in models]
-        for named_layer_modules in zip(*module_list):
-            if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1]) == ConvMerge:
-                continue
 
-            if hasattr(named_layer_modules[0][1], "weight"):
-
-                for module_i in range(len(named_layer_modules)):
-                    for module_j in range(len(named_layer_modules)):
-                        if module_j == module_i:
-                            continue
-                        else:
-                            named_layer_modules[module_i][1].weight_align_list.append(
-                                nn.Parameter(named_layer_modules[module_j][1].weight, requires_grad=True))
-                            named_layer_modules[module_i][1].train_weight_list.append(train_weight_list[module_j])
-                            if args.bias:
-                                named_layer_modules[module_i][1].bias_align_list.append(
-                                    nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
-                    print(f'Layer {named_layer_modules[module_i][0]}: Added models to {module_i} ')
-
+        dist_matrix_p1=[]
+        dist_matrix_p2=[]
         for idx, trainer in enumerate(self.model_trainers):
             model = trainer.model
             model.eval()
-            for idx, trainer2 in enumerate(self.model_trainers):
+            dist_matrix2_p1=[]
+            dist_matrix2_p2 = []
+            for idx2, trainer2 in enumerate(self.model_trainers):
                 model2 = trainer2.model
                 model2.eval()
-                if idx==idx:
+                if idx==idx2:
                     continue
-                module_list = [model.named_modules() for model in [model,model2]]
+
                 model1_param_list=nn.Parameter([])
                 model2_param_list=nn.Parameter([])
-                for named_layer_modules in zip(*module_list):
-                    if not type(named_layer_modules[0][1]) == LinearMerge and not type(named_layer_modules[0][1]) == ConvMerge:
+                for n1,m1,n2,m2 in zip(model1.named_modules(), model2.named_modules()):
+                    if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
                         continue
-                    if hasattr(named_layer_modules[0][1], "weight"):
-                        model1_param_list=torch.cat([model1_param_list, ])
-                        model2_param_list = nn.Parameter([])
+                    if hasattr(m1, "weight"):
+                        model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight)])
+                        model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight)])
+                    if hasattr(m1, "bias"):
+                        model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias)])
+                        model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias)])
 
+
+                assert(model1_param_list.size()==model2_param_list.size())
+
+                #Distance metrics
+                dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
+                dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
 
 
                 del model1_param_list
                 del model2_param_list
 
-        with torch.no_grad():
+            dist_matrix_p1.append(dist_matrix2_p1)
+            dist_matrix_p2.append(dist_matrix2_p2)
 
-            for data, target in self.model_trainers[0].test_loader:
-                data, target = data.to(self.device), target.to(self.device)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',
+                dist_matrix_p1)
 
-                for idx,trainer in enumerate(self.model_trainers):
-                    model=trainer.model
-                    model.eval()
-                    output, sd = model(data, )
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p2_weight_distance_iter_{iteration}.npy',
+                dist_matrix_p2)
+
+
+        model_scores = {}
+        model_scores_hamming = {}
+
+        for idx, trainer in enumerate(self.model_trainers):
+            model = trainer.model
+            model.eval()
+
+            scores = []
+            preds = []
+            with torch.no_grad():
+                for data, labels in dataloader:
+                    data = data.to(device)
+                    outputs = model(data)
+                    _, predicted = torch.max(outputs, 1)
+
+                    scores.extend(outputs.cpu().numpy())
+                    preds.extend(predicted.cpu().numpy())
+            model_scores[idx] = scores
+            model_scores_hamming[idx]= preds
+
+        distance_p1=[]
+        distance_p2=[]
+        for key, value in model_scores.items():
+            distance2_p1 = []
+            distance2_p2 = []
+            for key2, value2 in model_scores.items():
+                distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=1.))
+                distance2_p2.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=2.))
+            distance_p1.append(distance2_p1)
+            distance_p2.append(distance2_p2)
+
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
+
+
+        distance_p1=[]
+        for key, value in model_scores_hamming.items():
+            distance2_p1 = []
+            for key2, value2 in model_scores.items():
+                distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='hamming',))
+            distance_p1.append(distance2_p1)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
+
 
 
     def run(self):
@@ -210,7 +246,7 @@ class Merge_Iterator:
                 self.client_to_tensorboard(iter, client, trainer)
 
             self.ensemble()
-            #self.comparison_statistics(iter)
+            self.comparison_statistics(iter)
 
             self.log_results(iter)
 

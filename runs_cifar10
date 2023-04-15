@@ -27,4 +27,4 @@ nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff
 
 
 
-python -u main.py --config=configs/mnist_dummy.yaml --gpu=6
+python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
