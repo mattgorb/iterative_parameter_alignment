@@ -97,7 +97,9 @@ class Merge_Iterator:
 
                 model1_param_list=torch.Tensor()
                 model2_param_list=torch.Tensor()
-                for n1,m1,n2,m2 in zip(model1.named_modules(), model2.named_modules()):
+                for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
+                    n1, m1 = model1_mods
+                    n2, m2 = model2_mods
                     if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
                         continue
                     if hasattr(m1, "weight"):
