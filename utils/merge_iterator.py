@@ -96,8 +96,8 @@ class Merge_Iterator:
                 if idx==idx2:
                     continue
 
-                model1_param_list=torch.Tensor()
-                model2_param_list=torch.Tensor()
+                model1_param_list=torch.Tensor().to(self.args.device)
+                model2_param_list=torch.Tensor().to(self.args.device)
                 for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
                     n1, m1 = model1_mods
                     n2, m2 = model2_mods
