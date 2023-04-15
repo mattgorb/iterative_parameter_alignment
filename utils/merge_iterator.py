@@ -9,6 +9,7 @@ import pandas as pd
 from tensorboardX import SummaryWriter
 import os
 import shutil
+from models.layers import LinearMerge, ConvMerge
 
 class Merge_Iterator:
     def __init__(self, args, train_loaders, test_loader,train_weight_list, device, weight_dir):
