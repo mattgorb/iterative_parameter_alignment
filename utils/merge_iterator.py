@@ -124,6 +124,9 @@ class Merge_Iterator:
             dist_matrix_p1.append(dist_matrix2_p1)
             dist_matrix_p2.append(dist_matrix2_p2)
 
+        print(dist_matrix_p1)
+        print(dist_matrix_p2)
+
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p2_weight_distance_iter_{iteration}.npy', dist_matrix_p2)
