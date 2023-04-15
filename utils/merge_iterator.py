@@ -85,8 +85,8 @@ class Merge_Iterator:
         dist_matrix_p1=[]
         dist_matrix_p2=[]
         for idx, trainer in enumerate(self.model_trainers):
-            model = trainer.model
-            model.eval()
+            model1 = trainer.model
+            model1.eval()
             dist_matrix2_p1=[]
             dist_matrix2_p2 = []
             for idx2, trainer2 in enumerate(self.model_trainers):
