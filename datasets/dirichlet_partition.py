@@ -22,8 +22,6 @@ def record_net_data_stats(y_train, net_dataidx_map, args):
 
     print(f'Data statistics: {net_cls_counts}')
     print(net_cls_counts)
-    sys.exit()
-
 
     with open(f'{args.base_dir}weight_alignment_csvs/{save_str}.pkl', 'wb') as f:
         pickle.dump(net_cls_counts, f)
