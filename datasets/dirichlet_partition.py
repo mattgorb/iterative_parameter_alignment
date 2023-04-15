@@ -21,7 +21,7 @@ def record_net_data_stats(y_train, net_dataidx_map, args):
         net_cls_counts[net_i] = tmp
 
     print(f'Data statistics: {net_cls_counts}')
-    pritn(net_cls_counts)
+    print(net_cls_counts)
     sys.exit()
 
 
