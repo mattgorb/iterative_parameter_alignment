@@ -95,8 +95,8 @@ class Merge_Iterator:
                 if idx==idx2:
                     continue
 
-                model1_param_list=torch.nn.Parameter([])
-                model2_param_list=torch.nn.Parameter([])
+                model1_param_list=torch.Tensor()
+                model2_param_list=torch.Tensor()
                 for n1,m1,n2,m2 in zip(model1.named_modules(), model2.named_modules()):
                     if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
                         continue
