@@ -95,8 +95,8 @@ class Merge_Iterator:
                 if idx==idx2:
                     continue
 
-                model1_param_list=nn.Parameter([])
-                model2_param_list=nn.Parameter([])
+                model1_param_list=torch.nn.Parameter([])
+                model2_param_list=torch.nn.Parameter([])
                 for n1,m1,n2,m2 in zip(model1.named_modules(), model2.named_modules()):
                     if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
                         continue
@@ -121,11 +121,9 @@ class Merge_Iterator:
             dist_matrix_p1.append(dist_matrix2_p1)
             dist_matrix_p2.append(dist_matrix2_p2)
 
-        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',
-                dist_matrix_p1)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
-        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p2_weight_distance_iter_{iteration}.npy',
-                dist_matrix_p2)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p2_weight_distance_iter_{iteration}.npy', dist_matrix_p2)
 
 
         model_scores = {}
@@ -172,6 +170,8 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
 
+
+        sys.exit()
 
     def run(self):
         merge_iterations = self.args.merge_iter
