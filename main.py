@@ -7,6 +7,7 @@ from args import args
 from utils.trainer import Trainer
 from utils.merge_iterator import Merge_Iterator
 from utils.model_utils import model_selector
+from utils.model_utils import set_seed, _init_weight
 
 def get_dataloaders(args):
     print(f'Data config: \n\t Dataset: {args.dataset}, num_clients: {args.num_clients}, disjoint classes: {args.disjoint_classes}, imbalanced:{args.imbalanced}')
@@ -28,6 +29,8 @@ def main():
     args.device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     print(f'Using Device {args.device}')
     print(args)
+
+    set_seed(args.seed)
 
     weight_dir = f'{args.base_dir}iwa_weights/'
     if args.baseline:
