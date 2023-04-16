@@ -7,7 +7,8 @@ data_transform: True
 num_clients: 16
 bias: True
 local_epochs: 5
-dataset_split: dirichlet
+dataset_split: iid
+#dirichlet
 dirichlet_alpha: 0.5
 batch_size: 50
 merge_iter: 500
