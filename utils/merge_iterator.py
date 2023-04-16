@@ -184,7 +184,10 @@ class Merge_Iterator:
         distance_p1=[]
         for key, value in model_scores_hamming.items():
             distance2_p1 = []
-            for key2, value2 in model_scores.items():
+            for key2, value2 in model_scores_hamming.items():
+
+                #print(torch.unsqueeze(value, dim=0).size())
+                #print(torch.unsqueeze(value2, dim=0).size())
                 distance2_p1.append(torch.cdist(torch.unsqueeze(value, dim=0),
                                                 torch.unsqueeze(value2, dim=0), p=1).item())
             distance_p1.append(distance2_p1)
