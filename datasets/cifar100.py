@@ -4,7 +4,7 @@ import numpy as np
 import collections
 import random
 
-from datasets.dirichlet_partition import dirichlet,  record_net_data_stats
+from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
 
 def get_datasets(args):
     normalize = transforms.Normalize(
@@ -109,7 +109,7 @@ def get_datasets(args):
 
                 stats_dict[i]=group
                 i+=1
-            record_net_data_stats(dataset.targets, stats_dict, args)
+            record_net_data_stats_iid(dataset.targets, stats_dict, args)
         elif args.dataset_split=='dirichlet':
             dataset = datasets.CIFAR100(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
             _, y_train = dataset.data, np.array(dataset.targets)

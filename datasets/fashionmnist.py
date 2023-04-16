@@ -95,7 +95,7 @@ def get_datasets(args):
                 i+=1
 
             dataset = datasets.FashionMNIST(f'{args.base_dir}data', train=True, transform=transform)
-            record_net_data_stats(dataset.targets, stats_dict, args)
+            record_net_data_stats_iid(dataset.targets, stats_dict, args)
 
         elif args.dataset_split=='dirichlet':
             X_train, y_train = dataset1.data, dataset1.targets
