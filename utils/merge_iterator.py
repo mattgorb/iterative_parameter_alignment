@@ -125,6 +125,8 @@ class Merge_Iterator:
             dist_matrix_p1.append(dist_matrix2_p1)
             dist_matrix_p2.append(dist_matrix2_p2)
 
+
+        print('heree')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
 
@@ -152,9 +154,6 @@ class Merge_Iterator:
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
-            print(scores.size())
-            print(preds.size())
-
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
@@ -164,8 +163,7 @@ class Merge_Iterator:
             distance2_p1 = []
             distance2_p2 = []
             for key2, value2 in model_scores.items():
-                #distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=1.))
-                #distance2_p2.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=2.))
+
                 distance2_p1.append(torch.cdist(torch.unsqueeze(torch.flatten(value), dim=0),
                                                 torch.unsqueeze(torch.flatten(value2), dim=0), p=1).item())
                 distance2_p2.append(torch.cdist(torch.unsqueeze(torch.flatten(value), dim=0),
@@ -178,8 +176,11 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
+        print('heree2')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
+
+        sys.exit()
 
         distance_p1=[]
         for key, value in model_scores_hamming.items():
