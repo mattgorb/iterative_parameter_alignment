@@ -200,7 +200,7 @@ class Merge_Iterator:
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
-        print('heree')
+        print('heree3')
         print(distance_p1)
 
         #sys.exit()
