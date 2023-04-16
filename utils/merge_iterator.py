@@ -231,14 +231,22 @@ class Merge_Iterator:
 
 
 
-        #run this for IID datasets
+
         if self.args.single_model:
             print("Running single model")
-            self.models = model_selector(self.args)
-            self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
-                                     self.test_loader], self.models, self.device,
-                                   f'model_single_{self.args.dataset}_'+self.model_cnf_str, )
-                        for i in range(self.num_clients)]
+            # run this for IID datasets
+            if self.args.dataset_split==-"iid":
+                print("Running single model shared across clients for IID data")
+                self.model = model_selector(self.args)
+                self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
+                                         self.test_loader], self.model, self.device,
+                                       f'model_single_{self.args.dataset}_'+self.model_cnf_str, )
+                            for i in range(self.num_clients)]
+            else:
+                print("Running single model on each peer with parameter sharing")
+                self.model_trainers = [
+                    Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
+                            f'model_{i}_baseline_{self.args.dataset}_' + self.model_cnf_str, ) for i in range(self.num_clients)]
 
         else:
 
