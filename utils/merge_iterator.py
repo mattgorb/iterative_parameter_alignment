@@ -140,16 +140,21 @@ class Merge_Iterator:
             model = trainer.model
             model.eval()
 
-            scores = []
-            preds = []
+            scores = torch.Tensor().to(self.args.device)
+            preds = torch.Tensor().to(self.args.device)
             with torch.no_grad():
                 for data, labels in self.model_trainers[0].train_loader:
                     data = data.to(self.args.device)
                     outputs,_ = model(data)
                     _, predicted = torch.max(outputs, 1)
 
-                    scores.extend(outputs.cpu())
-                    preds.extend(predicted.cpu())
+                    #scores.extend(outputs.cpu())
+                    #preds.extend(predicted.cpu())
+                    scores=torch.cat([scores, outputs.cpu()], dim=1)
+
+            print(scores)
+            print(scores.size())
+            sys.exit()
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
