@@ -94,8 +94,7 @@ class Merge_Iterator:
             for idx2, trainer2 in enumerate(self.model_trainers):
                 model2 = trainer2.model
                 model2.eval()
-                if idx==idx2:
-                    continue
+
 
                 model1_param_list=torch.Tensor().to(self.args.device)
                 model2_param_list=torch.Tensor().to(self.args.device)
@@ -197,12 +196,12 @@ class Merge_Iterator:
                 distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
                                                 torch.unsqueeze(value2.double(), dim=0), p=1).item())
                 print(distance2_p1)
-                sys.exit()
+                #ssys.exit()
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
 
-        print(distance_p2)
+        print(distance_p1)
 
         sys.exit()
 
