@@ -10,7 +10,7 @@ from models.layers import *
 
 class VGG11(nn.Module):
     def __init__(self, args, weight_merge=False):
-        super(Conv2, self).__init__()
+        super(VGG11, self).__init__()
         self.args=args
         self.weight_merge=weight_merge
         self.bias = self.args.bias
