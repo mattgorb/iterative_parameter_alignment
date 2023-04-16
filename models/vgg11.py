@@ -73,6 +73,7 @@ class VGG11(nn.Module):
             out,wd8 = self.layer8(out)
             out = self.relu(out)
             out = self.max_pool(out)
+
             out = out.reshape(out.size(0), -1)
 
             out = self.dropout(out)
@@ -122,7 +123,7 @@ class VGG11(nn.Module):
             out = self.fc1(out)
             out=self.relu(out)
             out = self.fc2(out)
-            return out
+            return out, torch.tensor(0)
 
 
 
