@@ -177,10 +177,10 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
         print('heree2')
-        print(dist_matrix_p1)
-        print(dist_matrix_p2)
+        print(distance_p1)
+        print(distance_p2)
 
-        sys.exit()
+
 
         distance_p1=[]
         for key, value in model_scores_hamming.items():
@@ -202,7 +202,7 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
 
-        print(dist_matrix_p1)
+        print(distance_p2)
 
         sys.exit()
 
