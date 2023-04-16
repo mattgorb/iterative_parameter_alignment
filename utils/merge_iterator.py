@@ -148,8 +148,8 @@ class Merge_Iterator:
                     outputs,_ = model(data)
                     _, predicted = torch.max(outputs, 1)
 
-                    scores.extend(outputs.cpu().numpy())
-                    preds.extend(predicted.cpu().numpy())
+                    scores.extend(outputs.cpu())
+                    preds.extend(predicted.cpu())
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
@@ -159,14 +159,20 @@ class Merge_Iterator:
             distance2_p1 = []
             distance2_p2 = []
             for key2, value2 in model_scores.items():
-                distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=1.))
-                distance2_p2.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=2.))
+                #distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=1.))
+                #distance2_p2.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=2.))
+                distance2_p1.append(torch.cdist(torch.unsqueeze(value, dim=0),torch.unsqueeze(value2, dim=0), p=1).item())
+                distance2_p2.append(torch.cdist(torch.unsqueeze(value, dim=0),torch.unsqueeze(value2, dim=0), p=2).item())
+
+
             distance_p1.append(distance2_p1)
             distance_p2.append(distance2_p2)
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
+        print(dist_matrix_p1)
+        print(dist_matrix_p2)
 
         distance_p1=[]
         for key, value in model_scores_hamming.items():
@@ -177,6 +183,7 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
 
+        print(dist_matrix_p1)
 
         sys.exit()
 
