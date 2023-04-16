@@ -42,7 +42,7 @@ class VGG11(nn.Module):
             self.fc2 = nn.Linear(512, 10)
 
         self.relu=nn.ReLU(True)
-        self.dropout=nn.Dropout()
+
         self.max_pool=nn.MaxPool2d(kernel_size=2, stride=2)
 
     def forward(self, x):
@@ -76,10 +76,10 @@ class VGG11(nn.Module):
 
             out = out.reshape(out.size(0), -1)
 
-            out = self.dropout(out)
+
             out,wd9 = self.fc(out)
             out = self.relu(out)
-            out = self.dropout(out)
+
             out,wd10 = self.fc1(out)
             out = self.relu(out)
             out,wd11 = self.fc2(out)
@@ -116,10 +116,10 @@ class VGG11(nn.Module):
             out=self.max_pool(out)
             out = out.reshape(out.size(0), -1)
 
-            out=self.dropout(out)
+
             out = self.fc(out)
             out=self.relu(out)
-            out=self.dropout(out)
+
             out = self.fc1(out)
             out=self.relu(out)
             out = self.fc2(out)
