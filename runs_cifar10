@@ -27,7 +27,8 @@ nohup python -u main.py --config=configs/mnist_10_dir_p3_ae_diff_seed.yaml --gpu
 nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff_seed.yaml --gpu=6 > ~/iwa/4.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=5 > ~/iwa/5.txt 2>&1 &
 
-cifar10_16_dir_p5_ae_vgg_kaiming_diff_seed.yaml
 
+
+nohup python -u main.py --config=configs/cifar10_16_dir_p5_ae_vgg_kaiming_diff_seed.yaml --gpu=0 > ~/iwa/7.txt 2>&1 &
 
 python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
