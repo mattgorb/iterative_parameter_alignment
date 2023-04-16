@@ -166,8 +166,8 @@ class Merge_Iterator:
             for key2, value2 in model_scores.items():
                 #distance2_p1.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=1.))
                 #distance2_p2.append(scipy.spatial.distance.cdist(value, value2, metric='minkowski', p=2.))
-                distance2_p1.append(torch.cdist(value,value2, p=1).item())
-                distance2_p2.append(torch.cdist(torch.unsqueeze(value, dim=0),torch.unsqueeze(value2, dim=0), p=2).item())
+                distance2_p1.append(torch.cdist(torch.flatten(value),torch.flatten(value2), p=1).item())
+                distance2_p2.append(torch.cdist(torch.flatten(value),torch.flatten(value2), p=2).item())
 
 
             distance_p1.append(distance2_p1)
