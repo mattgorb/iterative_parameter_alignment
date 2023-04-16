@@ -188,22 +188,22 @@ class Merge_Iterator:
 
                 #print(torch.unsqueeze(value, dim=0).size())
                 #print(torch.unsqueeze(value2, dim=0).size())
-                hamming=(value!=value2)
-                print(hamming)
+                #hamming=(value!=value2)
+                #print(hamming)
 
-                print(torch.sum(hamming))
+                #print(torch.sum(hamming))
 
                 distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
                                                 torch.unsqueeze(value2.double(), dim=0), p=1).item())
-                print(distance2_p1)
+                #print(distance2_p1)
                 #ssys.exit()
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
-
+        print('heree')
         print(distance_p1)
 
-        sys.exit()
+        #sys.exit()
 
     def run(self):
         merge_iterations = self.args.merge_iter
