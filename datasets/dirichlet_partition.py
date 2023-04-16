@@ -8,6 +8,15 @@ import random
 
 import pickle
 
+def record_net_data_stats_iid( net_dataidx_map, args):
+
+    save_str = f"dataset_split_info_model_{args.model}_n_cli_{args.num_clients}_ds_split_{args.dataset_split}_ds_alpha_{args.dirichlet_alpha}_align_{args.align_loss}_waf_{args.weight_align_factor}_delta_{args.delta}_init_type_{args.weight_init}_same_init_{args.same_initialization}_le_{args.local_epochs}_s_{args.single_model}"
+
+    print(f'Data statistics: {net_dataidx_map}')
+    print(net_dataidx_map)
+
+    with open(f'{args.base_dir}weight_alignment_csvs/{save_str}.pkl', 'wb') as f:
+        pickle.dump(net_dataidx_map, f)
 
 def record_net_data_stats(y_train, net_dataidx_map, args):
 

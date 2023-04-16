@@ -109,7 +109,7 @@ def get_datasets(args):
 
                 stats_dict[i]=group
                 i+=1
-            record_net_data_stats(dataset.targets, stats_dict, args)
+            record_net_data_stats_iid(stats_dict, args)
         elif args.dataset_split=='dirichlet':
             dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=True, transform=train_transform)
             _, y_train = dataset.data, np.array(dataset.targets)
