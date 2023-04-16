@@ -148,16 +148,12 @@ class Merge_Iterator:
                     outputs,_ = model(data)
                     _, predicted = torch.max(outputs, 1)
 
-                    #scores.extend(outputs.cpu())
-                    #preds.extend(predicted.cpu())
-                    #print(scores.size())
 
-                    #print(outputs.size())
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
             print(preds)
             print(preds.size())
-            sys.exit()
+            #sys.exit()
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
