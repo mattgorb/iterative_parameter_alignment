@@ -143,7 +143,7 @@ class Merge_Iterator:
             scores = torch.Tensor().to(self.args.device)
             preds = torch.Tensor().to(self.args.device)
             with torch.no_grad():
-                for data, labels in self.model_trainers[0].train_loader:
+                for data, labels in self.model_trainers[0].test_loader:
                     data = data.to(self.args.device)
                     outputs,_ = model(data)
                     _, predicted = torch.max(outputs, 1)
