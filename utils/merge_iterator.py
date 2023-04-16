@@ -150,7 +150,7 @@ class Merge_Iterator:
 
                     #scores.extend(outputs.cpu())
                     #preds.extend(predicted.cpu())
-                    scores=torch.cat([scores, outputs.cpu()], dim=1)
+                    scores=torch.cat([scores, outputs], dim=1)
 
             print(scores)
             print(scores.size())
