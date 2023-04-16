@@ -154,9 +154,9 @@ class Merge_Iterator:
 
                     #print(outputs.size())
                     scores=torch.cat([scores, outputs], dim=0)
-
-            print(scores)
-            print(scores.size())
+                    preds=torch.cat([preds, predicted], dim=0)
+            print(preds)
+            print(preds.size())
             sys.exit()
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
