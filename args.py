@@ -22,7 +22,6 @@ def parse_arguments():
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',  help='learning rate (default: 1.0)')
 
     #ablation args
-    #parser.add_argument('--ensemble', type=bool, default=False, )
     parser.add_argument('--single_model', type=bool, default=False, )
 
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')

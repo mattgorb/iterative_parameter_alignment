@@ -162,7 +162,6 @@ class Merge_Iterator:
             distance2_p1 = []
             distance2_p2 = []
             for key2, value2 in model_scores.items():
-
                 distance2_p1.append(torch.cdist(torch.unsqueeze(torch.flatten(value), dim=0),
                                                 torch.unsqueeze(torch.flatten(value2), dim=0), p=1).item())
                 distance2_p2.append(torch.cdist(torch.unsqueeze(torch.flatten(value), dim=0),
@@ -185,8 +184,11 @@ class Merge_Iterator:
         for key, value in model_scores_hamming.items():
             distance2_p1 = []
             for key2, value2 in model_scores_hamming.items():
-                distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
-                                                torch.unsqueeze(value2.double(), dim=0), p=1).item())
+                #distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
+                                                #torch.unsqueeze(value2.double(), dim=0), p=1).item())
+                hamming_bool=(value.double()!=value2.double())
+                distance2_p1.append(torch.sum(hamming_bool))
+
 
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
