@@ -125,7 +125,7 @@ class Merge_Iterator:
             dist_matrix_p2.append(dist_matrix2_p2)
 
 
-        print('heree')
+        print('Parameter Distances')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
 
@@ -175,7 +175,7 @@ class Merge_Iterator:
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
-        print('heree2')
+        print('Prediction Distances')
         print(distance_p1)
         print(distance_p2)
 
@@ -185,30 +185,18 @@ class Merge_Iterator:
         for key, value in model_scores_hamming.items():
             distance2_p1 = []
             for key2, value2 in model_scores_hamming.items():
-
-                #print(torch.unsqueeze(value, dim=0).size())
-                #print(torch.unsqueeze(value2, dim=0).size())
-                #hamming=(value!=value2)
-                #print(hamming)
-
-                #print(torch.sum(hamming))
-
                 distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
                                                 torch.unsqueeze(value2.double(), dim=0), p=1).item())
-                #print(distance2_p1)
-                #ssys.exit()
+
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
-        print('heree3')
+        print('Prediction Hamming Distances')
         print(distance_p1)
 
-        #sys.exit()
 
     def run(self):
         merge_iterations = self.args.merge_iter
-        #intra_merge_iterations=[10 for i in range(2)]+[5 for i in range(2)]+[2 for i in range(10)]+[1 for i in range(10000)]
-
 
         if self.args.same_initialization:
             self.models = [model_selector(self.args) for i in range(self.num_clients)]
@@ -223,7 +211,6 @@ class Merge_Iterator:
                     for idx2, model2 in enumerate(self.models):
                         if idx==idx2:
                             continue
-                        #assert(model1.fc1.weight[0][0]!=model2.fc1.weight[0][0])
                         if model1.fc1.weight[0][0]==model2.fc1.weight[0][0]:
                             print('initial weights are the same')
                             sys.exit(0)
