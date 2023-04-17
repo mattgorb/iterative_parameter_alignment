@@ -187,7 +187,7 @@ class Merge_Iterator:
                 #distance2_p1.append(torch.cdist(torch.unsqueeze(value.double(), dim=0),
                                                 #torch.unsqueeze(value2.double(), dim=0), p=1).item())
                 hamming_bool=(value.double()!=value2.double())
-                distance2_p1.append(torch.sum(hamming_bool))
+                distance2_p1.append(torch.sum(hamming_bool).item())
 
 
             distance_p1.append(distance2_p1)
@@ -274,10 +274,10 @@ class Merge_Iterator:
 
                 self.client_to_tensorboard(iter, client, trainer)
 
-            if iter%10 ==0:
-                self.ensemble()
-                self.comparison_statistics(iter)
-
+            #if iter%10 ==0:
+                #self.ensemble()
+            self.comparison_statistics(iter)
+            sys.exit()
             self.log_results(iter)
 
     def log_results(self,iter):
