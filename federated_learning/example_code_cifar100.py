@@ -44,7 +44,7 @@ model_name = 'cifar100_Conv4' # Model type
 # Common hyperparameters
 
 if rule=='iid':
-    com_amount=350
+    com_amount=150
 elif rule=='Drichlet' and rule_arg==0.6:
     com_amount=500
 elif rule=='split_label':

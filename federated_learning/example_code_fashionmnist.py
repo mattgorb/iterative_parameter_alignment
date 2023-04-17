@@ -60,11 +60,13 @@ n_client = 20
 optim='SGD'
 '''
 
-
+'''
 rule='Drichlet'
 rule_arg=0.3
 n_client = 20
 optim='SGD'
+'''
+
 
 '''
 
@@ -80,28 +82,28 @@ optim='SGD'
 rule='Drichlet'
 rule_arg=0.3
 n_client = 20
-optim='Adam'
+optim='SGD'
 '''
 
-'''
+''''''
 rule='split_label'
 rule_arg=0.3
 n_client = 2
-optim='Adam'
-'''
+optim='SGD'
+
 
 '''
 rule='iid'
 rule_arg=0.3
 n_client = 20
-optim='Adam'
+optim='SGD'
 '''
 
 '''
 rule='iid'
 rule_arg=0.3
 n_client = 2
-optim='Adam'
+optim='SGD'
 '''
 
 # Dirichlet (0.6)
@@ -113,7 +115,7 @@ model_name = 'fashionmnist_2NN'  # Model type
 
 ###
 # Common hyperparameters
-if rule == 'split_label':
+if rule == 'split_label' or rule == 'split_label5':
     com_amount = 3000
 else:
     com_amount = 1000
