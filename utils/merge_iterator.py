@@ -255,7 +255,7 @@ class Merge_Iterator:
             self.model_trainers = [Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
                                            f'model_{i}_{self.args.dataset}_' + self.model_cnf_str, ) for i in range(self.num_clients)]
 
-            #set_weight_align_param(self.models, self.args, self.train_weight_list)
+            set_weight_align_param(self.models, self.args, self.train_weight_list)
 
         for trainer in self.model_trainers:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
