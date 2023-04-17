@@ -1,7 +1,8 @@
 dataset: CIFAR10
 weight_init: default
 #kaiming_normal
-model: VGG11
+model: Conv4
+#VGG11
 align_loss: ae
 weight_align_factor: 1
 data_transform: True
