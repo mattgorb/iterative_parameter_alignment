@@ -1,5 +1,5 @@
 dataset: CIFAR10
-weight_init: default
+weight_init: kaiming_normal
 #kaiming_normal
 model: Conv4
 #VGG11
