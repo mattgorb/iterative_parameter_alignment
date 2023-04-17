@@ -237,7 +237,7 @@ class Merge_Iterator:
         if self.args.single_model:
             print("Running single model")
             # run this for IID datasets
-            if self.args.dataset_split==-"iid":
+            if self.args.dataset_split=="iid":
                 print("Running single model shared across clients for IID data")
                 self.model = model_selector(self.args)
                 self.model_trainers=[Trainer(self.args, [self.train_loaders[i],
