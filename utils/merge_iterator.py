@@ -274,10 +274,10 @@ class Merge_Iterator:
 
                 self.client_to_tensorboard(iter, client, trainer)
 
-            #if iter%10 ==0:
-                #self.ensemble()
-            self.comparison_statistics(iter)
-            sys.exit()
+            if iter%10 ==0:
+                self.ensemble()
+                self.comparison_statistics(iter)
+
             self.log_results(iter)
 
     def log_results(self,iter):
