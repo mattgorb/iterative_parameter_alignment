@@ -100,7 +100,7 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                      data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 
-sys.exit(0)
+#sys.exit(0)
 
 
 ###
