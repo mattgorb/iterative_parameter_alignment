@@ -26,9 +26,9 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #rule='iid'
 
 
-rule='Drichlet'
+rule='iid'
 rule_arg=0.3
-n_client = 10
+n_client = 20
 optim='SGD'
 
 data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg,unbalanced_sgm=0, data_path=data_path)
@@ -98,6 +98,10 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                      model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
                                      sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                      data_path=data_path, lr_decay_per_round=lr_decay_per_round)
+
+
+sys.exit(0)
+
 
 ###
 # baselines
