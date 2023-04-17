@@ -16,7 +16,7 @@ class VGG11(nn.Module):
         self.bias = self.args.bias
 
         if self.weight_merge:
-            self.layer1 = conv_init(3, 5, 3, 1 , args=self.args, )
+            self.layer1 = conv_init(3, 64, 3, 1 , args=self.args, )
             self.layer2 = conv_init(64, 128, 3, 1, args=self.args, )
             self.layer3 = conv_init(128, 256, 3, 1, args=self.args, )
             self.layer4 = conv_init(256, 256, 3, 1, args=self.args, )
