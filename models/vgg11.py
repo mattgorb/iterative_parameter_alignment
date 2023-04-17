@@ -16,7 +16,7 @@ class VGG11(nn.Module):
         self.bias = self.args.bias
 
         if self.weight_merge:
-            '''self.layer1 = conv_init(3, 64, 3, 1 , args=self.args, )
+            self.layer1 = conv_init(3, 64, 3, 1 , args=self.args, )
             self.layer2 = conv_init(64, 128, 3, 1, args=self.args, )
             self.layer3 = conv_init(128, 256, 3, 1, args=self.args, )
             self.layer4 = conv_init(256, 256, 3, 1, args=self.args, )
@@ -26,14 +26,15 @@ class VGG11(nn.Module):
             self.layer8 = conv_init(512, 512, 3, 1, args=self.args, )
             self.fc = linear_init(512, 512, args=self.args, )
             self.fc1 = linear_init(512, 512, args=self.args, )
-            self.fc2 = linear_init(512, 10, args=self.args, )'''
-            self.conv1 = conv_init(3, 64, args=self.args)
+            self.fc2 = linear_init(512, 10, args=self.args, )
+
+            '''self.conv1 = conv_init(3, 64, args=self.args)
             self.conv2 = conv_init(64, 64, args=self.args)
             self.conv3 = conv_init(64, 128, args=self.args)
             self.conv4 = conv_init(128, 128, args=self.args)
             self.fc1=linear_init(32*32*8, 256, args=self.args)
             self.fc2=linear_init(256, 256, args=self.args)
-            self.fc3=linear_init(256, 10, args=self.args)
+            self.fc3=linear_init(256, 10, args=self.args)'''
         else:
             self.layer1 = nn.Conv2d(3, 64, kernel_size=3, stride=1, padding=1)
             self.layer2 = nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1)
@@ -54,7 +55,7 @@ class VGG11(nn.Module):
 
     def forward(self, x):
         if self.weight_merge:
-            x,wd1 = self.conv1(x)
+            '''x,wd1 = self.conv1(x)
             x = self.relu(x)
             x,wd2 = self.conv2(x)
             x = self.relu(x)
@@ -71,8 +72,8 @@ class VGG11(nn.Module):
             x = self.relu(x)
             x,wd7 = self.fc3(x)
             wd=wd1+wd2+wd3+wd4+wd5+wd6+wd7
-            return x, wd
-            '''out,wd1 = self.layer1(x)
+            return x, wd'''
+            out,wd1 = self.layer1(x)
             out = self.relu(out)
             out = self.max_pool(out)
 
@@ -111,7 +112,7 @@ class VGG11(nn.Module):
 
 
             wd = wd1+wd2+wd3+wd4+wd5+wd6+wd7+wd8+wd9+wd10+wd11
-            return out, torch.tensor(0)'''
+            return out, torch.tensor(0)
         else:
             out = self.layer1(x)
             out=self.relu(out)
