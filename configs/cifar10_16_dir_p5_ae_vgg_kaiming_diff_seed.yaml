@@ -1,5 +1,5 @@
 dataset: CIFAR10
-weight_init: kaiming_normal
+weight_init: default
 model: VGG11
 align_loss: ae
 weight_align_factor: 1
@@ -12,4 +12,3 @@ dataset_split: iid
 dirichlet_alpha: 0.5
 batch_size: 50
 merge_iter: 500
-same_initialization: False
