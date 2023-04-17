@@ -21,14 +21,14 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #########
 
 
-#rule='split_label'
-#n_client=2
+rule='split_label'
+n_client=2
 #rule='iid'
 
 
-rule='Drichlet'
+#rule='Drichlet'
 rule_arg=0.3
-n_client = 10
+#n_client = 10
 optim='SGD'
 
 data_obj = DatasetObject(dataset='CIFAR100', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg,unbalanced_sgm=0, data_path=data_path)
@@ -100,7 +100,7 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                      data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 
-#sys.exit(0)
+sys.exit(0)
 
 
 ###
