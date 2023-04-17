@@ -71,8 +71,9 @@ class Trainer:
 
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
-
-            loss = self.criterion(output, target) # + self.args.weight_align_factor * weight_align
+            if batch_idx==0:
+                print(weight_align)
+            loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
             self.optimizer.step()
