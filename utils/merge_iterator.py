@@ -165,7 +165,7 @@ class Merge_Iterator:
                     pred = outputs.argmax(dim=1, keepdim=True)
                     correct += pred.eq(labels.view_as(pred)).sum().item()
 
-            print(f'{idx}: 100. * correct / len(self.test_loader.dataset)')
+            print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
 
 
             model_scores[idx] = scores
