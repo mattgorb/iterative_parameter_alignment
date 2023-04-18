@@ -145,9 +145,7 @@ class Merge_Iterator:
             model = trainer.model
 
             model.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
-
             model.eval()
-            print(trainer.save_path)
 
             scores = torch.Tensor().to(self.args.device)
             preds = torch.LongTensor().to(self.args.device)
@@ -166,15 +164,13 @@ class Merge_Iterator:
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
-                    pred = outputs.argmax(dim=1, keepdim=True)
-                    correct += pred.eq(labels.view_as(pred)).sum().item()
+                    #pred = outputs.argmax(dim=1, keepdim=True)
+                    #correct += pred.eq(labels.view_as(pred)).sum().item()
 
 
 
 
-            print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
-
-            print(preds[:10])
+            #print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
@@ -209,8 +205,7 @@ class Merge_Iterator:
             distance2_p1 = []
             for key2, value2 in model_scores_hamming.items():
 
-                print(value[:5])
-                print(value2[:5])
+
                 hamming_bool=(value.double()!=value2.double())
                 distance2_p1.append(torch.sum(hamming_bool).item())
 
@@ -220,10 +215,7 @@ class Merge_Iterator:
         print('Prediction Hamming Distances')
         print(distance_p1)
 
-        print(hamming_bool.size())
-        print(value[:100])
-        print(value2[:100])
-        sys.exit()
+
 
     def run(self):
         merge_iterations = self.args.merge_iter

@@ -87,7 +87,7 @@ class VGG11(nn.Module):
 
 
             wd = wd1+wd2+wd3+wd4+wd5+wd6+wd7+wd8+wd9+wd10+wd11
-            return out, torch.tensor(0)
+            return out, wd
         else:
             out = self.layer1(x)
             out=self.relu(out)
