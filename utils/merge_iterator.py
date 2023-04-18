@@ -154,10 +154,13 @@ class Merge_Iterator:
 
             correct = 0
             with torch.no_grad():
-                for data, labels in self.model_trainers[0].test_loader:
+                for batch_idx, (data, labels) in enumerate(self.model_trainers[0].test_loader):
                     data, labels = data.to(self.args.device), labels.to(self.args.device)
                     outputs, _ = model(data)
                     _, predicted = torch.max(outputs, 1)
+
+                    if batch_idx==0:
+                        print(outputs[0])
 
 
                     scores=torch.cat([scores, outputs], dim=0)
@@ -166,11 +169,8 @@ class Merge_Iterator:
                     pred = outputs.argmax(dim=1, keepdim=True)
                     correct += pred.eq(labels.view_as(pred)).sum().item()
 
-                    print(outputs)
-                    print(predicted)
-                    print(pred)
 
-                    sys.exit()
+
 
             print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
 
@@ -179,7 +179,7 @@ class Merge_Iterator:
             model_scores_hamming[idx]= preds
 
 
-        #sys.exit()
+        sys.exit()
 
 
         distance_p1=[]
