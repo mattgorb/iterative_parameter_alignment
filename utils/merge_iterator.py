@@ -213,7 +213,7 @@ class Merge_Iterator:
                 print(value2[:5])
                 hamming_bool=(value.double()!=value2.double())
                 distance2_p1.append(torch.sum(hamming_bool).item())
-            sys.exit()
+
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_hamming_iter_{iteration}.npy', distance_p1)
 
