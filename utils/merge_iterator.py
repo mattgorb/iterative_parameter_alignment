@@ -172,7 +172,7 @@ class Merge_Iterator:
             model_scores_hamming[idx]= preds
 
 
-        sys.exit()
+        #sys.exit()
 
 
         distance_p1=[]
