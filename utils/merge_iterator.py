@@ -87,7 +87,10 @@ class Merge_Iterator:
         dist_matrix_p1=[]
         dist_matrix_p2=[]
         for idx, trainer in enumerate(self.model_trainers):
-            model1 = trainer.model
+            model = trainer.model
+            model.load_state_dict(torch.load(trainer.save_path))
+            model.eval()
+
             model1.eval()
             dist_matrix2_p1=[]
             dist_matrix2_p2 = []
@@ -149,7 +152,6 @@ class Merge_Iterator:
                     data = data.to(self.args.device)
                     outputs,_ = model(data)
                     _, predicted = torch.max(outputs, 1)
-
 
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
