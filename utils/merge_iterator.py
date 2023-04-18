@@ -156,14 +156,14 @@ class Merge_Iterator:
             with torch.no_grad():
                 for data, labels in self.model_trainers[0].test_loader:
                     data = data.to(self.args.device)
-                    outputs, target = model(data)
+                    outputs, _ = model(data)
                     _, predicted = torch.max(outputs, 1)
 
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
                     pred = outputs.argmax(dim=1, keepdim=True)
-                    correct += pred.eq(target.view_as(pred)).sum().item()
+                    correct += pred.eq(labels.view_as(pred)).sum().item()
 
             print(f'{idx}: 100. * correct / len(self.test_loader.dataset)')
 
