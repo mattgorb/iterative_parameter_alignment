@@ -139,6 +139,7 @@ class Merge_Iterator:
 
         for idx, trainer in enumerate(self.model_trainers):
             model = trainer.model
+            model.load_state_dict(torch.load(trainer.save_path))
             model.eval()
 
             scores = torch.Tensor().to(self.args.device)
