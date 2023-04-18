@@ -162,7 +162,7 @@ class Merge_Iterator:
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
-                    pred = output.argmax(dim=1, keepdim=True)
+                    pred = outputs.argmax(dim=1, keepdim=True)
                     correct += pred.eq(target.view_as(pred)).sum().item()
 
             print(f'{idx}: 100. * correct / len(self.test_loader.dataset)')
@@ -173,6 +173,8 @@ class Merge_Iterator:
 
 
         sys.exit()
+
+
         distance_p1=[]
         distance_p2=[]
         for key, value in model_scores.items():
