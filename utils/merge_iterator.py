@@ -157,10 +157,6 @@ class Merge_Iterator:
                     outputs, _ = model(data)
                     _, predicted = torch.max(outputs, 1)
 
-                    if batch_idx==0:
-                        print(outputs[0])
-                        print(outputs.argmax(dim=1, keepdim=True)[:5])
-
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
