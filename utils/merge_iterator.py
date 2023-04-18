@@ -156,7 +156,7 @@ class Merge_Iterator:
             with torch.no_grad():
                 for data, labels in self.model_trainers[0].test_loader:
                     data = data.to(self.args.device)
-                    outputs,_ = model(data)
+                    outputs, target = model(data)
                     _, predicted = torch.max(outputs, 1)
 
                     scores=torch.cat([scores, outputs], dim=0)
