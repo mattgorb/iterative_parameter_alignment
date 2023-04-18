@@ -197,6 +197,8 @@ class Merge_Iterator:
         print(distance_p1)
 
         print(hamming_bool.size())
+        print(value[:100])
+        print(value2[:100])
         sys.exit()
 
     def run(self):
