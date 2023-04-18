@@ -261,7 +261,7 @@ class Merge_Iterator:
         for trainer in self.model_trainers:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
 
-        for iter in range(1,merge_iterations+1):
+        for iter in range(merge_iterations+1):
             client=0
             for trainer in self.model_trainers:
                 trainer.fit()
