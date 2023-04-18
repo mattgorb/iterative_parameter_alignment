@@ -143,9 +143,11 @@ class Merge_Iterator:
 
         for idx, trainer in enumerate(self.model_trainers):
             model = trainer.model
+            print(model.fc1.weight[0][:5])
             model.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+            print(model.fc1.weight[0][:5])
             model.eval()
-
+            print(trainer.save_path)
             scores = torch.Tensor().to(self.args.device)
             preds = torch.LongTensor().to(self.args.device)
             with torch.no_grad():
@@ -159,7 +161,7 @@ class Merge_Iterator:
 
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
-
+        sys.exit()
         distance_p1=[]
         distance_p2=[]
         for key, value in model_scores.items():
