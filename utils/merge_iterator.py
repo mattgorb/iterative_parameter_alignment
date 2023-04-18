@@ -161,7 +161,7 @@ class Merge_Iterator:
 
                     if batch_idx==0:
                         print(outputs[0])
-                        print(outputs.argmax(dim=1, keepdim=True)[:10])
+                        print(outputs.argmax(dim=1, keepdim=True)[:5])
 
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
@@ -174,7 +174,7 @@ class Merge_Iterator:
 
             print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
 
-
+            print(preds[:10])
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
 
