@@ -194,7 +194,7 @@ class Merge_Iterator:
                 print(value.size())
                 print(value2.size())
 
-                torch.distributions.kl_divergence(p, q).mean()
+                torch.distributions.kl_divergence(value, value2).mean()
 
             distance_p1.append(distance2_p1)
             distance_p2.append(distance2_p2)
