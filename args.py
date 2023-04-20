@@ -24,6 +24,8 @@ def parse_arguments():
     #ablation args
     parser.add_argument('--single_model', type=bool, default=False, )
 
+
+    parser.add_argument('--random_topology', type=bool, default=False, )
     parser.add_argument('--seed', type=int, default=1, metavar='S', help='random seed (default: 1)')
     parser.add_argument('--weight_seed', type=int, default=1, )
     parser.add_argument('--same_initialization', type=bool, default=True, )

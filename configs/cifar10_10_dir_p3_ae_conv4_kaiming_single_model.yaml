@@ -12,3 +12,4 @@ dirichlet_alpha: 0.3
 batch_size: 50
 merge_iter: 2500
 single_model: True
+random_topology: True

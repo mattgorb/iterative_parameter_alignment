@@ -11,6 +11,11 @@ import os
 import shutil
 from models.layers import LinearMerge, ConvMerge
 import scipy.spatial
+import random
+
+
+
+
 
 class Merge_Iterator:
     def __init__(self, args, train_loaders, test_loader,train_weight_list, device, weight_dir):
@@ -186,9 +191,15 @@ class Merge_Iterator:
                                                 torch.unsqueeze(torch.flatten(value2), dim=0), p=2).item())
 
 
+                print(value.size())
+                print(value2.size())
+
+                torch.distributions.kl_divergence(p, q).mean()
+
             distance_p1.append(distance2_p1)
             distance_p2.append(distance2_p2)
 
+        sys.exit()
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
@@ -276,19 +287,36 @@ class Merge_Iterator:
         for trainer in self.model_trainers:
             trainer.optimizer = optim.Adam(trainer.model.parameters(), lr=self.args.lr)
 
+        peer_list = list(range(0, len(self.model_trainers), 1))
+
         for iter in range(merge_iterations+1):
-            client=0
-            for trainer in self.model_trainers:
-                trainer.fit()
+            if self.args.random_topology:
+                random.shuffle(peer_list)
 
-                print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
-                      f'Train CE loss: {trainer.train_loss_ce}, '
-                      f'Test loss: {trainer.test_loss},  '
-                      f'Test accuracy: {trainer.test_acc}')
+                for i in peer_list:
+                    trainer=self.model_trainers[i]
+                    trainer.fit()
 
-                client+=1
+                    print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
+                          f'Train CE loss: {trainer.train_loss_ce}, '
+                          f'Test loss: {trainer.test_loss},  '
+                          f'Test accuracy: {trainer.test_acc}')
 
-                self.client_to_tensorboard(iter, client, trainer)
+                    self.client_to_tensorboard(iter, i, trainer)
+
+            else:
+                client=0
+                for trainer in self.model_trainers:
+                    trainer.fit()
+
+                    print(f'Model {trainer.model_name} Train loss: {trainer.train_loss}, '
+                          f'Train CE loss: {trainer.train_loss_ce}, '
+                          f'Test loss: {trainer.test_loss},  '
+                          f'Test accuracy: {trainer.test_acc}')
+
+                    client+=1
+
+                    self.client_to_tensorboard(iter, client, trainer)
 
             if iter%10 ==0:
                 self.ensemble()
@@ -358,15 +386,9 @@ class Merge_Iterator:
                            'test_losses': self.test_losses,
                            'test_accuracy_list': self.test_accuracy_list, })
         df.to_csv(
-            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_model_{self.args.model}_cli'
-            f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
-            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
-                                    f'_same_init_{self.args.same_initialization}.csv')
+            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_{self.model_cnf_str}.csv')
 
         df = pd.DataFrame({'best_test_accuracy': self.best_test_accuracy,
                            'average_test_accuracy': self.average_test_accuracy, })
         df.to_csv(
-            f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_model_{self.args.model}_cli'
-            f'_{self.args.num_clients}_split_{self.args.dataset_split}_dir_alph_{self.args.dirichlet_alpha}_align'
-            f'_{self.args.align_loss}_waf_{self.args.weight_align_factor}_{self.args.weight_init}'
-                                    f'_same_init_{self.args.same_initialization}.csv')
+            f'{self.args.base_dir}/weight_alignment_csvs/overall_results_ds_{self.args.dataset}_{self.model_cnf_str}.csv')
