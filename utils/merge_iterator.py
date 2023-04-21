@@ -167,7 +167,8 @@ class Merge_Iterator:
 
                     #pred = outputs.argmax(dim=1, keepdim=True)
                     #correct += pred.eq(labels.view_as(pred)).sum().item()
-
+                    print(pred.eq(labels.view_as(pred)))
+                    sys.exit()
 
 
 
@@ -191,15 +192,10 @@ class Merge_Iterator:
                                                 torch.unsqueeze(torch.flatten(value2), dim=0), p=2).item())
 
 
-                print(value.size())
-                print(value2.size())
-
-                torch.distributions.kl_divergence(value, value2).mean()
-
             distance_p1.append(distance2_p1)
             distance_p2.append(distance2_p2)
 
-        sys.exit()
+
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p1_iter_{iteration}.npy', distance_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_scores_p2_iter_{iteration}.npy', distance_p2)
 
