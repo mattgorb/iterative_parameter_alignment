@@ -145,7 +145,7 @@ class Merge_Iterator:
 
         model_scores = {}
         model_scores_hamming = {}
-
+        model_scores_correct = {}
         for idx, trainer in enumerate(self.model_trainers):
             model = trainer.model
 
@@ -154,8 +154,8 @@ class Merge_Iterator:
 
             scores = torch.Tensor().to(self.args.device)
             preds = torch.LongTensor().to(self.args.device)
+            correct=torch.LongTensor().to(self.args.device)
 
-            correct = 0
             with torch.no_grad():
                 for batch_idx, (data, labels) in enumerate(self.model_trainers[0].test_loader):
                     data, labels = data.to(self.args.device), labels.to(self.args.device)
@@ -166,18 +166,16 @@ class Merge_Iterator:
                     preds=torch.cat([preds, predicted], dim=0)
 
                     pred = outputs.argmax(dim=1, keepdim=True)
-                    #correct += pred.eq(labels.view_as(pred)).sum().item()
-                    print(pred.eq(labels.view_as(pred)))
-                    sys.exit()
+
+                    correct=torch.cat([correct, pred.eq(labels.view_as(pred))], dim=0)
+
 
 
 
             #print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
-
-
-
+            model_scores_correct[idx]=correct
 
 
         distance_p1=[]
@@ -218,6 +216,30 @@ class Merge_Iterator:
         print('Prediction Hamming Distances')
         print(distance_p1)
 
+
+        distance_p1=[]
+        for key, value in model_scores_correct.items():
+            distance2_p1 = []
+            for key2, value2 in model_scores_correct.items():
+                distance2_p1.append(torch.logical_and(value, value2).sum().item())
+
+            distance_p1.append(distance2_p1)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_both_correct_pred_iter_{iteration}.npy', distance_p1)
+
+        print('Predictions both correct (Logical And)')
+        print(distance_p1)
+
+        distance_p1=[]
+        for key, value in model_scores_correct.items():
+            distance2_p1 = []
+            for key2, value2 in model_scores_correct.items():
+                distance2_p1.append(torch.logical_and(~value, ~value2).sum().item())
+
+            distance_p1.append(distance2_p1)
+        np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_both_incorrect_pred_iter_{iteration}.npy', distance_p1)
+
+        print('Predictions both correct (Logical And)')
+        print(distance_p1)
 
 
     def run(self):
