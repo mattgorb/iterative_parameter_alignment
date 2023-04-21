@@ -165,7 +165,7 @@ class Merge_Iterator:
                     scores=torch.cat([scores, outputs], dim=0)
                     preds=torch.cat([preds, predicted], dim=0)
 
-                    #pred = outputs.argmax(dim=1, keepdim=True)
+                    pred = outputs.argmax(dim=1, keepdim=True)
                     #correct += pred.eq(labels.view_as(pred)).sum().item()
                     print(pred.eq(labels.view_as(pred)))
                     sys.exit()
