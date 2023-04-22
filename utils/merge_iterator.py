@@ -154,7 +154,7 @@ class Merge_Iterator:
 
             scores = torch.Tensor().to(self.args.device)
             preds = torch.LongTensor().to(self.args.device)
-            correct=torch.LongTensor().to(self.args.device)
+            correct=torch.BoolTensor().to(self.args.device)
 
             with torch.no_grad():
                 for batch_idx, (data, labels) in enumerate(self.model_trainers[0].test_loader):
