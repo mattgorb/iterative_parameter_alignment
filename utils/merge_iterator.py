@@ -93,7 +93,7 @@ class Merge_Iterator:
         dist_matrix_p2=[]
         for idx, trainer in enumerate(self.model_trainers):
             model1 = trainer.model
-            model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+            model1=model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
             model1.eval()
 
 
@@ -101,7 +101,7 @@ class Merge_Iterator:
             dist_matrix2_p2 = []
             for idx2, trainer2 in enumerate(self.model_trainers):
                 model2 = trainer2.model
-                model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
+                model2=model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
                 model2.eval()
 
 
