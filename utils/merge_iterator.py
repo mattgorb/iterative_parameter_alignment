@@ -111,8 +111,10 @@ class Merge_Iterator:
                     print(f'{idx}, {idx2}')
                     print(trainer.save_path)
                     print(trainer2.save_path)
-                    trainer.test()
-                    trainer2.test()
+                    x,y=trainer.test()
+                    print(y)
+                    x,y=trainer2.test()
+                    print(y)
                     print(model1.fc1.weight[:10])
                     print(model2.fc1.weight[:10])
 
