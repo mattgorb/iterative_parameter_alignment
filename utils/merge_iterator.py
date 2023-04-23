@@ -109,6 +109,8 @@ class Merge_Iterator:
 
                 if (idx==0 and idx2==1) or (idx==1 and idx2==0):
                     print(f'{idx}, {idx2}')
+                    print(trainer.save_path)
+                    print(trainer2.save_path)
                     print(model1.fc1.weight[:10])
                     print(model2.fc1.weight[:10])
 
