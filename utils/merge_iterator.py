@@ -128,6 +128,8 @@ class Merge_Iterator:
 
                 if idx in [0,1] and idx2 in [0,1]:
                     print(f'{idx}, {idx2}')
+                    print(model1_param_list[:10])
+                    print(model2_param_list[:10])
                     print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
 
                 del model1_param_list
