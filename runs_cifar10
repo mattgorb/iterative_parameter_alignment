@@ -1,7 +1,7 @@
 example: nohup python -u main.py --config=configs/cifar10_20_dir_p3_se_conv4_default1.yaml --gpu=7 --data_dir=data7 > ~/iwa/23.txt 2>&1 &
 scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/client_results_ds_CIFAR10_model_Conv4_cli_10_split_dirichlet_dir_alph_0.3_align_ae_waf_1_kaiming_normal* ~/Downloads
 
-scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_similarity/model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_*_iter_110.npy ~/Downloads
+scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_similarity/model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_*_iter_200.npy ~/Downloads
 
 
 

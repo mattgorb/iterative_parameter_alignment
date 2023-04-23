@@ -238,7 +238,7 @@ class Merge_Iterator:
             distance_p1.append(distance2_p1)
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_both_incorrect_pred_iter_{iteration}.npy', distance_p1)
 
-        print('Predictions both correct (Logical And)')
+        print('Predictions both Incorrect (Logical NOT)')
         print(distance_p1)
 
 
@@ -338,7 +338,9 @@ class Merge_Iterator:
 
             if iter%10 ==0:
                 self.ensemble()
-                self.comparison_statistics(iter)
+
+                if self.num_clients==10:
+                    self.comparison_statistics(iter)
 
             self.log_results(iter)
 
