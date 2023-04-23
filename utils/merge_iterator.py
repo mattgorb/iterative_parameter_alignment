@@ -96,7 +96,7 @@ class Merge_Iterator:
             model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
             model1.eval()
 
-            model1.eval()
+
             dist_matrix2_p1=[]
             dist_matrix2_p2 = []
             for idx2, trainer2 in enumerate(self.model_trainers):
@@ -137,6 +137,9 @@ class Merge_Iterator:
         print('Parameter Distances')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
+
+
+        sys.exit()
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
