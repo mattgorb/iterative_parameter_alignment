@@ -105,6 +105,11 @@ class Merge_Iterator:
                 model2.eval()
 
 
+                if (idx==0 and idx2==1) or (idx==1 and idx2==0):
+                    print(f'{idx}, {idx2}')
+                    print(model1.fc1.weight[:10])
+                    print(model2.fc1.weight[:10])
+
                 model1_param_list=torch.Tensor().to(self.args.device)
                 model2_param_list=torch.Tensor().to(self.args.device)
                 for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
@@ -126,11 +131,11 @@ class Merge_Iterator:
                 dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
                 dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
 
-                if (idx==0 and idx2==1) or (idx==1 and idx2==0):
+                '''if (idx==0 and idx2==1) or (idx==1 and idx2==0):
                     print(f'{idx}, {idx2}')
                     print(model1_param_list[:10])
                     print(model2_param_list[:10])
-                    print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
+                    print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())'''
 
                 del model1_param_list
                 del model2_param_list
