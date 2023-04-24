@@ -154,7 +154,7 @@ class Merge_Iterator:
         print(dist_matrix_p2)
 
 
-        sys.exit()
+        #sys.exit()
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
@@ -187,6 +187,8 @@ class Merge_Iterator:
 
                     correct=torch.cat([correct, pred.eq(labels.view_as(pred))], dim=0)
 
+            x, y = trainer.test()
+            print(y)
 
 
 
@@ -194,7 +196,7 @@ class Merge_Iterator:
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
             model_scores_correct[idx]=correct
-
+        sys.exit()
 
         distance_p1=[]
         distance_p2=[]
