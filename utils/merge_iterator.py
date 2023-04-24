@@ -89,9 +89,8 @@ class Merge_Iterator:
         2. Distance between each models outputs on test set
         '''
 
-        dist_matrix_p1=[]
-        dist_matrix_p2=[]
-        with torch.no_grad():
+
+        '''with torch.no_grad():
             for idx, trainer in enumerate(self.model_trainers):
                 model1 = trainer.model
                 model1.eval()
@@ -108,20 +107,7 @@ class Merge_Iterator:
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
 
-                    print(model1.fc1.weight[:5])
-                    '''print("HERE")
-                    print(trainer.model_name)
-                    print(trainer2.model_name)
-                    if (idx==0 and idx2==1) or (idx==1 and idx2==0):
-                        print(f'{idx}, {idx2}')
-                        print(trainer.save_path)
-                        print(trainer2.save_path)
-                        x,y=trainer.test()
-                        print(y)
-                        x,y=trainer2.test()
-                        print(y)
-                        print(model1.fc1.weight[:10])
-                        print(model2.fc1.weight[:10])'''
+
 
                     model1_param_list=torch.Tensor().to(self.args.device)
                     model2_param_list=torch.Tensor().to(self.args.device)
@@ -147,7 +133,30 @@ class Merge_Iterator:
                     del model2_param_list
 
                 dist_matrix_p1.append(dist_matrix2_p1)
-                dist_matrix_p2.append(dist_matrix2_p2)
+                dist_matrix_p2.append(dist_matrix2_p2)'''
+
+
+        param_list=[]
+
+        for idx, trainer in enumerate(self.model_trainers):
+            model1 = trainer.model
+            model1.eval()
+            model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+
+            model1_param_list = torch.Tensor().to(self.args.device)
+            for model1_mods in model1.named_modules():
+                n1, m1 = model1_mods
+                if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
+                    continue
+                if hasattr(m1, "weight"):
+                    model1_param_list = torch.cat([model1_param_list, torch.flatten(m1.weight.detach())])
+                if hasattr(m1, "bias"):
+                    model1_param_list = torch.cat([model1_param_list, torch.flatten(m1.bias.detach())])
+
+            param_list.append(model1_param_list)
+
+        for params in param_list:
+            print(params[:10])
 
         sys.exit()
 
