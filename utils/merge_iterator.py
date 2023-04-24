@@ -103,7 +103,10 @@ class Merge_Iterator:
                     model2 = trainer2.model
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
-                    print("HERE")
+
+                    print(model1.fc1.weight[:5])
+                    print(model2.fc1.weight[:5])
+                    '''print("HERE")
                     print(trainer.model_name)
                     print(trainer2.model_name)
                     if (idx==0 and idx2==1) or (idx==1 and idx2==0):
@@ -115,7 +118,7 @@ class Merge_Iterator:
                         x,y=trainer2.test()
                         print(y)
                         print(model1.fc1.weight[:10])
-                        print(model2.fc1.weight[:10])
+                        print(model2.fc1.weight[:10])'''
 
                     model1_param_list=torch.Tensor().to(self.args.device)
                     model2_param_list=torch.Tensor().to(self.args.device)
