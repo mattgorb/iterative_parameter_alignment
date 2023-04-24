@@ -155,15 +155,28 @@ class Merge_Iterator:
 
             param_list.append(model1_param_list)
 
-        for params in param_list:
-            print(params[:10])
+        dist_matrix_p1=[]
+        dist_matrix_p2=[]
 
-        sys.exit()
+        for params in param_list:
+            dist_matrix2_p1 = []
+            dist_matrix2_p2 = []
+            for params2 in param_list:
+                dist_matrix2_p1.append(
+                    torch.cdist(torch.unsqueeze(params, dim=0), torch.unsqueeze(params2, dim=0),
+                                p=1).item())
+                dist_matrix2_p2.append(
+                    torch.cdist(torch.unsqueeze(params, dim=0), torch.unsqueeze(params2, dim=0),
+                                p=2).item())
+            dist_matrix_p1.append(dist_matrix2_p1)
+            dist_matrix_p2.append(dist_matrix2_p2)
+
+
 
         print('Parameter Distances')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
-
+        sys.exit()
 
 
 
