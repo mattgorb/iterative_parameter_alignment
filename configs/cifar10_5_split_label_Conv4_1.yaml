@@ -1,0 +1,12 @@
+dataset: CIFAR10
+weight_init: kaiming_normal
+model: Conv4
+align_loss: ae
+weight_align_factor: 1
+data_transform: True
+num_clients: 5
+bias: True
+local_epochs: 1
+dataset_split: disjoint_classes
+batch_size: 50
+merge_iter: 5000

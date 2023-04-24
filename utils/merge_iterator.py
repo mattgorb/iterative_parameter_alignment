@@ -89,53 +89,6 @@ class Merge_Iterator:
         2. Distance between each models outputs on test set
         '''
 
-
-        '''with torch.no_grad():
-            for idx, trainer in enumerate(self.model_trainers):
-                model1 = trainer.model
-                model1.eval()
-                #model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
-
-                dist_matrix2_p1=[]
-                dist_matrix2_p2 = []
-                for idx2, trainer2 in enumerate(self.model_trainers):
-                    model1 = trainer.model
-                    model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
-                    model1.eval()
-
-                    model2 = trainer2.model
-                    model2.eval()
-                    model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
-
-
-
-                    model1_param_list=torch.Tensor().to(self.args.device)
-                    model2_param_list=torch.Tensor().to(self.args.device)
-                    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
-                        n1, m1 = model1_mods
-                        n2, m2 = model2_mods
-                        if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
-                            continue
-                        if hasattr(m1, "weight"):
-                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight.detach())])
-                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight.detach())])
-                        if hasattr(m1, "bias"):
-                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias.detach())])
-                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias.detach())])
-
-
-                    #Distance metrics
-                    dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
-                    dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
-
-
-                    del model1_param_list
-                    del model2_param_list
-
-                dist_matrix_p1.append(dist_matrix2_p1)
-                dist_matrix_p2.append(dist_matrix2_p2)'''
-
-
         param_list=[]
 
         for idx, trainer in enumerate(self.model_trainers):
@@ -176,9 +129,6 @@ class Merge_Iterator:
         print('Parameter Distances')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
-        sys.exit()
-
-
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
