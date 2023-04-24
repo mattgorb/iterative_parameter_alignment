@@ -103,7 +103,7 @@ class Merge_Iterator:
                     model2 = trainer2.model
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
-
+                    print("HERE")
                     print(model1.fc1.weight[:5])
                     print(model2.fc1.weight[:5])
                     '''print("HERE")
