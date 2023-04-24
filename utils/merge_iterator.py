@@ -128,11 +128,11 @@ class Merge_Iterator:
                         if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
                             continue
                         if hasattr(m1, "weight"):
-                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight)])
-                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight)])
+                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight.detach())])
+                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight.detach())])
                         if hasattr(m1, "bias"):
-                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias)])
-                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias)])
+                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias.detach())])
+                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias.detach())])
 
 
                     assert(model1_param_list.size()==model2_param_list.size())
