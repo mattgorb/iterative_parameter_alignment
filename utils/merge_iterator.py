@@ -104,6 +104,8 @@ class Merge_Iterator:
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
 
+                    print(trainer.model_name)
+                    print(trainer2.model_name)
                     if (idx==0 and idx2==1) or (idx==1 and idx2==0):
                         print(f'{idx}, {idx2}')
                         print(trainer.save_path)
@@ -148,13 +150,14 @@ class Merge_Iterator:
                 dist_matrix_p1.append(dist_matrix2_p1)
                 dist_matrix_p2.append(dist_matrix2_p2)
 
+        sys.exit()
 
         print('Parameter Distances')
         print(dist_matrix_p1)
         print(dist_matrix_p2)
 
 
-        #sys.exit()
+
 
         np.save(f'{self.args.base_dir}weight_alignment_similarity/{self.model_cnf_str}_p1_weight_distance_iter_{iteration}.npy',  dist_matrix_p1)
 
@@ -187,16 +190,12 @@ class Merge_Iterator:
 
                     correct=torch.cat([correct, pred.eq(labels.view_as(pred))], dim=0)
 
-            x, y = trainer.test()
-            print(y)
-
-
 
             #print(f'{idx}: {100. * correct / len(self.test_loader.dataset)}')
             model_scores[idx] = scores
             model_scores_hamming[idx]= preds
             model_scores_correct[idx]=correct
-        sys.exit()
+
 
         distance_p1=[]
         distance_p2=[]
