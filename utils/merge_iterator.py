@@ -100,20 +100,15 @@ class Merge_Iterator:
                 dist_matrix2_p1=[]
                 dist_matrix2_p2 = []
                 for idx2, trainer2 in enumerate(self.model_trainers):
-
-                    print("HERE3")
-                    print(model1.fc1.weight[:5])
+                    model1 = trainer.model
+                    model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+                    model1.eval()
 
                     model2 = trainer2.model
-                    print("HERE4")
-                    print(model1.fc1.weight[:5])
                     model2.eval()
-                    print("HERE3")
-                    print(model1.fc1.weight[:5])
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
-                    print("HERE")
-                    print(model1.fc1.weight[:5])
 
+                    print(model1.fc1.weight[:10])
                     '''print("HERE")
                     print(trainer.model_name)
                     print(trainer2.model_name)
