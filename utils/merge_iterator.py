@@ -103,7 +103,7 @@ class Merge_Iterator:
                     model2 = trainer2.model
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
-
+                    print("HERE")
                     print(trainer.model_name)
                     print(trainer2.model_name)
                     if (idx==0 and idx2==1) or (idx==1 and idx2==0):
