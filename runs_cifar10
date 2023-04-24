@@ -47,3 +47,5 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20p3.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_10_dir_p05_ae_conv4_kaiming.yaml --gpu=4 > ~/iwa/17.txt 2>&1 &
 nohup python -u main.py --config=configs/mnist_10_dir_p05_ae.yaml --gpu=4 > ~/iwa/18.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar100_10_iid_se_conv4_kaiming_diff_seed.yaml --gpu=6 > ~/iwa/19.txt 2>&1 &
