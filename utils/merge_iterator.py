@@ -105,6 +105,8 @@ class Merge_Iterator:
                     print(model1.fc1.weight[:5])
 
                     model2 = trainer2.model
+                    print("HERE4")
+                    print(model1.fc1.weight[:5])
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
                     print("HERE")
@@ -138,9 +140,6 @@ class Merge_Iterator:
                             model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias.detach())])
                             model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias.detach())])
 
-                    print("HERE2")
-                    print(model1.fc1.weight[:5])
-                    assert(model1_param_list.size()==model2_param_list.size())
 
                     #Distance metrics
                     dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
