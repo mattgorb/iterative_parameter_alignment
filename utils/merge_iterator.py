@@ -91,65 +91,62 @@ class Merge_Iterator:
 
         dist_matrix_p1=[]
         dist_matrix_p2=[]
-        for idx, trainer in enumerate(self.model_trainers):
-            model1 = trainer.model
-            model1.eval()
-            model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+        with torch.no_grad():
+            for idx, trainer in enumerate(self.model_trainers):
+                model1 = trainer.model
+                model1.eval()
+                model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+
+                dist_matrix2_p1=[]
+                dist_matrix2_p2 = []
+                for idx2, trainer2 in enumerate(self.model_trainers):
+                    model2 = trainer2.model
+                    model2.eval()
+                    model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
+
+                    if (idx==0 and idx2==1) or (idx==1 and idx2==0):
+                        print(f'{idx}, {idx2}')
+                        print(trainer.save_path)
+                        print(trainer2.save_path)
+                        x,y=trainer.test()
+                        print(y)
+                        x,y=trainer2.test()
+                        print(y)
+                        print(model1.fc1.weight[:10])
+                        print(model2.fc1.weight[:10])
+
+                    model1_param_list=torch.Tensor().to(self.args.device)
+                    model2_param_list=torch.Tensor().to(self.args.device)
+                    for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
+                        n1, m1 = model1_mods
+                        n2, m2 = model2_mods
+                        if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
+                            continue
+                        if hasattr(m1, "weight"):
+                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight)])
+                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight)])
+                        if hasattr(m1, "bias"):
+                            model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias)])
+                            model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias)])
 
 
+                    assert(model1_param_list.size()==model2_param_list.size())
 
-            dist_matrix2_p1=[]
-            dist_matrix2_p2 = []
-            for idx2, trainer2 in enumerate(self.model_trainers):
-                model2 = trainer2.model
-                model2.eval()
-                model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
+                    #Distance metrics
+                    dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
+                    dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
 
+                    '''if (idx==0 and idx2==1) or (idx==1 and idx2==0):
+                        print(f'{idx}, {idx2}')
+                        print(model1_param_list[:10])
+                        print(model2_param_list[:10])
+                        print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())'''
 
+                    del model1_param_list
+                    del model2_param_list
 
-                if (idx==0 and idx2==1) or (idx==1 and idx2==0):
-                    print(f'{idx}, {idx2}')
-                    print(trainer.save_path)
-                    print(trainer2.save_path)
-                    x,y=trainer.test()
-                    print(y)
-                    x,y=trainer2.test()
-                    print(y)
-                    print(model1.fc1.weight[:10])
-                    print(model2.fc1.weight[:10])
-
-                model1_param_list=torch.Tensor().to(self.args.device)
-                model2_param_list=torch.Tensor().to(self.args.device)
-                for model1_mods, model2_mods, in zip(model1.named_modules(), model2.named_modules()):
-                    n1, m1 = model1_mods
-                    n2, m2 = model2_mods
-                    if not type(m1) == LinearMerge and not type(m1) == ConvMerge:
-                        continue
-                    if hasattr(m1, "weight"):
-                        model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.weight)])
-                        model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.weight)])
-                    if hasattr(m1, "bias"):
-                        model1_param_list=torch.cat([model1_param_list, torch.flatten(m1.bias)])
-                        model2_param_list=torch.cat([model2_param_list, torch.flatten(m2.bias)])
-
-
-                assert(model1_param_list.size()==model2_param_list.size())
-
-                #Distance metrics
-                dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
-                dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
-
-                '''if (idx==0 and idx2==1) or (idx==1 and idx2==0):
-                    print(f'{idx}, {idx2}')
-                    print(model1_param_list[:10])
-                    print(model2_param_list[:10])
-                    print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())'''
-
-                del model1_param_list
-                del model2_param_list
-
-            dist_matrix_p1.append(dist_matrix2_p1)
-            dist_matrix_p2.append(dist_matrix2_p2)
+                dist_matrix_p1.append(dist_matrix2_p1)
+                dist_matrix_p2.append(dist_matrix2_p2)
 
 
         print('Parameter Distances')
