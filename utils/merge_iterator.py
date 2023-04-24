@@ -100,6 +100,10 @@ class Merge_Iterator:
                 dist_matrix2_p1=[]
                 dist_matrix2_p2 = []
                 for idx2, trainer2 in enumerate(self.model_trainers):
+
+                    print("HERE3")
+                    print(model1.fc1.weight[:5])
+
                     model2 = trainer2.model
                     model2.eval()
                     model2.load_state_dict(torch.load(trainer2.save_path)['model_state_dict'])
@@ -142,11 +146,6 @@ class Merge_Iterator:
                     dist_matrix2_p1.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())
                     dist_matrix2_p2.append(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=2).item())
 
-                    '''if (idx==0 and idx2==1) or (idx==1 and idx2==0):
-                        print(f'{idx}, {idx2}')
-                        print(model1_param_list[:10])
-                        print(model2_param_list[:10])
-                        print(torch.cdist(torch.unsqueeze(model1_param_list, dim=0),torch.unsqueeze(model2_param_list, dim=0), p=1).item())'''
 
                     del model1_param_list
                     del model2_param_list
