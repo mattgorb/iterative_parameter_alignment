@@ -14,24 +14,6 @@ ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa_new mgorb@luffy.cs
 localhost:16006
 
 
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split.txt 2>&1 &
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split.txt 2>&1 & -> Complete
-nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp3.txt 2>&1 &
-nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_20dirp6.txt 2>&1 &
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp3.txt 2>&1 & Complete
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_20dirp6.txt 2>&1 & Complete-ish
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20dirp6.txt 2>&1 & Complete
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_10dirp3.txt 2>&1 &
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_10dirp3.txt 2>&1 &
-nohup python -u example_code_mnist.py > ~/iwa/mnist_10dirp3.txt 2>&1 & Complete
-nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_split5.txt 2>&1 &
-nohup python -u example_code_fashionmnist.py > ~/iwa/mnist_split5.txt 2>&1 &
-
-
-nohup python -u main.py --config=configs/mnist_10_dir_p3_ae_diff_seed.yaml --gpu=3 > ~/iwa/1.txt 2>&1 &
-
-
-nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_single_model.yaml --gpu=7 > ~/iwa/6.txt 2>&1 &
 
 
 python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
@@ -51,3 +33,11 @@ nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split.txt 2>&1 &
 
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split5.txt 2>&1 &
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split5.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4.yaml --gpu=0 > ~/iwa/12.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=0 > ~/iwa/13.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff_seed.yaml --gpu=1 > ~/iwa/14.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_10_dir_p6_ae_conv4_kaiming_diff_seed.yaml --gpu=1 > ~/iwa/15.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar100_10_dir_p6_ae_conv4_kaiming_diff_seed.yaml --gpu=1 > ~/iwa/16.txt 2>&1 &
