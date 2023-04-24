@@ -27,17 +27,17 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 
 #rule_arg=0.6
 
-n_client = 5
-rule='split_label5'
+n_client = 20
+#rule='split_label5'
 
-#rule='Drichlet'
+rule='Drichlet'
 #rule='iid'
 rule_arg=0.3
 #n_client = 20
 optim='SGD'
 
 
-data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule=rule, rule_arg=rule_arg, unbalanced_sgm=0, data_path=data_path)
+data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=1, rule=rule, rule_arg=rule_arg, unbalanced_sgm=0, data_path=data_path)
 # unbalanced
 #data_obj = DatasetObject(dataset='CIFAR10', n_client=n_client, seed=23, rule='iid', unbalanced_sgm=0.3, data_path=data_path)
 
@@ -55,6 +55,8 @@ if rule=='iid':
     com_amount=350
 elif rule=='Drichlet' and rule_arg==0.6:
     com_amount=500
+elif rule=='Drichlet' and rule_arg==0.3:
+    com_amount=350
 elif rule=='split_label':
     com_amount=3000
 else:
@@ -75,7 +77,7 @@ init_model = model_func()
 
 
 # Initalise the model for all methods with a random seed or load it from a saved initial model
-torch.manual_seed(37)
+torch.manual_seed(1)
 init_model = model_func()
 if not os.path.exists('%sModel/%s/%s_init_mdl.pt' %(data_path, data_obj.name, model_name)):
     if not os.path.exists('%sModel/%s/' %(data_path, data_obj.name)):
