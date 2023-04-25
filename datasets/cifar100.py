@@ -8,7 +8,7 @@ from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, reco
 
 def get_datasets(args):
     normalize = transforms.Normalize(
-        mean=[0.491, 0.482, 0.447], std=[0.247, 0.243, 0.262]
+        mean=[0.5071, 0.4867, 0.4408], std=[0.2675, 0.2565, 0.2761]
     )
 
     test_transform = transforms.Compose(
