@@ -24,7 +24,7 @@ python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff_seed.yaml --gpu=5 > ~/iwa/8.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_10_iid_se_conv4_kaiming_diff_seed.yaml --gpu=6 > ~/iwa/9.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=4 > ~/iwa/10.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=6 > ~/iwa/10.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_1.yaml --gpu=7 > ~/iwa/11.txt 2>&1 &
 
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_10dirp3.txt 2>&1 &
