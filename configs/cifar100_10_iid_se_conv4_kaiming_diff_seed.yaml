@@ -11,5 +11,5 @@ dataset_split: iid
 dirichlet_alpha: 0.3
 batch_size: 50
 merge_iter: 500
-same_initialization: False
-random_topology: True
+#same_initialization: False
+#random_topology: Fa

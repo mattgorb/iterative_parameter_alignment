@@ -7,6 +7,7 @@ scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/w
 scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_similarity/model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_*_iter_180.npy ~/Downloads
 scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_similarity/model_Conv4_n_cli_10_ds_split_iid_ds_alpha_0.3_align_se_waf_1_delta_None_init_type_kaiming_normal_same_init_False_*_iter_50.npy ~/Downloads
 
+scp -r -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu:/s/luffy/b/nobackup/mgorb/weight_alignment_csvs/client_results_ds_CIFAR10_model_Conv4_n_cli_2_ds_split_disjoint_classes_ds_alpha_None_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.csv ~/Downloads
 
 
 /s/luffy/b/nobackup/mgorb/Runs/*
@@ -53,11 +54,8 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_20p3.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_10_dir_p05_ae_conv4_kaiming.yaml --gpu=4 > ~/iwa/17.txt 2>&1 &
-
 nohup python -u main.py --config=configs/mnist_10_dir_p05_ae.yaml --gpu=4 > ~/iwa/18.txt 2>&1 &
-
 nohup python -u main.py --config=configs/cifar100_10_iid_se_conv4_kaiming_diff_seed.yaml --gpu=6 > ~/iwa/19.txt 2>&1 &
-
 nohup python -u main.py --config=configs/cifar100_10_dir_p05_ae_conv4_kaiming.yaml --gpu=4 > ~/iwa/20.txt 2>&1 &
-
 nohup python -u main.py --config=configs/cifar10_20_dir_p1_ae_conv4_kaiming.yaml --gpu=1 > ~/iwa/21.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 > ~/iwa/22.txt 2>&1 &
