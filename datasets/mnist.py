@@ -5,7 +5,7 @@ import torch
 import collections
 
 import random
-from datasets.dirichlet_partition import dirichlet,  record_net_data_stats
+from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
 
 def get_datasets(args):
     # not using normalization

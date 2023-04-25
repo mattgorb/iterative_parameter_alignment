@@ -63,3 +63,6 @@ nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 > ~/iw
 nohup python -u main.py --config=configs/mnist_5_split_label.yaml --gpu=0 > ~/iwa/23.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_10_iid_se_conv4_kaiming.yaml --gpu=5 > ~/iwa/24.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=6 > ~/iwa/25.txt 2>&1 &
+
+nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/26.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_iid.yaml --gpu=2 > ~/iwa/27.txt 2>&1 &
