@@ -59,3 +59,6 @@ nohup python -u main.py --config=configs/cifar100_10_iid_se_conv4_kaiming_diff_s
 nohup python -u main.py --config=configs/cifar100_10_dir_p05_ae_conv4_kaiming.yaml --gpu=4 > ~/iwa/20.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p1_ae_conv4_kaiming.yaml --gpu=1 > ~/iwa/21.txt 2>&1 &
 nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=3 > ~/iwa/22.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/mnist_5_split_label.yaml --gpu=0 > ~/iwa/23.txt 2>&1 &
