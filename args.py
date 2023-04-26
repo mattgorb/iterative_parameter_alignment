@@ -19,7 +19,7 @@ def parse_arguments():
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=1.0, )
     parser.add_argument('--delta', type=float, default=None, )
-    parser.add_argument('--lr', type=float, default=1e-3, metavar='LR',  help='learning rate (default: 1.0)')
+    parser.add_argument('--lr', type=float, default=1e-3, metavar='LR')
 
     #ablation args
     parser.add_argument('--single_model', type=bool, default=False, )
