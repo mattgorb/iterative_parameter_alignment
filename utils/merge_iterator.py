@@ -267,8 +267,6 @@ class Merge_Iterator:
 
 
 
-
-
         if self.args.single_model:
             print("Running single model")
             # run this for IID datasets
