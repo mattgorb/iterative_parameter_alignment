@@ -39,6 +39,8 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
+            print(test_acc)
+            sys.exit()
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
@@ -77,11 +79,9 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
-            print(output.size())
+
             print(loss)
-            print(weight_align)
-            print(target)
-            sys.exit()
+
 
             self.optimizer.step()
 
