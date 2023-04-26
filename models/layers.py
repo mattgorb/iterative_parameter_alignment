@@ -72,7 +72,7 @@ class ConvMerge(nn.Conv2d):
                         #weights_diff += torch.sum(torch.square(self.bias - self.bias_align_list[ba]))
                         weights_diff += (self.train_weight_list[wa] * torch.sum(torch.square(self.bias - self.bias_align_list[ba])))
                     elif self.args.align_loss == 'pd':
-                        weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs().pow(self.args.delta)))
+                        weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs().pow(self.args.delta)).pow(1/self.args.delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
@@ -124,7 +124,7 @@ class LinearMerge(nn.Linear):
                         #weights_diff += torch.sum(torch.square(self.bias - self.bias_align_list[ba]))
                         weights_diff += (self.train_weight_list[wa] * torch.sum(torch.square(self.bias - self.bias_align_list[ba])))
                     elif self.args.align_loss == 'pd':
-                        weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs().pow(self.args.delta)))
+                        weights_diff += (self.train_weight_list[wa]*torch.sum((self.bias - self.bias_align_list[ba]).abs().pow(self.args.delta)).pow(1/self.args.delta))
                     else:
                         sys.exit(1)
         return x, weights_diff
