@@ -2,7 +2,7 @@ import argparse
 import sys
 import yaml
 
-#from configs import parser as _parser
+from configs import parser as _parser
 
 args = None
 
