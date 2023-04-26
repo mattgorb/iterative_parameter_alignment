@@ -80,6 +80,7 @@ class Trainer:
             print(output.size())
             print(loss)
             print(weight_align)
+            print(target)
             sys.exit()
 
             self.optimizer.step()
