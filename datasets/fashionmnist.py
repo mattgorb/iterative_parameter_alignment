@@ -11,7 +11,7 @@ def get_datasets(args):
     # not using normalization
     transform = transforms.Compose([
         transforms.ToTensor(),
-        transforms.Normalize((0.5,), (0.5,))
+        transforms.Normalize((0.2860,), (0.3530))
     ])
     if args.baseline:
         dataset1 = datasets.FashionMNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)

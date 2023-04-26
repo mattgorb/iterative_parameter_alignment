@@ -10,7 +10,7 @@ from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, reco
 def get_datasets(args):
     # not using normalization
     transform = transforms.Compose([
-        transforms.ToTensor(),
+        transforms.ToTensor(),transforms.Normalize((0.1307,), (0.3081,))
     ])
     if args.baseline:
         dataset1 = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
