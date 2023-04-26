@@ -66,6 +66,8 @@ class Trainer:
         train_loss_ce=0
         train_loss=0
 
+        print(len(self.train_loader.dataset))
+
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
 
@@ -74,6 +76,11 @@ class Trainer:
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
+
+            print(output)
+            print(loss)
+            print(weight_align)
+            sys.exit()
 
             self.optimizer.step()
 
