@@ -20,5 +20,5 @@ def set_weight_align_param(models, args,train_weight_list):
                         named_layer_modules[module_i][1].train_weight_list.append(train_weight_list[module_j])
                         if args.bias:
                             named_layer_modules[module_i][1].bias_align_list.append(nn.Parameter(named_layer_modules[module_j][1].bias, requires_grad=True))
-                    print(f'Model {module_i}, Layer {named_layer_modules[module_i][0]}: Added model {module_j}, layer {named_layer_modules[module_j][0]} weight ')
+                    print(f'Model {module_i}, Layer {named_layer_modules[module_i][0]}: Added model {module_j}, layer {named_layer_modules[module_j][0]} weight, weight {train_weight_list[module_j]}')
 
