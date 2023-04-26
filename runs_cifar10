@@ -68,5 +68,7 @@ nohup python -u main.py --config=configs/fashionmnist_20_iid.yaml --gpu=2 > ~/iw
 nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=6 > ~/iwa/10.txt 2>&1 &
 
 nohup python -u main.py --config=configs/mnist_2_split_label.yaml --gpu=0 > ~/iwa/28.txt 2>&1 &
+
 nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/29.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/30.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/30.txt 2>&1 & -default init
+nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/31.txt 2>&1 & -5 local epochs
