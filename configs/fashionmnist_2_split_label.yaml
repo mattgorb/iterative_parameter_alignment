@@ -1,7 +1,7 @@
 dataset: Fashion_MNIST
 weight_init: kaiming_normal
 model: MLP
-align_loss: ae
+align_loss: se
 weight_align_factor: 1
 data_transform: True
 num_clients: 2
