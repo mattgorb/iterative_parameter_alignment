@@ -79,8 +79,9 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
-
+            print(output.size())
             print(loss)
+            sys.exit()
 
 
             self.optimizer.step()
