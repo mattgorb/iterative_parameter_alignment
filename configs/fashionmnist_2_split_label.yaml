@@ -1,9 +1,8 @@
 dataset: Fashion_MNIST
 weight_init: kaiming_normal
 model: MLP
-#align_loss: ae
-align_loss: pd
-delta: 0.75
+align_loss: ae
+
 weight_align_factor: 1
 data_transform: True
 num_clients: 2
@@ -12,5 +11,5 @@ local_epochs: 5
 dataset_split: disjoint_classes
 dirichlet_alpha: 0.3
 batch_size: 50
-merge_iter: 300
+merge_iter: 750
 
