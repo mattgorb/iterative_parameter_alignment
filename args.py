@@ -63,18 +63,18 @@ def parse_arguments():
 
 def get_config(args):
     # get commands from command line
-    #override_args = _parser.argv_to_vars(sys.argv)
+    override_args = _parser.argv_to_vars(sys.argv)
 
     # load yaml file
     yaml_txt = open(args.config).read()
 
     # override args
     loaded_yaml = yaml.load(yaml_txt, Loader=yaml.FullLoader)
-
+    for v in override_args:
+        loaded_yaml[v] = getattr(args, v)
 
     print(f"=> Reading YAML config from {args.config}")
     args.__dict__.update(loaded_yaml)
-    print(args)
 
 
 def run_args():
