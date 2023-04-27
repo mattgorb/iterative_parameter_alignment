@@ -67,8 +67,6 @@ class Trainer:
         train_loss_ce=0
         train_loss=0
 
-        print(len(self.train_loader.dataset))
-
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
 
