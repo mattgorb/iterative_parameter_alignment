@@ -80,8 +80,9 @@ nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=3
 
 
 nohup python -u main.py --config=configs/cifar100_10_iid_se_conv4_kaiming.yaml --gpu=5 --baseline=True --local_epochs=25 > ~/iwa/35.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_5_split_label.yaml --gpu=2 > ~/iwa/40.txt 2>&1 & - 1 local epoch
-nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/39.txt 2>&1 & - 1 local epoch
 
+nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/39.txt 2>&1 &
 
-nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1 > ~/iwa/39.txt 2>&1 & - 1 local epoch
+nohup python -u main.py --config=configs/fashionmnist_5_split_label.yaml --gpu=2 > ~/iwa/40.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_10_iid.yaml --gpu=1 > ~/iwa/41.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=3 > ~/iwa/42.txt 2>&1 &
