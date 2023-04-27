@@ -125,6 +125,8 @@ model_name = 'mnist_2NN' # Model type
 # Common hyperparameters
 if rule=='split_label':
     com_amount=3000
+if rule=='split_label5':
+    com_amount=250
 else:
     com_amount = 1000
 
