@@ -90,9 +90,9 @@ nohup python -u main.py --config=configs/fashionmnist_10_iid.yaml --gpu=1 > ~/iw
 nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=3 > ~/iwa/42.txt 2>&1 &
 
 nohup python -u main.py --config=configs/fashionmnist_20_dirp3.yaml --gpu=0 > ~/iwa/43.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=3 > ~/iwa/44.txt 2>&1 &
+
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=0 > ~/iwa/45.txt 2>&1 &
 
-
-nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=4 > ~/iwa/46.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=4 > ~/iwa/47.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=3 > ~/iwa/44.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4 > ~/iwa/46.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dirp6.yaml --gpu=4 > ~/iwa/47.txt 2>&1 &
