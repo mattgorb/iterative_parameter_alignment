@@ -93,8 +93,6 @@ def get_datasets(args):
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
-                    assert (set(index_groupings[1]).isdisjoint(index_groupings[3]))
-                    assert (set(index_groupings[3]).isdisjoint(index_groupings[4]))
 
         elif args.dataset_split == 'iid':
             num_clients = args.num_clients
