@@ -6,11 +6,18 @@ import numpy as np
 from matplotlib.colors import ListedColormap
 import scipy
 
-bottom=np.load('/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/heatmap/'
+'''bottom=np.load('/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/heatmap/'
           'model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_scores_hamming_iter_190.npy')
 
 top=np.load('/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/heatmap/'
           'model_Conv4_n_cli_10_ds_split_iid_ds_alpha_0.3_align_se_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_scores_hamming_iter_200.npy')
+'''
+bottom=np.load('heatmap/'
+          'model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_scores_hamming_iter_190.npy')
+
+top=np.load('heatmap/'
+          'model_Conv4_n_cli_10_ds_split_iid_ds_alpha_0.3_align_se_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_scores_hamming_iter_200.npy')
+
 
 print(bottom)
 print(top)
