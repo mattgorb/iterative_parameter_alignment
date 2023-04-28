@@ -81,7 +81,7 @@ print(np.triu(top)+np.tril(bottom))
 
 A=sns.heatmap(np.triu(top)+np.tril(bottom),  cmap=cmap,linewidths=1,square=False, cbar_kws={
  'use_gridspec':True,"shrink": .6,"orientation": "vertical" }, )
-A.set_yticklabels(A.get_yticks(), size = 10)
+#A.set_yticklabels(A.get_yticks(), size = 10)
 
 #sns.heatmap(np.tril(bottom),   cmap=cmap,mask=np.triu(top),linewidths=1, square=False,cbar=False)
 #sns.heatmap(np.triu(top),  cmap=cmap,mask=np.tril(bottom),linewidths=1,square=False, cbar_kws={
