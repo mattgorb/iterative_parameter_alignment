@@ -81,7 +81,7 @@ print(np.triu(top)+np.tril(bottom))
 
 A=sns.heatmap(np.triu(top)+np.tril(bottom),  cmap=cmap,linewidths=1,square=False, cbar_kws={
  'use_gridspec':True,"shrink": .6,"orientation": "vertical" }, )
-A.set_yticklabels(A.get_yticks(), size = 15)
+A.set_yticklabels(A.get_yticks(), size = 10)
 
 #sns.heatmap(np.tril(bottom),   cmap=cmap,mask=np.triu(top),linewidths=1, square=False,cbar=False)
 #sns.heatmap(np.triu(top),  cmap=cmap,mask=np.tril(bottom),linewidths=1,square=False, cbar_kws={
@@ -91,7 +91,7 @@ A.set_yticklabels(A.get_yticks(), size = 15)
 ax.figure.axes[-1].set_ylabel('Mismatching Predictions',labelpad=15)
 ax.figure.axes[-1].yaxis.label.set_size(30)
 #.set_ylabel('Mean Absolute Error', rotation=270, fontsize = 15, labelpad=15)
-#ax.figure.axes[-1].tick_params(labelsize=25)
+ax.figure.axes[-1].tick_params(labelsize=25)
 
 ax.set_title('IID', fontsize=40)
 ax.set_xlabel('Peer Model', fontsize=30)
