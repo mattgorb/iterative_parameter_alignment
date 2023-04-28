@@ -59,8 +59,10 @@ elif rule=='Drichlet' and rule_arg==0.3:
     com_amount=350
 elif rule=='split_label':
     com_amount=3000
+elif rule=='split_label3':
+    com_amount=3000
 else:
-    com_amount=1000
+    com_amount=000
 
 
 save_period = 200
@@ -91,7 +93,7 @@ else:
 
 ####
 
-'''print('FedDC')
+print('FedDC')
 
 epoch = 5
 alpha_coef = 1e-2
@@ -107,7 +109,7 @@ n_minibatch = (epoch*n_iter_per_epoch).astype(np.int64)
                                     com_amount=com_amount, print_per=print_per, weight_decay=weight_decay, 
                                     model_func=model_func, init_model=init_model, alpha_coef=alpha_coef,
                                     sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
-                                    data_path=data_path, lr_decay_per_round=lr_decay_per_round)'''
+                                    data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 #exit(0)
 ###
