@@ -12,4 +12,4 @@ local_epochs: 1
 dataset_split: dirichlet
 dirichlet_alpha: 0.3
 batch_size: 50
-merge_iter: 600
+merge_iter: 201
