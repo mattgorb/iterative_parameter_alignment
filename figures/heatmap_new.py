@@ -91,7 +91,7 @@ A.set_yticklabels(A.get_yticks(), size = 15)
 ax.figure.axes[-1].set_ylabel('Mismatching Predictions',labelpad=15)
 ax.figure.axes[-1].yaxis.label.set_size(30)
 #.set_ylabel('Mean Absolute Error', rotation=270, fontsize = 15, labelpad=15)
-ax.figure.axes[-1].tick_params(labelsize=25)
+#ax.figure.axes[-1].tick_params(labelsize=25)
 
 ax.set_title('IID', fontsize=40)
 ax.set_xlabel('Peer Model', fontsize=30)
