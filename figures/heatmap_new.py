@@ -72,8 +72,9 @@ Prediction Hamming Distances
 print(np.triu(top)+np.tril(bottom))
 #sys.exit()
 
-sns.heatmap(np.triu(top)+np.tril(bottom),  cmap=cmap,linewidths=1,square=False, cbar_kws={
+A=sns.heatmap(np.triu(top)+np.tril(bottom),  cmap=cmap,linewidths=1,square=False, cbar_kws={
  'use_gridspec':True,"shrink": .6,"orientation": "vertical" }, )
+A.set_yticklabels(A.get_yticks(), size = 15)
 
 #sns.heatmap(np.tril(bottom),   cmap=cmap,mask=np.triu(top),linewidths=1, square=False,cbar=False)
 #sns.heatmap(np.triu(top),  cmap=cmap,mask=np.tril(bottom),linewidths=1,square=False, cbar_kws={
@@ -87,6 +88,6 @@ ax.figure.axes[-1].tick_params(labelsize=25)
 
 ax.set_title('IID', fontsize=40)
 ax.set_xlabel('Peer Model', fontsize=30)
-ax.set_ylabel('Dir(0.6)', fontsize=40)
+ax.set_ylabel('Dir(0.3)', fontsize=40)
 plt.tight_layout()
 plt.savefig('/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/heatmap1.pdf', bbox_inches='tight')
