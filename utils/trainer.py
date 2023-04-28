@@ -11,7 +11,12 @@ class Trainer:
         self.args = args
         self.model = model
         self.train_loader, self.test_loader = datasets[0], datasets[1]
-        self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+
+        if self.args.optimizer=='Adam':
+            self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
+        else:
+            self.optimizer = optim.SGD(self.model.parameters(), lr=.1)
+            self.scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1)
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
@@ -75,6 +80,11 @@ class Trainer:
 
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
+
+            if self.args.optimizer=='SGD':
+                torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=10)  # Clip gradients to prevent exploding
+
+
 
             self.optimizer.step()
 

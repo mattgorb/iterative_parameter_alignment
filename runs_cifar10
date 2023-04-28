@@ -56,7 +56,7 @@ nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=1
 # Model difference experiments
 nohup python -u main.py --config=configs/fashionmnist_5_split_label.yaml --gpu=2 > ~/iwa/40.txt 2>&1 & BLEH
 nohup python -u main.py --config=configs/fashionmnist_10_iid.yaml --gpu=1 > ~/iwa/41.txt 2>&1 &
-
+nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=3 > ~/iwa/42.txt 2>&1 &
 
 #peer contributions
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4 > ~/iwa/46.txt 2>&1 &
@@ -65,10 +65,12 @@ nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml -
 
 
 #FASHION REDO+ MNIST TEST
-nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=3 > ~/iwa/42.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_20_dirp3.yaml --gpu=1 > ~/iwa/43.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/44.txt 2>&1 &
 
+
+nohup python -u main.py --config=configs/fashionmnist_20_dirp3.yaml --gpu=1 > ~/iwa/43.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/44.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=5 > ~/iwa/45.txt 2>&1 &
@@ -76,7 +78,7 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml
 
 
 
-nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=5 > ~/iwa/48.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=5 --lr=0.0001 > ~/iwa/48.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=0 > ~/iwa/49.txt 2>&1 &
@@ -85,6 +87,6 @@ nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --g
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=3 > ~/iwa/55.txt 2>&1 &
 
 
-nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split3.txt 2>&1 & CURRENTLY ON 822
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split3.txt 2>&1 & CURRENTLY ON 416
+nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split3.txt 2>&1 &
+nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split3.txt 2>&1 &
 

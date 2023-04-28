@@ -20,6 +20,7 @@ def parse_arguments():
     parser.add_argument('--weight_align_factor', type=float, default=1.0, )
     parser.add_argument('--delta', type=float, default=None, )
     parser.add_argument('--lr', type=float, default=1e-3, metavar='LR')
+    parser.add_argument('--optimizer', type=str, default='Adam',)
 
     #ablation args
     parser.add_argument('--single_model', type=bool, default=False, )
@@ -40,8 +41,6 @@ def parse_arguments():
     parser.add_argument('--config', type=str, default=None, help='config file to use')
 
 
-    #distributed
-    parser.add_argument("--local_rank", default=0, type=int)
 
 
     #dataset configs
