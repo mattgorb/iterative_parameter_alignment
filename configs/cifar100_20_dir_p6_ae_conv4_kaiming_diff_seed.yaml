@@ -11,5 +11,3 @@ dataset_split: dirichlet
 dirichlet_alpha: 0.6
 batch_size: 50
 merge_iter: 2500
-same_initialization: False
-random_topology: True
