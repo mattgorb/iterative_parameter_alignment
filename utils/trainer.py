@@ -82,7 +82,7 @@ class Trainer:
             loss.backward()
 
             #if self.args.optimizer=='SGD':
-            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=1)  # Clip gradients to prevent exploding
+            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=10)  # Clip gradients to prevent exploding
 
             self.optimizer.step()
 
