@@ -67,7 +67,8 @@ nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml -
 #FASHION REDO+ MNIST TEST
 nohup python -u main.py --config=configs/fashionmnist_20_dirp3.yaml --gpu=1 > ~/iwa/43.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/44.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/60.txt 2>&1 & NORM CLIPPING
+nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/60.txt 2>&1 & NORM CLIPPING 10
+nohup python -u main.py --config=configs/fashionmnist_20_dirp6.yaml --gpu=1 > ~/iwa/60.txt 2>&1 & NORM CLIPPING 1
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=5 > ~/iwa/45.txt 2>&1 &
 
