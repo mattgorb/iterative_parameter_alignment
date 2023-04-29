@@ -12,4 +12,4 @@ local_epochs: 5
 dataset_split: disjoint_classes
 #dirichlet_alpha: 0.3
 batch_size: 50
-merge_iter: 1500
+merge_iter: 2500
