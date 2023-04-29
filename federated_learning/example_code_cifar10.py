@@ -62,7 +62,7 @@ elif rule=='split_label':
 elif rule=='split_label3':
     com_amount=3000
 else:
-    com_amount=000
+    com_amount=1000
 
 
 save_period = 200
