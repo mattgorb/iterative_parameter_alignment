@@ -77,10 +77,14 @@ nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gp
 
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=0 > ~/iwa/49.txt 2>&1 &
 
+RUNNING:
+nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=3 > ~/iwa/56.txt 2>&1 &
+NOT RUNNING:
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=3 > ~/iwa/54.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=3 > ~/iwa/55.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=3 > ~/iwa/56.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_20_dir_p6_ae_conv4_kaiming_diff_seed.yaml --gpu=3 > ~/iwa/57.txt 2>&1 &
+
+
 
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split3.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split3.txt 2>&1 &
