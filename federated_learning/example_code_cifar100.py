@@ -49,8 +49,8 @@ elif rule=='Drichlet' and rule_arg==0.6:
     com_amount=500
 elif rule=='split_label':
     com_amount=3000
-else:
-    com_amount=1000
+elif rule == 'split_label3':
+    com_amount = 3000
 
 save_period = 200
 weight_decay = 1e-3
