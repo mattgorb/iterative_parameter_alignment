@@ -62,7 +62,7 @@ elif rule=='split_label':
 elif rule=='split_label3':
     com_amount=3000
 
-
+com_amount=3000
 
 save_period = 200
 weight_decay = 1e-3
