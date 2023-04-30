@@ -81,13 +81,15 @@ class Trainer:
             loss = self.criterion(output, target) + self.args.weight_align_factor * weight_align
             loss.backward()
 
-            #if self.args.optimizer=='SGD':
+
             torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=1)  # Clip gradients to prevent exploding
 
             self.optimizer.step()
 
             train_loss += loss.item()
             train_loss_ce += self.criterion(output, target).item()
+
+        self.scheduler.step()
 
         self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
         self.train_loss= train_loss / len(self.train_loader.dataset)
