@@ -16,16 +16,15 @@ import numpy as np
 
 
 ds='c10'
-class_dict=f'/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/dataset_splits' \
-           f'/dataset_split_info_model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_' \
-           f'waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.pkl'
+class_dict=f'dataset_splits' \
+           f'dataset_split_info_model_MLP_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.pkl'
 
 
 classes = pickle.load( open( class_dict, "rb" ) )
 
 
-results=f'/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/client_results/' \
-        f'client_results_ds_CIFAR10_model_Conv4_n_cli_10_ds_split_dirichlet_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.csv'
+results=f'client_results/' \
+        f'client_results_ds_Fashion_MNIST_model_MLP_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
 
 
 df=pd.read_csv(results)
@@ -74,8 +73,8 @@ for peer in classes.items():
     vals=list(class_ls.values())
     #print(vals)
     vals=pad_or_truncate(vals,10)
-    #print(vals)
-    uniformity_ls.append(1/np.std(vals))
+
+    uniformity_ls.append(np.std(vals))
     #print(f'{total_num}, { (1-(np.linalg.norm(freqs)*math.sqrt(label_len)-1)/(math.sqrt(label_len)-1))},'
     #      f' { total_num*(1-(np.linalg.norm(freqs)*math.sqrt(label_len)-1)/(math.sqrt(label_len)-1))}')
 
@@ -88,4 +87,4 @@ print(df.values)
 
 plt.clf()
 plt.plot(uniformity_ls, df.values, '.')
-plt.savefig('/Users/matthewgorbett/PycharmProjects/iterative_weight_alignment/figures/a.png')
+plt.savefig('b.png')
