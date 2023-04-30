@@ -16,7 +16,7 @@ class Trainer:
             self.optimizer = optim.Adam(self.model.parameters(), lr=self.args.lr)
         else:
             self.optimizer = optim.SGD(self.model.parameters(), lr=.1)
-            self.scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=1)
+            self.scheduler = optim.lr_scheduler.StepLR(self.optimizer, step_size=1, gamma=1)
 
         self.criterion = nn.CrossEntropyLoss(reduction='sum')
         self.device = device
