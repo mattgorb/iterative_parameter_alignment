@@ -89,7 +89,8 @@ class Trainer:
             train_loss += loss.item()
             train_loss_ce += self.criterion(output, target).item()
 
-        self.scheduler.step()
+        if self.args.optimizer!='Adam':
+            self.scheduler.step()
 
         self.train_loss_ce=train_loss_ce/len(self.train_loader.dataset)
         self.train_loss= train_loss / len(self.train_loader.dataset)
