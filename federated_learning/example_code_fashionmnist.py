@@ -70,7 +70,7 @@ optim='SGD'
 
 '''
 
-rule='split_label5'
+rule='split_label3'
 rule_arg=0.3
 n_client = 5
 optim='SGD'
@@ -86,7 +86,7 @@ optim='SGD'
 '''
 
 ''''''
-rule='split_label'
+rule='split_label3'
 rule_arg=0.3
 n_client = 2
 optim='SGD'
