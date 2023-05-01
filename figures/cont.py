@@ -16,21 +16,17 @@ import numpy as np
 
 
 ds='c10'
-class_dict=f'dataset_splits' \
-           f'dataset_split_info_model_MLP_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.pkl'
-
+class_dict=f'dataset_splits/dataset_split_info_model_Conv4_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
 
 classes = pickle.load( open( class_dict, "rb" ) )
 
-
-results=f'client_results/' \
-        f'client_results_ds_Fashion_MNIST_model_MLP_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
+results=f'client_results/client_results_ds_CIFAR10_model_Conv4_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
 
 
 df=pd.read_csv(results)
 
 
-df=df[(df['iter_list']>100)&(df['iter_list']<150) ]
+df=df[(df['iter_list']>150)&(df['iter_list']<200) ]
 df=df.groupby(['client_list'])['test_accuracy_list'].mean()#.agg({'test_accuracy_list':['mean','std']})
 print(df.head(12))
 
@@ -74,9 +70,8 @@ for peer in classes.items():
     #print(vals)
     vals=pad_or_truncate(vals,10)
 
+    #uniformity_ls.append(sum(class_ls.values())*np.std(vals))
     uniformity_ls.append(np.std(vals))
-    #print(f'{total_num}, { (1-(np.linalg.norm(freqs)*math.sqrt(label_len)-1)/(math.sqrt(label_len)-1))},'
-    #      f' { total_num*(1-(np.linalg.norm(freqs)*math.sqrt(label_len)-1)/(math.sqrt(label_len)-1))}')
 
 print(uniformity_ls)
 #sys.exit()
@@ -85,6 +80,9 @@ print(uniformity_ls)
 print(df)
 print(df.values)
 
+print(np.mean(df.values))
+print(np.std(df.values))
+
 plt.clf()
 plt.plot(uniformity_ls, df.values, '.')
-plt.savefig('b.png')
+plt.savefig('a2.png')

@@ -56,6 +56,11 @@ nohup python -u main.py --config=configs/fashionmnist_10_dirp3.yaml --gpu=3 > ~/
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4 > ~/iwa/46.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=4 > ~/iwa/51.txt 2>&1 &
 
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7 --weight_seed=4 --seed=4> ~/iwa/70.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=7  --weight_seed=4 --seed=4 > ~/iwa/71.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5  --weight_seed=6 --seed=6 > ~/iwa/72.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=5   --weight_seed=6 --seed=6 > ~/iwa/73.txt 2>&1 &
 
 
 #FASHION REDO+ MNIST TEST
