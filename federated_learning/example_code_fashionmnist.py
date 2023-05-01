@@ -88,7 +88,7 @@ optim='SGD'
 ''''''
 rule='split_label3'
 rule_arg=0.3
-n_client = 2
+n_client = 3
 optim='SGD'
 
 
