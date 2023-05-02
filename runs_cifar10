@@ -33,8 +33,8 @@ nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gp
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=3 > ~/iwa/55.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar100_20_dir_p6_ae_conv4_kaiming_diff_seed.yaml --gpu=2 > ~/iwa/57.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=3 > ~/iwa/70.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=3 --optimizer=SGD > ~/iwa/63.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=5 > ~/iwa/70.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=3  > ~/iwa/63.txt 2>&1 &
 
 
 

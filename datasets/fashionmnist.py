@@ -29,10 +29,12 @@ def get_datasets(args):
         #labels = torch.unique(dataset1.targets)
         train_loaders = []
         if args.dataset_split=="disjoint_classes":
-            assert num_clients in [2,5,10]
+            assert num_clients in [2,3,5,10]
 
             if num_clients==2:
                 labels_iter=[[0,1,2,3,4],[5,6,7,8,9]]
+            elif num_clients == 3:
+                labels_iter = [[0,1,2,3],[4,5,6],[7,8,9]]
             elif num_clients==5:
                 labels_iter=[[0,1],[2,3],[4,5],[6,7],[8,9]]
             elif num_clients==10:
