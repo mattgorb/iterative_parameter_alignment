@@ -29,7 +29,6 @@ python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 
 RUNNING:
-
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=1 > ~/iwa/49.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=3 > ~/iwa/55.txt 2>&1 &
 

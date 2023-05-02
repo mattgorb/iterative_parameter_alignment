@@ -115,12 +115,12 @@ model_name = 'fashionmnist_2NN'  # Model type
 
 ###
 # Common hyperparameters
-if rule == 'split_label' or rule == 'split_label5':
+if rule == 'split_label' or rule == 'split_label5' or rule == 'split_label3':
     com_amount = 3000
 else:
     com_amount = 1000
 
-com_amount=3000
+#com_amount=2000
 
 save_period = 100
 weight_decay = 1e-3
