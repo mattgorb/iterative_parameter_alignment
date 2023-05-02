@@ -46,7 +46,7 @@ def parse_arguments():
     #dataset configs
     parser.add_argument('--dataset', type=str, default=None, )
     parser.add_argument('--num_clients', type=int, default=None, )
-    parser.add_argument('--disjoint_classes', type=bool, default=False, )
+    parser.add_argument('--uneven', type=str, default=None, )
     parser.add_argument('--imbalanced', type=bool, default=False)
     parser.add_argument('--dataset_split', type=str, default=None)
     parser.add_argument('--dirichlet_alpha', type=float, default=None)

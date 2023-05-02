@@ -49,11 +49,11 @@ teaser:
 2 class CIFAR10 DONE
 
 5 class MNIST DONE
-
 3 class FashionMNIST?
 3 class CIFAR10
-
 Maybe:
 2 class CIFAR100
 3 class cifar100
 5 class cifar10
+
+IMBALANCED: 9classes/1class, 8classes/2classes

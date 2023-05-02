@@ -53,6 +53,8 @@ def get_datasets(args):
             elif num_clients == 10:
                 labels_iter = [[0], [1], [2], [3], [4], [5], [6], [7], [8], [9]]
 
+            if num_clients == 2 and args.uneven=='91':
+                labels_iter = [[0, 1, 2, 3, 4, 5, 6, 7, 8, ], [9]]
             print(f'label groupings: {labels_iter}')
 
             index_groupings = []
@@ -93,6 +95,8 @@ def get_datasets(args):
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[1]))
                     assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
                     assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
+
+
 
         elif args.dataset_split == 'iid':
             num_clients = args.num_clients
