@@ -120,6 +120,8 @@ if rule == 'split_label' or rule == 'split_label5':
 else:
     com_amount = 1000
 
+com_amount=3000
+
 save_period = 100
 weight_decay = 1e-3
 batch_size = 50

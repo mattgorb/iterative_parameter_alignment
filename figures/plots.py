@@ -40,8 +40,8 @@ plt.savefig('cifar10_split.png', bbox_inches='tight')
 
 '''
 
-df1=pd.read_csv('client_results/'
-               'client_results_ds_MNIST_model_MLP_n_cli_5_ds_split_disjoint_classes_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.csv')
+df1=pd.read_csv(
+    'split_label_exps/split5/client_results_ds_MNIST_model_MLP_n_cli_5_ds_split_disjoint_classes_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.csv')
 
 df2=pd.read_csv( 'split_label_exps/split5/run-FedDyn_mnist_2NN_n_cli_5_rule_split_label5_rule_arg_0.3_SGD_S100_F1.000000_Lr0.100000_1_1.000000_B50_E1_W0.001000_a0.010000_seed0_lrdecay0.998000_Accuracy_test_Sel clients-tag-Accuracy_test.csv')
 df3=pd.read_csv( 'split_label_exps/split5/run-FedDC_0.1mnist_2NN_n_cli_5_rule_split_label5_rule_arg_0.3_SGD_S100_F1.000000_Lr0.100000_1_1.000000_B50_E1_W0.001000_a0.100000_seed0_lrdecay0.998000_Accuracy_test_Sel clients-tag-Accuracy_test.csv')
