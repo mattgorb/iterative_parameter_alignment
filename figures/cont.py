@@ -13,76 +13,60 @@ import numpy as np
 #x=[0.10,0.11,0.10 ,0.09, 0.09,0.11  ,  0.10 ,   0.10 ,   0.12 ,   0.08]
 #np.uniformity=1-(np.linalg.norm(x)*math.sqrt(10)-1)/(math.sqrt(10)-1)
 
-
-
-ds='c10'
-class_dict=f'dataset_splits/dataset_split_info_model_Conv4_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
-
-classes = pickle.load( open( class_dict, "rb" ) )
-
-results=f'client_results/client_results_ds_CIFAR10_model_Conv4_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
-
-
-df=pd.read_csv(results)
-
-
-df=df[(df['iter_list']>150)&(df['iter_list']<200) ]
-df=df.groupby(['client_list'])['test_accuracy_list'].mean()#.agg({'test_accuracy_list':['mean','std']})
-print(df.head(12))
-
-
-print(classes)
-
-total_samples=0
-for peer in classes.items():
-    peer, class_ls=peer[0],peer[1]
-    total_samples+=sum(class_ls.values())
-
-print('Total samples')
-print(total_samples)
-
-freq_dict={}
-
-if ds=='c10':
-    label_len=10
-else:
-    label_len=100
-
-
-def pad_or_truncate(some_list, target_len):
-    return some_list[:target_len] + [0]*(target_len - len(some_list))
-
-uniformity_ls=[]
-for peer in classes.items():
-    peer, class_ls=peer[0],peer[1]
-    '''freqs=[]
-    for label, num in class_ls.items():
-        freqs.append(num/sum(class_ls.values()))
-        #freqs.append(num/5000)
-
-    freq_dict[peer]=freqs
-
-    total_num=(sum(class_ls.values()))'''
-    #uniformity_ls.append(len(class_ls.keys()))
-    #uniformity_ls.append((1-(np.linalg.norm(freqs)*math.sqrt(label_len)-1)/(math.sqrt(label_len)-1)))
-
-    vals=list(class_ls.values())
-    #print(vals)
-    vals=pad_or_truncate(vals,10)
-
-    #uniformity_ls.append(sum(class_ls.values())*np.std(vals))
-    uniformity_ls.append(np.std(vals))
-
-print(uniformity_ls)
-#sys.exit()
-
-#np.uniformity=1-(np.linalg.norm(x)*math.sqrt(10)-1)/(math.sqrt(10)-1)
-print(df)
-print(df.values)
-
-print(np.mean(df.values))
-print(np.std(df.values))
-
 plt.clf()
-plt.plot(uniformity_ls, df.values, '.')
+
+ds = 'cifar10'
+
+seeds=[1,4,6]
+for seed in seeds:
+    if ds=='cifar10':
+        class_dict=f'dataset_splits/dataset_split_info_model_Conv4_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
+        classes = pickle.load( open( class_dict, "rb" ) )
+        results=f'client_results/peer_contrib/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
+
+    else:
+        results=f'client_results/peer_contrib/client_results_ds_Fashion_MNIST_model_MLP_ds_Fashion_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
+        class_dict=f'dataset_splits/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.pkl'
+        classes = pickle.load( open( class_dict, "rb" ) )
+
+    df=pd.read_csv(results)
+
+
+    df=df[(df['iter_list']>100)&(df['iter_list']<105) ]
+    df=df.groupby(['client_list'])['test_accuracy_list'].mean()#.agg({'test_accuracy_list':['mean','std']})
+
+
+
+    total_samples=0
+    for peer in classes.items():
+        peer, class_ls=peer[0],peer[1]
+        total_samples+=sum(class_ls.values())
+
+
+    freq_dict={}
+    label_len=10
+
+    def pad_or_truncate(some_list, target_len):
+        return some_list[:target_len] + [0]*(target_len - len(some_list))
+
+    uniformity_ls=[]
+    size_ls=[]
+    for peer in classes.items():
+        peer, class_ls=peer[0],peer[1]
+        vals=list(class_ls.values())
+
+        vals=pad_or_truncate(vals,10)
+        size_ls.append(sum(vals))
+        uniformity_ls.append(np.std(vals))
+
+    print(uniformity_ls)
+
+
+    print(np.mean(df.values))
+    print(np.std(df.values))
+
+
+    #plt.plot(uniformity_ls,size_ls, '.')
+    plt.plot(uniformity_ls, df.values, '.')
+    #plt.plot([i for i in range(len(df.values))], df.values, '.')
 plt.savefig('a2.png')
