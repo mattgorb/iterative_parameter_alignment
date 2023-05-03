@@ -356,8 +356,8 @@ class DatasetObject:
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
             elif self.rule == 'split_label82':
-                if self.n_client!=3:
-                    print('set clients to 3 for split_label')
+                if self.n_client!=2:
+                    print('set clients to 2 for split_label')
                     sys.exit()
 
                 clnt_x = [np.zeros((clnt_data_list[clnt__], self.channels, self.height, self.width)).astype(np.float32)
