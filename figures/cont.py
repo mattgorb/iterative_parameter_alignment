@@ -8,7 +8,7 @@ import math
 import pickle
 import pandas as pd
 import numpy as np
-
+from scipy.stats import pearsonr
 #Example
 #x=[0.10,0.11,0.10 ,0.09, 0.09,0.11  ,  0.10 ,   0.10 ,   0.12 ,   0.08]
 #np.uniformity=1-(np.linalg.norm(x)*math.sqrt(10)-1)/(math.sqrt(10)-1)
@@ -32,8 +32,8 @@ for seed in seeds:
     df=pd.read_csv(results)
 
 
-    df=df[(df['iter_list']>100)&(df['iter_list']<105) ]
-    df=df.groupby(['client_list'])['test_accuracy_list'].mean()#.agg({'test_accuracy_list':['mean','std']})
+    df=df[(df['iter_list']>120)&(df['iter_list']<200) ]
+    df=df.groupby(['client_list'])['test_losses'].mean()#.agg({'test_accuracy_list':['mean','std']})
 
 
 
@@ -59,14 +59,25 @@ for seed in seeds:
         size_ls.append(sum(vals))
         uniformity_ls.append(np.std(vals))
 
-    print(uniformity_ls)
+    #print(uniformity_ls)
 
 
-    print(np.mean(df.values))
-    print(np.std(df.values))
+    #print(np.mean(df.values))
+    #print(np.std(df.values))
 
-
-    #plt.plot(uniformity_ls,size_ls, '.')
+    #plt.plot([i / j for i, j in zip(size_ls, uniformity_ls)], df.values, '.')
     plt.plot(uniformity_ls, df.values, '.')
+    #plt.plot(uniformity_ls,size_ls, '.')
+
+    corr, _ = pearsonr(uniformity_ls, size_ls)
+    print('\nSTD to Size correlation %.3f' % corr)
+
+    corr, _ = pearsonr(size_ls, df.values)
+    print('Size to Accuracy correlation %.3f' % corr)
+
+    corr, _ = pearsonr(uniformity_ls, df.values)
+    print('STD to Accuracy correlation: %.3f' % corr)
+
+
     #plt.plot([i for i in range(len(df.values))], df.values, '.')
 plt.savefig('a2.png')
