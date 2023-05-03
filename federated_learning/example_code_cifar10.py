@@ -27,8 +27,8 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 
 #rule_arg=0.6
 
-n_client = 3
-rule='split_label3'
+n_client = 2
+rule='split_label82'
 
 #rule='Drichlet'
 #rule='iid'
@@ -62,7 +62,7 @@ elif rule=='split_label':
 elif rule=='split_label3':
     com_amount=3000
 
-com_amount=3000
+com_amount=1000
 
 save_period = 200
 weight_decay = 1e-3
