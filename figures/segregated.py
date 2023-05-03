@@ -14,7 +14,7 @@ df4=pd.read_csv( 'split_label_exps/split5/run-FedAvg_mnist_2NN_n_cli_5_rule_spli
 col=3
 plt.clf()
 sns.set_style('whitegrid')
-fig, axs = plt.subplots(1, col, sharex=True, figsize=(5*col,5))
+fig, axs = plt.subplots(1, col, sharex=True, figsize=(6.5*col,5))
 
 
 sns.set_style('whitegrid')
@@ -47,14 +47,82 @@ axs[0].set_ylabel("Test Accuracy", fontdict = {'fontsize' : 14})
 #plt.xticks([20, 40,50,60,80, 90])
 #plt.xlim([19.9, 90.1])
 handles, labels = axs[0].get_legend_handles_labels()
-print(labels)
+#print(labels)
 handles=[handles[0],  handles[1], handles[3], handles[2], handles[-1]]
 labels=[labels[0], labels[1], labels[3],  labels[2], labels[-1]]
-fig.legend(handles, labels, loc='lower left', ncol=5,bbox_to_anchor=(.04, .001), prop={'size': 14})
+#fig.legend(handles, labels, loc='lower left', ncol=5,bbox_to_anchor=(.04, .001), prop={'size': 14})
 
 
 
-plt.tight_layout(rect=[0,.1,1,1])
+plt.tight_layout(rect=[0,0,1,1])
 #print(labels)
 
 plt.savefig('segregated.png')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+col=2
+plt.clf()
+sns.set_style('whitegrid')
+fig, axs = plt.subplots(1, col, sharex=True, figsize=(7.5*col,5))
+
+
+sns.set_style('whitegrid')
+
+sns.lineplot(df2.Value[:150]*100, label='FedDyn',ax=axs[0], linestyle='-.', color='C0',linewidth=1.5, legend=False)
+sns.lineplot(df3.Value[:150]*100, label='FedDC',ax=axs[0], linestyle='-.', color='C1',linewidth=1.5, legend=False)
+sns.lineplot(df4.Value[:150]*100, label='FedAvg',ax=axs[0], linestyle='-.',color='C3',linewidth=1.5,  legend=False)
+
+sns.lineplot(df1[df1['client_list']==1]['test_accuracy_list'].values[:150] ,ax=axs[0],color='C2', linestyle='-',label='Peer Model',linewidth=1.5,  legend=False)
+sns.lineplot(df1[df1['client_list']==2]['test_accuracy_list'].values[:150] ,ax=axs[0],color='C2', linestyle='-',label='Peer Model',linewidth=1.5,  legend=False)
+sns.lineplot(df1[df1['client_list']==3]['test_accuracy_list'].values[:150] ,ax=axs[0],color='C2', linestyle='-',label='Peer Model',linewidth=1.5,  legend=False)
+sns.lineplot(df1[df1['client_list']==4]['test_accuracy_list'].values[:150] ,ax=axs[0], color='C2',linestyle='-',label='Peer Model',linewidth=1.5,  legend=False)
+sns.lineplot(df1[df1['client_list']==5]['test_accuracy_list'].values[:150] ,ax=axs[0],color='C2', linestyle='-',label='Peer Model',linewidth=1.5,  legend=False)
+
+#axs[0].errorbar([20,40,50,60,80,90], [81.05,81.6,81.68,81.12,79.06,70.22] ,[0.2,0.22,.9,.3,.65,.66], label='asdf',linewidth =2,  )
+
+axs[0].set_title(label='MNIST, 5 Peers', fontdict = {'fontsize' : 22})
+axs[0].axhline(98, linestyle=':', linewidth=2, color='c',label='Target Accuracy' )
+
+
+
+
+
+for ax in axs:
+    ax.set_xlabel("Communication Round", fontdict = {'fontsize' : 14})
+    #ax.get_legend().remove()
+axs[0].set_ylabel("Test Accuracy", fontdict = {'fontsize' : 14})
+
+#plt.xticks([.2,.5, .5, .6,.8,.9])
+#plt.xticks([20, 40,50,60,80, 90])
+#plt.xlim([19.9, 90.1])
+handles, labels = axs[0].get_legend_handles_labels()
+#print(labels)
+handles=[handles[0],  handles[1], handles[3], handles[2], handles[-1]]
+labels=[labels[0], labels[1], labels[3],  labels[2], labels[-1]]
+#fig.legend(handles, labels, loc='lower left', ncol=5,bbox_to_anchor=(.04, .001), prop={'size': 14})
+
+
+
+plt.tight_layout(rect=[0,0,1,1])
+#print(labels)
+
+plt.savefig('segregated2.png')

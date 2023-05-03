@@ -60,15 +60,15 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split82.txt 2>&1 &
 
 
 
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml.yaml --gpu=0  --seed=4 --weight_seed=4  > ~/iwa/80.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml.yaml --gpu=0   --seed=6 --weight_seed=6  > ~/iwa/81.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml.yaml --gpu=0   --seed=3 --weight_seed=3  > ~/iwa/82.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml.yaml --gpu=0   --seed=9 --weight_seed=9  > ~/iwa/83.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0  --seed=4 --weight_seed=4  > ~/iwa/80.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=6 --weight_seed=6  > ~/iwa/81.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=3 --weight_seed=3  > ~/iwa/82.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=9 --weight_seed=9  > ~/iwa/83.txt 2>&1 &
 
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml.yaml --gpu=7  --seed=4 --weight_seed=4  > ~/iwa/84.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml.yaml --gpu=7   --seed=6 --weight_seed=6  > ~/iwa/85.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml.yaml --gpu=7   --seed=3 --weight_seed=3  > ~/iwa/86.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml.yaml --gpu=7   --seed=9 --weight_seed=9  > ~/iwa/87.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7  --seed=4 --weight_seed=4  > ~/iwa/84.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=6 --weight_seed=6  > ~/iwa/85.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=3 --weight_seed=3  > ~/iwa/86.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=9 --weight_seed=9  > ~/iwa/87.txt 2>&1 &
 
 
 
