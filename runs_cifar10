@@ -33,9 +33,7 @@ nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gp
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=5 > ~/iwa/55.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=2 > ~/iwa/56.txt 2>&1 &
 
-nohup python -u main.py --config=configs/cifar10_73_split_label_Conv4.yaml --gpu=2  > ~/iwa/73.txt 2>&1 &
-
-
+nohup python -u main.py --config=configs/cifar10_73_split_label_Conv4.yaml --gpu=3  > ~/iwa/73.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=3   --seed=15 --weight_seed=15  > ~/iwa/91.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7   --seed=54 --weight_seed=54  > ~/iwa/92.txt 2>&1 &
 
@@ -48,7 +46,7 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_ran
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split3.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split3.txt 2>&1 &
 nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_split3.txt 2>&1 &
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split82.txt 2>&1 &
+nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split73.txt 2>&1 &
 
 
 
