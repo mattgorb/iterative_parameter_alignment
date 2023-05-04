@@ -198,6 +198,8 @@ print_per = 1
                                     sch_step=1, sch_gamma=1,save_period=save_period, suffix=suffix, trial=True,
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
+
+'''
 # ###
 print('SCAFFOLD')
 
@@ -217,7 +219,7 @@ print_per = 1
                                     model_func=model_func, init_model=init_model,
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
                                     trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-
+'''
 
 ####
 print('FedAvg')
@@ -232,7 +234,7 @@ print_per = 1
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
                                     trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
         
-#### 
+'''
 print('FedProx')
 
 learning_rate = 0.1
@@ -246,7 +248,7 @@ mu = 1e-4
                                 model_func=model_func, init_model=init_model, sch_step=1, sch_gamma=1,
                                 save_period=save_period, mu=mu, suffix=suffix, trial=True,
                                 data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-exit(0)
+
 
 # Plot results
 plt.figure(figsize=(6, 5))
@@ -261,3 +263,4 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.savefig('%s.pdf' %data_obj.name, dpi=1000, bbox_inches='tight')
 # plt.show() 
+'''

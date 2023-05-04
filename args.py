@@ -15,7 +15,7 @@ def parse_arguments():
     parser.add_argument('--data_transform', type=bool, default=False)
     parser.add_argument('--weight_init', type=str, default=None)
 
-    parser.add_argument('--bias', type=bool, default=False)
+    parser.add_argument('--bias', type=bool, default=True)
     parser.add_argument('--align_loss', type=str, default=None)
     parser.add_argument('--weight_align_factor', type=float, default=1.0, )
     parser.add_argument('--delta', type=float, default=None, )
@@ -39,7 +39,7 @@ def parse_arguments():
     parser.add_argument('--data_dir', type=str, default="data")
 
     parser.add_argument('--config', type=str, default=None, help='config file to use')
-
+    parser.add_argument('--compare', type=bool, default=False)
 
 
 

@@ -191,6 +191,7 @@ print_per = 1
                                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 
 # ###
+'''
 print('SCAFFOLD')
 
 n_data_per_client = np.concatenate(data_obj.clnt_x, axis=0).shape[0] / n_client
@@ -218,7 +219,8 @@ print_per = 1
                                                                                                       data_path=data_path,
                                                                                                       lr_decay_per_round=lr_decay_per_round)
 
-####
+'''
+
 print('FedAvg')
 
 learning_rate = 0.1
@@ -242,7 +244,7 @@ print_per = 1
                                                                                                     data_path=data_path,
                                                                                                     lr_decay_per_round=lr_decay_per_round)
 
-####
+'''
 print('FedProx')
 
 learning_rate = 0.1
@@ -267,7 +269,7 @@ mu = 1e-4
                                                                                                      trial=True,
                                                                                                      data_path=data_path,
                                                                                                      lr_decay_per_round=lr_decay_per_round)
-exit(0)
+
 
 # Plot results
 plt.figure(figsize=(6, 5))
@@ -282,3 +284,4 @@ plt.xticks(fontsize=16)
 plt.yticks(fontsize=16)
 plt.savefig('%s.pdf' % data_obj.name, dpi=1000, bbox_inches='tight')
 # plt.show()
+'''

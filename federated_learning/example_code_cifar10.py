@@ -129,7 +129,7 @@ print_per = epoch // 2
                                     data_path=data_path, lr_decay_per_round=lr_decay_per_round)
 #exit(0)
 # ###
-print('SCAFFOLD')
+'''print('SCAFFOLD')
 
 epoch = 5
 
@@ -147,7 +147,7 @@ print_per = 5
                                     model_func=model_func, init_model=init_model,
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
                                     trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
-
+'''
 ####
 print('FedAvg')
 
@@ -162,7 +162,8 @@ print_per = 5
                                     sch_step=1, sch_gamma=1, save_period=save_period, suffix=suffix, 
                                     trial=True, data_path=data_path, lr_decay_per_round=lr_decay_per_round)
         
-# #### 
+# ####
+'''
 print('FedProx')
 
 epoch = 5
@@ -178,3 +179,4 @@ mu = 1e-4
                                 save_period=save_period, mu=mu, suffix=suffix, trial=True,
                                 data_path=data_path, lr_decay_per_round=lr_decay_per_round)
            
+'''

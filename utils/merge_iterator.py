@@ -326,9 +326,9 @@ class Merge_Iterator:
 
             if iter%10 ==0:
                 self.ensemble()
-
-                if self.num_clients==10 or self.num_clients==3:
-                    self.comparison_statistics(iter)
+                if self.args.compare:
+                    if self.num_clients==10 or self.num_clients==3:
+                        self.comparison_statistics(iter)
 
             self.log_results(iter)
 
