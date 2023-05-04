@@ -57,7 +57,8 @@ class Trainer:
 
         self.optimizer.zero_grad()
         del self.optimizer
-        torch.cuda.empty_cache()
+        with torch.cuda.device(f"cuda:{self.args.gpu}"):
+            torch.cuda.empty_cache()
 
         self.merge_iter+=1
 

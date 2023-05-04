@@ -35,7 +35,8 @@ nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --g
 
 nohup python -u main.py --config=configs/cifar10_73_split_label_Conv4.yaml --gpu=3  > ~/iwa/73.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=3   --seed=15 --weight_seed=15  > ~/iwa/91.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7   --seed=54 --weight_seed=54  > ~/iwa/92.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=1   --seed=16 --weight_seed=16  > ~/iwa/92.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=1 --weight_seed=1  --single_model=True --local_epochs=40 > ~/iwa/93.txt 2>&1 &
 
 
 
