@@ -355,7 +355,7 @@ class DatasetObject:
 
                 clnt_x = np.asarray(clnt_x)
                 clnt_y = np.asarray(clnt_y)
-            elif self.rule == 'split_label82':
+            elif self.rule == 'split_label73':
                 if self.n_client!=2:
                     print('set clients to 2 for split_label')
                     sys.exit()
@@ -373,7 +373,7 @@ class DatasetObject:
                                    [i for i in range(66,100)],]
                 else:
                     #labels_iter = [[0, 1], [2, 3], [4, 5], [6, 7], [8, 9]]
-                    labels_iter = [[0, 1, 2, 3,4, 5, 6,7,],[8,9]]
+                    labels_iter = [[0, 1, 2, 3,4, 5, 6,],[7,8,9]]
 
 
                 ds1_labels = labels[labels_iter[0]]

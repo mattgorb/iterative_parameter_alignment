@@ -16,20 +16,22 @@ from scipy.stats import pearsonr
 plt.clf()
 
 ds = 'cifar10'
+alpha=0.25
 
 if ds=='cifar10':
     seeds=[1,4,6, 32]
 else:
-    seeds=[3,4,6]
+    seeds=[3,4,6, 9]
+    #seeds=[6,9]
 for seed in seeds:
     if ds=='cifar10':
-        class_dict=f'dataset_splits/dataset_split_info_model_Conv4_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
+        class_dict=f'dataset_splits/cifar10/dataset_split_info_model_Conv4_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
         classes = pickle.load( open( class_dict, "rb" ) )
-        results=f'client_results/peer_contrib/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
+        results=f'client_results/peer_contrib/cifar10/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
     elif ds=='mnist':
-        class_dict=f'dataset_splits/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.pkl'
+        class_dict=f'dataset_splits/mnist/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_{alpha}_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.pkl'
         classes = pickle.load( open( class_dict, "rb" ) )
-        results=f'client_results/peer_contrib/client_results_ds_MNIST_model_MLP_ds_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_rand_top_True.csv'
+        results=f'client_results/peer_contrib/mnist/client_results_ds_MNIST_model_MLP_ds_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_{alpha}_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_rand_top_True.csv'
 
     else:
         results=f'client_results/peer_contrib/client_results_ds_Fashion_MNIST_model_MLP_ds_Fashion_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
@@ -39,9 +41,9 @@ for seed in seeds:
     df=pd.read_csv(results)
 
     if ds=="mnist":
-        df = df[(df['iter_list'] > 15) & (df['iter_list'] < 35)]
+        df = df[(df['iter_list'] > 5) & (df['iter_list'] < 25)]
     else:
-        df=df[(df['iter_list']>40)&(df['iter_list']<70) ]
+        df=df[(df['iter_list']>50)&(df['iter_list']<70) ]
     df=df.groupby(['client_list'])['test_losses'].mean()#.agg({'test_accuracy_list':['mean','std']})
 
 
@@ -74,8 +76,9 @@ for seed in seeds:
     #print(np.mean(df.values))
     #print(np.std(df.values))
 
-    #plt.plot([i / j for i, j in zip(size_ls, uniformity_ls)], df.values, '.')
+    #plt.plot([i / j for i, j in zip(uniformity_ls,size_ls, )], df.values, '.')
     plt.plot(uniformity_ls, df.values, '.')
+    #plt.plot(size_ls, df.values, '.')
     #plt.plot(uniformity_ls,size_ls, '.')
 
     corr, _ = pearsonr(uniformity_ls, size_ls)

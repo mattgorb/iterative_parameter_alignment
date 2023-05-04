@@ -13,4 +13,4 @@ dataset_split: disjoint_classes
 #dirichlet_alpha: 0.3
 batch_size: 50
 merge_iter: 3000
-uneven: '91'
+uneven: '73'
