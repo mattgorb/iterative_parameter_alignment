@@ -17,12 +17,19 @@ plt.clf()
 
 ds = 'cifar10'
 
-seeds=[1,4,6]
+if ds=='cifar10':
+    seeds=[1,4,6, 32]
+else:
+    seeds=[3,4,6]
 for seed in seeds:
     if ds=='cifar10':
         class_dict=f'dataset_splits/dataset_split_info_model_Conv4_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
         classes = pickle.load( open( class_dict, "rb" ) )
         results=f'client_results/peer_contrib/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
+    elif ds=='mnist':
+        class_dict=f'dataset_splits/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.pkl'
+        classes = pickle.load( open( class_dict, "rb" ) )
+        results=f'client_results/peer_contrib/client_results_ds_MNIST_model_MLP_ds_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_rand_top_True.csv'
 
     else:
         results=f'client_results/peer_contrib/client_results_ds_Fashion_MNIST_model_MLP_ds_Fashion_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
@@ -31,8 +38,10 @@ for seed in seeds:
 
     df=pd.read_csv(results)
 
-
-    df=df[(df['iter_list']>120)&(df['iter_list']<200) ]
+    if ds=="mnist":
+        df = df[(df['iter_list'] > 15) & (df['iter_list'] < 35)]
+    else:
+        df=df[(df['iter_list']>40)&(df['iter_list']<70) ]
     df=df.groupby(['client_list'])['test_losses'].mean()#.agg({'test_accuracy_list':['mean','std']})
 
 
@@ -55,7 +64,7 @@ for seed in seeds:
         peer, class_ls=peer[0],peer[1]
         vals=list(class_ls.values())
 
-        vals=pad_or_truncate(vals,10)
+        vals=vals#pad_or_truncate(vals,10)
         size_ls.append(sum(vals))
         uniformity_ls.append(np.std(vals))
 

@@ -34,7 +34,6 @@ nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --g
 
 nohup python -u main.py --config=configs/cifar100_20_dir_p6_ae_conv4_kaiming_diff_seed.yaml --gpu=2 > ~/iwa/57.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=5 > ~/iwa/70.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar100_20_iid_se_conv4_kaiming.yaml --gpu=3  > ~/iwa/63.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=3  > ~/iwa/64.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_91_split_label_Conv4.yaml --gpu=4  > ~/iwa/65.txt 2>&1 &
@@ -59,16 +58,17 @@ nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_split3.txt 2>&
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split82.txt 2>&1 &
 
 
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=2   --seed=6 --weight_seed=6  > ~/iwa/85.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=5  --seed=4 --weight_seed=4  > ~/iwa/80.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=5   --seed=6 --weight_seed=6  > ~/iwa/81.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=3   --seed=3 --weight_seed=3  > ~/iwa/82.txt 2>&1 &
 
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0  --seed=4 --weight_seed=4  > ~/iwa/80.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=6 --weight_seed=6  > ~/iwa/81.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=3 --weight_seed=3  > ~/iwa/82.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=0   --seed=9 --weight_seed=9  > ~/iwa/83.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=3   --seed=9 --weight_seed=9  > ~/iwa/83.txt 2>&1 &
 
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7  --seed=4 --weight_seed=4  > ~/iwa/84.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=6 --weight_seed=6  > ~/iwa/85.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=3 --weight_seed=3  > ~/iwa/86.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=7   --seed=9 --weight_seed=9  > ~/iwa/87.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=2  --seed=4 --weight_seed=4  > ~/iwa/84.txt 2>&1 &
+
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=1   --seed=3 --weight_seed=3  > ~/iwa/86.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=1   --seed=9 --weight_seed=9  > ~/iwa/87.txt 2>&1 &
 
 
 
