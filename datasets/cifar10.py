@@ -2,6 +2,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
 import numpy as np
 import collections
+from torch.utils.data import DataLoader, Dataset
 import random
 
 from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
