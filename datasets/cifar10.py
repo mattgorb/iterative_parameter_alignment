@@ -131,7 +131,7 @@ def get_datasets(args):
             for i in train_loaders :
                 print(i.dataset.__len__())
                 #print(i.dataset.y_data)
-                print(Counter(i.dataset.y_data))
+                print(Counter(list(i.dataset.targets)))
             sys.exit()
         elif args.dataset_split == 'powerlaw':
             indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
