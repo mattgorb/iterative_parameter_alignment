@@ -134,7 +134,7 @@ def get_datasets(args):
                 train_loaders.append(train_loader)
 
         elif args.dataset_split == 'classimbalance':
-            train_dataset, _, test_dataset = prepare_dataset(name)
+            train_dataset, _, test_dataset = prepare_dataset('cifar10')
             n_classes = 10
             data_indices = [torch.nonzero(train_dataset.targets == class_id).view(-1).tolist() for class_id in
                             range(n_classes)]
