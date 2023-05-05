@@ -129,7 +129,7 @@ def get_datasets(args):
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
             print(train_loaders)
             for i in train_loaders :
-                print(i.dataset.size())
+                print(i.dataset.__len__())
             sys.exit()
         elif args.dataset_split == 'powerlaw':
             indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
