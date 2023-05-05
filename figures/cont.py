@@ -15,7 +15,7 @@ from scipy.stats import pearsonr
 
 plt.clf()
 
-ds = 'cifar10'
+ds = 'mnist'
 alpha=0.25
 
 all_test_accs=[]

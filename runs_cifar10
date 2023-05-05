@@ -30,16 +30,37 @@ python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 RUNNING:
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2 > ~/iwa/49.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=1 > ~/iwa/50.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=3 > ~/iwa/51.txt 2>&1 &
+
+
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=5 > ~/iwa/55.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=2 > ~/iwa/56.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_73_split_label_Conv4.yaml --gpu=3  > ~/iwa/73.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=3   --seed=15 --weight_seed=15  > ~/iwa/91.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=1   --seed=16 --weight_seed=16  > ~/iwa/92.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=1 --weight_seed=1  --single_model=True --local_epochs=40 > ~/iwa/93.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=3   --seed=20 --weight_seed=20  > ~/iwa/101.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=1   --seed=2 --weight_seed=2  > ~/iwa/102.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=2   --seed=34 --weight_seed=34  > ~/iwa/105.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=43 --weight_seed=43  > ~/iwa/106.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5   --seed=73 --weight_seed=73  > ~/iwa/103.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7   --seed=85 --weight_seed=85  > ~/iwa/104.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=20 --weight_seed=20    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/107.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5   --seed=2 --weight_seed=2    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/108.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5   --seed=73 --weight_seed=73    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/109.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7   --seed=85 --weight_seed=85    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/110.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=2   --seed=34 --weight_seed=34    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=43 --weight_seed=43   --single_model=True --local_epochs=50 --merge_iter=1  > ~/iwa/112.txt 2>&1 &
 
 
 
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5   --single_model=True --local_epochs=1500 --merge_iter=1 > ~/iwa/99.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=7  > ~/iwa/100.txt 2>&1 &
 
 
 
@@ -52,11 +73,6 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split73.txt 2>&1 &
 
 
 
-nohup python -u main.py --config=configs/mnist_20_dir_p25_ae.yaml --gpu=3   --seed=9 --weight_seed=9  > ~/iwa/83.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=0  --seed=4 --weight_seed=4  > ~/iwa/84.txt 2>&1 &
-nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=1   --seed=3 --weight_seed=3  > ~/iwa/86.txt 2>&1 &
-
-
 
 
 
@@ -64,13 +80,14 @@ nohup python -u main.py --config=configs/mnist_20_dir_p05_ae.yaml --gpu=1   --se
 
 teaser:
 2 class CIFAR10 DONE
-
 5 class MNIST DONE
+
+
 3 class FashionMNIST?
-3 class CIFAR10
+3 class CIFAR10?
+
 Maybe:
-2 class CIFAR100
-3 class cifar100
+
 5 class cifar10
 
 IMBALANCED: 90classes/10class, 8classes/2classes
