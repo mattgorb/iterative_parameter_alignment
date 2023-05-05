@@ -7,7 +7,7 @@ import random
 import torch
 from torch.utils.data.sampler import SubsetRandomSampler
 from torchvision.datasets import CIFAR10, CIFAR100
-
+from collections import Counter
 
 from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
 
@@ -123,13 +123,15 @@ def get_datasets(args):
                 sample_size_cap=5000,
                 train_val_split_ratio=0.8, device=args.device, args_dict=args)
 
-            # valid_loader = data_prepper.get_valid_loader()
+
             test_loader = data_prepper.get_test_loader()
 
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
             print(train_loaders)
             for i in train_loaders :
                 print(i.dataset.__len__())
+                #print(i.dataset.y_data)
+                print(Counter(i.dataset.y_data))
             sys.exit()
         elif args.dataset_split == 'powerlaw':
             indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
