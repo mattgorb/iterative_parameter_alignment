@@ -250,13 +250,15 @@ class Data_Prepper:
                             data_indices[class_id] = data_indices[class_id][extra_needed:]
 
                 indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
-
+                print([len(i) for i in indices_list])
+                sys.exit()
             elif split == 'powerlaw':
                 indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
 
             elif split in ['uniform']:
                 indices_list = random_split(sample_indices=list(range(len(self.train_dataset))), m_bins=n_agents,
                                             equal=True)
+
 
         self.train_datasets = [Custom_Dataset(self.train_dataset.data[indices], self.train_dataset.targets[indices]) for
                                indices in indices_list]
