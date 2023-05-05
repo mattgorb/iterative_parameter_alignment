@@ -222,6 +222,11 @@ class Data_Prepper:
                 n_classes = 10
                 data_indices = [torch.nonzero(self.train_dataset.targets == class_id).view(-1).tolist() for class_id in
                                 range(n_classes)]
+
+                print(data_indices)
+                print(self.train_dataset.targets)
+                sys.exit()
+
                 class_sizes = np.linspace(1, n_classes, n_agents, dtype='int')
                 print("class_sizes for each party", class_sizes)
                 party_mean = self.sample_size_cap // self.n_agents
