@@ -132,6 +132,43 @@ def get_datasets(args):
                 train_loader = DataLoader(dataset, batch_size=args.batch_size, shuffle=True)
                 train_loaders.append(train_loader)
 
+        elif args.dataset_split == 'classimbalance':
+            train_datasets, validation_dataset, test_dataset = prepare_dataset(name)
+            n_classes = 10
+            data_indices = [torch.nonzero(train_dataset.targets == class_id).view(-1).tolist() for class_id in
+                            range(n_classes)]
+            class_sizes = np.linspace(1, n_classes, n_agents, dtype='int')
+            print("class_sizes for each party", class_sizes)
+            party_mean = self.sample_size_cap // self.n_agents
+
+            from collections import defaultdict
+            party_indices = defaultdict(list)
+            for party_id, class_sz in enumerate(class_sizes):
+                classes = range(class_sz)  # can customize classes for each party rather than just listing
+                each_class_id_size = party_mean // class_sz
+                # print("party each class size:", party_id, each_class_id_size)
+                for i, class_id in enumerate(classes):
+                    # randomly pick from each class a certain number of samples, with replacement
+                    selected_indices = random.choices(data_indices[class_id], k=each_class_id_size)
+
+                    # randomly pick from each class a certain number of samples, without replacement
+                    '''
+                    NEED TO MAKE SURE THAT EACH CLASS HAS MORE THAN each_class_id_size for no replacement sampling
+                    selected_indices = random.sample(data_indices[class_id],k=each_class_id_size)
+                    '''
+                    party_indices[party_id].extend(selected_indices)
+
+                    # top up to make sure all parties have the same number of samples
+                    if i == len(classes) - 1 and len(party_indices[party_id]) < party_mean:
+                        extra_needed = party_mean - len(party_indices[party_id])
+                        party_indices[party_id].extend(data_indices[class_id][:extra_needed])
+                        data_indices[class_id] = data_indices[class_id][extra_needed:]
+
+            indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
+
+        elif args.dataset_split == 'powerlaw':
+            indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
+
         else:
             print('choose dataset split!')
         test_dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=False, transform=test_transform)
@@ -152,3 +189,71 @@ def get_datasets(args):
 
         return train_loaders, test_loader,weights
 
+
+from torchvision.datasets import CIFAR10, CIFAR100
+
+
+class FastCIFAR10(CIFAR10):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Scale data to [0,1]
+        from torch import from_numpy
+        self.data = from_numpy(self.data)
+        self.data = self.data.float().div(255)
+        self.data = self.data.permute(0, 3, 1, 2)
+
+        self.targets = torch.Tensor(self.targets).long()
+
+        # https://github.com/kuangliu/pytorch-cifar/issues/16
+        # https://github.com/kuangliu/pytorch-cifar/issues/8
+        for i, (mean, std) in enumerate(zip((0.4914, 0.4822, 0.4465), (0.2470, 0.2435, 0.2616))):
+            self.data[:, i].sub_(mean).div_(std)
+
+        # Put both data and targets on GPU in advance
+        self.data, self.targets = self.data, self.targets
+        print('CIFAR10 data shape {}, targets shape {}'.format(self.data.shape, self.targets.shape))
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+        img, target = self.data[index], self.targets[index]
+
+        return img, target
+
+
+def prepare_dataset(self, name='mnist'):
+    if name == 'mnist':
+
+        train = FastMNIST('.data', train=True, download=True)
+        test = FastMNIST('.data', train=False, download=True)
+
+        train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
+                                                               self.sample_size_cap)
+
+        train_set = Custom_Dataset(train.data[train_indices], train.targets[train_indices], device=self.device)
+        validation_set = Custom_Dataset(train.data[valid_indices], train.targets[valid_indices], device=self.device)
+        test_set = Custom_Dataset(test.data, test.targets, device=self.device)
+
+        del train, test
+
+        return train_set, validation_set, test_set
+
+    elif name == 'cifar10':
+
+        train = FastCIFAR10('.data', train=True, download=True)  # , transform=transform_train)
+        test = FastCIFAR10('.data', train=False, download=True)  # , transform=transform_test)
+
+        train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
+                                                               self.sample_size_cap)
+
+        train_set = Custom_Dataset(train.data[train_indices], train.targets[train_indices], device=self.device)
+        validation_set = Custom_Dataset(train.data[valid_indices], train.targets[valid_indices], device=self.device)
+        test_set = Custom_Dataset(test.data, test.targets, device=self.device)
+        del train, test
+
+        return train_set, validation_set, test_set
