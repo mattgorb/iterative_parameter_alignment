@@ -120,7 +120,7 @@ def get_datasets(args):
         elif args.dataset_split == 'classimbalance':
             data_prepper = Data_Prepper(
                 'cifar10', train_batch_size=args.batch_size, n_agents=num_clients,
-                sample_size_cap=5000,
+                sample_size_cap=600,
                 train_val_split_ratio=0.8, device=args.device, args_dict=args)
 
 
@@ -129,10 +129,7 @@ def get_datasets(args):
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
             print(train_loaders)
             for i in train_loaders :
-                print(i.dataset.__len__())
-                #print(i.dataset.y_data)
-                #print(i.dataset.targets)
-                #print(i.dataset.targets.cpu().numpy())
+
 
                 print(Counter(list(i.dataset.targets.cpu().numpy())))
             sys.exit()
