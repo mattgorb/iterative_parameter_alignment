@@ -126,7 +126,7 @@ def get_datasets(args):
             # valid_loader = data_prepper.get_valid_loader()
             test_loader = data_prepper.get_test_loader()
 
-            train_loaders = data_prepper.get_train_loaders(N, args['split'])
+            train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
             print(train_loaders)
             sys.exit()
         elif args.dataset_split == 'powerlaw':
