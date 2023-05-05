@@ -7,7 +7,6 @@ import random
 import torch
 
 from torchvision.datasets import CIFAR10, CIFAR100
-from torchtext.data import Field, LabelField, BucketIterator
 
 
 from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
@@ -238,36 +237,7 @@ class Data_Prepper:
 
         self.init_batch_size(train_batch_size, test_batch_size, valid_batch_size)
 
-        if name in ['sst', 'mr']:
-            parser = argparse.ArgumentParser(description='CNN text classificer')
-            self.args = {}
-
-            self.train_datasets, self.validation_dataset, self.test_dataset = self.prepare_dataset(name)
-
-            self.valid_loader = BucketIterator(self.validation_dataset, batch_size=500, sort_key=lambda x: len(x.text),
-                                               device=self.device)
-            self.test_loader = BucketIterator(self.test_dataset, batch_size=500, sort_key=lambda x: len(x.text),
-                                              device=self.device)
-
-            self.args['embed_dim'] = self.args_dict['embed_dim']
-            self.args['kernel_num'] = self.args_dict['kernel_num']
-            self.args['kernel_sizes'] = self.args_dict['kernel_sizes']
-            self.args['static'] = self.args_dict['static']
-
-            train_size = sum([len(train_dataset) for train_dataset in self.train_datasets])
-            if self.n_agents > 5:
-                print(
-                    "Splitting all {} train data to {} parties. Caution against this due to the limited training size.".format(
-                        train_size, self.n_agents))
-            print("Model embedding arguments:", self.args)
-            print('------')
-            print("Train to split size: {}. Validation size: {}. Test size: {}".format(train_size,
-                                                                                       len(self.validation_dataset),
-                                                                                       len(self.test_dataset)))
-            print('------')
-
-
-        elif name in ['mnist', 'cifar10']:
+        if name in ['mnist', 'cifar10']:
             self.train_dataset, self.validation_dataset, self.test_dataset = self.prepare_dataset(name)
 
             print('------')
