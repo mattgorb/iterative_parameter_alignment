@@ -4,6 +4,7 @@ import numpy as np
 import collections
 from torch.utils.data import DataLoader, Dataset
 import random
+import torch
 
 from datasets.dirichlet_partition import dirichlet,  record_net_data_stats, record_net_data_stats_iid
 
@@ -234,8 +235,8 @@ class FastCIFAR10(CIFAR10):
 def prepare_dataset( name='mnist'):
     if name == 'mnist':
 
-        train = FastMNIST('.data', train=True, download=True)
-        test = FastMNIST('.data', train=False, download=True)
+        train = FastMNIST(f'{args.base_dir}{args.data_dir}', train=True, download=True)
+        test = FastMNIST(f'{args.base_dir}{args.data_dir}', train=False, download=True)
 
         train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
                                                                self.sample_size_cap)
