@@ -120,7 +120,7 @@ def get_datasets(args):
         elif args.dataset_split == 'classimbalance':
             data_prepper = Data_Prepper(
                 'cifar10', train_batch_size=args.batch_size, n_agents=num_clients,
-                sample_size_cap=None,
+                sample_size_cap=5000,
                 train_val_split_ratio=0.8, device=args.device, args_dict=args)
 
             # valid_loader = data_prepper.get_valid_loader()
