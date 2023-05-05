@@ -11,10 +11,10 @@ df4=pd.read_csv( 'split_label_exps/split5/run-FedAvg_mnist_2NN_n_cli_5_rule_spli
 print(df2)
 
 
-col=3
+col=4
 plt.clf()
 sns.set_style('whitegrid')
-fig, axs = plt.subplots(1, col, sharex=True, figsize=(6.5*col,5))
+fig, axs = plt.subplots(1, col, sharex=True, figsize=(5*col,5))
 
 
 sns.set_style('whitegrid')

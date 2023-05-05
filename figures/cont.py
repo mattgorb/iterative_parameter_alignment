@@ -18,78 +18,46 @@ plt.clf()
 ds = 'cifar10'
 alpha=0.25
 
+all_test_accs=[]
+all_baseline_accs=[]
+
 if ds=='cifar10':
-    seeds=[1,4,6, 32]
+    seeds=[4,6,15,16, 32]
 else:
-    seeds=[3,4,6, 9]
-    #seeds=[6,9]
+    seeds = [ 3,4, 6, 9 , 18, 24, 32]
+    #seeds = [3,]
 for seed in seeds:
     if ds=='cifar10':
-        class_dict=f'dataset_splits/cifar10/dataset_split_info_model_Conv4_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False.pkl'
-        classes = pickle.load( open( class_dict, "rb" ) )
-        results=f'client_results/peer_contrib/cifar10/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_5_s_False_rand_top_True.csv'
-    elif ds=='mnist':
-        class_dict=f'dataset_splits/mnist/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_{alpha}_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False.pkl'
-        classes = pickle.load( open( class_dict, "rb" ) )
-        results=f'client_results/peer_contrib/mnist/client_results_ds_MNIST_model_MLP_ds_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_{alpha}_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_rand_top_True.csv'
 
-    else:
-        results=f'client_results/peer_contrib/client_results_ds_Fashion_MNIST_model_MLP_ds_Fashion_MNIST_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False_rand_top_True.csv'
-        class_dict=f'dataset_splits/dataset_split_info_model_MLP_seed_{seed}_n_cli_20_ds_split_dirichlet_ds_alpha_0.25_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_True_le_1_s_False.pkl'
-        classes = pickle.load( open( class_dict, "rb" ) )
+        results=f'client_results/peer_contrib/cifar10/{seed}False.csv'
+        standalone=f'client_results/peer_contrib/cifar10/{seed}True.csv'
+        df_standalone = pd.read_csv(standalone)
+    elif ds=='mnist':
+
+        results=f'client_results/peer_contrib/mnist/{seed}False.csv'
+        standalone=f'client_results/peer_contrib/mnist/{seed}True.csv'
+        df_standalone = pd.read_csv(standalone)
 
     df=pd.read_csv(results)
 
-    if ds=="mnist":
-        df = df[(df['iter_list'] > 5) & (df['iter_list'] < 25)]
-    else:
-        df=df[(df['iter_list']>50)&(df['iter_list']<70) ]
-    df=df.groupby(['client_list'])['test_losses'].mean()#.agg({'test_accuracy_list':['mean','std']})
+    df_standalone = df_standalone.groupby(['client_list'])['test_losses'].mean()
+
+    corrs=[]
+
+    for iter in np.unique(df['iter_list'].values):
 
 
+        df_temp=df[df['iter_list']==iter].sort_values(by=['client_list'])
 
-    total_samples=0
-    for peer in classes.items():
-        peer, class_ls=peer[0],peer[1]
-        total_samples+=sum(class_ls.values())
+        corr, _ = pearsonr(df_temp['test_losses'].values, df_standalone.values)
+        corrs.append(corr)
+    print(corrs)
+    plt.plot( [i for i in range(len(corrs))], corrs, '-.')
 
+    '''for client in np.unique(df['client_list'].values):
+        df_temp = df[df['client_list'] == client].sort_values(by=['iter_list'])
+        print(client)
+        plt.plot([i for i in range(len(df_temp['iter_list'].values))], df_temp['test_accuracy_list'].values, '.')'''
 
-    freq_dict={}
-    label_len=10
-
-    def pad_or_truncate(some_list, target_len):
-        return some_list[:target_len] + [0]*(target_len - len(some_list))
-
-    uniformity_ls=[]
-    size_ls=[]
-    for peer in classes.items():
-        peer, class_ls=peer[0],peer[1]
-        vals=list(class_ls.values())
-
-        vals=vals#pad_or_truncate(vals,10)
-        size_ls.append(sum(vals))
-        uniformity_ls.append(np.std(vals))
-
-    #print(uniformity_ls)
-
-
-    #print(np.mean(df.values))
-    #print(np.std(df.values))
-
-    #plt.plot([i / j for i, j in zip(uniformity_ls,size_ls, )], df.values, '.')
-    plt.plot(uniformity_ls, df.values, '.')
-    #plt.plot(size_ls, df.values, '.')
-    #plt.plot(uniformity_ls,size_ls, '.')
-
-    corr, _ = pearsonr(uniformity_ls, size_ls)
-    print('\nSTD to Size correlation %.3f' % corr)
-
-    corr, _ = pearsonr(size_ls, df.values)
-    print('Size to Accuracy correlation %.3f' % corr)
-
-    corr, _ = pearsonr(uniformity_ls, df.values)
-    print('STD to Accuracy correlation: %.3f' % corr)
-
-
-    #plt.plot([i for i in range(len(df.values))], df.values, '.')
-plt.savefig('a2.png')
+#plt.ylim([95,100])
+plt.savefig(f'fairness_by_epochs_{ds}.png')
