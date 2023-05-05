@@ -231,7 +231,7 @@ class FastCIFAR10(CIFAR10):
         return img, target
 
 
-def prepare_dataset(self, name='mnist'):
+def prepare_dataset( name='mnist'):
     if name == 'mnist':
 
         train = FastMNIST('.data', train=True, download=True)
