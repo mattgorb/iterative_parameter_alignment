@@ -133,7 +133,7 @@ def get_datasets(args):
                 train_loaders.append(train_loader)
 
         elif args.dataset_split == 'classimbalance':
-            train_datasets, validation_dataset, test_dataset = prepare_dataset(name)
+            train_dataset, _, test_dataset = prepare_dataset(name)
             n_classes = 10
             data_indices = [torch.nonzero(train_dataset.targets == class_id).view(-1).tolist() for class_id in
                             range(n_classes)]
@@ -165,7 +165,11 @@ def get_datasets(args):
                         data_indices[class_id] = data_indices[class_id][extra_needed:]
 
             indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
+            train_datasets = [Custom_Dataset(self.train_dataset.data[indices], self.train_dataset.targets[indices]) for
+                          indices in indices_list]
 
+            print(train_datasets[0].size())
+            sys.exit()
         elif args.dataset_split == 'powerlaw':
             indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
 
@@ -257,3 +261,22 @@ def prepare_dataset(self, name='mnist'):
         del train, test
 
         return train_set, validation_set, test_set
+
+
+class Custom_Dataset(Dataset):
+
+	def __init__(self, X, y, device=None, transform=None):
+		self.data = X.to(device)
+		self.targets = y.to(device)
+		self.count = len(X)
+		self.device = device
+		self.transform = transform
+
+	def __len__(self):
+		return self.count
+
+	def __getitem__(self, idx):
+		if self.transform:
+			return self.transform(self.data[idx]), self.targets[idx]
+
+		return self.data[idx], self.targets[idx]
