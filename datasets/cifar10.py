@@ -132,7 +132,7 @@ def get_datasets(args):
                 print(i.dataset.__len__())
                 #print(i.dataset.y_data)
                 print(i.dataset.targets)
-                pritn(i.dataset.targets.numpy())
+                print(i.dataset.targets.numpy())
                 #print(Counter(list(i.dataset.targets)))
             sys.exit()
         elif args.dataset_split == 'powerlaw':
