@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 
 import torch.optim as optim
-
+import pandas as pd
 
 class Trainer:
     def __init__(self, args, datasets, model, device, model_name,):
