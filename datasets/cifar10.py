@@ -133,9 +133,6 @@ def get_datasets(args):
 
             train_loaders = data_prepper.get_train_loaders(num_clients, 'powerlaw')
 
-            for i in train_loaders:
-                print(Counter(i.dataset.targets.tolist()))
-            sys.exit()
         else:
             print('choose dataset split!')
         test_dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=False, transform=test_transform)
