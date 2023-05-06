@@ -256,6 +256,10 @@ class Data_Prepper:
         self.train_datasets = [Custom_Dataset(self.train_dataset.data[indices], self.train_dataset.targets[indices]) for
                                indices in indices_list]
 
+        for i in self.train_datasets:
+            print(Counter(list(i.targets.cpu().numpy())))
+        sys.exit()
+
         self.shard_sizes = [len(indices) for indices in indices_list]
         agent_train_loaders = [
             DataLoader(self.train_dataset, batch_size=batch_size, sampler=SubsetRandomSampler(indices)) for indices in
