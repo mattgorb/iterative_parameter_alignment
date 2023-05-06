@@ -27,7 +27,10 @@ class Trainer:
 
         self.model_name = model_name
         self.save_path=f'{self.weight_dir}{self.model_name}.pt'
-
+        self.model_cnf_str= f'model_{self.args.model}_ds_{self.args.dataset}_seed_{self.args.seed}_n_cli_{self.args.num_clients}_{self.args.uneven}_ds_split_{self.args.dataset_split}_ds_alpha_{self.args.dirichlet_alpha}' \
+                             f'_align_{self.args.align_loss}_waf_{self.args.weight_align_factor}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
+                             f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_s_{self.args.single_model}_rand_top_{self.args.random_topology}'
+        self.test_accs=[]
     def fit(self, log_output=True):
         print(f'Model {self.model_name}, merge iteration: {self.merge_iter}')
         if self.merge_iter>1:
@@ -44,10 +47,15 @@ class Trainer:
             self.test_loss = test_loss
             self.test_acc = test_acc
 
+            self.test_accs.append(test_acc)
 
 
             if log_output:
                 print( f'Local Epoch: {epoch}, Train loss: {self.train_loss}, Test loss: {self.test_loss}, Test Acc: {self.test_acc}')
+            if self.args.single_model:
+                df = pd.DataFrame({'test_accs': self.test_accs,})
+                df.to_csv(
+                    f'{self.args.base_dir}/weight_alignment_csvs/client_results_single_{self.model_cnf_str}.csv')
 
         torch.save({
             'epoch': self.merge_iter,

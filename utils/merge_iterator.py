@@ -283,6 +283,7 @@ class Merge_Iterator:
                     Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
                             f'model_{i}_baseline_{self.args.dataset}_' + self.model_cnf_str, ) for i in range(self.num_clients)]
 
+
         else:
 
             self.model_trainers = [Trainer(self.args, [self.train_loaders[i], self.test_loader], self.models[i], self.device,
@@ -393,8 +394,7 @@ class Merge_Iterator:
                            'train_ce_losses': self.train_ce_losses,
                            'test_losses': self.test_losses,
                            'test_accuracy_list': self.test_accuracy_list, })
-        df.to_csv(
-            f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_{self.model_cnf_str}.csv')
+        df.to_csv(f'{self.args.base_dir}/weight_alignment_csvs/client_results_ds_{self.args.dataset}_{self.model_cnf_str}.csv')
 
         df = pd.DataFrame({'best_test_accuracy': self.best_test_accuracy,
                            'average_test_accuracy': self.average_test_accuracy, })

@@ -60,11 +60,13 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_ran
 
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5   --single_model=True --local_epochs=1500 --merge_iter=1 > ~/iwa/99.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=7  > ~/iwa/100.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=3  --same_initialization=True > ~/iwa/120.txt 2>&1 &
 
 
-
-nohup python -u main.py --config=configs/cifar10_10_cla_ae_conv4_rand_topo.yaml --gpu=4  > ~/iwa/110.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml --gpu=4  > ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_cla_ae_conv4_rand_topo.yaml --gpu=2  --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/110.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml --gpu=3  --single_model=True --local_epochs=50 --merge_iter=1> ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_cla_ae_conv4_rand_topo.yaml --gpu=4  > ~/iwa/112.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml --gpu=5  > ~/iwa/113.txt 2>&1 &
 
 
 
