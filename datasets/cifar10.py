@@ -214,17 +214,17 @@ class Data_Prepper:
                 class_sizes = np.linspace(1, n_classes, n_agents, dtype='int')
                 print("class_sizes for each party", class_sizes)
                 party_mean = self.sample_size_cap // self.n_agents
-
+                print(party_mean)
                 from collections import defaultdict
                 party_indices = defaultdict(list)
                 for party_id, class_sz in enumerate(class_sizes):
-                    print("HERe")
-                    print(class_sz)
+
                     classes = range(class_sz)  # can customize classes for each party rather than just listing
                     each_class_id_size = party_mean // class_sz
+                    print(each_class_id_size)
                     # print("party each class size:", party_id, each_class_id_size)
                     for i, class_id in enumerate(classes):
-                        print(class_id)
+
                         # randomly pick from each class a certain number of samples, with replacement
                         selected_indices = random.choices(data_indices[class_id], k=each_class_id_size)
 
