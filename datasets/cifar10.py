@@ -215,7 +215,7 @@ class Data_Prepper:
                 print("class_sizes for each party", class_sizes)
                 party_mean = self.sample_size_cap // self.n_agents
 
-                print(data_indices[0])
+
                 from collections import defaultdict
                 party_indices = defaultdict(list)
                 for party_id, class_sz in enumerate(class_sizes):
@@ -235,9 +235,7 @@ class Data_Prepper:
                         selected_indices = random.sample(data_indices[class_id],k=each_class_id_size)
                         '''
                         party_indices[party_id].extend(selected_indices)
-                        print('here')
-                        print(selected_indices)
-                        sys.exit()
+
                         # top up to make sure all parties have the same number of samples
                         if i == len(classes) - 1 and len(party_indices[party_id]) < party_mean:
                             extra_needed = party_mean - len(party_indices[party_id])
@@ -246,10 +244,7 @@ class Data_Prepper:
 
                 indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
 
-                print(party_indices.items())
-                print([len(i) for i in indices_list])
 
-                sys.exit()
             elif split == 'powerlaw':
                 indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
 
