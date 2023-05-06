@@ -220,11 +220,14 @@ class Data_Prepper:
                         "Calling on dataset {}. Only mnist and cifar10 are implemnted for this split".format(self.name))
 
                 n_classes = 10
-                data_indices = [torch.nonzero(self.train_dataset.targets == class_id).view(-1).tolist() for class_id in
-                                range(n_classes)]
+                print(self.train_dataset.targets)
+                print(torch.nonzero(self.train_dataset.targets == 0 ).view(-1).tolist())
+
+                sys.exit()
+                data_indices = [torch.nonzero(self.train_dataset.targets == class_id).view(-1).tolist() for class_id in range(n_classes)]
 
                 print(data_indices)
-                print(self.train_dataset.targets)
+
                 sys.exit()
 
                 class_sizes = np.linspace(1, n_classes, n_agents, dtype='int')
