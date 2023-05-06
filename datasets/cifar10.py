@@ -85,8 +85,6 @@ def get_datasets(args):
                 assert (set(index_groupings[0]).isdisjoint(index_groupings[2]))
                 assert (set(index_groupings[1]).isdisjoint(index_groupings[2]))
 
-
-
         elif args.dataset_split == 'iid':
             num_clients = args.num_clients
             lst = np.arange(len(dataset1))
@@ -121,14 +119,15 @@ def get_datasets(args):
             data_prepper = Data_Prepper(
                 'cifar10', train_batch_size=args.batch_size, n_agents=num_clients,
                 sample_size_cap=600,
-                train_val_split_ratio=0.8, device=args.device, args_dict=args)
+                train_val_split_ratio=0.8, device=args.device,
+                args_dict=args)
 
 
             test_loader = data_prepper.get_test_loader()
 
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
             print(train_loaders)
-            for i in train_loaders :
+            for i in train_loaders:
 
 
                 print(Counter(list(i.dataset.targets.cpu().numpy())))
@@ -219,10 +218,13 @@ class Data_Prepper:
                 from collections import defaultdict
                 party_indices = defaultdict(list)
                 for party_id, class_sz in enumerate(class_sizes):
+                    print("HERe")
+                    print(class_sz)
                     classes = range(class_sz)  # can customize classes for each party rather than just listing
                     each_class_id_size = party_mean // class_sz
                     # print("party each class size:", party_id, each_class_id_size)
                     for i, class_id in enumerate(classes):
+                        print(class_id)
                         # randomly pick from each class a certain number of samples, with replacement
                         selected_indices = random.choices(data_indices[class_id], k=each_class_id_size)
 
