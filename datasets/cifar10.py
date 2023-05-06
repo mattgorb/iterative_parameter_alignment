@@ -281,8 +281,8 @@ class Data_Prepper:
 
         elif name == 'cifar10':
 
-            train = FastCIFAR10(f'{args.base_dir}{args.data_dir}', train=True, download=True)  # , transform=transform_train)
-            test = FastCIFAR10(f'{args.base_dir}{args.data_dir}', train=False, download=True)  # , transform=transform_test)
+            train = FastCIFAR10(f'.data', train=True, download=True)  # , transform=transform_train)
+            test = FastCIFAR10(f'.data', train=False, download=True)  # , transform=transform_test)
 
             train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
                                                                    self.sample_size_cap)
