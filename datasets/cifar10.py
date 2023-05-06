@@ -203,16 +203,7 @@ class Data_Prepper:
 
         if self.name not in ['sst', 'mr', 'mnist', 'cifar10']: raise NotImplementedError
 
-        if self.name in ['sst', 'mr']:
-            # sst, mr split is different from other datasets, so return here
-
-            self.train_loaders = [BucketIterator(train_dataset, batch_size=self.train_batch_size, device=self.device,
-                                                 sort_key=lambda x: len(x.text), train=True) for train_dataset in
-                                  self.train_datasets]
-            self.shard_sizes = [(len(train_dataset)) for train_dataset in self.train_datasets]
-            return self.train_loaders
-
-        elif self.name in ['mnist', 'cifar10']:
+        if self.name in ['mnist', 'cifar10']:
 
             if split == 'classimbalance':
                 if self.name not in ['mnist', 'cifar10']:
@@ -220,16 +211,7 @@ class Data_Prepper:
                         "Calling on dataset {}. Only mnist and cifar10 are implemnted for this split".format(self.name))
 
                 n_classes = 10
-                print(self.train_dataset.targets)
-                print(torch.nonzero(self.train_dataset.targets == 0 ).view(-1).tolist())
-
-                sys.exit()
                 data_indices = [torch.nonzero(self.train_dataset.targets == class_id).view(-1).tolist() for class_id in range(n_classes)]
-
-                print(data_indices)
-
-                sys.exit()
-
                 class_sizes = np.linspace(1, n_classes, n_agents, dtype='int')
                 print("class_sizes for each party", class_sizes)
                 party_mean = self.sample_size_cap // self.n_agents
@@ -259,6 +241,7 @@ class Data_Prepper:
 
                 indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
                 print([len(i) for i in indices_list])
+
                 sys.exit()
             elif split == 'powerlaw':
                 indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
@@ -298,8 +281,8 @@ class Data_Prepper:
 
         elif name == 'cifar10':
 
-            train = FastCIFAR10('.data', train=True, download=True)  # , transform=transform_train)
-            test = FastCIFAR10('.data', train=False, download=True)  # , transform=transform_test)
+            train = FastCIFAR10(f'{args.base_dir}{args.data_dir}', train=True, download=True)  # , transform=transform_train)
+            test = FastCIFAR10(f'{args.base_dir}{args.data_dir}', train=False, download=True)  # , transform=transform_test)
 
             train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
                                                                    self.sample_size_cap)
@@ -311,64 +294,6 @@ class Data_Prepper:
 
             return train_set, validation_set, test_set
 
-        elif name == "sst":
-            import torchtext.data as data
-            text_field = data.Field(lower=True)
-            from torch import long as torch_long
-            label_field = LabelField(dtype=torch_long, sequential=False)
-
-            import torchtext.datasets as datasets
-            train_data, validation_data, test_data = datasets.SST.splits(text_field, label_field, root='.data',
-                                                                         fine_grained=True)
-
-            if self.args_dict['split'] == 'uniform':
-                indices_list = random_split(sample_indices=list(range(len(train_data))), m_bins=self.n_agents,
-                                            equal=True)
-            else:
-                indices_list = powerlaw(list(range(len(train_data))), self.n_agents)
-            ratios = [len(indices) / len(train_data) for indices in indices_list]
-
-            train_datasets = split_torchtext_dataset_ratios(train_data, ratios)
-
-            text_field.build_vocab(*(train_datasets + [validation_data, test_data]))
-            label_field.build_vocab(*(train_datasets + [validation_data, test_data]))
-
-            self.args['embed_num'] = len(text_field.vocab)
-            self.args['class_num'] = len(label_field.vocab)
-
-            return train_datasets, validation_data, test_data
-
-        elif name == 'mr':
-
-            import torchtext.data as data
-            from utils import mrdatasets
-
-            text_field = data.Field(lower=True)
-            from torch import long as torch_long
-            label_field = LabelField(dtype=torch_long, sequential=False)
-            # label_field = data.Field(sequential=False)
-
-            train_data, dev_data = mrdatasets.MR.splits(text_field, label_field, root='.data', shuffle=False)
-
-            validation_data, test_data = dev_data.split(split_ratio=0.5, random_state=random.seed(1234))
-
-            if self.args_dict['split'] == 'uniform':
-                indices_list = random_split(sample_indices=list(range(len(train_data))), m_bins=self.n_agents,
-                                            equal=True)
-            else:
-                indices_list = powerlaw(list(range(len(train_data))), self.n_agents)
-
-            ratios = [len(indices) / len(train_data) for indices in indices_list]
-
-            train_datasets = split_torchtext_dataset_ratios(train_data, ratios)
-
-            text_field.build_vocab(*(train_datasets + [validation_data, test_data]))
-            label_field.build_vocab(*(train_datasets + [validation_data, test_data]))
-
-            self.args['embed_num'] = len(text_field.vocab)
-            self.args['class_num'] = len(label_field.vocab)
-
-            return train_datasets, validation_data, test_data
         else:
             raise NotImplementedError
 
