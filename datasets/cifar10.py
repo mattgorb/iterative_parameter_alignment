@@ -240,6 +240,8 @@ class Data_Prepper:
                             data_indices[class_id] = data_indices[class_id][extra_needed:]
 
                 indices_list = [party_index_list for party_id, party_index_list in party_indices.items()]
+
+                print(party_indices.items())
                 print([len(i) for i in indices_list])
 
                 sys.exit()
