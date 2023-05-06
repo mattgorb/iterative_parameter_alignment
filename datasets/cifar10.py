@@ -122,16 +122,8 @@ def get_datasets(args):
                 train_val_split_ratio=0.8, device=args.device,
                 args_dict=args)
 
-
-            test_loader = data_prepper.get_test_loader()
-
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
-            print(train_loaders)
-            for i in train_loaders:
 
-
-                print(Counter(list(i.dataset.targets.cpu().numpy())))
-            sys.exit()
         elif args.dataset_split == 'powerlaw':
             indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
 

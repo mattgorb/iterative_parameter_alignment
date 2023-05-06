@@ -64,6 +64,12 @@ nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gp
 
 
 nohup python -u main.py --config=configs/cifar10_10_cla_ae_conv4_rand_topo.yaml --gpu=4  > ~/iwa/110.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml --gpu=4  > ~/iwa/111.txt 2>&1 &
+
+
+
+
+
 
 
 
