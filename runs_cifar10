@@ -70,6 +70,8 @@ nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml 
 
 
 
+nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=160 --merge_iter=1 > ~/iwa/124.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=5  --single_model=True --seed=6 --weight_seed=6 --local_epochs=250 --merge_iter=1> ~/iwa/123.txt 2>&1 &
 
 
 
