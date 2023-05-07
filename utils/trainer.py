@@ -83,7 +83,8 @@ class Trainer:
 
         for batch_idx, (data, target) in enumerate(self.train_loader):
             data, target = data.to(self.device), target.to(self.device)
-
+            print(data)
+            print(data.dtype)
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
 
