@@ -400,7 +400,7 @@ class Custom_Dataset(Dataset):
         if self.transform:
             return self.transform(self.data[idx]), self.targets[idx]
 
-        return self.data[idx], self.targets[idx]
+        return self.data[idx].float(), self.targets[idx]
 
 
 def random_split(sample_indices, m_bins, equal=True):
