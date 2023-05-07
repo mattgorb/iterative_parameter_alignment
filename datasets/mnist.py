@@ -306,9 +306,15 @@ class Data_Prepper:
     def prepare_dataset(self, name='mnist'):
 
         if name == 'mnist':
+            transform = transforms.Compose([
+                transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))
+            ])
 
-            train = FastMNIST('.data', train=True, download=True)
-            test = FastMNIST('.data', train=False, download=True)
+            train = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
+            test = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
+
+            #train = FastMNIST('.data', train=True, download=True)
+            #test = FastMNIST('.data', train=False, download=True)
 
             train_indices, valid_indices = get_train_valid_indices(len(train), self.train_val_split_ratio,
                                                                    self.sample_size_cap)
