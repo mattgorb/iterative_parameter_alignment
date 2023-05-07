@@ -124,6 +124,10 @@ def get_datasets(args):
 
             train_loaders = data_prepper.get_train_loaders(num_clients, 'classimbalance')
 
+            for i in train_loaders:
+                print(i.dataset.__len__())
+            sys.exit()
+
         elif args.dataset_split == 'powerlaw':
             data_prepper = Data_Prepper(
                 'mnist', train_batch_size=args.batch_size, n_agents=num_clients,
