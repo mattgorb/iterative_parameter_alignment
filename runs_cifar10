@@ -29,15 +29,12 @@ python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 
 RUNNING:
-nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2 > ~/iwa/49.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=1 > ~/iwa/49.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=1 > ~/iwa/50.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=3 > ~/iwa/51.txt 2>&1 &
 
 
-nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=5 > ~/iwa/55.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=2 > ~/iwa/56.txt 2>&1 &
 
-nohup python -u main.py --config=configs/cifar10_73_split_label_Conv4.yaml --gpu=3  > ~/iwa/73.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=3   --seed=20 --weight_seed=20  > ~/iwa/101.txt 2>&1 &
@@ -70,17 +67,20 @@ nohup python -u main.py --config=configs/cifar10_10_pow_ae_conv4_rand_topo.yaml 
 
 
 
-nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=160 --merge_iter=1 > ~/iwa/124.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=5  --single_model=True --seed=6 --weight_seed=6 --local_epochs=250 --merge_iter=1> ~/iwa/123.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=250 --merge_iter=1 --num_clients=10 > ~/iwa/124.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=2  --single_model=True --seed=6 --weight_seed=6 --local_epochs=250 --merge_iter=1  --num_clients=10 > ~/iwa/123.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=0  --single_model=True --seed=6 --weight_seed=6 --local_epochs=50 --merge_iter=1  --num_clients=10 > ~/iwa/126.txt 2>&1 &
 
-
+nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=0   --random_topology=True --merge_iter=1200  --num_clients=10 > ~/iwa/125.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=4  --merge_iter=1000  --num_clients=10 > ~/iwa/127.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=2  --merge_iter=200  --num_clients=10 > ~/iwa/128.txt 2>&1 &
 
 
 
 nohup python -u example_code_cifar100.py > ~/iwa/cifar100_split3.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split3.txt 2>&1 &
 nohup python -u example_code_fashionmnist.py > ~/iwa/fashionmnist_split3.txt 2>&1 &
-nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split73.txt 2>&1 &
+
 
 
 
@@ -92,14 +92,16 @@ nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split73.txt 2>&1 &
 
 teaser:
 2 class CIFAR10 DONE
+
 5 class MNIST DONE
+CIFAR10 73
+FASHION 2
 
-
-3 class FashionMNIST?
 3 class CIFAR10?
 
-Maybe:
+3 class FashionMNIST?
 
+Maybe:
 5 class cifar10
 
 IMBALANCED: 90classes/10class, 8classes/2classes

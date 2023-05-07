@@ -133,6 +133,16 @@ def get_datasets(args):
 
             train_loaders = data_prepper.get_train_loaders(num_clients, 'powerlaw')
 
+        elif args.dataset_split == 'uniform':
+            data_prepper = Data_Prepper(
+                'cifar10', train_batch_size=args.batch_size, n_agents=num_clients,
+                sample_size_cap=6000,
+                train_val_split_ratio=0.8, device=args.device,
+                args_dict=args)
+
+            train_loaders = data_prepper.get_train_loaders(num_clients, 'uniform')
+
+
         else:
             print('choose dataset split!')
         test_dataset = datasets.CIFAR10(f'{args.base_dir}{args.data_dir}', train=False, transform=test_transform)
@@ -246,7 +256,7 @@ class Data_Prepper:
             elif split == 'powerlaw':
                 indices_list = powerlaw(list(range(len(self.train_dataset))), n_agents)
 
-            elif split in ['uniform']:
+            elif split == 'uniform':
                 indices_list = random_split(sample_indices=list(range(len(self.train_dataset))), m_bins=n_agents,
                                             equal=True)
 
