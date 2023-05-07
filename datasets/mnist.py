@@ -310,8 +310,8 @@ class Data_Prepper:
                 transforms.ToTensor(), transforms.Normalize((0.1307,), (0.3081,))
             ])
 
-            train = datasets.MNIST(f'{args.base_dir}data', train=True, download=True, transform=transform)
-            test = datasets.MNIST(f'{args.base_dir}data', train=False, transform=transform)
+            train = datasets.MNIST(f'.data', train=True, download=True, transform=transform)
+            test = datasets.MNIST(f'.data', train=False, transform=transform)
 
             #train = FastMNIST('.data', train=True, download=True)
             #test = FastMNIST('.data', train=False, download=True)
