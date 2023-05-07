@@ -445,3 +445,32 @@ def split_torchtext_dataset_ratios(data, ratios):
         train_datasets.append(train_dataset)
     train_datasets.append(data)
     return train_datasets
+
+
+class FastMNIST(MNIST):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.data = self.data.unsqueeze(1).float().div(255)
+        from torch.nn import ZeroPad2d
+        pad = ZeroPad2d(2)
+        self.data = torch.stack([pad(sample.data) for sample in self.data])
+
+        self.targets = self.targets.long()
+
+        self.data = self.data.sub_(self.data.mean()).div_(self.data.std())
+        # self.data = self.data.sub_(0.1307).div_(0.3081)
+        # Put both data and targets on GPU in advance
+        self.data, self.targets = self.data, self.targets
+        print('MNIST data shape {}, targets shape {}'.format(self.data.shape, self.targets.shape))
+
+    def __getitem__(self, index):
+        """
+        Args:
+            index (int): Index
+        Returns:
+            tuple: (image, target) where target is index of the target class.
+        """
+        img, target = self.data[index], self.targets[index]
+
+        return img, target
