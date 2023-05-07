@@ -85,6 +85,7 @@ class Trainer:
             data, target = data.to(self.device), target.to(self.device)
             print(data)
             print(data.dtype)
+            sys.exit()
             self.optimizer.zero_grad()
             output, weight_align = self.model(data)
 
