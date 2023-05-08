@@ -61,20 +61,22 @@ nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gp
 
 
 
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=0  --single_model=True --local_epochs=25 --merge_iter=1 --num_clients=10> ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=5  --merge_iter=25  --num_clients=10 --local_epochs=1> ~/iwa/112.txt 2>&1 &
 
-nohup python -u main.py --config=configs/fairness_tests/cifar10_10_uni_ae_conv4_rand_topo.yaml --gpu=3  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/cifar10_10_uni_ae_conv4_rand_topo.yaml --gpu=4  --merge_iter=25 > ~/iwa/112.txt 2>&1 &
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=3  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=4  --merge_iter=25 > ~/iwa/112.txt 2>&1 &
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=3  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=4  --merge_iter=25 > ~/iwa/112.txt 2>&1 &
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_uni_ae.yaml --gpu=3  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_uni_ae.yaml --gpu=4  --merge_iter=25 > ~/iwa/112.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --single_model=True --local_epochs=25 --merge_iter=1  --num_clients=10> ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --num_clients=10  --local_epochs=1> ~/iwa/112.txt 2>&1 &
 
 
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=0  --single_model=True --local_epochs=25 --merge_iter=1 > ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=1> ~/iwa/112.txt 2>&1 &
+
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=1> ~/iwa/112.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=50  --local_epochs=1> ~/iwa/112.txt 2>&1 &
+nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=2> ~/iwa/112.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=250 --merge_iter=1 --num_clients=10 > ~/iwa/124.txt 2>&1 &
@@ -82,7 +84,7 @@ nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml -
 nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=0  --single_model=True --seed=6 --weight_seed=6 --local_epochs=50 --merge_iter=1  --num_clients=10 > ~/iwa/126.txt 2>&1 &
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=0   --random_topology=True --merge_iter=1200  --num_clients=10 > ~/iwa/125.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=4  --merge_iter=1000  --num_clients=10 > ~/iwa/127.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=4  --merge_iter=1000  --num_clients=10 >12>&1 &
 nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=2  --merge_iter=200  --num_clients=10 > ~/iwa/128.txt 2>&1 &
 
 
