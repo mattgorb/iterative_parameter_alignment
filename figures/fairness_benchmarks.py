@@ -9,11 +9,13 @@ from scipy.stats import pearsonr
 
 
 rule='classimbalance'
-#rule='powerlaw'
+rule='powerlaw'
 #rule='uniform'
 
 metric='test_accuracy_list'
 #metric='test_losses'
+
+#seeds=[2,4,15,16, 32, 85]
 
 ipa=pd.read_csv(f'client_results/peer_contrib/benchmarks/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_1_n_cli_10_None_ds_split_{rule}_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_5_s_False_rand_top_True.csv')
 baseline=pd.read_csv(f'client_results/peer_contrib/benchmarks/client_results_ds_CIFAR10_model_Conv4_ds_CIFAR10_seed_1_n_cli_10_None_ds_split_{rule}_ds_alpha_0.3_align_ae_waf_1_delta_None_init_type_kaiming_normal_same_init_False_le_50_s_True_rand_top_True.csv')
