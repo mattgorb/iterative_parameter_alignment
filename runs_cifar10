@@ -67,8 +67,8 @@ nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gp
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=7  --weight_seed=32 --seed=32 > ~/iwa/135.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=7  --weight_seed=85 --seed=85 > ~/iwa/136.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=7 --weight_seed=32 --seed=32  > ~/iwa/137.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml.yaml --gpu=3 --weight_seed=32 --seed=32  > ~/iwa/138.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml.yaml --gpu=4 --weight_seed=8 --seed=8  > ~/iwa/139.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=3 --weight_seed=32 --seed=32  > ~/iwa/138.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=4 --weight_seed=8 --seed=8  > ~/iwa/139.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=250 --merge_iter=1 --num_clients=10 > ~/iwa/124.txt 2>&1 &
