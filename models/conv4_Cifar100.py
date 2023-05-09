@@ -17,9 +17,9 @@ class Conv4(nn.Module):
             self.conv2 = conv_init(64, 64, args=self.args)
             self.conv3 = conv_init(64, 128, args=self.args)
             self.conv4 = conv_init(128, 128, args=self.args)
-            self.fc1=linear_init(32*32*8, 256, args=self.args)
-            self.fc2=linear_init(256, 256, args=self.args)
-            self.fc3=linear_init(256, 100, args=self.args)
+            self.fc1=linear_init(32*32*8, 512, args=self.args)
+            self.fc2=linear_init(512, 512, args=self.args)
+            self.fc3=linear_init(512, 100, args=self.args)
         else:
 
             self.conv1 = nn.Conv2d(3, 64, kernel_size=3, padding=1, bias=self.bias)

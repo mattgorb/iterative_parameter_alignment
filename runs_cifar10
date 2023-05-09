@@ -30,7 +30,7 @@ python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 RUNNING:
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=1 > ~/iwa/49.txt 2>&1 &
-nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=1 > ~/iwa/50.txt 2>&1 &
+
 nohup python -u main.py --config=configs/fashionmnist_2_split_label.yaml --gpu=3 > ~/iwa/51.txt 2>&1 &
 
 
@@ -57,26 +57,18 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_ran
 
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5   --single_model=True --local_epochs=1500 --merge_iter=1 > ~/iwa/99.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=7  > ~/iwa/100.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=3  --same_initialization=True > ~/iwa/120.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=3  --same_initialization=True --random_topology=False > ~/iwa/120.txt 2>&1 &
 
 
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=0  --single_model=True --local_epochs=25 --merge_iter=1 --num_clients=10> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=5  --merge_iter=25  --num_clients=10 --local_epochs=1> ~/iwa/112.txt 2>&1 &
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --single_model=True --local_epochs=25 --merge_iter=1  --num_clients=10> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --num_clients=10  --local_epochs=1> ~/iwa/112.txt 2>&1 &
-
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=0  --single_model=True --local_epochs=25 --merge_iter=1 > ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_cla_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=1> ~/iwa/112.txt 2>&1 &
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --single_model=True --local_epochs=25 --merge_iter=1> ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=1> ~/iwa/112.txt 2>&1 &
-
-
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=50  --local_epochs=1> ~/iwa/112.txt 2>&1 &
-nohup python -u main.py --config=configs/fairness_tests/mnist_20_pow_ae.yaml --gpu=5  --merge_iter=25  --local_epochs=2> ~/iwa/112.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=0  --same_initialization=True --random_topology=False --weight_seed=1 --seed=1> ~/iwa/131.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=4  --same_initialization=True --random_topology=False --weight_seed=4 --seed=4> ~/iwa/132.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5  --same_initialization=True --random_topology=False --weight_seed=15 --seed=15> ~/iwa/133.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5  --same_initialization=True --random_topology=False --weight_seed=32 --seed=32> ~/iwa/134.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=7  --weight_seed=32 --seed=32 > ~/iwa/135.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=7  --weight_seed=85 --seed=85 > ~/iwa/136.txt 2>&1 &
+nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=7 --weight_seed=32 --seed=32  > ~/iwa/137.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml.yaml --gpu=3 --weight_seed=32 --seed=32  > ~/iwa/138.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml.yaml --gpu=4 --weight_seed=8 --seed=8  > ~/iwa/139.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=250 --merge_iter=1 --num_clients=10 > ~/iwa/124.txt 2>&1 &
