@@ -55,7 +55,7 @@ class Trainer:
             if self.args.single_model:
                 df = pd.DataFrame({'test_accs': self.test_accs,})
                 df.to_csv(
-                    f'{self.args.base_dir}/weight_alignment_csvs/single_{self.model_name}_{self.model_cnf_str}.csv')
+                    f'{self.args.base_dir}/weight_alignment_csvs/single_{self.model_name}_{self.model_cnf_str[:50]}.csv')
 
         torch.save({
             'epoch': self.merge_iter,
