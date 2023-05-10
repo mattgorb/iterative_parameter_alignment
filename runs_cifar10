@@ -47,11 +47,8 @@ nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_ran
 
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=20 --weight_seed=20    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/107.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5   --seed=2 --weight_seed=2    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/108.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=5   --seed=73 --weight_seed=73    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/109.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=7   --seed=85 --weight_seed=85    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/110.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=2   --seed=34 --weight_seed=34    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/111.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=43 --weight_seed=43   --single_model=True --local_epochs=50 --merge_iter=1  > ~/iwa/112.txt 2>&1 &
+
+
 
 
 
@@ -70,6 +67,14 @@ nohup python -u main.py --config=configs/fashionmnist_3_split_label.yaml --gpu=7
 nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=3 --weight_seed=32 --seed=32  > ~/iwa/138.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_5_split_label_Conv4_5.yaml --gpu=4 --weight_seed=8 --seed=8  > ~/iwa/139.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/mnist_split2.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_20_dir_p25_ae_conv4_kaiming_rand_top.yaml --gpu=4   --seed=20 --weight_seed=20    --single_model=True --local_epochs=50 --merge_iter=1 > ~/iwa/107.txt 2>&1 &
+
+
+
+
+
+
+
 
 nohup python -u main.py --config=configs/cifar10_20_dir_p6_ae_conv4_kaiming.yaml --gpu=4   --single_model=True  --local_epochs=250 --merge_iter=1 --num_clients=10 > ~/iwa/124.txt 2>&1 &
 nohup python -u main.py --config=configs/fashionmnist_20_dirp25_rand_topo.yaml --gpu=2  --single_model=True --seed=6 --weight_seed=6 --local_epochs=250 --merge_iter=1  --num_clients=10 > ~/iwa/123.txt 2>&1 &
