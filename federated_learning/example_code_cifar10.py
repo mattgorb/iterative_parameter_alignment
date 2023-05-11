@@ -28,7 +28,7 @@ data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
 #rule_arg=0.6
 
 n_client = 2
-rule='split_label73'
+rule='split_label'
 
 #rule='Drichlet'
 #rule='iid'
