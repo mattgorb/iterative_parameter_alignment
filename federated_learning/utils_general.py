@@ -146,7 +146,7 @@ def train_model(model, trn_x, trn_y, tst_x, tst_y, learning_rate, batch_size, ep
             loss = loss / list(batch_y.size())[0]
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
             optimizer.step()
 
         if (e+1) % print_per == 0:
@@ -221,7 +221,7 @@ def train_model_prox(model, cld_mdl_param, trn_x, trn_y, tst_x, tst_y, learning_
             loss = loss / list(batch_y.size())[0]+loss_algo
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
             optimizer.step()
 
         if (e+1) % print_per == 0:
@@ -311,7 +311,7 @@ def train_scaffold_mdl(model, model_func, state_params_diff, trn_x, trn_y,
             ###
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
             optimizer.step()
             step_loss += loss.item() * list(batch_y.size())[0]; n_data_step += list(batch_y.size())[0]
 
@@ -389,7 +389,7 @@ def train_model_alg(model, model_func, alpha_coef, avg_mdl_param, hist_params_di
             ###
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
             optimizer.step()
             epoch_loss += loss.item() * list(batch_y.size())[0]
 
@@ -470,7 +470,7 @@ def train_model_FedDC(model, model_func, alpha, local_update_last, global_update
             loss = loss_f_i + loss_cp + loss_cg
             optimizer.zero_grad()
             loss.backward()
-            torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=model.parameters(), max_norm=max_norm) # Clip gradients to prevent exploding
             optimizer.step()
             epoch_loss += loss.item() * list(batch_y.size())[0]
 
