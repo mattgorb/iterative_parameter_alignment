@@ -1,6 +1,6 @@
 from utils_general import *
 from utils_methods import *
-from utils_weight_alignment import *
+
 
 # Dataset initialization
 data_path = '/s/luffy/b/nobackup/mgorb/'  # The folder to save Data & Model
