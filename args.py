@@ -33,7 +33,7 @@ def parse_arguments():
     parser.add_argument('--gpu', type=int, default=1, )
     parser.add_argument('--save-model', action='store_true', default=False,help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
-
+    parser.add_argument('--record_align_losses', type=bool, default=False)
 
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/", help='Directory for data and weights')
     parser.add_argument('--data_dir', type=str, default="data")

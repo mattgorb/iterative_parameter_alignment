@@ -32,7 +32,7 @@ class Trainer:
                              f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_s_{self.args.single_model}_rand_top_{self.args.random_topology}'
         self.test_accs=[]
         self.epoch=[]
-
+        self.align_losses=[]
 
 
     def fit(self, log_output=True):
@@ -60,6 +60,10 @@ class Trainer:
                 df = pd.DataFrame({'test_accs': self.test_accs,})
                 df.to_csv(
                     f'{self.args.base_dir}/weight_alignment_csvs/single_{self.model_name}_{self.model_cnf_str[:25]}.csv')
+            if self.args.record_align_losses:
+                df = pd.DataFrame({'align_losses': self.align_losses,})
+                df.to_csv(
+                    f'{self.args.base_dir}/weight_alignment_csvs/single_align_losses_{self.model_name}_{self.model_cnf_str[:15]}.csv')
 
         torch.save({
             'epoch': self.merge_iter,
@@ -101,6 +105,9 @@ class Trainer:
 
             train_loss += loss.item()
             train_loss_ce += self.criterion(output, target).item()
+
+            if self.args.record_align_losses:
+                self.align_losses.append(weight_align.item())
 
         if self.args.optimizer!='Adam':
             self.scheduler.step()
