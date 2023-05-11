@@ -31,6 +31,10 @@ class Trainer:
                              f'_align_{self.args.align_loss}_waf_{self.args.weight_align_factor}_delta_{self.args.delta}_init_type_{self.args.weight_init}' \
                              f'_same_init_{self.args.same_initialization}_le_{self.args.local_epochs}_s_{self.args.single_model}_rand_top_{self.args.random_topology}'
         self.test_accs=[]
+        self.epoch=[]
+
+
+
     def fit(self, log_output=True):
         print(f'Model {self.model_name}, merge iteration: {self.merge_iter}')
         if self.merge_iter>1:
@@ -91,7 +95,7 @@ class Trainer:
             loss.backward()
 
 
-            torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=1)  # Clip gradients to prevent exploding
+            #torch.nn.utils.clip_grad_norm_(parameters=self.model.parameters(), max_norm=1)  # Clip gradients to prevent exploding
 
             self.optimizer.step()
 
