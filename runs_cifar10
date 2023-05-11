@@ -46,3 +46,4 @@ nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --g
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=5  --same_initialization=True --random_topology=False   > ~/iwa/157.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=6  --same_initialization=True --random_topology=False  --weight_seed=32 --seed=32  > ~/iwa/158.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split2.txt 2>&1 &
+nohup python -u example_code_mnist.py > ~/iwa/mnist_split2.txt 2>&1 &
