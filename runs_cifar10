@@ -15,8 +15,7 @@ tensorboard --samples_per_plugin=scalars=3000 --logdir=/s/luffy/b/nobackup/mgorb
 ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa mgorb@luffy.cs.colostate.edu
 ssh -N -f -L  localhost:16006:localhost:6006 -i ~/.ssh/id_rsa_new mgorb@luffy.cs.colostate.edu
 localhost:16006
-
-
+1
 python -u main.py --config=configs/mnist_dummy.yaml --gpu=0
 
 
@@ -37,9 +36,7 @@ nohup python -u example_code_mnist.py > ~/iwa/mnist_split2.txt 2>&1 &
 
 
 nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=0  --weight_seed=32 --seed=32 --weight_init=default   --same_initialization=True --random_topology=False > ~/iwa/151.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5  --same_initialization=True --random_topology=False --weight_seed=32 --seed=32  --weight_init=default> ~/iwa/152.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=1  --same_initialization=True --random_topology=False > ~/iwa/153.txt 2>&1 &
-nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=2  --same_initialization=True --random_topology=False  --weight_seed=32 --seed=32  > ~/iwa/154.txt 2>&1 &
+
 
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=3  --same_initialization=True --random_topology=False   > ~/iwa/155.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml --gpu=4  --same_initialization=True --random_topology=False  --weight_seed=32 --seed=32  > ~/iwa/156.txt 2>&1 &
@@ -47,3 +44,26 @@ nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --g
 nohup python -u main.py --config=configs/cifar100_3_split_label_Conv4_5.yaml --gpu=6  --same_initialization=True --random_topology=False  --weight_seed=32 --seed=32  > ~/iwa/158.txt 2>&1 &
 nohup python -u example_code_cifar10.py > ~/iwa/cifar10_split2.txt 2>&1 &
 nohup python -u example_code_mnist.py > ~/iwa/mnist_split2.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=5  --same_initialization=True --random_topology=False --weight_seed=32 --seed=32  --record_align_losses=True > ~/iwa/159.txt 2>&1 &
+
+
+nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=3 --merge_iter=3000> ~/iwa/160.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=1  --merge_iter=3000> ~/iwa/161.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=0  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=3 --merge_iter=3000> ~/iwa/162.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=1  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=1  --merge_iter=3000> ~/iwa/163.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar100_2_split_label_Conv4_5.yaml  --gpu=1  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=1  --merge_iter=3000  > ~/iwa/164.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gpu=1  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=1  --merge_iter=3000 --align_loss=se   --record_align_losses=True > ~/iwa/165.txt 2>&1 &
+
+
+
+
+
+nohup python -u main.py --config=configs/cifar10_10_iid_se_conv4_kaiming_diff_seed.yaml --gpu=1 --align_loss=ae --merge_iter=50 > ~/iwa/166.txt 2>&1 &
+
+
+cifar10 2 split
+cifar10 3 split
+cifar100 2 split
