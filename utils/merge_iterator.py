@@ -327,7 +327,7 @@ class Merge_Iterator:
                     self.client_to_tensorboard(iter, client, trainer)
 
             if iter%10 ==0:
-                self.ensemble()
+                #self.ensemble()
                 if self.args.compare:
                     if self.num_clients==10 or self.num_clients==3:
                         self.comparison_statistics(iter)

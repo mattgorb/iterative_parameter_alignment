@@ -71,3 +71,7 @@ nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=7  --same
 nohup python -u main.py --config=configs/mnist_20_dir_p6_ae.yaml --gpu=5  --same_initialization=True --merge_iter=100> ~/iwa/172.txt 2>&1 &
 nohup python -u main.py --config=configs/mnist_20_dir_p6_ae.yaml --gpu=6  --same_initialization=False --merge_iter=100> ~/iwa/173.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=0 --same_initialization=True  > ~/iwa/174.txt 2>&1 &
+
+
+nohup python -u mnist_mlp_2_detach.py --gpu=5   --merge_iter=200 --align_loss=ae --set_weight_from_weight_align=True > ~/iwa/175.txt 2>&1 &
+nohup python -u mnist_mlp_2_detach.py --gpu=5   --merge_iter=200 --align_loss=ae --set_weight_from_weight_align=False > ~/iwa/176.txt 2>&1 &
