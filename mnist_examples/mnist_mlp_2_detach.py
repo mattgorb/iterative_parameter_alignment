@@ -235,6 +235,10 @@ class Merge_Iterator:
         self.model1_trainer.optimizer = optim.Adam(model1.parameters(), lr=self.args.lr)
         self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
+        print(self.args.set_weight_from_weight_align)
+        if self.args.set_weight_from_weight_align:
+            print('here')
+        sys.exit()
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
