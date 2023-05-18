@@ -321,11 +321,13 @@ def main():
     parser.add_argument('--save-model', action='store_true', default=False,
                         help='For Saving the current Model')
     parser.add_argument('--baseline', type=bool, default=False, help='train base model')
-    parser.add_argument('--set_weight_from_weight_align', type=bool, default=True, )
+    parser.add_argument('--set_weight_from_weight_align', type=bool, default=True )
     parser.add_argument('--graphs', type=bool, default=False, help='add norm graphs during training')
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
     args = parser.parse_args()
+    print(args)
+    sys.exit()
     set_seed(args.seed)
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir = f'{args.base_dir}iwa_weights/'
