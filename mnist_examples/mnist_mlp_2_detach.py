@@ -236,9 +236,7 @@ class Merge_Iterator:
         self.model2_trainer.optimizer = optim.Adam(model2.parameters(), lr=self.args.lr)
 
         print(self.args.set_weight_from_weight_align)
-        if self.args.set_weight_from_weight_align:
-            print('here')
-        sys.exit()
+
         for iter in range(merge_iterations):
             self.model1_trainer.merge_iter=iter
             self.model2_trainer.merge_iter=iter
@@ -326,8 +324,7 @@ def main():
     parser.add_argument('--base_dir', type=str, default="/s/luffy/b/nobackup/mgorb/",
                         help='Directory for data and weights')
     args = parser.parse_args()
-    print(args)
-    sys.exit()
+
     set_seed(args.seed)
     device = torch.device(f"cuda:{args.gpu}" if torch.cuda.is_available() else "cpu")
     weight_dir = f'{args.base_dir}iwa_weights/'
