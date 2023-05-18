@@ -62,10 +62,12 @@ nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gp
 
 
 
-nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=2 > ~/iwa/167.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=2 --same_initialization=True  > ~/iwa/167.txt 2>&1 &
 nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff_seed.yaml --gpu=3  > ~/iwa/168.txt 2>&1 &
 
 
-
-
-
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=4  --same_initialization=True --merge_iter=100> ~/iwa/170.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p3_ae.yaml --gpu=7  --same_initialization=False --merge_iter=100> ~/iwa/171.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p6_ae.yaml --gpu=5  --same_initialization=True --merge_iter=100> ~/iwa/172.txt 2>&1 &
+nohup python -u main.py --config=configs/mnist_20_dir_p6_ae.yaml --gpu=6  --same_initialization=False --merge_iter=100> ~/iwa/173.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=0 --same_initialization=True  > ~/iwa/174.txt 2>&1 &
