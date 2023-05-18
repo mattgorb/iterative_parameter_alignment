@@ -95,7 +95,7 @@ class Merge_Iterator:
         for idx, trainer in enumerate(self.model_trainers):
             model1 = trainer.model
             model1.eval()
-            #model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+            model1.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
 
             model1_param_list = torch.Tensor().to(self.args.device)
             for model1_mods in model1.named_modules():
@@ -142,7 +142,7 @@ class Merge_Iterator:
         for idx, trainer in enumerate(self.model_trainers):
             model = trainer.model
 
-            #model.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
+            model.load_state_dict(torch.load(trainer.save_path)['model_state_dict'])
             model.eval()
 
             scores = torch.Tensor().to(self.args.device)

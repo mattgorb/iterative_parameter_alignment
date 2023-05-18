@@ -10,6 +10,6 @@ local_epochs: 5
 dataset_split: iid
 dirichlet_alpha: 0.3
 batch_size: 50
-merge_iter: 500
+merge_iter: 75
 same_initialization: False
 random_topology: True

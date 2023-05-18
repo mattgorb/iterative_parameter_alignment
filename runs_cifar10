@@ -61,9 +61,11 @@ nohup python -u main.py --config=configs/cifar10_2_split_label_Conv4_5.yaml --gp
 
 
 
-nohup python -u main.py --config=configs/cifar10_10_iid_se_conv4_kaiming_diff_seed.yaml --gpu=1 --align_loss=ae --merge_iter=50 > ~/iwa/166.txt 2>&1 &
+
+nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming.yaml --gpu=2 > ~/iwa/167.txt 2>&1 &
+nohup python -u main.py --config=configs/cifar10_10_dir_p3_ae_conv4_kaiming_diff_seed.yaml --gpu=3  > ~/iwa/168.txt 2>&1 &
 
 
-cifar10 2 split
-cifar10 3 split
-cifar100 2 split
+
+
+
