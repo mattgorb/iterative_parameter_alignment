@@ -256,7 +256,7 @@ class Merge_Iterator:
             self.model1_trainer.fit()
             self.model2_trainer.fit()
 
-            if iter==1:
+            if iter==3:
                 print(model1.fc1.weight[0][:5])
                 print(model2.fc1.weight[0][:5])
                 sys.exit()
