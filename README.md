@@ -24,7 +24,7 @@ Additional examples are in the run_hist file.
 
 Important pieces of code are located in the following files: 
 ```
-https://github.com/mattgorb/iterative_parameter_alignment/blob/main/utils/align_util.py
+utils/align_util.py
 
-https://github.com/mattgorb/iterative_parameter_alignment/blob/main/models/layers.py
+models/layers.py
 ```
