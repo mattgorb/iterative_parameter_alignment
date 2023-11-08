@@ -1,7 +1,0 @@
-dataset: CIFAR10
-model: LeNetCifar10
-data_transform: True
-bias: True
-local_epochs: 500
-baseline: True
-batch_size: 50
