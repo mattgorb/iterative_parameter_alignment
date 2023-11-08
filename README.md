@@ -5,10 +5,11 @@ Published at IEEE International Conference on Big Data 2023
 ![alt text](teaser.png)
 
 
-To get started, you can check out basic MNIST examples at: 
-mnist_examples/mnist_mlp_2_.py and 
+To get started, check out the basic MNIST examples: 
+```
+mnist_examples/mnist_mlp_2_.py 
 mnist_examples/mnist_mlp_2_detach.py
-
+```
 
 
 The following code shows how to run an experiment with a specific configuration.  You can specify arguments in the config file or pass them in the python command.  
