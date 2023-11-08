@@ -20,3 +20,11 @@ python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2  -
 
 
 Additional examples are in the run_hist file. 
+
+
+Important pieces of code are located in the following files: 
+```
+https://github.com/mattgorb/iterative_parameter_alignment/blob/main/utils/align_util.py
+
+https://github.com/mattgorb/iterative_parameter_alignment/blob/main/models/layers.py
+```
