@@ -1,6 +1,6 @@
 
 #### Cross-Silo Federated Learning across Divergent Domains with Iterative Parameter Alignment
-Published at IEEE International Conference on Big Data
+Published at IEEE International Conference on Big Data 2023
 
 ![alt text](teaser.png)
 
