@@ -4,3 +4,6 @@ original/
 original/original_newer/
 utils/__pycache__
 figures/
+__pycache__
+inspectionProfiles
+configs/bad/
