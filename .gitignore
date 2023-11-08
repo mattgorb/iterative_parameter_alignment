@@ -7,3 +7,4 @@ figures/
 __pycache__
 inspectionProfiles
 configs/bad/
+results.xlsx
