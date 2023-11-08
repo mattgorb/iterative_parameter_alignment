@@ -1,3 +1,0 @@
-nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=6 --num_clients=2  --merge_iter=25 > ~/iwa_results/1.txt 2>&1 &
-nohup python main.py --config=configs/mnist_merge_cnn_2.yaml --gpu=7 --disjoint_classes=True --num_clients=2  --merge_iter=25  --bias=True > ~/iwa_results/2.txt 2>&1 &
-

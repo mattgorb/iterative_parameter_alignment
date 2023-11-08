@@ -11,7 +11,7 @@ mnist_examples/mnist_mlp_2_detach.py \
 
 
 
-You can run an experiment with the following code: 
+The following code shows how to run an experiment with a specific configuration.  You can specify arguments in the config file or pass them in the python command.  
 
 ```
 python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2  --weight_seed=32 --seed=32   --same_initialization=True --random_topology=False --local_epochs=3 --merge_iter=3000
