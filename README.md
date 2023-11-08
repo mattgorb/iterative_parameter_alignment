@@ -7,7 +7,7 @@ Published at IEEE International Conference on Big Data
 
 To get started, you can check out basic MNIST examples at: 
 mnist_examples/mnist_mlp_2_.py and \
-mnist_examples/mnist_mlp_2_detach.py\
+mnist_examples/mnist_mlp_2_detach.py \
 
 
 
@@ -18,4 +18,4 @@ python -u main.py --config=configs/cifar10_3_split_label_Conv4_5.yaml --gpu=2  -
 ```
 
 
-Example runs are in run_hist file with a nohup command. 
+Additional examples are in the run_hist file. 
